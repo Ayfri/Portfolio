@@ -28,7 +28,7 @@ jobs:
       - name: Save sample
         uses: actions/upload-artifact@v3
         with:
-          path: artifacts/dist
+          path: dist
 
       - name: Publish to Pages
         uses: actions/checkout@v3
