@@ -43,7 +43,7 @@ jobs:
       - name: Add changes
         run: git add .
       - name: Try to commit changes
-        run: git commit -m "feat:\ Update CD."
+        run: git commit -m "Update build."
         continue-on-error: true
       - name: Publish changes
         run: git push
