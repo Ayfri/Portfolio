@@ -49,9 +49,7 @@ jobs:
         run: git add .
 
       - name: List files
-        run:
-          \ls -la
-          \git status
+        run: ls -la
 
       - name: Try to commit changes
         run: git commit -m "Update build."
