@@ -1,4 +1,3 @@
-
 import org.jetbrains.compose.compose
 
 plugins {
@@ -18,27 +17,27 @@ repositories {
 kotlin {
 	js(IR) {
 		browser {
-			testTask {
-				testLogging.showStandardStreams = true
-				useKarma {
-					useChromeHeadless()
-					useFirefox()
-				}
+			commonWebpackConfig {
+				devServer?.open = false
 			}
 		}
+		
 		binaries.executable()
 	}
+	
 	sourceSets {
 		val jsMain by getting {
 			dependencies {
 				implementation(compose.web.core)
 				implementation(compose.runtime)
-			}
-		}
-		val jsTest by getting {
-			dependencies {
-				implementation(kotlin("test-js"))
+				implementation("app.softwork:routing-compose:0.2.4")
 			}
 		}
 	}
+}
+
+// create a task to generate the app
+
+task("compose") {
+	val app = project.file("app")
 }
