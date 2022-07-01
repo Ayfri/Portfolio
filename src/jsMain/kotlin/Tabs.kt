@@ -13,7 +13,7 @@ val tabs = listOf(
 
 @Composable
 fun Tab(tab: Tab) {
-	A(href = "/#${tab.link}") {
+	A(href = tab.link) {
 		Text(tab.name)
 	}
 }
