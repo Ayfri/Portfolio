@@ -1,18 +1,29 @@
 
 import app.softwork.routingcompose.BrowserRouter
+import kotlinx.browser.document
 import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.renderComposable
+import org.jetbrains.compose.web.renderComposableInBody
+import org.w3c.dom.HTMLBodyElement
 
 fun main() {
-	renderComposable(rootElementId = "root") {
+	renderComposable(root = document.querySelector("head")!!) {
+		Head()
+	}
+	
+	val body = document.createElement("body") as HTMLBodyElement
+	document.body = body
+	
+	renderComposableInBody {
 		BrowserRouter("/") {
-			route("/test") {
-				Text("Test")
-			}
+			redirect("/about.html", target = "/about", hide = true)
+			
+			Header()
+			
+			setTitle("${document.location?.pathname?.titlecase() ?: "404"} - Pierre Roy")
 			
 			noMatch {
-				Header()
-				Text(this.remainingPath)
+				Text("$remainingPath not found")
 			}
 		}
 	}
