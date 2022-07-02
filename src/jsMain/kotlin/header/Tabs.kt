@@ -1,6 +1,7 @@
+package header
 
 import androidx.compose.runtime.Composable
-import org.jetbrains.compose.web.dom.A
+import app.softwork.routingcompose.NavLink
 import org.jetbrains.compose.web.dom.Text
 
 data class Tab(val name: String, val link: String)
@@ -14,7 +15,7 @@ val tabs = listOf(
 
 @Composable
 fun Tab(tab: Tab) {
-	A(href = tab.link) {
+	NavLink(tab.link) {
 		Text(tab.name)
 	}
 }
