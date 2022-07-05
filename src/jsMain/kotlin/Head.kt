@@ -4,6 +4,7 @@ import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.dom.TagElement
 import org.w3c.dom.HTMLLinkElement
 import org.w3c.dom.HTMLMetaElement
+import style.AppStyle
 
 @Composable
 fun Head() {
@@ -36,10 +37,8 @@ fun Head() {
 fun Link(href: String, rel: String = "", type: String = "") {
 	TagElement<HTMLLinkElement>("link", {
 		attr("href", href)
-		if (rel != "") attr("rel", rel)
-		if (type != "") {
-			attr("type", type)
-		}
+		if (rel.isNotEmpty()) attr("rel", rel)
+		if (type.isNotEmpty()) attr("type", type)
 	}) {}
 }
 

@@ -1,9 +1,8 @@
+package style
 
 import org.jetbrains.compose.web.css.*
 
-object CSSVariables : StyleSheet() {
-//	val navbarBackground by variable<CSSColorValue>()
-}
+object CSSVariables : StyleSheet()
 
 object AppStyle : StyleSheet() {
 	const val navbarColor = "#363636"
@@ -21,16 +20,19 @@ object AppStyle : StyleSheet() {
 	}
 	
 	val navbar by style {
-		alignItems(AlignItems.Center)
+		val height = 5.cssRem
+		
 		backgroundColor(Color(navbarColor))
 		display(DisplayStyle.Flex)
-		height(6.cssRem)
+		height(height)
 		
 		"a" style {
 			color(Color.white)
+			height(100.percent)
+			lineHeight(height)
 			property("padding", "0 2rem")
 			
-			":hover" style {
+			group(self + className("active"), hover(self)) style {
 				backgroundColor(Color(navbarColorSelected))
 			}
 		}

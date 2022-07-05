@@ -1,7 +1,8 @@
 package header
-import AppStyle
+
 import androidx.compose.runtime.Composable
 import org.jetbrains.compose.web.dom.Header
+import style.AppStyle
 
 
 @Composable
