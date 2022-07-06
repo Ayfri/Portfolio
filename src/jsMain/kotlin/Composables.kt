@@ -1,10 +1,11 @@
 import androidx.compose.runtime.Composable
+import org.jetbrains.compose.web.dom.I
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
 fun I(vararg text: String) {
-	org.jetbrains.compose.web.dom.I({
+	I({
 		classes(*text)
 	})
 }
@@ -19,7 +20,7 @@ enum class FontAwesomeType(val value: String) {
 
 @Composable
 fun I(type: FontAwesomeType = FontAwesomeType.SOLID, icon: String) {
-	org.jetbrains.compose.web.dom.I({
+	I({
 		classes(type.value, "fa-$icon")
 	})
 }

@@ -20,7 +20,8 @@ fun main() {
 			
 			Header()
 			
-			setTitle("${document.location?.pathname?.titlecase() ?: "404"} - Pierre Roy")
+			val pathname = document.location?.pathname ?: "404"
+			setTitle("${pathname.removePrefix("/").replace("/", " ").titlecase()} - Pierre Roy")
 		}
 	}
 }
