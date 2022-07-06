@@ -18,10 +18,11 @@ fun main() {
 		BrowserRouter("/") {
 			redirect("/about.html", target = "/about", hide = true)
 			
-			Header()
-			
 			val pathname = document.location?.pathname ?: "404"
 			setTitle("${pathname.removePrefix("/").replace("/", " ").titlecase()} - Pierre Roy")
+			
+			Header()
+			Footer()
 		}
 	}
 }
