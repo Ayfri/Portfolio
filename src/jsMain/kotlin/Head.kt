@@ -31,6 +31,7 @@ fun Head() {
 	
 	Style(AppStyle)
 	Link(href = "https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap", rel = "stylesheet")
+	Link(href = "https://use.fontawesome.com/releases/v5.13.0/css/all.css", rel = "stylesheet")
 }
 
 @Composable

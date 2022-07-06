@@ -2,7 +2,9 @@ package style
 
 import org.jetbrains.compose.web.css.*
 
-object CSSVariables : StyleSheet()
+object CSSVariables : StyleSheet() {
+	val navbarHeight by variable<CSSNumeric>()
+}
 
 object AppStyle : StyleSheet() {
 	const val navbarColor = "#363636"
@@ -10,8 +12,8 @@ object AppStyle : StyleSheet() {
 	
 	init {
 		"body" {
-			property("margin", "0")
 			fontFamily("'Roboto'", "sans-serif")
+			margin(0.px)
 		}
 		
 		"a" style {
@@ -20,21 +22,49 @@ object AppStyle : StyleSheet() {
 	}
 	
 	val navbar by style {
-		val height = 5.cssRem
+		CSSVariables.navbarHeight(5.cssRem)
 		
+		alignItems(AlignItems.Center)
 		backgroundColor(Color(navbarColor))
 		display(DisplayStyle.Flex)
-		height(height)
+		justifyContent(JustifyContent.SpaceBetween)
+		position(Position.Fixed)
+		size(CSSVariables.navbarHeight.value(), 100.percent)
 		
+		"i" style {
+			fontSize(CSSVariables.navbarHeight.value() * .6)
+		}
+	}
+	
+	val navbarPart by style {
+		alignItems(AlignItems.Center)
+		color(Color.white)
+		display(DisplayStyle.Flex)
+		justifyContent(JustifyContent.Center)
+	}
+	
+	val navbarLinks by style {
 		"a" style {
 			color(Color.white)
 			height(100.percent)
-			lineHeight(height)
-			property("padding", "0 2rem")
+			display(DisplayStyle.InlineBlock)
+			lineHeight(CSSVariables.navbarHeight.value())
+			padding(0.px, 2.cssRem)
 			
 			group(self + className("active"), hover(self)) style {
 				backgroundColor(Color(navbarColorSelected))
 			}
+		}
+	}
+	
+	val navbarGithub by style {
+		borderRadius(1.5.cssRem)
+		gap(1.cssRem)
+		marginRight(2.cssRem)
+		padding(.5.cssRem, 1.cssRem)
+		
+		hover(self) style {
+			backgroundColor(Color(navbarColorSelected))
 		}
 	}
 }
