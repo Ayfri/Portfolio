@@ -1,7 +1,7 @@
 import org.jetbrains.compose.compose
 
 plugins {
-	kotlin("multiplatform")
+	kotlin("js")
 	id("org.jetbrains.compose")
 }
 
@@ -24,19 +24,13 @@ kotlin {
 		
 		binaries.executable()
 	}
-	
-	sourceSets {
-		val jsMain by getting {
-			dependencies {
-				implementation(compose.web.core)
-				implementation(compose.runtime)
-				implementation("app.softwork:routing-compose:0.2.4")
-			}
-		}
-	}
 }
 
-// create a task to generate the app
+dependencies {
+	implementation(compose.web.core)
+	implementation(compose.runtime)
+	implementation("app.softwork:routing-compose:${project.extra["compose.routing"]}")
+}
 
 task("compose") {
 	val app = project.file("app")

@@ -15,7 +15,9 @@ val tabs = listOf(
 
 @Composable
 fun Tab(tab: Tab) {
-	NavLink(tab.link) {
+	NavLink(tab.link, {selected ->
+		if (selected) classes("active")
+	}) {
 		Text(tab.name)
 	}
 }
