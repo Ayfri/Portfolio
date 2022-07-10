@@ -9,6 +9,8 @@ object CSSVariables : StyleSheet() {
 object AppStyle : StyleSheet() {
 	const val navbarColor = "#363636"
 	const val navbarColorSelected = "#2b2b2b"
+	const val footerColor = "#222222"
+	const val footerLinkHover = "#cccccc"
 	
 	init {
 		"body" {
@@ -18,6 +20,7 @@ object AppStyle : StyleSheet() {
 		
 		"a" style {
 			textDecoration("none")
+			property("transition", "color .2s ease-in-out")
 		}
 	}
 	
@@ -65,6 +68,34 @@ object AppStyle : StyleSheet() {
 		
 		hover(self) style {
 			backgroundColor(Color(navbarColorSelected))
+		}
+	}
+	
+	val footer by style {
+		backgroundColor(Color(footerColor))
+		position(Position.Fixed)
+		bottom(0.px)
+		color(Color.white)
+		padding(1.cssRem, 0.px)
+		textAlign("center")
+		width(100.percent)
+		
+		className("top") style {
+			alignItems(AlignItems.Center)
+			display(DisplayStyle.Flex)
+			gap(2.cssRem)
+			justifyContent(JustifyContent.Center)
+			listStyle("none")
+			padding(0.px)
+			
+			"a" style {
+				color(Color.white)
+				fontSize(2.5.cssRem)
+				
+				hover(self) style {
+					color(Color(footerLinkHover))
+				}
+			}
 		}
 	}
 }

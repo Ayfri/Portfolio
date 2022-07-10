@@ -9,7 +9,7 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Header
 import style.AppStyle
 
-const val PERSONAL_GITHUB = "https://github.com/Ayfri"
+const val GITHUB_LINK = "https://github.com/Ayfri"
 
 @Composable
 fun Header() {
@@ -24,7 +24,7 @@ fun Header() {
 			}
 		}
 		
-		A(PERSONAL_GITHUB, {
+		A(GITHUB_LINK, {
 			classes(AppStyle.navbarPart, AppStyle.navbarGithub)
 		}) {
 			P("Ayfri")
