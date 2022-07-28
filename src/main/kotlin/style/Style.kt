@@ -1,6 +1,7 @@
 package style
 
 import org.jetbrains.compose.web.css.*
+import style.CSSVariables.navbarHeight
 
 object CSSVariables : StyleSheet() {
 	val navbarHeight by variable<CSSNumeric>()
@@ -11,8 +12,13 @@ object AppStyle : StyleSheet() {
 	const val navbarColorSelected = "#2b2b2b"
 	const val footerColor = "#222222"
 	const val footerLinkHover = "#cccccc"
+	const val contentBackgroundColor = "#212125"
 	
 	init {
+		root {
+			CSSVariables.navbarHeight(5.cssRem)
+		}
+		
 		"body" {
 			fontFamily("'Roboto'", "sans-serif")
 			margin(0.px)
@@ -22,20 +28,25 @@ object AppStyle : StyleSheet() {
 			textDecoration("none")
 			property("transition", "color .2s ease-in-out")
 		}
+		
+		id("main") style {
+			backgroundColor(Color(contentBackgroundColor))
+			color(Color.white)
+			marginTop(navbarHeight.value())
+		}
 	}
 	
 	val navbar by style {
-		CSSVariables.navbarHeight(5.cssRem)
-		
 		alignItems(AlignItems.Center)
 		backgroundColor(Color(navbarColor))
 		display(DisplayStyle.Flex)
 		justifyContent(JustifyContent.SpaceBetween)
 		position(Position.Fixed)
-		size(CSSVariables.navbarHeight.value(), 100.percent)
+		size(navbarHeight.value(), 100.percent)
+		top(0.px)
 		
 		"i" style {
-			fontSize(CSSVariables.navbarHeight.value() * .6)
+			fontSize(navbarHeight.value() * .6)
 		}
 	}
 	
@@ -51,7 +62,7 @@ object AppStyle : StyleSheet() {
 			color(Color.white)
 			height(100.percent)
 			display(DisplayStyle.InlineBlock)
-			lineHeight(CSSVariables.navbarHeight.value())
+			lineHeight(navbarHeight.value())
 			padding(0.px, 2.cssRem)
 			
 			group(self + className("active"), hover(self)) style {
@@ -73,8 +84,6 @@ object AppStyle : StyleSheet() {
 	
 	val footer by style {
 		backgroundColor(Color(footerColor))
-		position(Position.Fixed)
-		bottom(0.px)
 		color(Color.white)
 		padding(1.cssRem, 0.px)
 		textAlign("center")

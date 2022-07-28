@@ -33,9 +33,7 @@ fun Footer() {
 			classes("top")
 		}) {
 			footerSocials.forEach {
-				Li({
-				
-				}) {
+				Li {
 					A(it.url, {
 						attr("target", "_blank")
 					}) {
