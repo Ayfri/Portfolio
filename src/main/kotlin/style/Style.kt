@@ -8,9 +8,9 @@ object CSSVariables : StyleSheet() {
 }
 
 object AppStyle : StyleSheet() {
-	const val navbarColor = "#363636"
-	const val navbarColorSelected = "#2b2b2b"
-	const val footerColor = "#222222"
+	const val navbarColor = "#2A2B36"
+	const val navbarColorSelected = "#1e1c28"
+	const val footerColor = "#1a1120"
 	const val footerLinkHover = "#cccccc"
 	const val contentBackgroundColor = "#212125"
 	
@@ -25,8 +25,12 @@ object AppStyle : StyleSheet() {
 		}
 		
 		"a" style {
+			transitions {
+				delay(.25.s)
+				properties("background-color", "color")
+			}
+			
 			textDecoration("none")
-			property("transition", "color .2s ease-in-out")
 		}
 		
 		id("main") style {

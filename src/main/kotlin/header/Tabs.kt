@@ -8,14 +8,15 @@ data class Tab(val name: String, val link: String)
 
 val tabs = listOf(
 	Tab("Home", "/"),
-	Tab("About", "/about"),
-	Tab("Blog", "/blog"),
-	Tab("Contact", "/contact")
+	Tab("About Me", "/about"),
+	Tab("My Skills", "/skills"),
+	Tab("My Projects", "/projects"),
+	Tab("Experiences", "/experiences"),
 )
 
 @Composable
 fun Tab(tab: Tab) {
-	NavLink(tab.link, {selected ->
+	NavLink(tab.link, { selected ->
 		if (selected) classes("active")
 	}) {
 		Text(tab.name)

@@ -1,18 +1,18 @@
 package style
 
-import org.jetbrains.compose.web.css.CSSBuilder
 import org.jetbrains.compose.web.css.CSSNumeric
 import org.jetbrains.compose.web.css.StylePropertyEnum
+import org.jetbrains.compose.web.css.StyleScope
 import org.jetbrains.compose.web.css.height
 import org.jetbrains.compose.web.css.keywords.CSSAutoKeyword
 import org.jetbrains.compose.web.css.width
 
-fun CSSBuilder.size(height: CSSNumeric, width: CSSNumeric = height) {
+fun StyleScope.size(height: CSSNumeric, width: CSSNumeric = height) {
 	height(height)
 	width(width)
 }
 
-fun CSSBuilder.size(height: CSSAutoKeyword, width: CSSAutoKeyword = height) {
+fun StyleScope.size(height: CSSAutoKeyword, width: CSSAutoKeyword = height) {
 	height(height)
 	width(width)
 }
@@ -34,7 +34,7 @@ interface ObjectFit : StylePropertyEnum {
 
 fun ObjectFit(value: String) = value.unsafeCast<ObjectFit>()
 
-fun CSSBuilder.objectFit(value: ObjectFit) {
+fun StyleScope.objectFit(value: ObjectFit) {
 	property("object-fit", value)
 }
 
@@ -46,14 +46,14 @@ inline val minContent get() = SizeKeyword("min-content")
 
 fun SizeKeyword(value: String) = value.unsafeCast<SizeKeyword>()
 
-fun CSSBuilder.size(value: SizeKeyword) {
+fun StyleScope.size(value: SizeKeyword) {
 	property("size", value)
 }
 
-fun CSSBuilder.width(value: SizeKeyword) {
+fun StyleScope.width(value: SizeKeyword) {
 	property("width", value)
 }
 
-fun CSSBuilder.height(value: SizeKeyword) {
+fun StyleScope.height(value: SizeKeyword) {
 	property("height", value)
 }
