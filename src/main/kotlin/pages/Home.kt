@@ -12,7 +12,9 @@ import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import style.ObjectFit
+import style.clamp
 import style.objectFit
+import style.size
 
 @Composable
 fun Home() {
@@ -24,9 +26,7 @@ fun Home() {
 		Div({
 			classes(HomeStyle.topInfo)
 		}) {
-			Img(localImage("avatar.jpg"), "avatar") {
-			
-			}
+			Img(localImage("avatar.jpg"), "avatar")
 			
 			H2 {
 				Text("Pierre Roy")
@@ -82,13 +82,12 @@ object HomeStyle : StyleSheet() {
 		"img" style {
 			objectFit(ObjectFit.Cover)
 			borderRadius(100.vmax)
-			maxHeight(100.percent)
-			width(80.percent)
+			size(15.cssRem)
 		}
 	}
 	
 	val topInfo by style {
 		height(80.percent)
-		property("width", "clamp(34rem, 23vw, 38rem)")
+		width(clamp(34.cssRem, 23.vw, 38.cssRem))
 	}
 }
