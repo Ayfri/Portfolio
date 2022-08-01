@@ -1,4 +1,4 @@
-package style
+package style.utils
 
 import org.jetbrains.compose.web.css.AnimationTimingFunction
 import org.jetbrains.compose.web.css.CSSSizeValue

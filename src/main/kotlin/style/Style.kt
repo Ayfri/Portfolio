@@ -2,6 +2,8 @@ package style
 
 import org.jetbrains.compose.web.css.*
 import style.CSSVariables.navbarHeight
+import style.utils.size
+import style.utils.transitions
 
 object CSSVariables : StyleSheet() {
 	val navbarHeight by variable<CSSNumeric>()
@@ -13,6 +15,8 @@ object AppStyle : StyleSheet() {
 	const val footerColor = "#1a1120"
 	const val footerLinkHover = "#cccccc"
 	const val contentBackgroundColor = "#212125"
+	const val specialTextColor = "#B4BBFF"
+	const val linkColor = "#75C9CE"
 	
 	init {
 		root {
@@ -20,7 +24,7 @@ object AppStyle : StyleSheet() {
 		}
 		
 		"body" {
-			fontFamily("'Roboto'", "sans-serif")
+			fontFamily("Open Sans", "sans-serif")
 			margin(0.px)
 		}
 		
@@ -37,7 +41,16 @@ object AppStyle : StyleSheet() {
 			backgroundColor(Color(contentBackgroundColor))
 			color(Color.white)
 			marginTop(navbarHeight.value())
+			padding(1.cssRem)
 		}
+	}
+	
+	val monoFont by style {
+		fontFamily("JetBrains Mono", "monospace")
+	}
+	
+	val numberColor by style {
+		color(Color(specialTextColor))
 	}
 	
 	val navbar by style {

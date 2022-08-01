@@ -31,7 +31,8 @@ fun Head() {
 	}
 	
 	Style(AppStyle)
-	Link(href = "https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700&display=swap", rel = "stylesheet")
+	Link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;300;400;500;700&display=swap", rel = "stylesheet")
+	Link(href = "https://dev-cats.github.io/code-snippets/JetBrainsMono.css", rel = "stylesheet")
 	Script(src = "https://kit.fontawesome.com/74fed0e2b5.js", crossOrigin = CrossOrigin.ANONYMOUS)
 }
 
