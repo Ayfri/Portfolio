@@ -1,5 +1,6 @@
 package pages
 
+import A
 import androidx.compose.runtime.Composable
 import localImage
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -74,9 +75,11 @@ fun Home() {
 			P({
 				classes(AppStyle.monoFont)
 			}) {
+				Text("Hi, it’s me, Pierre Roy, I am a first year IT student at ")
+				A("https://www.ynov.com/campus/aix-en-provence/", "Ynov Aix school")
 				Text(
 					"""
-						Hi, it’s me, Pierre Roy, I am a first year IT student at Ynov Aix school, and I am passionate about computer science and especially programming.
+						, and I am passionate about computer science and especially programming.
 						I’m making all sort of projects and programming by myself since years and this is my portfolio, welcome !
 					""".trimIndent()
 				)
@@ -156,6 +159,7 @@ object HomeStyle : StyleSheet() {
 			}
 			
 			lastChild style {
+				fontWeight(700)
 				fontSize(1.4.cssRem)
 			}
 		}

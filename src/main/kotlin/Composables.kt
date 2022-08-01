@@ -1,4 +1,5 @@
 import androidx.compose.runtime.Composable
+import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.I
 import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Text
@@ -31,5 +32,14 @@ fun P(text: String, vararg classes: String = emptyArray()) {
 		classes(*classes)
 	}) {
 		Text(text)
+	}
+}
+
+@Composable
+fun A(href: String, content: String = "", vararg classes: String = arrayOf("link")) {
+	A(href, {
+		classes(*classes)
+	}) {
+		Text(content)
 	}
 }

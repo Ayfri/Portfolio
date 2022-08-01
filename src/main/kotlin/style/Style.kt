@@ -17,6 +17,7 @@ object AppStyle : StyleSheet() {
 	const val contentBackgroundColor = "#212125"
 	const val specialTextColor = "#B4BBFF"
 	const val linkColor = "#75C9CE"
+	const val linkHoverColor = "#95fbff"
 	
 	init {
 		root {
@@ -29,12 +30,18 @@ object AppStyle : StyleSheet() {
 		}
 		
 		"a" style {
+			color(Color(linkColor))
+			
 			transitions {
 				delay(.25.s)
 				properties("background-color", "color")
 			}
 			
 			textDecoration("none")
+			
+			hover(selector("a")) style {
+				color(Color(linkHoverColor))
+			}
 		}
 		
 		id("main") style {
