@@ -43,27 +43,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@main
-#
-#      - name: Publish to Pages
-#        uses: actions/checkout@v3
-#        with:
-#          ref: build
-#
-#      - uses: actions/download-artifact@v3
-#
-#      - name: Copy files to /
-#        run: cp -r artifact/* . && rm -Rf artifact/*
-#
-#      - name: Config git
-#        run: git config user.email "github-actions@github.com" && git config user.name "CD Bot"
-#
-#      - name: Add changes
-#        run: git add .
-#
-#      - name: Try to commit changes
-#        run: git commit -m "Update build."
-#        continue-on-error: true
-#
-#      - name: Publish changes
-#        run: git push
-#        if: ${{ success() }}
