@@ -43,3 +43,20 @@ fun A(href: String, content: String = "", vararg classes: String = arrayOf("link
 		Text(content)
 	}
 }
+
+@Composable
+fun RichText(text: String) {
+	val resultingText = text.split(Regex("<br>|\\[.*?\\]\\(.*?\\)", RegexOption.MULTILINE))
+	resultingText.forEach {
+		if (it.startsWith("[")) {
+			val icon = it.substring(1, it.length - 1)
+			I(icon = icon)
+		} else if (it.startsWith("(")) {
+			val icon = it.substring(1, it.length - 1)
+			I(icon = icon)
+		} else {
+			Text(it)
+		}
+	}
+	
+}

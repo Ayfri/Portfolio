@@ -106,7 +106,11 @@ object AppStyle : StyleSheet() {
 		}
 	}
 	
-	val footer by style {
+	val footerContact by style {
+	
+	}
+	
+	val footerInfo by style {
 		backgroundColor(Color(footerColor))
 		color(Color.white)
 		padding(1.cssRem, 0.px)

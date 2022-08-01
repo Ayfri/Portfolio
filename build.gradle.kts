@@ -30,6 +30,7 @@ dependencies {
 	implementation(compose.web.core)
 	implementation(compose.runtime)
 	implementation("app.softwork:routing-compose:${project.extra["compose.routing"]}")
+	implementation(npm("@types/marked", project.extra["npm.@types/marked"].toString(), true))
 }
 
 task("compose") {

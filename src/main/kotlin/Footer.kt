@@ -1,4 +1,3 @@
-
 import androidx.compose.runtime.Composable
 import header.GITHUB_LINK
 import org.jetbrains.compose.web.dom.A
@@ -27,7 +26,7 @@ val footerSocials = listOf(
 @Composable
 fun Footer() {
 	Footer({
-		classes(AppStyle.footer)
+		classes(AppStyle.footerInfo)
 	}) {
 		Ul({
 			classes("top")
@@ -42,7 +41,6 @@ fun Footer() {
 				}
 			}
 		}
-		
 		
 		Div {
 			P("© ${Date().getFullYear()} Pierre Roy - All rights reserved.")

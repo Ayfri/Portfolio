@@ -1,8 +1,8 @@
 package pages
 
-import A
 import androidx.compose.runtime.Composable
 import localImage
+import markdownParagraph
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType
@@ -12,7 +12,6 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.Img
-import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
@@ -71,20 +70,15 @@ fun Home() {
 			}
 		}
 		
-		Div {
-			P({
-				classes(AppStyle.monoFont)
-			}) {
-				Text("Hi, it’s me, Pierre Roy, I am a first year IT student at ")
-				A("https://www.ynov.com/campus/aix-en-provence/", "Ynov Aix school")
-				Text(
-					"""
-						, and I am passionate about computer science and especially programming.
-						I’m making all sort of projects and programming by myself since years and this is my portfolio, welcome !
-					""".trimIndent()
-				)
-			}
-		}
+		Div({
+			markdownParagraph(
+				"""
+					Hi, it's me, Pierre Roy, I am a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/) and I am passionate about computer science and especially programming.<br>
+					I'm making all sort of projects and programming by myself since years and this is my portfolio, welcome !
+				""".trimIndent(),
+				AppStyle.monoFont
+			)
+		})
 	}
 }
 
