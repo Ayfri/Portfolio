@@ -3,30 +3,10 @@ package style.utils
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.CSSAutoKeyword
 import org.jetbrains.compose.web.css.selectors.CSSSelector
-import pages.HomeStyle.plus
 import pages.HomeStyle.selector
-import pages.HomeStyle.style
 
-data class CSSSelectorList(val selectors: List<CSSSelector>) {
-	constructor(vararg selectors: String) : this(selectors.map { selector(it) })
-	
-	override fun toString() = selectors.joinToString(", ")
-	fun asSelector() = selector(toString())
-	
-	operator fun plus(other: CSSSelectorList) = CSSSelectorList(selectors + other.selectors)
-	operator fun plus(other: CSSSelector) = CSSSelectorList(selectors + other)
-	operator fun plus(other: String) = CSSSelectorList(selectors + selector(other))
-	
-	infix fun combined(other: CSSSelector) = CSSSelectorList(selectors.map { it + " " + other })
-	infix fun combined(other: String) = CSSSelectorList(selectors.map { it + " " + selector(other) })
-	
-	fun desc(other: CSSSelector) = CSSSelectorList(selectors.map { it + ">" + other })
-	fun desc(other: String) = CSSSelectorList(selectors.map { it + ">" + selector(other) })
-	
-	infix fun style(block: CSSStyleRuleBuilder.() -> Unit) = style(asSelector(), block)
-}
-
-fun SelectorsScope.list(vararg selectors: String) = CSSSelectorList(*selectors)
+fun CSSBuilder.list(vararg selectors: String) = group(*(selectors.map { desc(self, it) }.toTypedArray()))
+fun CSSBuilder.list(vararg selectors: CSSSelector) = group(*(selectors.map { desc(self, it) }.toTypedArray()))
 
 fun StyleScope.size(height: CSSNumeric, width: CSSNumeric = height) {
 	height(height)
@@ -85,4 +65,77 @@ fun StyleScope.height(value: SizeKeyword) {
 
 fun StyleScope.boxShadow(color: CSSColorValue, offset: CSSNumeric = 0.number, blur: CSSNumeric = 0.number, spread: CSSNumeric = 0.number, inset: Boolean = false) {
 	property("box-shadow", "${if (inset) "inset " else ""}${offset} $blur $spread $color")
+}
+
+fun StyleScope.zIndex(value: Int) {
+	property("z-index", value)
+}
+
+interface Resize : StylePropertyEnum {
+	companion object {
+		inline val Both get() = Resize("both")
+		inline val Horizontal get() = Resize("horizontal")
+		inline val None get() = Resize("none")
+		inline val Vertical get() = Resize("vertical")
+		
+		inline val Inherit get() = Resize("inherit")
+		inline val Initial get() = Resize("initial")
+		inline val Revert get() = Resize("revert")
+		inline val Unset get() = Resize("unset")
+	}
+}
+
+fun Resize(value: String) = value.unsafeCast<Resize>()
+
+fun StyleScope.resize(value: Resize) {
+	property("resize", value)
+}
+
+val SelectorsScope.placeholder get() = slotted(selector("placeholder"))
+
+interface Cursor : StylePropertyEnum {
+	companion object {
+		inline val Auto get() = Cursor("auto")
+		inline val Default get() = Cursor("default")
+		inline val None get() = Cursor("none")
+		inline val ContextMenu get() = Cursor("context-menu")
+		inline val Help get() = Cursor("help")
+		inline val Pointer get() = Cursor("pointer")
+		inline val Progress get() = Cursor("progress")
+		inline val Wait get() = Cursor("wait")
+		inline val Cell get() = Cursor("cell")
+		inline val Crosshair get() = Cursor("crosshair")
+		inline val Text get() = Cursor("text")
+		inline val VerticalText get() = Cursor("vertical-text")
+		inline val Alias get() = Cursor("alias")
+		inline val Copy get() = Cursor("copy")
+		inline val Move get() = Cursor("move")
+		inline val NoDrop get() = Cursor("no-drop")
+		inline val Grab get() = Cursor("grab")
+		inline val Grabbing get() = Cursor("grabbing")
+		inline val NotAllowed get() = Cursor("not-allowed")
+		inline val AllScroll get() = Cursor("all-scroll")
+		inline val ColResize get() = Cursor("col-resize")
+		inline val RowResize get() = Cursor("row-resize")
+		inline val NResize get() = Cursor("n-resize")
+		inline val EResize get() = Cursor("e-resize")
+		inline val SResize get() = Cursor("s-resize")
+		inline val WResize get() = Cursor("w-resize")
+		inline val NeResize get() = Cursor("ne-resize")
+		inline val NwResize get() = Cursor("nw-resize")
+		inline val SeResize get() = Cursor("se-resize")
+		inline val SwResize get() = Cursor("sw-resize")
+		inline val EwResize get() = Cursor("ew-resize")
+		inline val NsResize get() = Cursor("ns-resize")
+		inline val NeswResize get() = Cursor("nesw-resize")
+		inline val NwseResize get() = Cursor("nwse-resize")
+		inline val ZoomIn get() = Cursor("zoom-in")
+		inline val ZoomOut get() = Cursor("zoom-out")
+	}
+}
+
+fun Cursor(value: String) = value.unsafeCast<Cursor>()
+
+fun StyleScope.cursor(value: Cursor) {
+	property("cursor", value)
 }

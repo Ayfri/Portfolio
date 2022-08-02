@@ -16,3 +16,5 @@ fun AttrsScope<*>.markdownParagraph(text: String, vararg classes: String) {
 		onDispose {}
 	}
 }
+
+inline fun <C : CharSequence, R : C> C.ifNotBlank(block: (C) -> R) = if (isNotBlank()) block(this) else ""

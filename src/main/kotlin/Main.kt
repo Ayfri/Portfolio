@@ -9,6 +9,8 @@ import org.jetbrains.compose.web.renderComposableInBody
 import org.w3c.dom.HTMLBodyElement
 import pages.Home
 
+const val MAIL_TO = "pierre.ayfri@gmail.com"
+
 fun main() {
 	renderComposable(root = document.querySelector("head")!!) {
 		Head()

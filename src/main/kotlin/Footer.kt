@@ -1,10 +1,15 @@
 import androidx.compose.runtime.Composable
 import header.GITHUB_LINK
-import org.jetbrains.compose.web.dom.A
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.Footer
-import org.jetbrains.compose.web.dom.Li
-import org.jetbrains.compose.web.dom.Ul
+import kotlinx.browser.document
+import kotlinx.browser.window
+import org.jetbrains.compose.web.attributes.InputType
+import org.jetbrains.compose.web.attributes.maxLength
+import org.jetbrains.compose.web.attributes.minLength
+import org.jetbrains.compose.web.attributes.placeholder
+import org.jetbrains.compose.web.attributes.required
+import org.jetbrains.compose.web.dom.*
+import org.w3c.dom.HTMLInputElement
+import org.w3c.dom.HTMLTextAreaElement
 import style.AppStyle
 import kotlin.js.Date
 
@@ -24,26 +29,111 @@ val footerSocials = listOf(
 )
 
 @Composable
+fun FooterContactField(
+	label: String,
+	id: String,
+	type: InputType<String> = InputType.Text,
+	required: Boolean = false,
+	range: IntRange? = null,
+	textArea: Boolean = false,
+) {
+	Div {
+		Label(id) {
+			Text(label)
+		}
+		
+		if (textArea) {
+			TextArea {
+				id(id)
+				if (required) required()
+				placeholder(label)
+				minLength(range?.first ?: 0)
+				maxLength(range?.last ?: Int.MAX_VALUE)
+			}
+		} else {
+			Input(type) {
+				id(id)
+				if (required) required()
+				placeholder(label)
+				minLength(range?.first ?: 0)
+				maxLength(range?.last ?: Int.MAX_VALUE)
+			}
+		}
+	}
+}
+
+@Composable
 fun Footer() {
 	Footer({
-		classes(AppStyle.footerInfo)
+		classes(AppStyle.footer)
 	}) {
-		Ul({
-			classes("top")
+		Div({
+			classes(AppStyle.footerContact)
 		}) {
-			footerSocials.forEach {
-				Li {
-					A(it.url, {
-						attr("target", "_blank")
-					}) {
-						I(FontAwesomeType.BRAND, it.iconName)
-					}
+			H2({
+				classes(AppStyle.monoFont)
+			}) {
+				Text("Contact Me :")
+			}
+			
+			Div({
+				classes(AppStyle.footerContactInputs)
+			}) {
+				FooterContactField(label = "First Name", id = "first-name", range = 1..20)
+				FooterContactField(label = "Last Name", id = "last-name", range = 1..20)
+				FooterContactField(label = "Subject", id = "subject", required = true, range = 5..50)
+				FooterContactField(label = "Email", id = "email", type = InputType.Email, range = 16..256)
+				FooterContactField(label = "Message", id = "message", textArea = true, required = true, range = 20..500)
+			}
+			
+			Button({
+				onClick {
+					val firstName = (document.querySelector("#first-name") as HTMLInputElement).value
+					val lastName = (document.querySelector("#last-name") as HTMLInputElement).value
+					val subjectString = (document.querySelector("#subject") as HTMLInputElement).value
+					val email = (document.querySelector("#email") as HTMLInputElement).value
+					val message = (document.querySelector("#message") as HTMLTextAreaElement).value
+					
+					val subject = subjectString.ifBlank { "No Subject" }
+					val name = firstName.ifBlank { lastName }
+					
+					val body = """
+						${name.ifNotBlank { "Name: $name" }}
+						${subject.ifNotBlank { "Subject: $subject" }}
+						${email.ifNotBlank { "Email: $email" }}
+						
+						${message.ifNotBlank { "Message: $message" }}
+					""".trimIndent().replace("\n", "%0A")
+					
+					window.open("mailto:$MAIL_TO?subject=$subject&body=$body", "_blank")
 				}
+			}) {
+				Text("Send message")
+				
+				I(FontAwesomeType.SOLID, "arrow-up-right-from-square")
 			}
 		}
 		
-		Div {
-			P("© ${Date().getFullYear()} Pierre Roy - All rights reserved.")
+		Div({
+			classes(AppStyle.footerInfo)
+		}) {
+			Ul({
+				classes("top")
+			}) {
+				footerSocials.forEach {
+					Li {
+						A(it.url, {
+							attr("target", "_blank")
+						}) {
+							I(FontAwesomeType.BRAND, it.iconName)
+						}
+					}
+				}
+			}
+			
+			Div {
+				P("© ${Date().getFullYear()} Pierre Roy - All rights reserved.")
+			}
 		}
 	}
 }

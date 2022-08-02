@@ -64,3 +64,5 @@ class CSSMax<T : CSSUnit>(vararg val values: CSSSizeValue<out T>) : CSSNumericVa
 }
 
 fun max(vararg values: CSSSizeValue<out CSSUnit>) = CSSMax(*values)
+
+fun repeat(count: Int, value: CSSSizeValue<out CSSUnit>) = "repeat($count, $value)"
