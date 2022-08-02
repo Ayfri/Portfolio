@@ -45,7 +45,7 @@ fun FooterContactField(
 		if (textArea) {
 			TextArea {
 				id(id)
-				if (required) required()
+				if (required) attr("required", "")
 				placeholder(label)
 				minLength(range?.first ?: 0)
 				maxLength(range?.last ?: Int.MAX_VALUE)
