@@ -1,5 +1,6 @@
 plugins {
 	kotlin("jvm")
+	kotlin("plugin.serialization")
 }
 
 repositories {
@@ -7,6 +8,10 @@ repositories {
 }
 
 dependencies {
-	implementation("io.ktor:ktor-client-core:${project.property("ktor.version")}")
-	implementation("io.ktor:ktor-client-cio:${project.property("ktor.version")}")
+	val ktorVersion = project.property("ktor.version") as String
+	
+	implementation("io.ktor:ktor-client-core:$ktorVersion")
+	implementation("io.ktor:ktor-client-cio:$ktorVersion")
+	implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+	implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
 }

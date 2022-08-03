@@ -1,3 +1,3 @@
-fun main() {
-	println("Hello, world!")
+suspend fun main() {
+	println(GitHubAPI.getUser().prettyPrint())
 }
