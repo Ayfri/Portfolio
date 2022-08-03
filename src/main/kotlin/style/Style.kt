@@ -21,6 +21,8 @@ object AppStyle : StyleSheet() {
 	const val linkColor = "#75C9CE"
 	const val linkHoverColor = "#95fbff"
 	
+	val mobileNavBarFirstBreak = 860.px
+	
 	init {
 		root {
 			CSSVariables.navbarHeight(5.cssRem)
@@ -32,16 +34,18 @@ object AppStyle : StyleSheet() {
 		}
 		
 		"a" style {
-			color(Color(linkColor))
-			
 			transitions {
 				delay(.25.s)
 				properties("background-color", "color")
 			}
 			
 			textDecoration("none")
+		}
+		
+		desc("p", "a") style {
+			color(Color(linkColor))
 			
-			hover(selector("a")) style {
+			hover(desc("p", "a")) style {
 				color(Color(linkHoverColor))
 			}
 		}
@@ -99,7 +103,7 @@ object AppStyle : StyleSheet() {
 			height(100.percent)
 			display(DisplayStyle.InlineBlock)
 			lineHeight(navbarHeight.value())
-			padding(0.px, 2.cssRem)
+			padding(0.px, clamp(1.5.cssRem, 3.vw, 2.8.cssRem))
 			
 			group(self + className("active"), hover(self)) style {
 				backgroundColor(Color(navbarColorSelected))
@@ -115,6 +119,12 @@ object AppStyle : StyleSheet() {
 		
 		hover(self) style {
 			backgroundColor(Color(navbarColorSelected))
+		}
+		
+		media(mediaMaxWidth(mobileNavBarFirstBreak)) {
+			"p" {
+				display(DisplayStyle.None)
+			}
 		}
 	}
 	
@@ -232,7 +242,7 @@ object AppStyle : StyleSheet() {
 	val footerInfo by style {
 		backgroundColor(Color(footerColor))
 		color(Color.white)
-		padding(1.cssRem, 0.px)
+		padding(.5.cssRem, 0.px)
 		textAlign("center")
 		width(100.percent)
 		
