@@ -1,6 +1,5 @@
 .gradle
 build/
-yarn.lock
 
 ### IntelliJ IDEA ###
 .idea
