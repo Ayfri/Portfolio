@@ -139,3 +139,11 @@ fun Cursor(value: String) = value.unsafeCast<Cursor>()
 fun StyleScope.cursor(value: Cursor) {
 	property("cursor", value)
 }
+
+fun StyleScope.margin(value: CSSNumeric, auto: CSSAutoKeyword) {
+	property("margin", "$value $auto")
+}
+
+fun StyleScope.margin(auto: CSSAutoKeyword, value: CSSNumeric) {
+	property("margin", "$auto $value")
+}

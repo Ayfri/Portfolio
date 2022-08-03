@@ -80,10 +80,9 @@ fun Footer() {
 				classes(AppStyle.footerContactInputs)
 			}) {
 				FooterContactField(label = "First Name", id = "first-name", range = 1..20)
-				FooterContactField(label = "Last Name", id = "last-name", range = 1..20)
-				FooterContactField(label = "Subject", id = "subject", required = true, range = 5..50)
-				FooterContactField(label = "Email", id = "email", type = InputType.Email, range = 16..256)
-				FooterContactField(label = "Message", id = "message", textArea = true, required = true, range = 20..500)
+				FooterContactField(label = "Last Name", id = "last-name", range = 1..32)
+				FooterContactField(label = "Subject", id = "subject", required = true, range = 5..96)
+				FooterContactField(label = "Message", id = "message", textArea = true, required = true, range = 16..512)
 			}
 			
 			Button({
@@ -91,7 +90,6 @@ fun Footer() {
 					val firstName = (document.querySelector("#first-name") as HTMLInputElement).value
 					val lastName = (document.querySelector("#last-name") as HTMLInputElement).value
 					val subjectString = (document.querySelector("#subject") as HTMLInputElement).value
-					val email = (document.querySelector("#email") as HTMLInputElement).value
 					val message = (document.querySelector("#message") as HTMLTextAreaElement).value
 					
 					val subject = subjectString.ifBlank { "No Subject" }
@@ -100,7 +98,6 @@ fun Footer() {
 					val body = """
 						${name.ifNotBlank { "Name: $name" }}
 						${subject.ifNotBlank { "Subject: $subject" }}
-						${email.ifNotBlank { "Email: $email" }}
 						
 						${message.ifNotBlank { "Message: $message" }}
 					""".trimIndent().replace("\n", "%0A")

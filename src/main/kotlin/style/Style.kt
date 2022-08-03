@@ -2,6 +2,7 @@ package style
 
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.css.selectors.Nth
 import style.CSSVariables.navbarHeight
 import style.utils.*
@@ -127,8 +128,10 @@ object AppStyle : StyleSheet() {
 	
 	@OptIn(ExperimentalComposeWebApi::class)
 	val footerContact by style {
-		padding(1.cssRem, 20.percent)
+		margin(0.px, auto)
+		padding(1.cssRem, 0.px)
 		position(Position.Relative)
+		width(clamp(20.cssRem, 40.vw, 60.cssRem))
 		
 		"button" {
 			backgroundColor(Color("#50435A"))
@@ -183,14 +186,10 @@ object AppStyle : StyleSheet() {
 		}
 		
 		child(self, nthChild(Nth.Functional(3))) style {
-			gridArea("2", "1", "3", "2")
+			gridArea("2", "1", "3", "3")
 		}
 		
 		child(self, nthChild(Nth.Functional(4))) style {
-			gridArea("2", "2", "3", "3")
-		}
-		
-		child(self, nthChild(Nth.Functional(5))) style {
 			gridArea("3", "1", "5", "3")
 		}
 		
