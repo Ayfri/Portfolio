@@ -1,4 +1,4 @@
-name: CD
+name: Get data from GitHub
 
 on:
   workflow_dispatch:
