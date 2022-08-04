@@ -1,28 +1,17 @@
 package entities
 
 import GitHubAPI
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Repository(
-	@SerialName("allow_auto_merge")
-	val allowAutoMerge: Boolean,
-	@SerialName("allow_forking")
-	val allowForking: Boolean,
-	@SerialName("allow_merge_commit")
-	val allowMergeCommit: Boolean,
-	@SerialName("allow_rebase_merge")
-	val allowRebaseMerge: Boolean,
-	@SerialName("allow_squash_merge")
-	val allowSquashMerge: Boolean,
-	@SerialName("allow_update_branch")
-	val allowUpdateBranch: Boolean,
 	@SerialName("archive_url")
 	val archiveUrl: String,
-	@SerialName("archived")
 	val archived: Boolean,
 	@SerialName("assignees_url")
 	val assigneesUrl: String,
@@ -48,21 +37,15 @@ data class Repository(
 	val createdAt: String,
 	@SerialName("default_branch")
 	val defaultBranch: String,
-	@SerialName("delete_branch_on_merge")
-	val deleteBranchOnMerge: Boolean,
 	@SerialName("deployments_url")
 	val deploymentsUrl: String,
-	@SerialName("description")
-	val description: String,
-	@SerialName("disabled")
+	val description: String?,
 	val disabled: Boolean,
 	@SerialName("downloads_url")
 	val downloadsUrl: String,
 	@SerialName("events_url")
 	val eventsUrl: String,
-	@SerialName("fork")
 	val fork: Boolean,
-	@SerialName("forks")
 	val forks: Int,
 	@SerialName("forks_count")
 	val forksCount: Int,
@@ -88,13 +71,11 @@ data class Repository(
 	val hasProjects: Boolean,
 	@SerialName("has_wiki")
 	val hasWiki: Boolean,
-	@SerialName("homepage")
-	val homepage: String,
+	val homepage: String?,
 	@SerialName("hooks_url")
 	val hooksUrl: String,
 	@SerialName("html_url")
 	val htmlUrl: String,
-	@SerialName("id")
 	val id: Int,
 	@SerialName("is_template")
 	val isTemplate: Boolean,
@@ -108,11 +89,9 @@ data class Repository(
 	val keysUrl: String,
 	@SerialName("labels_url")
 	val labelsUrl: String,
-	@SerialName("language")
-	val language: String,
+	val language: String?,
 	@SerialName("languages_url")
 	val languagesUrl: String,
-	@SerialName("license")
 	val license: License?,
 	@SerialName("merges_url")
 	val mergesUrl: String,
@@ -120,10 +99,7 @@ data class Repository(
 	val milestonesUrl: String,
 	@SerialName("mirror_url")
 	val mirrorUrl: String?,
-	@SerialName("name")
 	val name: String,
-	@SerialName("network_count")
-	val networkCount: Int,
 	@SerialName("node_id")
 	val nodeId: String,
 	@SerialName("notifications_url")
@@ -132,9 +108,7 @@ data class Repository(
 	val openIssues: Int,
 	@SerialName("open_issues_count")
 	val openIssuesCount: Int,
-	@SerialName("owner")
 	val owner: PartialUser,
-	@SerialName("permissions")
 	val permissions: Permissions,
 	@SerialName("private")
 	val `private`: Boolean,
@@ -144,7 +118,6 @@ data class Repository(
 	val pushedAt: String,
 	@SerialName("releases_url")
 	val releasesUrl: String,
-	@SerialName("size")
 	val size: Int,
 	@SerialName("ssh_url")
 	val sshUrl: String,
@@ -154,8 +127,6 @@ data class Repository(
 	val stargazersUrl: String,
 	@SerialName("statuses_url")
 	val statusesUrl: String,
-	@SerialName("subscribers_count")
-	val subscribersCount: Int,
 	@SerialName("subscribers_url")
 	val subscribersUrl: String,
 	@SerialName("subscription_url")
@@ -166,21 +137,13 @@ data class Repository(
 	val tagsUrl: String,
 	@SerialName("teams_url")
 	val teamsUrl: String,
-	@SerialName("temp_clone_token")
-	val tempCloneToken: String,
-	@SerialName("topics")
 	val topics: List<String>,
 	@SerialName("trees_url")
 	val treesUrl: String,
 	@SerialName("updated_at")
 	val updatedAt: String,
-	@SerialName("url")
 	val url: String,
-	@SerialName("use_squash_pr_title_as_default")
-	val useSquashPrTitleAsDefault: Boolean,
-	@SerialName("visibility")
 	val visibility: String,
-	@SerialName("watchers")
 	val watchers: Int,
 	@SerialName("watchers_count")
 	val watchersCount: Int,
@@ -188,11 +151,18 @@ data class Repository(
 	val webCommitSignoffRequired: Boolean,
 ) {
 	suspend fun getREADME() = GitHubAPI.ktorClient.get {
-		url("${GitHubAPI.RAW_URL}/repos/${owner.login}/${name}/${defaultBranch}/README.md")
-	}.bodyAsText()
+		url("${this@Repository.url}/readme?ref=$defaultBranch")
+	}.let {
+		if (it.status == HttpStatusCode.NotFound) null
+		else it.body<ReadMe>().content
+	}
 	
 	suspend fun getCommitsCount() = GitHubAPI.ktorClient.get {
-		url("${GitHubAPI.RAW_URL}/repos/${owner.login}/${name}/commits?sha=${defaultBranch}&per_page=1&page=1")
+		url("${this@Repository.url}/commits?sha=${defaultBranch}&per_page=1&page=1")
+	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 1
+	
+	suspend fun getWatchersCount() = GitHubAPI.ktorClient.get {
+		url("${this@Repository.url}/subscribers?per_page=1&page=1")
 	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 0
 }
 
@@ -212,9 +182,7 @@ data class PartialUser(
 	val gravatarId: String,
 	@SerialName("html_url")
 	val htmlUrl: String,
-	@SerialName("id")
 	val id: Int,
-	@SerialName("login")
 	val login: String,
 	@SerialName("node_id")
 	val nodeId: String,
@@ -230,38 +198,55 @@ data class PartialUser(
 	val starredUrl: String,
 	@SerialName("subscriptions_url")
 	val subscriptionsUrl: String,
-	@SerialName("type")
 	val type: String,
-	@SerialName("url")
 	val url: String,
 )
 
 @Serializable
 data class Permissions(
-	@SerialName("admin")
 	val admin: Boolean,
-	@SerialName("maintain")
 	val maintain: Boolean,
-	@SerialName("pull")
 	val pull: Boolean,
-	@SerialName("push")
 	val push: Boolean,
-	@SerialName("triage")
 	val triage: Boolean,
 )
 
 @Serializable
 data class License(
-	@SerialName("key")
 	val key: String,
-	@SerialName("name")
 	val name: String,
 	@SerialName("node_id")
 	val nodeId: String,
 	@SerialName("spdx_id")
 	val spdxId: String,
-	@SerialName("url")
+	val url: String?,
+)
+
+@Serializable
+data class ReadMe(
+	val content: String?,
+	@SerialName("download_url")
+	val downloadUrl: String,
+	val encoding: String,
+	@SerialName("git_url")
+	val gitUrl: String,
+	@SerialName("html_url")
+	val htmlUrl: String,
+	@SerialName("_links")
+	val links: Links,
+	val name: String,
+	val path: String,
+	val sha: String,
+	val size: Int,
+	val type: String,
 	val url: String,
+)
+
+@Serializable
+data class Links(
+	val git: String,
+	val html: String,
+	val self: String,
 )
 
 enum class GetRepositoryDirection {
