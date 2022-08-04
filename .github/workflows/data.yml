@@ -1,4 +1,4 @@
-name: Get data from GitHub
+name: Data
 
 on:
   workflow_dispatch:
