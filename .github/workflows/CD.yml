@@ -1,12 +1,9 @@
 name: CD
 
 on:
-  push:
-    branches:
-      - master
-
   workflow_dispatch:
-  pull_request:
+  schedule:
+    - cron: "0 6 * * *"
 
 permissions:
   contents: read
@@ -14,11 +11,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
+  data:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,16 +22,15 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           distribution: 'adopt'
-          java-version: 11
+          java-version: 17
 
-      - name: Gradle Build
-        run: gradle browserDistribution
+      - name: Run gradle
+        run: ./gradlew run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Save sample
-        uses: actions/upload-pages-artifact@v1
+      - name: Commit result
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          path: build/distributions
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@main
+          commit_message: Deploy data.
+          file_pattern: "*result.json"
