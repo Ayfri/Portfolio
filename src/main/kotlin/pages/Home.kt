@@ -1,6 +1,14 @@
 package pages
 
+import Carousel
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
+import data.DataStyle
+import data.GitHubRepository
+import data.HomeCard
+import data.data
 import localImage
 import markdownParagraph
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -17,17 +25,23 @@ import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import style.AppStyle
 import style.utils.ObjectFit
+import style.utils.TextAlign
 import style.utils.clamp
 import style.utils.linearGradient
 import style.utils.objectFit
 import style.utils.size
+import style.utils.textAlign
 import kotlin.js.Date
 
 inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
 
+
 @Composable
 fun Home() {
+	val homeRepositories = remember { mutableStateListOf<GitHubRepository>() }
+	
 	Style(HomeStyle)
+	Style(DataStyle)
 	
 	Section({
 		classes(HomeStyle.top)
@@ -79,6 +93,20 @@ fun Home() {
 				AppStyle.monoFont
 			)
 		})
+		
+		if (homeRepositories.isEmpty()) {
+			LaunchedEffect(Unit) {
+				data.then { gitHubData ->
+					homeRepositories += gitHubData.repos.sortedBy {
+						it.stargazersCount
+					}.reversed().take(6)
+				}
+			}
+		}
+		
+		Carousel(homeRepositories, "${HomeStyle.repositoriesCarousel} ${AppStyle.monoFont}", DataStyle.homeCard) {
+			HomeCard(it)
+		}
 	}
 }
 
@@ -114,7 +142,7 @@ object HomeStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
-		textAlign("center")
+		textAlign(TextAlign.Center)
 		
 		"img" style {
 			objectFit(ObjectFit.Cover)
@@ -161,5 +189,9 @@ object HomeStyle : StyleSheet() {
 		"h3" {
 			fontWeight(400)
 		}
+	}
+	
+	val repositoriesCarousel by style {
+		gap(4.cssRem)
 	}
 }
