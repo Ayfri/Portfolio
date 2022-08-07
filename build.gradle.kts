@@ -2,6 +2,7 @@ import org.jetbrains.compose.compose
 
 plugins {
 	kotlin("js")
+	kotlin("plugin.serialization")
 	id("org.jetbrains.compose")
 }
 
@@ -31,6 +32,12 @@ dependencies {
 	implementation(compose.runtime)
 	implementation("app.softwork:routing-compose:${project.extra["compose.routing"]}")
 	implementation(npm("@types/marked", project.extra["npm.@types/marked"].toString(), true))
+	
+	val ktorVersion = project.extra["ktor.version"] as String
+	implementation("io.ktor:ktor-client-core:$ktorVersion")
+	implementation("io.ktor:ktor-client-js:$ktorVersion")
+	
+	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${project.extra["serialization.json.version"]}")
 }
 
 task("compose") {
