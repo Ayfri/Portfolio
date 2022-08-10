@@ -29,8 +29,6 @@ fun main() {
 	
 	renderComposableInBody {
 		BrowserRouter("/") {
-			redirect("/about.html", target = "/about", hide = true)
-			
 			val pathname = document.location?.pathname ?: "404"
 			setTitle("${pathname.removePrefix("/").replace("/", " ").titlecase()} - Pierre Roy")
 			
@@ -45,6 +43,10 @@ fun main() {
 			}
 			
 			Footer()
+			
+			noMatch {
+				redirect("/", true)
+			}
 		}
 	}
 }
