@@ -147,3 +147,45 @@ fun StyleScope.margin(value: CSSNumeric, auto: CSSAutoKeyword) {
 fun StyleScope.margin(auto: CSSAutoKeyword, value: CSSNumeric) {
 	property("margin", "$auto $value")
 }
+
+interface Overflow : StylePropertyEnum {
+	companion object {
+		inline val Auto get() = Overflow("auto")
+		inline val Hidden get() = Overflow("hidden")
+		inline val Scroll get() = Overflow("scroll")
+		inline val Visible get() = Overflow("visible")
+		
+		inline val Inherit get() = Overflow("inherit")
+		inline val Initial get() = Overflow("initial")
+		inline val Revert get() = Overflow("revert")
+		inline val Unset get() = Overflow("unset")
+	}
+}
+
+fun Overflow(value: String) = value.unsafeCast<Overflow>()
+
+fun StyleScope.overflow(value: Overflow) {
+	property("overflow", value)
+}
+
+interface TextAlign : StylePropertyEnum {
+	companion object {
+		inline val Left get() = TextAlign("left")
+		inline val Right get() = TextAlign("right")
+		inline val Center get() = TextAlign("center")
+		inline val Justify get() = TextAlign("justify")
+		inline val Start get() = TextAlign("start")
+		inline val End get() = TextAlign("end")
+		
+		inline val Inherit get() = TextAlign("inherit")
+		inline val Initial get() = TextAlign("initial")
+		inline val Revert get() = TextAlign("revert")
+		inline val Unset get() = TextAlign("unset")
+	}
+}
+
+fun TextAlign(value: String) = value.unsafeCast<TextAlign>()
+
+fun StyleScope.textAlign(value: TextAlign) {
+	property("text-align", value)
+}
