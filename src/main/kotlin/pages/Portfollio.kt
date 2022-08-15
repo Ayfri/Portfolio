@@ -14,8 +14,10 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Text
 import style.AppStyle
+import style.utils.ObjectFit
 import style.utils.TextAlign
 import style.utils.linearGradient
+import style.utils.objectFit
 import style.utils.textAlign
 
 @Composable
@@ -117,6 +119,8 @@ object PortfolioStyle : StyleSheet() {
 	
 	@OptIn(ExperimentalComposeWebApi::class)
 	val section by style {
+		val mobileBreak = 820.px
+		
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		justifyContent(JustifyContent.Center)
@@ -125,9 +129,11 @@ object PortfolioStyle : StyleSheet() {
 		
 		textAlign(TextAlign.Right)
 		
-		self + nthChild(Nth.Even) style {
-			textAlign(TextAlign.Left)
-			flexDirection(FlexDirection.RowReverse)
+		media(mediaMinWidth(mobileBreak + 1.px)) {
+			self + nthChild(Nth.Even) style {
+				textAlign(TextAlign.Left)
+				flexDirection(FlexDirection.RowReverse)
+			}
 		}
 		
 		self + not(lastChild) + after style {
@@ -139,10 +145,10 @@ object PortfolioStyle : StyleSheet() {
 			width(4.vw)
 			
 			position(Position.Absolute)
-			bottom((sectionsGap + height) * -.5)
+			bottom((sectionsGap * -.5) - height)
 			left(50.percent)
 			transform {
-				translateY((-50).percent)
+				translateX((-50).percent)
 			}
 			
 			backgroundColor(Color.white)
@@ -172,8 +178,23 @@ object PortfolioStyle : StyleSheet() {
 		"img" {
 			borderRadius(.8.cssRem)
 			property("box-shadow", "0 0 .75rem #71A0E8")
+			
 			height(14.cssRem)
+			objectFit(ObjectFit.Cover)
 			width(auto)
+		}
+		
+		media(mediaMaxWidth(mobileBreak)) {
+			self {
+				flexDirection(FlexDirection.Column)
+				alignItems(AlignItems.Stretch)
+				justifyContent(JustifyContent.Center)
+				textAlign(TextAlign.Center)
+				
+				"img" {
+					maxWidth(100.percent)
+				}
+			}
 		}
 	}
 }
