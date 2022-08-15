@@ -28,9 +28,10 @@ enum class FontAwesomeType(val value: String) {
 }
 
 @Composable
-fun I(type: FontAwesomeType = FontAwesomeType.SOLID, icon: String) {
+fun I(type: FontAwesomeType = FontAwesomeType.SOLID, icon: String, style: StyleScope.() -> Unit = {}) {
 	I({
 		classes(type.value, "fa-$icon")
+		style(style)
 	})
 }
 
@@ -99,7 +100,7 @@ inline fun <T> Carousel(children: List<T>, carouselClass: String? = null, itemCl
 			}
 		}
 		
-		// TODO : Find a way to loop around 
+		// TODO : Find a way to loop around
 	}
 }
 

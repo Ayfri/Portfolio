@@ -11,7 +11,9 @@ object CSSVariables : StyleSheet() {
 	val navbarHeight by variable<CSSNumeric>()
 }
 
+
 object AppStyle : StyleSheet() {
+	const val monoFontFamily = "JetBrains Mono"
 	const val navbarColor = "#2A2B36"
 	const val navbarColorSelected = "#1e1c28"
 	const val footerColor = "#1a1120"
@@ -68,11 +70,26 @@ object AppStyle : StyleSheet() {
 	}
 	
 	val monoFont by style {
-		fontFamily("JetBrains Mono", "monospace")
+		fontFamily(monoFontFamily, "monospace")
 	}
 	
 	val numberColor by style {
 		color(Color(specialTextColor))
+	}
+	
+	@OptIn(ExperimentalComposeWebApi::class)
+	val avatar by style {
+		objectFit(ObjectFit.Cover)
+		borderRadius(100.vmax)
+		size(15.cssRem)
+		filter {
+			dropShadow(
+				offsetX = 0.px,
+				offsetY = 0.px,
+				blurRadius = 30.px,
+				color = rgba(0, 0, 0, .75)
+			)
+		}
 	}
 	
 	val navbar by style {
@@ -83,7 +100,7 @@ object AppStyle : StyleSheet() {
 		position(Position.Fixed)
 		size(navbarHeight.value(), 100.percent)
 		top(0.px)
-		zIndex(3)
+		zIndex(5)
 		
 		"i" style {
 			fontSize(navbarHeight.value() * .6)

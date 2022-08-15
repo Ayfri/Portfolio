@@ -7,6 +7,7 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.renderComposable
 import org.jetbrains.compose.web.renderComposableInBody
 import org.w3c.dom.HTMLBodyElement
+import pages.AboutMe
 import pages.Home
 
 const val MAIL_TO = "pierre.ayfri@gmail.com"
@@ -19,7 +20,7 @@ fun main() {
 	val renderer = object : marked.TextRenderer() {
 		override fun link(href: String?, title: String?, text: String) = """
 			<a href="$href" ${title?.let { "title=$it" } ?: ""} class="link">$text</a>
-		"""
+		""".trimIndent()
 	}
 	
 	marked.use(jso { this.renderer = renderer })
@@ -39,6 +40,10 @@ fun main() {
 			}) {
 				route("/") {
 					Home()
+				}
+				
+				route("/about") {
+					AboutMe()
 				}
 			}
 			

@@ -11,7 +11,6 @@ import data.HomeCard
 import data.data
 import localImage
 import markdownParagraph
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType.Enum.Screen
@@ -20,16 +19,14 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.Img
+import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import style.AppStyle
-import style.utils.ObjectFit
 import style.utils.TextAlign
 import style.utils.clamp
 import style.utils.linearGradient
-import style.utils.objectFit
-import style.utils.size
 import style.utils.textAlign
 import kotlin.js.Date
 
@@ -49,7 +46,9 @@ fun Home() {
 		Div({
 			classes(HomeStyle.topInfo)
 		}) {
-			Img(localImage("avatar.jpg"), "avatar")
+			Img(localImage("avatar.jpg"), "avatar") {
+				classes(AppStyle.avatar)
+			}
 			
 			H2 {
 				Text("Pierre Roy ")
@@ -84,7 +83,7 @@ fun Home() {
 			}
 		}
 		
-		Div({
+		P({
 			markdownParagraph(
 				"""
 					Hi, it's me, Pierre Roy, I am a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/) and I am passionate about computer science and especially programming.<br>
@@ -137,26 +136,11 @@ object HomeStyle : StyleSheet() {
 		}
 	}
 	
-	@OptIn(ExperimentalComposeWebApi::class)
 	val top by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
 		textAlign(TextAlign.Center)
-		
-		"img" style {
-			objectFit(ObjectFit.Cover)
-			borderRadius(100.vmax)
-			size(15.cssRem)
-			filter {
-				dropShadow(
-					offsetX = 0.px,
-					offsetY = 0.px,
-					blurRadius = 30.px,
-					color = rgba(0, 0, 0, .75)
-				)
-			}
-		}
 	}
 	
 	val topInfo by style {
