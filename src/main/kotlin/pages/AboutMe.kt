@@ -31,13 +31,14 @@ data class AboutMeSection(val content: String, val date: Int, val image: Boolean
 	var htmlElement: HTMLElement? = null
 	
 	@Composable
-	fun Display() {
+	fun Display(selected: Boolean = false) {
 		Section({
 			if (image) classes(AboutMeStyle.withImage)
+			if (selected) classes("selected")
 			id(id)
+			
 			ref {
 				htmlElement = it
-				
 				onDispose {}
 			}
 		}) {
@@ -225,7 +226,7 @@ fun AboutMe() {
 		sections.forEachIndexed { index, section ->
 			if (index == roundSelected) return@forEachIndexed
 			val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
-			val elementOffset = element.asDynamic().offsetTop as Double - 90
+			val elementOffset = element.asDynamic().offsetTop as Double - timelineDefaultOffset * 2
 			val elementHeight = element.asDynamic().offsetHeight as Double
 			
 			val elementRange = elementOffset..(elementOffset + elementHeight)
@@ -243,7 +244,7 @@ fun AboutMe() {
 	Div({
 		classes(AboutMeStyle.content)
 	}) {
-		sections.forEach { it.Display() }
+		sections.forEachIndexed { index, it -> it.Display(index == roundSelected) }
 	}
 }
 
@@ -269,11 +270,12 @@ object AboutMeStyle : StyleSheet() {
 	const val timelineBgGradiantStartColor = "#4B4F9D"
 	
 	val timelineSize by variable<CSSSizeValue<*>>()
+	val timelineOffset = 1.5.cssRem
 	
 	init {
 		"html" {
 			property("scroll-behavior", "smooth")
-			property("scroll-padding-top", CSSVariables.navbarHeight.value())
+			property("scroll-padding-top", CSSVariables.navbarHeight.value() + timelineDefaultOffset.px)
 		}
 		
 		id("main") style {
@@ -295,6 +297,16 @@ object AboutMeStyle : StyleSheet() {
 		}
 	}
 	
+	val sectionSelection by keyframes {
+		from {
+			backgroundPosition("200% 0%")
+		}
+		
+		to {
+			backgroundPosition("0% 0%")
+		}
+	}
+	
 	@OptIn(ExperimentalComposeWebApi::class)
 	val timeline by style {
 		val thickness = 1.vh
@@ -306,7 +318,7 @@ object AboutMeStyle : StyleSheet() {
 		alignItems(AlignItems.Center)
 		
 		position(Position.Absolute)
-		left(1.5.cssRem)
+		left(timelineOffset)
 		height(90.percent)
 		width(timelineSize.value())
 		
@@ -385,6 +397,7 @@ object AboutMeStyle : StyleSheet() {
 		}
 	}
 	
+	@OptIn(ExperimentalComposeWebApi::class)
 	val content by style {
 		marginLeft(timelineSize.value())
 		
@@ -394,12 +407,36 @@ object AboutMeStyle : StyleSheet() {
 			backgroundColor(Color(backgroundSectionOddColor))
 			fontFamily(AppStyle.monoFontFamily)
 			padding(1.5.cssRem, height)
+			position(Position.Relative)
+			
+			transitions {
+				delay(.25.s)
+				ease(AnimationTimingFunction.EaseInOut)
+				properties("transform")
+			}
 			
 			self + className("selected") style {
-				background(linearGradient(90.deg) {
+				val offset = 4.px
+				transform {
+					scaleX(1.005)
+					translateX(-offset)
+				}
+				
+				borderRadius(topLeft = 5.px, bottomLeft = 5.px, topRight = 0.px, bottomRight = 0.px)
+				
+				overflow(Overflow.Hidden)
+				animation(sectionSelection) {
+					duration(.5.s)
+					timingFunction(AnimationTimingFunction.EaseInOut)
+				}
+				
+				property("background-size", "200% 100%")
+				backgroundImage(linearGradient(90.deg) {
 					stop(Color("#50435A"))
-					stop(Color("#13051F"))
+					stop(Color("#28273e"))
+					stop(Color.transparent)
 				})
+				backgroundRepeat("no-repeat")
 			}
 			
 			self + nthChild(Nth.Even) style {
