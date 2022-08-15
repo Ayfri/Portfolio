@@ -12,6 +12,7 @@ val tabs = listOf(
 	Tab("My Skills", "/skills"),
 	Tab("My Projects", "/projects"),
 	Tab("Experiences", "/experiences"),
+	Tab("Portfolio", "/portfolio"),
 )
 
 @Composable

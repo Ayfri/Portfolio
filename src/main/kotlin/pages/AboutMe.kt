@@ -27,7 +27,7 @@ import style.AppStyle
 import style.CSSVariables
 import style.utils.*
 
-data class Section(val content: String, val date: Int, val image: Boolean = false, val id: String, val title: (@Composable () -> Unit)? = null) {
+data class AboutMeSection(val content: String, val date: Int, val image: Boolean = false, val id: String, val title: (@Composable () -> Unit)? = null) {
 	var htmlElement: HTMLElement? = null
 	
 	@Composable
@@ -58,7 +58,7 @@ data class Section(val content: String, val date: Int, val image: Boolean = fals
 }
 
 val sections = listOf(
-	Section(
+	AboutMeSection(
 		"""
 			Hi, it’s me, Pierre Roy, I am a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/), and I am passionate about computer science and especially programming.
 			I’m making all sort of projects and programming by myself since years and this is my portfolio, welcome !
@@ -69,7 +69,7 @@ val sections = listOf(
 		}
 	},
 	
-	Section(
+	AboutMeSection(
 		"""
 			First started programming in 2014 by randomly watching a conference about programming in a library.
 			I first tried some experiments in Python with a [book](https://www.eyrolles.com/Informatique/Livre/python-pour-les-kids-9782212140880) that my dad paid me, done some beginner projects, etc.
@@ -81,7 +81,7 @@ val sections = listOf(
 		TextIcon("Intro to programming", FontAwesomeType.SOLID, "computer")
 	},
 	
-	Section(
+	AboutMeSection(
 		"""
 			After creating my own [Discord server](https://discord.gg/BySjRNQ9Je) for my community from [Youtube](https://www.youtube.com/c/Ayfri), I wanted to create a Discord Bot. So I created a bot in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) using [Node.JS](https://nodejs.org) in early 2018 by following tutorials, I created CommunAyBot.
 			Back in the days it was not that common to create a bot for your own community and Discord was not so reputed. Because of that, there was no really great tutorials and I got a lot of help from a Discord Server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons and some others helped me a lot to understand and create my bot.
@@ -95,7 +95,7 @@ val sections = listOf(
 		TextIcon("Second Intro to Programming", FontAwesomeType.BRAND, "discord", Color("#5865f2"))
 	},
 	
-	Section(
+	AboutMeSection(
 		"""
 			At my high-school, for 3 years, I used arduino a lot, only creating big projects on the last year but still. It has let me learn a lot on low-level programming, [C++](https://cplusplus.com) basics and microcontrollers.
 			By doing my own researches I learned a lot about C++ compilation, assembler, reverse engineering, optimisation and other low-level subjects.
@@ -110,7 +110,7 @@ val sections = listOf(
 		TextIcon("Arduino", localImage("arduino.svg"))
 	},
 	
-	Section(
+	AboutMeSection(
 		"""
 			At this time I was administrator (and I’m still) on a [big Discord server](https://discord.gg/sDT7W8mNmq) at the time about sharing your server or website. And I was friend with the other administrator, Antow, which also created his own bot, I was helping him sometimes.
 			After some discussions, we accorded to merge our bots together, as we were both passionate about astronomy, we named it [Galileo](https://github.com/Galileo-Bot/galileo).
@@ -121,7 +121,7 @@ val sections = listOf(
 		TextIcon("Galileo", localImage("galileo.png"))
 	},
 	
-	Section(
+	AboutMeSection(
 		"""
 			In 2015, I created my first graphic programs using [Processing](https://processing.org) and [Java](https://www.java.com).
 			I heard about this program from watching videos from [The Coding Train](https://www.youtube.com/c/TheCodingTrain). I created a lot of little experiments using it and learned a lot of interesting concepts.
@@ -137,7 +137,7 @@ val sections = listOf(
 		TextIcon("Processing", "https://upload.wikimedia.org/wikipedia/commons/c/cb/Processing_2021_logo.svg")
 	},
 	
-	Section(
+	AboutMeSection(
 		"""
 			[Minecraft](https://minecraft.net) is my favorite game of all time, I started playing it back in 2010, I know it by heart.
 			Heard about it randomly on an old computer blog that my dad was subscribed to where on an article they spoked about _"this new game with an interesting concept"_.
@@ -150,7 +150,7 @@ val sections = listOf(
 		TextIcon("Minecraft", localImage("minecraft.svg"))
 	},
 	
-	Section(
+	AboutMeSection(
 		"""
 			After getting graduated from high-school, I got accepted into a private school named [Ynov](https://ynov.com).
 			We learned so far [GoLang](https://go.dev), [Python](https://www.python.org), pretty complex [C++](https://cplusplus.com) and POO into C++, some network basics, how to use [REST API](https://wikipedia.org/wiki/Representational_state_transfer)s, the team JS/HTML/CSS, databases and [MySQL](https://www.mysql.com), and other useful technologies.
@@ -164,7 +164,7 @@ val sections = listOf(
 		TextIcon("Post-Bac and Ynov", "https://www.ynov.com/wp-content/themes/ynov/assets/images/favicons/apple-touch-icon.png")
 	},
 	
-	Section(
+	AboutMeSection(
 		"""
 		My school required me to have an internship of 6 weeks in any enterprise to have a first professional experience.
 		I got in contact with [BlueFrog](https://www.bluefrog.fr/index.html), a company creating websites, and after some interviews got accepted !
@@ -379,7 +379,9 @@ object AboutMeStyle : StyleSheet() {
 		gap(2.5.cssRem)
 		
 		media(mediaMaxWidth(768.px)) {
-			flexDirection(FlexDirection.Column)
+			self {
+				flexDirection(FlexDirection.Column)
+			}
 		}
 	}
 	
@@ -436,9 +438,11 @@ object AboutMeStyle : StyleSheet() {
 		flexDirection(FlexDirection.Row)
 		gap(1.5.cssRem)
 		
-		media(mediaMaxWidth(520.px)) {
-			flexDirection(FlexDirection.Column)
-			textAlign(TextAlign.Center)
+		media(mediaMaxWidth(686.px)) {
+			self {
+				flexDirection(FlexDirection.Column)
+				textAlign(TextAlign.Center)
+			}
 		}
 	}
 }

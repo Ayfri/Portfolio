@@ -9,6 +9,7 @@ import org.jetbrains.compose.web.renderComposableInBody
 import org.w3c.dom.HTMLBodyElement
 import pages.AboutMe
 import pages.Home
+import pages.Portfolio
 
 const val MAIL_TO = "pierre.ayfri@gmail.com"
 
@@ -44,6 +45,10 @@ fun main() {
 				
 				route("/about") {
 					AboutMe()
+				}
+				
+				route("/portfolio") {
+					Portfolio()
 				}
 			}
 			
