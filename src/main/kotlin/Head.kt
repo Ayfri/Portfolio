@@ -12,22 +12,23 @@ fun Head() {
 	val description = "The portfolio of myself, Pierre Roy."
 	
 	Meta(charset = "utf-8")
-	Meta(name = "viewport", content = "width=device-width, initial-scale=1")
-	Meta(name = "description", content = description)
-	Meta(name = "author", content = "Ayfri")
+	MetaName(name = "viewport", content = "width=device-width, initial-scale=1")
+	MetaName(name = "description", content = description)
+	MetaName(name = "author", content = "Ayfri")
 	
-	Meta(name = "twitter:card", content = "summary")
-	Meta(name = "twitter:site", content = "@Ayfri_")
-	Meta(name = "twitter:creator", content = "@ayfri_")
-	Meta(name = "twitter:title", content = "Ayfri Portfolio")
-	Meta(name = "twitter:description", content = description)
+	MetaName(name = "twitter:card", content = "summary")
+	MetaName(name = "twitter:site", content = "@Ayfri_")
+	MetaName(name = "twitter:creator", content = "@ayfri_")
+	MetaName(name = "twitter:title", content = "Ayfri Portfolio")
+	MetaName(name = "twitter:description", content = description)
 	
-	Meta(name = "og:title", content = "Ayfri Portfolio")
-	Meta(name = "og:description", content = description)
-	Meta(name = "og:type", content = "website")
+	MetaProperty("og:title", content = "Ayfri Portfolio")
+	MetaProperty("og:description", content = description)
+	MetaProperty("og:type", content = "website")
+	MetaProperty("og:image", content = localImage("avatar.jpg"))
 	
 	document.location?.href?.let {
-		Meta(name = "og:url", content = it)
+		MetaProperty("og:url", content = it)
 	}
 	
 	Style(AppStyle)
@@ -37,9 +38,17 @@ fun Head() {
 }
 
 @Composable
-fun Meta(name: String, content: String) {
+fun MetaName(name: String, content: String) {
 	TagElement<HTMLMetaElement>("meta", {
 		attr("name", name)
+		attr("content", content)
+	}) {}
+}
+
+@Composable
+fun MetaProperty(property: String, content: String) {
+	TagElement<HTMLMetaElement>("meta", {
+		attr("property", property)
 		attr("content", content)
 	}) {}
 }
