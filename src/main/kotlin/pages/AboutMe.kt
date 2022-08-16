@@ -1,6 +1,7 @@
 package pages
 
 import FontAwesomeType
+import FooterStyle
 import I
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +23,6 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.events.Event
 import style.AppStyle
 import style.CSSVariables
 import style.utils.*
@@ -178,7 +178,7 @@ val sections = listOf(
 	},
 ).sortedBy { it.date }
 
-const val timelineDefaultOffset = 110.0
+const val timelineDefaultOffset = 125.0
 
 @Composable
 fun AboutMe() {
@@ -194,7 +194,7 @@ fun AboutMe() {
 		}
 		
 		window.addEventListener("scroll", {
-			val footerOffset = document.querySelector(".${AppStyle.footer}")?.asDynamic()?.offsetTop as Double? ?: return@addEventListener
+			val footerOffset = document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as Double? ?: return@addEventListener
 			
 			if (window.scrollY + window.innerHeight < footerOffset) {
 				timelineOffset = window.scrollY + timelineDefaultOffset
@@ -222,7 +222,13 @@ fun AboutMe() {
 		}
 	}
 	
-	val callback: (Event) -> Unit = callback@{
+	Div({
+		classes(AboutMeStyle.content)
+	}) {
+		sections.forEachIndexed { index, it -> it.Display(index == roundSelected) }
+	}
+	
+	val callback = callback@{
 		sections.forEachIndexed { index, section ->
 			if (index == roundSelected) return@forEachIndexed
 			val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
@@ -238,14 +244,9 @@ fun AboutMe() {
 		}
 	}
 	
-	window.addEventListener("scroll", callback)
-	window.addEventListener("resize", callback)
-	
-	Div({
-		classes(AboutMeStyle.content)
-	}) {
-		sections.forEachIndexed { index, it -> it.Display(index == roundSelected) }
-	}
+	window.addEventListener("resize", { callback() })
+	window.addEventListener("scroll", { callback() })
+	document.addEventListener("DOMContentLoaded", { callback() })
 }
 
 @Composable
@@ -410,7 +411,7 @@ object AboutMeStyle : StyleSheet() {
 			position(Position.Relative)
 			
 			transitions {
-				delay(.25.s)
+				duration(.3.s)
 				ease(AnimationTimingFunction.EaseInOut)
 				properties("transform")
 			}
@@ -426,7 +427,8 @@ object AboutMeStyle : StyleSheet() {
 				
 				overflow(Overflow.Hidden)
 				animation(sectionSelection) {
-					duration(.5.s)
+					delay(.1.s)
+					duration(.4.s)
 					timingFunction(AnimationTimingFunction.EaseInOut)
 				}
 				
@@ -461,7 +463,7 @@ object AboutMeStyle : StyleSheet() {
 			}
 			
 			"p" {
-				fontSize(1.1.cssRem)
+				fontSize(1.05.cssRem)
 				lineHeight(1.6.cssRem)
 				margin(0.px)
 			}
