@@ -2,8 +2,6 @@ package style
 
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.keywords.auto
-import org.jetbrains.compose.web.css.selectors.Nth
 import style.CSSVariables.navbarHeight
 import style.utils.*
 
@@ -16,8 +14,6 @@ object AppStyle : StyleSheet() {
 	const val monoFontFamily = "JetBrains Mono"
 	const val navbarColor = "#2A2B36"
 	const val navbarColorSelected = "#1e1c28"
-	const val footerColor = "#1a1120"
-	const val footerLinkHover = "#cccccc"
 	const val contentBackgroundColor = "#212125"
 	const val specialTextColor = "#B4BBFF"
 	const val linkColor = "#75C9CE"
@@ -141,143 +137,6 @@ object AppStyle : StyleSheet() {
 		media(mediaMaxWidth(mobileNavBarFirstBreak)) {
 			"p" {
 				display(DisplayStyle.None)
-			}
-		}
-	}
-	
-	val footer by style {
-		background(linearGradient(180.deg) {
-			stop(Color("#302F39"))
-			stop(Color("#211C24"), 100.percent)
-		})
-		color(Color.white)
-	}
-	
-	@OptIn(ExperimentalComposeWebApi::class)
-	val footerContact by style {
-		margin(0.px, auto)
-		padding(1.cssRem, 0.px)
-		position(Position.Relative)
-		width(clamp(20.cssRem, 40.vw, 60.cssRem))
-		
-		"button" {
-			backgroundColor(Color("#50435A"))
-			borderRadius(.4.cssRem)
-			color(Color.white)
-			fontSize(1.1.cssRem)
-			fontWeight(700)
-			padding(.7.cssRem, 1.2.cssRem)
-			
-			position(Position.Relative)
-			left(50.percent)
-			transform {
-				translateX((-50).percent)
-			}
-			
-			cursor(Cursor.Pointer)
-			
-			filter {
-				brightness(.8)
-			}
-			
-			transitions {
-				delay(.25.s)
-				properties("filter")
-			}
-			
-			"i" {
-				paddingLeft(.4.cssRem)
-			}
-			
-			hover(self) style {
-				filter {
-					brightness(1.0)
-				}
-			}
-		}
-	}
-	
-	val footerContactInputs by style {
-		display(DisplayStyle.Grid)
-		gridTemplateColumns(repeat(2, 1.fr))
-		gridTemplateRows(repeat(4, 1.fr))
-		gap(1.cssRem)
-		margin(1.cssRem, 0.px)
-		
-		child(self, nthChild(Nth.Functional(1))) style {
-			gridArea("1", "1", "2", "2")
-		}
-		
-		child(self, nthChild(Nth.Functional(2))) style {
-			gridArea("1", "2", "2", "3")
-		}
-		
-		child(self, nthChild(Nth.Functional(3))) style {
-			gridArea("2", "1", "3", "3")
-		}
-		
-		child(self, nthChild(Nth.Functional(4))) style {
-			gridArea("3", "1", "5", "3")
-		}
-		
-		child(self, universal) style {
-			width(100.percent)
-			height(100.percent)
-			display(DisplayStyle.Flex)
-			flexDirection(FlexDirection.Column)
-			gap(.4.cssRem)
-			
-			"label" style {
-				color(Color("#CFCFD2"))
-				fontSize(1.cssRem)
-			}
-			
-			list("input", "textarea") style {
-				backgroundColor(Color("#252525"))
-				borderRadius(.4.cssRem)
-				color(Color("#FFFFFF"))
-				border {
-					color(Color.white)
-					style(LineStyle.Solid)
-					width(2.px)
-				}
-				fontFamily("Open Sans", "sans-serif")
-				padding(.5.cssRem)
-			}
-			
-			list("input::placeholder", "textarea::placeholder") style {
-				color(Color("#FFFFFF7F"))
-			}
-			
-			"textarea" style {
-				height(100.percent)
-				resize(Resize.None)
-			}
-		}
-	}
-	
-	val footerInfo by style {
-		backgroundColor(Color(footerColor))
-		color(Color.white)
-		padding(.5.cssRem, 0.px)
-		textAlign("center")
-		width(100.percent)
-		
-		className("top") style {
-			alignItems(AlignItems.Center)
-			display(DisplayStyle.Flex)
-			gap(2.cssRem)
-			justifyContent(JustifyContent.Center)
-			listStyle("none")
-			padding(0.px)
-			
-			"a" style {
-				color(Color.white)
-				fontSize(2.5.cssRem)
-				
-				hover(self) style {
-					color(Color(footerLinkHover))
-				}
 			}
 		}
 	}

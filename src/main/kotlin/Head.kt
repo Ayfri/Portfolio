@@ -7,10 +7,10 @@ import org.w3c.dom.HTMLMetaElement
 import org.w3c.dom.HTMLScriptElement
 import style.AppStyle
 
+private const val description = "The portfolio of myself, Pierre Roy."
+
 @Composable
 fun Head() {
-	val description = "The portfolio of myself, Pierre Roy."
-	
 	Meta(charset = "utf-8")
 	MetaName(name = "viewport", content = "width=device-width, initial-scale=1")
 	MetaName(name = "description", content = description)
