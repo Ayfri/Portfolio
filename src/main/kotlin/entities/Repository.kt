@@ -158,7 +158,7 @@ data class Repository(
 			HttpStatusCode.NotFound -> null
 			else -> {
 				val encoded = it.body<ReadMe>().content
-				String(Base64.getDecoder().decode(encoded))
+				String(Base64.getMimeDecoder().decode(encoded))
 			}
 		}
 	}
