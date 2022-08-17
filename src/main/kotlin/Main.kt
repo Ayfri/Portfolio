@@ -6,10 +6,10 @@ import kotlinx.browser.document
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.renderComposable
 import org.jetbrains.compose.web.renderComposableInBody
-import org.w3c.dom.HTMLBodyElement
 import pages.AboutMe
 import pages.Home
 import pages.Portfolio
+import pages.Projects
 
 const val MAIL_TO = "pierre.ayfri@gmail.com"
 
@@ -25,9 +25,6 @@ fun main() {
 	}
 	
 	marked.use(jso { this.renderer = renderer })
-	
-	val body = document.createElement("body") as HTMLBodyElement
-	document.body = body
 	
 	renderComposableInBody {
 		BrowserRouter("/") {
@@ -45,6 +42,10 @@ fun main() {
 				
 				route("/about") {
 					AboutMe()
+				}
+				
+				route("/projects") {
+					Projects()
 				}
 				
 				route("/portfolio") {

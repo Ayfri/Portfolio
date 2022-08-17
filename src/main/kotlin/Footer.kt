@@ -1,7 +1,3 @@
-import FooterStyle.footer
-import FooterStyle.footerContact
-import FooterStyle.footerContactInputs
-import FooterStyle.footerInfo
 import androidx.compose.runtime.Composable
 import header.GITHUB_LINK
 import kotlinx.browser.document
@@ -78,10 +74,10 @@ fun Footer() {
 	Style(FooterStyle)
 	
 	Footer({
-		classes(footer)
+		classes(FooterStyle.footer)
 	}) {
 		Div({
-			classes(footerContact)
+			classes(FooterStyle.footerContact)
 		}) {
 			H2({
 				classes(AppStyle.monoFont)
@@ -90,7 +86,7 @@ fun Footer() {
 			}
 			
 			Div({
-				classes(footerContactInputs)
+				classes(FooterStyle.footerContactInputs)
 			}) {
 				FooterContactField(label = "First Name", id = "first-name", range = 1..20)
 				FooterContactField(label = "Last Name", id = "last-name", range = 1..32)
@@ -127,7 +123,7 @@ fun Footer() {
 		}
 		
 		Div({
-			classes(footerInfo)
+			classes(FooterStyle.footerInfo)
 		}) {
 			val cvPath = "${window.location.origin}/cv.pdf"
 			
@@ -284,7 +280,7 @@ object FooterStyle : StyleSheet() {
 			properties("filter")
 		}
 		
-		group(hover(self), active) style {
+		group(hover(self), self + active) style {
 			filter {
 				brightness(1.0)
 			}
