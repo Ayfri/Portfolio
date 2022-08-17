@@ -7,6 +7,7 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.*
 
 @Serializable
 data class Repository(
@@ -153,8 +154,13 @@ data class Repository(
 	suspend fun getREADME() = GitHubAPI.ktorClient.get {
 		url("${this@Repository.url}/readme?ref=$defaultBranch")
 	}.let {
-		if (it.status == HttpStatusCode.NotFound) null
-		else it.body<ReadMe>().content
+		when (it.status) {
+			HttpStatusCode.NotFound -> null
+			else -> {
+				val encoded = it.body<ReadMe>().content
+				String(Base64.getDecoder().decode(encoded))
+			}
+		}
 	}
 	
 	suspend fun getCommitsCount() = GitHubAPI.ktorClient.get {
