@@ -32,7 +32,6 @@ import kotlin.js.Date
 
 inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
 
-
 @Composable
 fun Home() {
 	val homeRepositories = remember { mutableStateListOf<GitHubRepository>() }

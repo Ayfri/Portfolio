@@ -24,7 +24,6 @@ import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.HTMLElement
 import style.AppStyle
-import style.CSSVariables
 import style.utils.*
 
 data class AboutMeSection(val content: String, val date: Int, val image: Boolean = false, val id: String, val title: (@Composable () -> Unit)? = null) {
@@ -276,7 +275,7 @@ object AboutMeStyle : StyleSheet() {
 	init {
 		"html" {
 			property("scroll-behavior", "smooth")
-			property("scroll-padding-top", CSSVariables.navbarHeight.value() + timelineDefaultOffset.px)
+			property("scroll-padding-top", AppStyle.navbarHeight.value() + timelineDefaultOffset.px)
 		}
 		
 		id("main") style {

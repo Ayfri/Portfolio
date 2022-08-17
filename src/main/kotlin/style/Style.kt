@@ -2,13 +2,7 @@ package style
 
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
-import style.CSSVariables.navbarHeight
 import style.utils.*
-
-object CSSVariables : StyleSheet() {
-	val navbarHeight by variable<CSSNumeric>()
-}
-
 
 object AppStyle : StyleSheet() {
 	const val monoFontFamily = "JetBrains Mono"
@@ -19,11 +13,12 @@ object AppStyle : StyleSheet() {
 	const val linkColor = "#75C9CE"
 	const val linkHoverColor = "#95fbff"
 	
+	val navbarHeight by variable<CSSNumeric>()
 	val mobileNavBarFirstBreak = 860.px
 	
 	init {
 		root {
-			CSSVariables.navbarHeight(5.cssRem)
+			navbarHeight(5.cssRem)
 		}
 		
 		"body" {
