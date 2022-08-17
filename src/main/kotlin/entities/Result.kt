@@ -43,6 +43,7 @@ data class ResultUser(
 data class ResultRepository(
 	val archived: Boolean,
 	val commitsCount: Int,
+	val contributorsCount: Int,
 	val createdAt: String,
 	val defaultBranch: String,
 	val description: String?,
@@ -71,6 +72,7 @@ data class ResultRepository(
 		suspend fun fromRepository(repository: Repository) = ResultRepository(
 			archived = repository.archived,
 			commitsCount = repository.getCommitsCount(),
+			contributorsCount = repository.getContributorsCount(),
 			createdAt = repository.createdAt,
 			defaultBranch = repository.defaultBranch,
 			description = repository.description,

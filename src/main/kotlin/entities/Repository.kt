@@ -170,6 +170,10 @@ data class Repository(
 	suspend fun getWatchersCount() = GitHubAPI.ktorClient.get {
 		url("${this@Repository.url}/subscribers?per_page=1&page=1")
 	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 0
+	
+	suspend fun getContributorsCount() = GitHubAPI.ktorClient.get {
+		url("${this@Repository.url}/contributors?per_page=1&page=1")
+	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 0
 }
 
 @Serializable
