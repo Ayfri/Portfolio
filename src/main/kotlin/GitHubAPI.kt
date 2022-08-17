@@ -15,7 +15,6 @@ import kotlinx.serialization.json.Json
 
 object GitHubAPI {
 	const val BASE_URL = "https://api.github.com"
-	const val RAW_URL = "https://raw.githubusercontent.com"
 	const val USER = "Ayfri"
 	
 	private val TOKEN = System.getenv("GITHUB_TOKEN") ?: throw IllegalStateException("GITHUB_TOKEN is not set")
