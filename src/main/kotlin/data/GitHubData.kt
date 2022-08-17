@@ -29,6 +29,7 @@ data class GitHubUser(
 data class GitHubRepository(
 	val archived: Boolean,
 	val commitsCount: Int,
+	val contributorsCount: Int,
 	val createdAt: String,
 	val defaultBranch: String,
 	val description: String?,
