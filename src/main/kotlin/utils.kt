@@ -1,4 +1,3 @@
-
 import org.jetbrains.compose.web.attributes.AttrsScope
 import org.w3c.dom.HTMLParagraphElement
 
@@ -9,7 +8,7 @@ inline fun <T> jso(block: T.() -> Unit = {}) = (js("{}") as T).apply(block)
 fun AttrsScope<HTMLParagraphElement>.markdownParagraph(text: String, vararg classes: String) {
 	ref {
 		if (classes.isNotEmpty()) it.classList.add(*classes)
-		it.innerHTML = marked.parseInline(text)
+		it.innerHTML = marked.parse(text)
 		
 		onDispose {}
 	}

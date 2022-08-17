@@ -51,7 +51,7 @@ data class AboutMeSection(val content: String, val date: Int, val image: Boolean
 			}
 			
 			P({
-				markdownParagraph(content.replace("\n", "<br>"))
+				markdownParagraph(content)
 			})
 		}
 	}
@@ -280,7 +280,6 @@ object AboutMeStyle : StyleSheet() {
 		
 		id("main") style {
 			timelineSize(max(8.cssRem, 10.vw))
-			padding(0.px)
 		}
 	}
 	

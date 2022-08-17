@@ -123,8 +123,7 @@ object HomeStyle : StyleSheet() {
 				}
 			)
 			
-			paddingLeft(20.vw)
-			paddingRight(20.vw)
+			padding(1.cssRem, 20.vw)
 			
 			media(Only(MediaType(Screen), mediaMaxWidth(900.px))) {
 				id("main") style {

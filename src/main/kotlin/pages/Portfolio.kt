@@ -78,7 +78,7 @@ fun PortfolioSection(text: String, title: String, image: String) {
 			}
 			
 			P({
-				markdownParagraph(text.replace("\n", "<br>"))
+				markdownParagraph(text)
 			})
 		}
 		
@@ -96,12 +96,6 @@ object PortfolioStyle : StyleSheet() {
 	const val backgroundGradientMiddle = "#1D2736"
 	const val backgroundGradientEnd = "#1F0C29"
 	val sectionsGap = 4.cssRem
-	
-	init {
-		id("main") style {
-			padding(0.px)
-		}
-	}
 	
 	val portfolio by style {
 		display(DisplayStyle.Flex)
