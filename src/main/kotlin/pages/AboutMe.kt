@@ -169,7 +169,7 @@ val sections = listOf(
 		My school required me to have an internship of 6 weeks in any enterprise to have a first professional experience.
 		I got in contact with [BlueFrog](https://www.bluefrog.fr/index.html), a company creating websites, and after some interviews got accepted !
 
-		I learned [PHP](https://www.php.net) and [WordPress](https://wordpress.org) and created a few websites during my traineeship, and it was a great experience for me.
+		I learned [PHP](https://www.php.net) and [WordPress](https://wordpress.org) and created a few websites & plugins during my internship, and it was a great experience for me.
 		Learning a bunch of useful technologies, the difference between personal project and real projects and a view of what is the job of developer.
 	""".trimIndent(), 2022, id = "first-internship"
 	) {

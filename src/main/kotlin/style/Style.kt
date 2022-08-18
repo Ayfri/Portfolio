@@ -62,6 +62,22 @@ object AppStyle : StyleSheet() {
 		}
 	}
 	
+	val sections by style {
+		margin(0.px, max(2.cssRem, 4.vw))
+		padding(3.cssRem)
+		
+		media(mediaMaxWidth(600.px)) {
+			self {
+				padding(1.cssRem)
+				margin(0.px, .5.cssRem)
+			}
+			
+			child(self, type("section")) style {
+				gap(1.cssRem)
+			}
+		}
+	}
+	
 	val title by style {
 		backgroundColor(Color(titleBackgroundColor))
 		border {
@@ -74,6 +90,13 @@ object AppStyle : StyleSheet() {
 		
 		margin(0.px, 0.px, 3.cssRem)
 		padding(1.cssRem, 1.5.cssRem)
+		
+		media(mediaMaxWidth(600.px)) {
+			self {
+				fontSize(1.8.cssRem)
+				padding(.8.cssRem, 1.3.cssRem)
+			}
+		}
 	}
 	
 	val monoFont by style {

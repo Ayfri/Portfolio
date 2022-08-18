@@ -17,7 +17,6 @@ import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.HTMLElement
 import style.AppStyle
-import style.utils.max
 import style.utils.minmax
 import style.utils.repeat
 
@@ -37,12 +36,12 @@ fun Projects() {
 	}
 	
 	Div({
-		classes(ProjectsStyle.projects)
+		classes(AppStyle.sections, ProjectsStyle.projects)
 	}) {
 		H1({
 			classes(AppStyle.monoFont, AppStyle.title)
 		}) {
-			Text("My Projects :")
+			Text("My Projects:")
 		}
 		
 		Section({
@@ -70,19 +69,6 @@ object ProjectsStyle : StyleSheet() {
 	
 	val projects by style {
 		backgroundColor(Color(projectsBackgroundColor))
-		margin(0.px, max(2.cssRem, 4.vw))
-		padding(4.cssRem)
-		
-		media(mediaMaxWidth(600.px)) {
-			self {
-				padding(1.cssRem)
-				margin(0.px, .5.cssRem)
-			}
-			
-			child(self, type("section")) style {
-				gap(1.cssRem)
-			}
-		}
 	}
 	
 	val projectsList by style {

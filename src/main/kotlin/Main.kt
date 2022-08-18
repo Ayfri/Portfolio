@@ -7,6 +7,7 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.renderComposable
 import org.jetbrains.compose.web.renderComposableInBody
 import pages.AboutMe
+import pages.Experiences
 import pages.Home
 import pages.Portfolio
 import pages.Projects
@@ -46,6 +47,10 @@ fun main() {
 				
 				route("/projects") {
 					Projects()
+				}
+				
+				route("/experiences") {
+					Experiences()
 				}
 				
 				route("/portfolio") {
