@@ -85,10 +85,9 @@ fun Home() {
 		P({
 			markdownParagraph(
 				"""
-					Hi, it's me, Pierre Roy, I am a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/) and I am passionate about computer science and especially programming.<br>
+					Hi, it's me, Pierre Roy, I am a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/) and I am passionate about computer science and especially programming.
 					I'm making all sort of projects and programming by myself since years and this is my portfolio, welcome !
-				""".trimIndent(),
-				AppStyle.monoFont
+				""".trimIndent(), true, AppStyle.monoFont
 			)
 		})
 		
@@ -114,14 +113,12 @@ object HomeStyle : StyleSheet() {
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Column)
 			alignItems(AlignItems.Center)
-			background(
-				linearGradient(180.deg) {
-					stop(Color("#1D1D1E"), (-3).percent)
-					stop(Color("#111629"), 14.percent)
-					stop(Color("#29183F"), 65.percent)
-					stop(Color("#302F39"), 90.percent)
-				}
-			)
+			background(linearGradient(180.deg) {
+				stop(Color("#1D1D1E"), (-3).percent)
+				stop(Color("#111629"), 14.percent)
+				stop(Color("#29183F"), 65.percent)
+				stop(Color("#302F39"), 90.percent)
+			})
 			
 			padding(1.cssRem, 20.vw)
 			

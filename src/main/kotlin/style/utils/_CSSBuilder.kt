@@ -3,6 +3,7 @@ package style.utils
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.CSSAutoKeyword
 import org.jetbrains.compose.web.css.selectors.CSSSelector
+import org.jetbrains.compose.web.css.selectors.Nth
 import pages.HomeStyle.selector
 
 fun CSSBuilder.list(vararg selectors: String) = group(*(selectors.map { desc(self, it) }.toTypedArray()))
@@ -189,3 +190,5 @@ fun TextAlign(value: String) = value.unsafeCast<TextAlign>()
 fun StyleScope.textAlign(value: TextAlign) {
 	property("text-align", value)
 }
+
+val Int.n get() = Nth.Functional(this)

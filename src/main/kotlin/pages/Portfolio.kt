@@ -78,7 +78,7 @@ fun PortfolioSection(text: String, title: String, image: String) {
 			}
 			
 			P({
-				markdownParagraph(text)
+				markdownParagraph(text, true)
 			})
 		}
 		

@@ -5,13 +5,16 @@ import org.jetbrains.compose.web.css.*
 import style.utils.*
 
 object AppStyle : StyleSheet() {
-	const val monoFontFamily = "JetBrains Mono"
-	const val navbarColor = "#2A2B36"
-	const val navbarColorSelected = "#1e1c28"
 	const val contentBackgroundColor = "#212125"
-	const val specialTextColor = "#B4BBFF"
+	const val monoFontFamily = "JetBrains Mono"
 	const val linkColor = "#75C9CE"
 	const val linkHoverColor = "#95fbff"
+	const val navbarColor = "#2A2B36"
+	const val navbarColorSelected = "#1e1c28"
+	const val titleBackgroundColor = "#252525"
+	const val titleBorderColor = "#797979"
+	const val specialTextColor = "#B4BBFF"
+	
 	
 	val navbarHeight by variable<CSSNumeric>()
 	val mobileNavBarFirstBreak = 860.px
@@ -56,8 +59,21 @@ object AppStyle : StyleSheet() {
 			backgroundColor(Color(contentBackgroundColor))
 			color(Color.white)
 			marginTop(navbarHeight.value())
-			padding(1.cssRem)
 		}
+	}
+	
+	val title by style {
+		backgroundColor(Color(titleBackgroundColor))
+		border {
+			color(Color(titleBorderColor))
+			style(LineStyle.Solid)
+			width(2.px)
+		}
+		borderRadius(1.cssRem)
+		fontSize(2.1.cssRem)
+		
+		margin(0.px, 0.px, 3.cssRem)
+		padding(1.cssRem, 1.5.cssRem)
 	}
 	
 	val monoFont by style {

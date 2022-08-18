@@ -51,7 +51,7 @@ data class AboutMeSection(val content: String, val date: Int, val image: Boolean
 			}
 			
 			P({
-				markdownParagraph(content)
+				markdownParagraph(content, true)
 			})
 		}
 	}

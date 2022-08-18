@@ -5,10 +5,12 @@ fun localImage(path: String) = "images/$path"
 
 inline fun <T> jso(block: T.() -> Unit = {}) = (js("{}") as T).apply(block)
 
-fun AttrsScope<HTMLParagraphElement>.markdownParagraph(text: String, vararg classes: String) {
+fun AttrsScope<HTMLParagraphElement>.markdownParagraph(text: String, breaks: Boolean = false, vararg classes: String) {
 	ref {
 		if (classes.isNotEmpty()) it.classList.add(*classes)
-		it.innerHTML = marked.parse(text)
+		
+		val textToParse = if (breaks) text.replace("\n", "<br>") else text
+		it.innerHTML = marked.parse(textToParse)
 		
 		onDispose {}
 	}

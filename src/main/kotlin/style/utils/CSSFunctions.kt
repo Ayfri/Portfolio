@@ -3,6 +3,7 @@ package style.utils
 import org.jetbrains.compose.web.css.CSSNumericValue
 import org.jetbrains.compose.web.css.CSSSizeValue
 import org.jetbrains.compose.web.css.CSSUnit
+import org.jetbrains.compose.web.css.keywords.CSSAutoKeyword
 
 data class CSSSizeValueRange<T : CSSUnit>(val min: CSSSizeValue<T>, val max: CSSSizeValue<T>) {
 	operator fun contains(value: CSSSizeValue<T>) = value.value >= min.value && value.value <= max.value
@@ -65,4 +66,29 @@ class CSSMax<T : CSSUnit>(vararg val values: CSSSizeValue<out T>) : CSSNumericVa
 
 fun max(vararg values: CSSSizeValue<out CSSUnit>) = CSSMax(*values)
 
-fun repeat(count: Int, value: CSSSizeValue<out CSSUnit>) = "repeat($count, $value)"
+class CSSMinMax<T : CSSUnit>(val min: CSSSizeValue<out T>, val max: CSSSizeValue<out T>) : CSSNumericValue<T> {
+	constructor(min: CSSSizeValue<out T>, max: CSSAutoKeyword) : this(min, max.unsafeCast<CSSSizeValue<out T>>())
+	constructor(min: CSSAutoKeyword, max: CSSSizeValue<out T>) : this(min.unsafeCast<CSSSizeValue<out T>>(), max)
+	
+	override fun toString() = "minmax($min, $max)"
+	
+	override fun equals(other: Any?): Boolean {
+		if (this === other) return true
+		if (other !is CSSMinMax<*>) return false
+		
+		if (min != other.min) return false
+		if (max != other.max) return false
+		
+		return true
+	}
+	
+	override fun hashCode() = min.hashCode() * 31 + max.hashCode()
+}
+
+fun minmax(min: CSSSizeValue<out CSSUnit>, max: CSSSizeValue<out CSSUnit>) = CSSMinMax(min, max)
+fun minmax(min: CSSSizeValue<out CSSUnit>, max: CSSAutoKeyword) = CSSMinMax(min, max)
+fun minmax(min: CSSAutoKeyword, max: CSSSizeValue<out CSSUnit>) = CSSMinMax(min, max)
+fun minmax(range: CSSSizeValueRange<out CSSUnit>) = CSSMinMax(range.min, range.max)
+
+fun repeat(count: Int, value: CSSNumericValue<out CSSUnit>) = "repeat($count, $value)"
+fun repeat(count: String, value: CSSNumericValue<out CSSUnit>) = "repeat($count, $value)"
