@@ -299,10 +299,7 @@ object FooterStyle : StyleSheet() {
 			backgroundColor(buttonBackgroundColor)
 			property("content", "'\\f019'")
 			position(Position.Absolute)
-			top(0.px)
-			left(0.px)
-			width(100.percent)
-			height(100.percent)
+			inset(0.px)
 			
 			fontFamily("Font Awesome 6 Free")
 			fontSize(2.cssRem)

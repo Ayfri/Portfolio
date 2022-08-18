@@ -192,3 +192,19 @@ fun StyleScope.textAlign(value: TextAlign) {
 }
 
 val Int.n get() = Nth.Functional(this)
+
+fun StyleScope.inset(top: CSSNumeric, right: CSSNumeric, bottom: CSSNumeric, left: CSSNumeric) {
+	property("inset", "$top $right $bottom $left")
+}
+
+fun StyleScope.inset(top: CSSNumeric, horizontal: CSSNumeric, bottom: CSSNumeric) {
+	property("inset", "$top $horizontal $bottom")
+}
+
+fun StyleScope.inset(vertical: CSSNumeric, horizontal: CSSNumeric) {
+	property("inset", "$vertical $horizontal")
+}
+
+fun StyleScope.inset(value: CSSNumeric) {
+	property("inset", value)
+}
