@@ -21,15 +21,7 @@ import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.HTMLDivElement
 import pages.TextIcon
 import style.AppStyle
-import style.utils.Overflow
-import style.utils.TextAlign
-import style.utils.clamp
-import style.utils.linearGradient
-import style.utils.n
-import style.utils.overflow
-import style.utils.size
-import style.utils.textAlign
-import style.utils.transitions
+import style.utils.*
 import kotlin.js.Date
 
 @Composable
@@ -179,6 +171,8 @@ object DataStyle : StyleSheet() {
 		gap(1.cssRem)
 		padding(clamp(2.cssRem, 2.vw, 3.5.cssRem))
 		borderRadius(.75.cssRem)
+		
+		cursor(Cursor.Pointer)
 		
 		transitions {
 			ease(AnimationTimingFunction.EaseInOut)

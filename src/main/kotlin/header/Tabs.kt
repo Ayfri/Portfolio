@@ -1,6 +1,7 @@
 package header
 
 import androidx.compose.runtime.Composable
+import androidx.compose.web.events.SyntheticMouseEvent
 import app.softwork.routingcompose.NavLink
 import org.jetbrains.compose.web.dom.Text
 
@@ -16,9 +17,11 @@ val tabs = listOf(
 )
 
 @Composable
-fun Tab(tab: Tab) {
+fun Tab(tab: Tab, onClick: (SyntheticMouseEvent) -> Unit = {}) {
 	NavLink(tab.link, { selected ->
 		if (selected) classes("active")
+		
+		onClick(onClick)
 	}) {
 		Text(tab.name)
 	}

@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import header.HeaderStyle
 import kotlinx.browser.document
 import kotlinx.browser.window
 import localImage
@@ -275,7 +276,7 @@ object AboutMeStyle : StyleSheet() {
 	init {
 		"html" {
 			property("scroll-behavior", "smooth")
-			property("scroll-padding-top", AppStyle.navbarHeight.value() + timelineDefaultOffset.px)
+			property("scroll-padding-top", HeaderStyle.navbarHeight.value() + timelineDefaultOffset.px)
 		}
 		
 		id("main") style {
