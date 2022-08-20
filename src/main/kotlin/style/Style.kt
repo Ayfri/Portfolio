@@ -57,14 +57,21 @@ object AppStyle : StyleSheet() {
 		margin(0.px, max(2.cssRem, 4.vw))
 		padding(3.cssRem)
 		
-		media(mediaMaxWidth(600.px)) {
+		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
 			self {
-				padding(1.cssRem)
-				margin(0.px, .5.cssRem)
+				padding(1.5.cssRem)
+				margin(0.px, .8.cssRem)
 			}
 			
 			child(self, type("section")) style {
 				gap(1.cssRem)
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+			self {
+				padding(.8.cssRem)
+				margin(0.px)
 			}
 		}
 	}
@@ -82,10 +89,17 @@ object AppStyle : StyleSheet() {
 		margin(0.px, 0.px, 3.cssRem)
 		padding(1.cssRem, 1.5.cssRem)
 		
-		media(mediaMaxWidth(600.px)) {
+		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
 			self {
 				fontSize(1.8.cssRem)
-				padding(.8.cssRem, 1.3.cssRem)
+				padding(.8.cssRem, 1.4.cssRem)
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+			self {
+				fontSize(1.6.cssRem)
+				marginBottom(1.8.cssRem)
 			}
 		}
 	}
@@ -110,6 +124,12 @@ object AppStyle : StyleSheet() {
 				blurRadius = 30.px,
 				color = rgba(0, 0, 0, .75)
 			)
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+			self {
+				size(max(7.cssRem, 30.vw))
+			}
 		}
 	}
 }

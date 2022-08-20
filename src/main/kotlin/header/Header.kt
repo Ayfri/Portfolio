@@ -7,6 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import org.jetbrains.compose.web.attributes.ATarget
+import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div
@@ -18,7 +20,7 @@ import style.utils.cursor
 import style.utils.size
 import style.utils.zIndex
 
-const val GITHUB_LINK = "https://github.com/Ayfri"
+const val GITHUB_LINK = "https://github.com/Ayfri/Ayfri.github.io"
 
 @Composable
 fun Header() {
@@ -41,6 +43,7 @@ fun Header() {
 		}
 		
 		A(GITHUB_LINK, {
+			target(ATarget.Blank)
 			classes(HeaderStyle.navbarPart, HeaderStyle.navbarGithub)
 		}) {
 			P("Ayfri")
@@ -62,8 +65,10 @@ object HeaderStyle : StyleSheet() {
 	const val navbarColor = "#2A2B36"
 	const val navbarColorSelected = "#1e1c28"
 	val navbarHeight by variable<CSSNumeric>()
-	val mobileNavBarFirstBreak = 890.px
-	val mobileNavBarSecondBreak = 810.px
+	val mobileFirstBreak = 890.px
+	val mobileSecondBreak = 810.px
+	val mobileThirdBreak = 510.px
+	val mobileFourthBreak = 386.px
 	
 	init {
 		root {
@@ -86,7 +91,7 @@ object HeaderStyle : StyleSheet() {
 			fontSize(navbarHeight.value() * .6)
 		}
 		
-		media(mediaMaxWidth(mobileNavBarSecondBreak)) {
+		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
 				padding(0.px, 1.cssRem)
 				
@@ -121,7 +126,7 @@ object HeaderStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(mobileNavBarSecondBreak)) {
+		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
 				display(DisplayStyle.None)
 				position(Position.Absolute)
@@ -155,7 +160,7 @@ object HeaderStyle : StyleSheet() {
 			backgroundColor(Color(navbarColorSelected))
 		}
 		
-		media(mediaMaxWidth(mobileNavBarFirstBreak)) {
+		media(mediaMaxWidth(mobileFirstBreak)) {
 			self {
 				padding(.5.cssRem)
 			}
@@ -171,7 +176,7 @@ object HeaderStyle : StyleSheet() {
 		color(Color.white)
 		cursor(Cursor.Pointer)
 		
-		media(mediaMaxWidth(mobileNavBarSecondBreak)) {
+		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
 				display(DisplayStyle.Block)
 			}

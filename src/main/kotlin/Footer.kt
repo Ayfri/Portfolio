@@ -1,5 +1,6 @@
 import androidx.compose.runtime.Composable
 import header.GITHUB_LINK
+import header.HeaderStyle
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -199,6 +200,14 @@ object FooterStyle : StyleSheet() {
 				paddingLeft(.4.cssRem)
 			}
 		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+			self {
+				boxSizing("border-box")
+				padding(1.5.cssRem)
+				width(100.percent)
+			}
+		}
 	}
 	
 	val footerContactInputs by style {
@@ -225,8 +234,9 @@ object FooterStyle : StyleSheet() {
 		}
 		
 		child(self, universal) style {
-			width(100.percent)
-			height(100.percent)
+			size(100.percent)
+			minWidth(3.cssRem)
+			
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Column)
 			gap(.4.cssRem)
@@ -256,6 +266,17 @@ object FooterStyle : StyleSheet() {
 			"textarea" style {
 				height(100.percent)
 				resize(Resize.None)
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+			self {
+				display(DisplayStyle.Flex)
+				flexDirection(FlexDirection.Column)
+				
+				"textarea" style {
+					height(4.cssRem)
+				}
 			}
 		}
 	}
@@ -348,6 +369,22 @@ object FooterStyle : StyleSheet() {
 				
 				hover(self) style {
 					color(Color(footerLinkHover))
+				}
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+			self {
+				className("top") style {
+					gap(1.cssRem)
+					
+					type("a") style {
+						fontSize(1.8.cssRem)
+					}
+				}
+				
+				"p" {
+					fontSize(.85.cssRem)
 				}
 			}
 		}

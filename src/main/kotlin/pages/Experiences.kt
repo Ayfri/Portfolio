@@ -1,6 +1,7 @@
 package pages
 
 import androidx.compose.runtime.Composable
+import header.HeaderStyle
 import markdownParagraph
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
@@ -75,6 +76,17 @@ object ExperiencesStyle : StyleSheet() {
 			
 			"p" {
 				lineHeight(1.6.cssRem)
+			}
+			
+			media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+				self {
+					padding(.5.cssRem, .8.cssRem)
+				}
+				
+				"p" {
+					fontSize(.9.cssRem)
+					lineHeight(1.4.cssRem)
+				}
 			}
 		}
 	}

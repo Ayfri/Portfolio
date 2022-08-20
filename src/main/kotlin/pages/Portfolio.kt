@@ -1,6 +1,7 @@
 package pages
 
 import androidx.compose.runtime.Composable
+import header.HeaderStyle
 import localImage
 import markdownParagraph
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -109,12 +110,16 @@ object PortfolioStyle : StyleSheet() {
 			stop(Color(backgroundGradientMiddle))
 			stop(Color(backgroundGradientEnd))
 		})
+		
+		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+			self {
+				padding(1.2.cssRem, .8.cssRem)
+			}
+		}
 	}
 	
 	@OptIn(ExperimentalComposeWebApi::class)
 	val section by style {
-		val mobileBreak = 820.px
-		
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		justifyContent(JustifyContent.Center)
@@ -123,7 +128,7 @@ object PortfolioStyle : StyleSheet() {
 		
 		textAlign(TextAlign.Right)
 		
-		media(mediaMinWidth(mobileBreak + 1.px)) {
+		media(mediaMinWidth(HeaderStyle.mobileFirstBreak + 1.px)) {
 			self + nthChild(Nth.Even) style {
 				textAlign(TextAlign.Left)
 				flexDirection(FlexDirection.RowReverse)
@@ -178,15 +183,27 @@ object PortfolioStyle : StyleSheet() {
 			width(auto)
 		}
 		
-		media(mediaMaxWidth(mobileBreak)) {
+		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
 			self {
 				flexDirection(FlexDirection.Column)
 				alignItems(AlignItems.Stretch)
 				justifyContent(JustifyContent.Center)
 				textAlign(TextAlign.Center)
 				
+				"h2" {
+					fontSize(2.cssRem)
+				}
+				
 				"img" {
 					maxWidth(100.percent)
+				}
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+			self {
+				"img" {
+					height(auto)
 				}
 			}
 		}

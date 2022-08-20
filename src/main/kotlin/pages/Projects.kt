@@ -8,6 +8,7 @@ import data.DataStyle
 import data.GitHubRepository
 import data.ProjectCard
 import data.data
+import header.HeaderStyle
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.*
@@ -76,5 +77,12 @@ object ProjectsStyle : StyleSheet() {
 		gridTemplateColumns(repeat("auto-fill", minmax(22.5.cssRem, 1.fr)))
 		gap(2.cssRem)
 		padding(0.px)
+		
+		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+			self {
+				display(DisplayStyle.Flex)
+				flexDirection(FlexDirection.Column)
+			}
+		}
 	}
 }

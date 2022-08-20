@@ -8,10 +8,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.web.events.SyntheticMouseEvent
+import header.HeaderStyle
 import markdownParagraph
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.AttrsScope
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.H3
@@ -169,7 +171,7 @@ object DataStyle : StyleSheet() {
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
 		gap(1.cssRem)
-		padding(clamp(2.cssRem, 2.vw, 3.5.cssRem))
+		padding(clamp(1.6.cssRem, 2.vw, 3.5.cssRem))
 		borderRadius(.75.cssRem)
 		
 		cursor(Cursor.Pointer)
@@ -239,12 +241,15 @@ object DataStyle : StyleSheet() {
 	}
 	
 	val projectCardClosed by style {
+		val maxSize by variable<CSSSizeValue<*>>()
+		maxSize(6.cssRem)
+		
 		flexDirection(FlexDirection.Row)
 		imageSize(3.5.cssRem)
 		
 		backgroundColor(Color(projectCardClosedBackground))
-		height(6.cssRem)
-		maxHeight(6.cssRem)
+		height(maxSize.value())
+		maxHeight(maxSize.value())
 		
 		className("top") style {
 			display(DisplayStyle.Flex)
@@ -270,6 +275,25 @@ object DataStyle : StyleSheet() {
 			
 			"h3" {
 				marginBottom(.5.cssRem)
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+			self {
+				maxSize(8.cssRem)
+				padding(1.cssRem)
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+			self {
+				imageSize(3.cssRem)
+				height(auto)
+				maxHeight("none")
+				
+				"h3" {
+					fontSize(1.1.cssRem)
+				}
 			}
 		}
 	}

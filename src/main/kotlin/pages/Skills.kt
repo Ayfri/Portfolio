@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import data.GitHubRepository
 import data.data
+import header.HeaderStyle
 import localImage
 import markdownParagraph
 import org.jetbrains.compose.web.css.*
@@ -71,7 +72,7 @@ data class Skill(
 			}
 			
 			P({
-				markdownParagraph(language.description, false, AppStyle.monoFont)
+				markdownParagraph(language.description, false, AppStyle.monoFont, "description")
 			})
 		}
 		
@@ -283,6 +284,14 @@ object SkillsStyle : StyleSheet() {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns(repeat("auto-fill", minmax(22.5.cssRem, 1.fr)))
 		gap(2.cssRem)
+		
+		
+		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+			self {
+				display(DisplayStyle.Flex)
+				flexDirection(FlexDirection.Column)
+			}
+		}
 	}
 	
 	val skill by style {
@@ -324,7 +333,7 @@ object SkillsStyle : StyleSheet() {
 		className("top") style {
 			textAlign(TextAlign.Center)
 			
-			group(child(self, type("p")), child(self, child(type("p"), type("p")))) style {
+			group(className("description"), desc(className("description"), type("p"))) style {
 				margin(1.2.cssRem, 0.px, 0.px)
 			}
 			
@@ -397,6 +406,31 @@ object SkillsStyle : StyleSheet() {
 				hover {
 					color(Color(AppStyle.linkHoverColor))
 					textDecoration("underline")
+				}
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+			self {
+				desc(className("description"), type("p")) style {
+					fontSize(.85.cssRem)
+				}
+			}
+		}
+		
+		
+		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+			self {
+				desc(className("top"), className("info")) style {
+					flexDirection(FlexDirection.Column)
+					
+					child(self, type("p")) style {
+						alignSelf(AlignSelf.Start)
+					}
+					
+					className("left") style {
+						padding(.8.cssRem, 1.5.cssRem)
+					}
 				}
 			}
 		}

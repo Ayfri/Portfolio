@@ -157,7 +157,7 @@ val sections = listOf(
 			We learned so far [GoLang](https://go.dev), [Python](https://www.python.org), pretty complex [C++](https://cplusplus.com) and POO into C++, some network basics, how to use [REST API](https://wikipedia.org/wiki/Representational_state_transfer)s, the team JS/HTML/CSS, databases and [MySQL](https://www.mysql.com), and other useful technologies.
 			I was already knowing some, but I appreciated a lot GoLang’s GoHTML Templates, C++ and my teacher who I chatted a lot with and understanding a lot more how network work.
 	
-			We created a bunch of projects, starting with little training projects in GoLang/Python/C++/JavaScript, done some websites using only front, but also using an API, and using MySQL creating an entire forum.
+			We created a bunch of projects, starting with little training projects in GoLang/<wbr>Python/<wbr>C++/<wbr>JavaScript, done some websites using only front, but also using an API, and using MySQL creating an entire forum.
 	
 			It is for me a great experience being in this school, and I’m excited for the next 4 years !
 		""".trimIndent(), 2021, id = "ynov"
@@ -197,7 +197,7 @@ fun AboutMe() {
 			val footerOffset = document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as Double? ?: return@addEventListener
 			
 			if (window.scrollY + window.innerHeight < footerOffset) {
-				timelineOffset = window.scrollY + timelineDefaultOffset
+				timelineOffset = window.scrollY + timelineDefaultOffset * .8
 			}
 		})
 	}) {
@@ -263,7 +263,6 @@ fun TextIcon(text: String, fontAwesomeType: FontAwesomeType, icon: String, color
 	Text(text)
 }
 
-
 object AboutMeStyle : StyleSheet() {
 	const val backgroundSectionOddColor = "#363636"
 	const val backgroundSectionEvenColor = "#2e2e2e"
@@ -271,7 +270,7 @@ object AboutMeStyle : StyleSheet() {
 	const val timelineBgGradiantStartColor = "#4B4F9D"
 	
 	val timelineSize by variable<CSSSizeValue<*>>()
-	val timelineOffset = 1.5.cssRem
+	val timelineOffset by variable<CSSSizeValue<*>>()
 	
 	init {
 		"html" {
@@ -281,6 +280,21 @@ object AboutMeStyle : StyleSheet() {
 		
 		id("main") style {
 			timelineSize(max(8.cssRem, 10.vw))
+			timelineOffset(1.5.cssRem)
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+			id("main") style {
+				timelineSize(max(4.cssRem, 5.vw))
+				timelineOffset(1.cssRem)
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+			id("main") style {
+				timelineSize(0.px)
+				timelineOffset((-5).cssRem)
+			}
 		}
 	}
 	
@@ -297,6 +311,25 @@ object AboutMeStyle : StyleSheet() {
 		}
 	}
 	
+	@OptIn(ExperimentalComposeWebApi::class)
+	val appearBottom by keyframes {
+		from {
+			opacity(0.0)
+			transform {
+				translateY((-2).cssRem)
+				translateX((-50).percent)
+			}
+		}
+		
+		to {
+			opacity(1.0)
+			transform {
+				translateY(0.px)
+				translateX((-50).percent)
+			}
+		}
+	}
+	
 	val sectionSelection by keyframes {
 		from {
 			backgroundPosition("200% 0%")
@@ -310,7 +343,7 @@ object AboutMeStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val timeline by style {
 		val thickness = 1.vh
-		val length = 8.vh
+		val length = 7.8.vh
 		val roundSize = 3.vh
 		
 		display(DisplayStyle.Flex)
@@ -318,7 +351,7 @@ object AboutMeStyle : StyleSheet() {
 		alignItems(AlignItems.Center)
 		
 		position(Position.Absolute)
-		left(timelineOffset)
+		left(timelineOffset.value().unsafeCast<CSSLengthValue>())
 		height(90.percent)
 		width(timelineSize.value())
 		
@@ -363,6 +396,7 @@ object AboutMeStyle : StyleSheet() {
 				
 				self + after style {
 					property("content", "attr(data-date)")
+					fontWeight(700)
 					
 					position(Position.Absolute)
 					top(0.px)
@@ -382,6 +416,30 @@ object AboutMeStyle : StyleSheet() {
 			height(length)
 			width(thickness)
 		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+			className("round") + className("selected") + after style {
+				left(50.percent)
+				transform { translateX((-50).percent) }
+				property("top", "unset")
+				bottom((-2.5).cssRem)
+				
+				backgroundColor(Color("#00000070"))
+				padding(.2.cssRem, .4.cssRem)
+				borderRadius(.5.cssRem)
+				
+				animation(appearBottom) {
+					duration(.3.s)
+					timingFunction(AnimationTimingFunction.EaseInOut)
+				}
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+			style {
+				display(DisplayStyle.None)
+			}
+		}
 	}
 	
 	val withImage by style {
@@ -399,14 +457,16 @@ object AboutMeStyle : StyleSheet() {
 	
 	@OptIn(ExperimentalComposeWebApi::class)
 	val content by style {
+		val titleHeight by variable<CSSSizeValue<*>>()
+		
 		marginLeft(timelineSize.value())
 		
 		"section" {
-			val height = 2.8.cssRem
+			titleHeight(max(2.cssRem, 3.vw))
 			
 			backgroundColor(Color(backgroundSectionOddColor))
 			fontFamily(AppStyle.monoFontFamily)
-			padding(1.5.cssRem, height)
+			padding(1.5.cssRem, titleHeight.value())
 			position(Position.Relative)
 			
 			transitions {
@@ -447,7 +507,7 @@ object AboutMeStyle : StyleSheet() {
 			"h2" {
 				group(desc(self, type("img")), desc(self, type("i"))) style {
 					val iconPadding = .4.cssRem
-					val iconHeight = height + (iconPadding * 2)
+					val iconHeight = titleHeight.value() + (iconPadding * 2)
 					
 					backgroundColor(Color("#00000015"))
 					borderRadius(.75.cssRem)
@@ -457,7 +517,7 @@ object AboutMeStyle : StyleSheet() {
 					width(auto)
 				}
 				
-				fontSize(height)
+				fontSize(titleHeight.value())
 				margin(0.cssRem, 0.px, 1.5.cssRem)
 			}
 			
@@ -465,6 +525,27 @@ object AboutMeStyle : StyleSheet() {
 				fontSize(1.05.cssRem)
 				lineHeight(1.6.cssRem)
 				margin(0.px)
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+			self {
+				marginLeft(timelineSize.value() * 1.5)
+			}
+		}
+		
+		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+			self {
+				titleHeight(1.5.cssRem)
+				marginLeft(0.px)
+				
+				"section" {
+					
+					
+					self + className("selected") style {
+						property("transform", "none")
+					}
+				}
 			}
 		}
 	}
