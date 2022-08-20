@@ -65,7 +65,7 @@ data class Skill(
 						"""
 							Since: ${language.since}$learnedAndNowUserFor
 							Level: ${"<i class='fa-solid fa-star'></i> ".repeat(language.level)}
-						""".trimIndent().also { console.log(it) }, true
+						""".trimIndent(), true
 					)
 				})
 			}
