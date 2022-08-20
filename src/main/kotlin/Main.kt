@@ -11,6 +11,7 @@ import pages.Experiences
 import pages.Home
 import pages.Portfolio
 import pages.Projects
+import pages.Skills
 
 const val MAIL_TO = "pierre.ayfri@gmail.com"
 
@@ -43,6 +44,10 @@ fun main() {
 				
 				route("/about") {
 					AboutMe()
+				}
+				
+				route("/skills") {
+					Skills()
 				}
 				
 				route("/projects") {

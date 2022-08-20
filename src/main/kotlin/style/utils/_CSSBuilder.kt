@@ -208,3 +208,15 @@ fun StyleScope.inset(vertical: CSSNumeric, horizontal: CSSNumeric) {
 fun StyleScope.inset(value: CSSNumeric) {
 	property("inset", value)
 }
+
+fun StyleScope.borderImageSource(value: String) {
+	property("border-image-source", value)
+}
+
+fun StyleScope.borderImageSlice(value: Int) {
+	property("border-image-slice", value)
+}
+
+fun StyleScope.borderTop(block: CSSBorder.() -> Unit) {
+	property("border-top", CSSBorder().apply(block))
+}
