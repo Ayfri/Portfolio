@@ -21,9 +21,14 @@ import kotlin.js.Promise.Companion.resolve
 val ktorClient = HttpClient(JsClient())
 
 const val DATA_URL = "https://raw.githubusercontent.com/Ayfri/Ayfri.github.io/api/result.json"
+
 val data by lazy {
 	localStorage["data"]?.let {
-		return@lazy Promise { resolve, _ -> resolve(JSON.parse(it)) }
+		try {
+			return@lazy Promise { resolve, _ -> resolve(JSON.parse(it)) }
+		} catch (e: Throwable) {
+			localStorage.removeItem("data")
+		}
 	}
 	
 	CoroutineScope(window.asCoroutineDispatcher()).promise {
