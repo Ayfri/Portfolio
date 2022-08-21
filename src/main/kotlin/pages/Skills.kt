@@ -222,7 +222,7 @@ val skills = listOf(
 	),
 	Language(
 		name = "Bash", since = 2022, learnedFor = "Creating scripts on Linux.", nowUsing = "Creating scripts on Linux.", level = 2, description = """
-			Description. bash is a sh-compatible command language interpreter that executes commands read from the standard input or from a file.
+			Bash is a sh-compatible command language interpreter that executes commands read from the standard input or from a file.
 			bash also incorporates useful features from the Korn and C shells (ksh and csh).
 		""".trimIndent(), iconUrl = devIcon("bash")
 	),

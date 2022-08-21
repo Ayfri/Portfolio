@@ -41,8 +41,6 @@ fun Experiences() {
 							
 							Maybe it was a bit repetitive because it was only WordPress websites and no big plugins that changes the experience.
 							
-							The office is located at Vitrolles with an air-conditioner, even a kitchen and was situated next to a supermarket therefore, we were buying some food and drinking every start of the week.
-							It had double screens for every workstation, making it more efficient.<br>
 							My days were from 10am to 18pm with the possibility to ask for home working if we needed to.
 						""".trimIndent()
 					)

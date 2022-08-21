@@ -73,13 +73,13 @@ val sections = listOf(
 	AboutMeSection(
 		"""
 			First started programming in 2014 by randomly watching a conference about programming in a library.
-			I first tried some experiments in Python with a [book](https://www.eyrolles.com/Informatique/Livre/python-pour-les-kids-9782212140880) that my dad paid me, done some beginner projects, etc.
+			I first tried some experiments in Python with a [book](https://www.eyrolles.com/Informatique/Livre/python-pour-les-kids-9782212140880) that my dad bought me, done some beginner projects, etc.
 
 			After that, created some random projects I found on YouTube about like programming a Minecraft-Like game in C++ or making some little games in Unity.
-			But I was not understanding a lot what I was doing and was almost only copying the tutorials without trying myself to create things.
+			But I didn't understand much of what I was doing and was almost only copying the tutorials without trying to create things by myself.
 		""".trimIndent(), 2014, id = "intro"
 	) {
-		TextIcon("Intro to programming", FontAwesomeType.SOLID, "computer")
+		TextIcon("Introduction to programming", FontAwesomeType.SOLID, "computer")
 	},
 	
 	AboutMeSection(
@@ -93,7 +93,7 @@ val sections = listOf(
 			AyBot 2 was taken down in end of 2019 because of [Galileo](#galileo).
 		""".trimIndent(), 2018, id = "second-intro"
 	) {
-		TextIcon("Second Intro to Programming", FontAwesomeType.BRAND, "discord", Color("#5865f2"))
+		TextIcon("Second Introduction to Programming", FontAwesomeType.BRAND, "discord", Color("#5865f2"))
 	},
 	
 	AboutMeSection(
@@ -105,7 +105,7 @@ val sections = listOf(
 			Back in 2015 I followed a [tutorial to create a Minecraft-Like game](https://www.youtube.com/watch?v=GACpZp8oquU) in C++ using [OpenGL](https://www.opengl.org/) and a bunch of libraries.
 			It was interesting to go after some years, back on this project and fix some issues and finally understand the code and learn more about OpenGL and low-level graphics processing.
 
-			I currently still have my own arduino that I bought during my high-school.
+			I currently still have my own arduino that I bought during high-school.
 		""".trimIndent(), 2018, id = "arduino"
 	) {
 		TextIcon("Arduino", localImage("arduino.svg"))
@@ -143,7 +143,7 @@ val sections = listOf(
 			[Minecraft](https://minecraft.net) is my favorite game of all time, I started playing it back in 2010, I know it by heart.
 			Heard about it randomly on an old computer blog that my dad was subscribed to where on an article they spoked about _"this new game with an interesting concept"_.
 
-			I played a hundred of hours on Minecraft, created numerous maps, technical maps using CommandBlocks, Datapacks, mods, even created mods since around 2018. In [Java](https://www.java.com) using [Forge](https://files.minecraftforge.net/net/minecraftforge/forge), [Fabric](https://fabricmc.net) since 2020 and in [Kotlin](https://kotlinlang.org) since 2021.
+			I played a hundred of hours on Minecraft, created numerous maps, technical maps using command blocks, datapacks, mods, even created mods since around 2018. In [Java](https://www.java.com) using [Forge](https://files.minecraftforge.net/net/minecraftforge/forge), [Fabric](https://fabricmc.net) since 2020 and in [Kotlin](https://kotlinlang.org) since 2021.
 
 			I know a lot about the concepts of Minecraft and how they are programmed, this is what motivated me to create a Minecraft-Like game, _4 times_. Approaching more what I want and performances needed for a game like this each time.
 		""".trimIndent(), 2018, id = "minecraft"
