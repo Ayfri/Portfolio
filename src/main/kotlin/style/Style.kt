@@ -19,6 +19,8 @@ object AppStyle : StyleSheet() {
 	val mobileThirdBreak = 510.px
 	val mobileFourthBreak = 386.px
 	
+	val buttonColor by variable<CSSColorValue>()
+	
 	init {
 		"html" {
 			property("scroll-behavior", "smooth")
@@ -120,6 +122,33 @@ object AppStyle : StyleSheet() {
 	
 	val numberColor by style {
 		color(Color(specialTextColor))
+	}
+	
+	@OptIn(ExperimentalComposeWebApi::class)
+	val button by style {
+		backgroundColor(buttonColor.value(Color("#252525")))
+		borderRadius(.4.cssRem)
+		color(Color.white)
+		fontSize(1.1.cssRem)
+		fontWeight(700)
+		padding(.7.cssRem, 1.2.cssRem)
+		
+		cursor(Cursor.Pointer)
+		
+		filter {
+			brightness(.8)
+		}
+		
+		transitions {
+			delay(.25.s)
+			properties("filter")
+		}
+		
+		group(hover(self), self + active) style {
+			filter {
+				brightness(1.0)
+			}
+		}
 	}
 	
 	@OptIn(ExperimentalComposeWebApi::class)

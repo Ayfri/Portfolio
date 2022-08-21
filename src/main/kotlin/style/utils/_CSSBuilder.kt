@@ -220,3 +220,7 @@ fun StyleScope.borderImageSlice(value: Int) {
 fun StyleScope.borderTop(block: CSSBorder.() -> Unit) {
 	property("border-top", CSSBorder().apply(block))
 }
+
+fun StyleScope.margin(value: CSSAutoKeyword) {
+	property("margin", value)
+}

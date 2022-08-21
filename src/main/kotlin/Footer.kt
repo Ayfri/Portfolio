@@ -95,7 +95,7 @@ fun Footer() {
 			}
 			
 			Button({
-				classes(FooterStyle.footerButton)
+				classes(AppStyle.button)
 				
 				onClick {
 					val firstName = (document.querySelector("#first-name") as HTMLInputElement).value
@@ -130,7 +130,7 @@ fun Footer() {
 			A(href = cvPath, {
 				target(ATarget.Blank)
 				attr("download", "CV Pierre Roy.pdf")
-				classes(FooterStyle.footerButton, FooterStyle.footerCVButton)
+				classes(AppStyle.button, FooterStyle.footerCVButton)
 			}) {
 				Text("Download my CV")
 			}
@@ -160,8 +160,6 @@ object FooterStyle : StyleSheet() {
 	const val footerColor = "#1a1120"
 	const val footerLinkHover = "#cccccc"
 	
-	val buttonColor by variable<CSSColorValue>()
-	
 	val footerCVButtonHover by keyframes {
 		from {
 			top((-100).percent)
@@ -182,7 +180,7 @@ object FooterStyle : StyleSheet() {
 	
 	@OptIn(ExperimentalComposeWebApi::class)
 	val footerContact by style {
-		buttonColor(Color("#50435A"))
+		AppStyle.buttonColor(Color("#50435A"))
 		margin(0.px, auto)
 		padding(2.cssRem, 0.px)
 		position(Position.Relative)
@@ -280,37 +278,10 @@ object FooterStyle : StyleSheet() {
 		}
 	}
 	
-	@OptIn(ExperimentalComposeWebApi::class)
-	val footerButton by style {
-		backgroundColor(buttonColor.value(Color("#252525")))
-		borderRadius(.4.cssRem)
-		color(Color.white)
-		fontSize(1.1.cssRem)
-		fontWeight(700)
-		padding(.7.cssRem, 1.2.cssRem)
-		
-		cursor(Cursor.Pointer)
-		
-		filter {
-			brightness(.8)
-		}
-		
-		transitions {
-			delay(.25.s)
-			properties("filter")
-		}
-		
-		group(hover(self), self + active) style {
-			filter {
-				brightness(1.0)
-			}
-		}
-	}
-	
 	val footerCVButton by style {
 		val buttonBackgroundColor = Color("#252525")
 		
-		buttonColor(buttonBackgroundColor)
+		AppStyle.buttonColor(buttonBackgroundColor)
 		position(Position.Relative)
 		overflow(Overflow.Hidden)
 		display(DisplayStyle.InlineBlock)

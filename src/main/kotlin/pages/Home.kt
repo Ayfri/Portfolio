@@ -1,7 +1,6 @@
 package pages
 
 import A
-import FooterStyle.buttonColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -27,13 +26,10 @@ import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import style.AppStyle
-import style.utils.Cursor
 import style.utils.TextAlign
-import style.utils.cursor
 import style.utils.linearGradient
 import style.utils.size
 import style.utils.textAlign
-import style.utils.transitions
 import kotlin.js.Date
 
 inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
@@ -92,7 +88,7 @@ fun Home() {
 			markdownParagraph(
 				"""
 					Hi, it's me, Pierre Roy, I am a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/) and I am passionate about computer science and especially programming.
-					I'm making all sort of projects and programming by myself since years and this is my portfolio, welcome !
+					I'm making all sort of projects and programming by myself since years and this is my portfolio, welcome!
 				""".trimIndent(), true, AppStyle.monoFont
 			)
 		})
@@ -122,7 +118,7 @@ fun Home() {
 				}
 			}
 			
-			A("/projects", "See all projects", "button")
+			A("/projects", "See all projects", AppStyle.button)
 		}
 		
 		Section({
@@ -140,7 +136,7 @@ fun Home() {
 				}
 			}
 			
-			A("/skills", "See all skills", "button")
+			A("/skills", "See all skills", AppStyle.button)
 		}
 	}
 }
@@ -158,7 +154,7 @@ object HomeStyle : StyleSheet() {
 				stop(Color("#302F39"), 90.percent)
 			})
 			
-			padding(1.cssRem, 10.vw)
+			padding(1.cssRem, 8.5.vw)
 		}
 		
 		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFirstBreak))) {
@@ -220,38 +216,12 @@ object HomeStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
-		gap(1.2.cssRem)
-		marginTop(2.4.cssRem)
+		gap(1.5.cssRem)
+		marginTop(3.cssRem)
 		padding(0.px, 1.cssRem)
 		
 		className("skills") style {
 			flexWrap(FlexWrap.Wrap)
-		}
-		
-		className("button") style {
-			backgroundColor(buttonColor.value(Color("#252525")))
-			borderRadius(.4.cssRem)
-			color(Color.white)
-			fontSize(1.1.cssRem)
-			fontWeight(700)
-			padding(.7.cssRem, 1.2.cssRem)
-			
-			cursor(Cursor.Pointer)
-			
-			filter {
-				brightness(.8)
-			}
-			
-			transitions {
-				delay(.25.s)
-				properties("filter")
-			}
-			
-			group(hover(self), self + active) style {
-				filter {
-					brightness(1.0)
-				}
-			}
 		}
 		
 		className("list") style {

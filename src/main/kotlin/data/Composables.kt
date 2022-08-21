@@ -10,10 +10,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.web.events.SyntheticMouseEvent
 import markdownParagraph
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
+import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.AttrsScope
 import org.jetbrains.compose.web.attributes.alt
+import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
+import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.H3
@@ -33,7 +36,7 @@ fun HomeCard(repository: GitHubRepository) {
 		Img(skills.first { it.language.name == repository.language }.language.iconUrl) {
 			alt(repository.language!!)
 		}
-		Text(repository.name)
+		A("/projects#${repository.name}", repository.name)
 	}
 	
 	Div {
@@ -53,6 +56,7 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 	
 	Div({
 		classes(if (open) DataStyle.projectCardOpen else DataStyle.projectCardClosed, DataStyle.projectCard)
+		id(repository.name)
 		
 		onClick {
 			open = !open
@@ -110,6 +114,15 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 				P(repository.description ?: "No description provided.")
 			}
 		}
+		
+		if (open) {
+			A(repository.htmlUrl, {
+				classes(AppStyle.button)
+				target(ATarget.Blank)
+			}) {
+				Text("View on GitHub")
+			}
+		}
 	}
 }
 
@@ -141,9 +154,12 @@ object DataStyle : StyleSheet() {
 			gap(.5.cssRem)
 			
 			backgroundColor(Color(homeCardTitleBackground))
-			color(Color.white)
 			margin(0.px)
 			padding(1.cssRem)
+			
+			"a" {
+				color(Color.white)
+			}
 			
 			"img" {
 				size(1.3.cssRem)
@@ -213,11 +229,17 @@ object DataStyle : StyleSheet() {
 			
 			"h2" {
 				fontSize(2.5.cssRem)
+				margin(1.cssRem, 0.px)
 			}
 			
 			"p" {
 				textAlign(TextAlign.Start)
 				margin(0.px, 1.5.cssRem)
+			}
+			
+			child(self, type("div")) style {
+				margin(auto)
+				width(fitContent)
 			}
 			
 			inline fun subSpanColor(color: CSSColorValue, index: Int) {
@@ -244,6 +266,17 @@ object DataStyle : StyleSheet() {
 			
 			"code" {
 				whiteSpace("pre-wrap")
+			}
+		}
+		
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
+			self {
+				padding(clamp(.8.cssRem, 1.vw, 1.6.cssRem))
+			}
+			
+			className("bottom") style {
+				maxWidth(95.percent)
+				padding(clamp(.8.cssRem, 1.vw, 2.cssRem))
 			}
 		}
 	}
