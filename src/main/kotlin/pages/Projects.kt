@@ -8,7 +8,6 @@ import data.DataStyle
 import data.GitHubRepository
 import data.ProjectCard
 import data.data
-import header.HeaderStyle
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.*
@@ -78,7 +77,7 @@ object ProjectsStyle : StyleSheet() {
 		gap(2.cssRem)
 		padding(0.px)
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
 				display(DisplayStyle.Flex)
 				flexDirection(FlexDirection.Column)

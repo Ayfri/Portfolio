@@ -14,7 +14,17 @@ object AppStyle : StyleSheet() {
 	const val titleBorderColor = "#797979"
 	const val specialTextColor = "#B4BBFF"
 	
+	val mobileFirstBreak = 890.px
+	val mobileSecondBreak = 810.px
+	val mobileThirdBreak = 510.px
+	val mobileFourthBreak = 386.px
+	
 	init {
+		"html" {
+			property("scroll-behavior", "smooth")
+			property("scroll-padding-top", HeaderStyle.navbarHeight.value())
+		}
+		
 		"body" {
 			fontFamily("Open Sans", "sans-serif")
 			margin(0.px)
@@ -57,7 +67,7 @@ object AppStyle : StyleSheet() {
 		margin(0.px, max(2.cssRem, 4.vw))
 		padding(3.cssRem)
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+		media(mediaMaxWidth(mobileFirstBreak)) {
 			self {
 				padding(1.5.cssRem)
 				margin(0.px, .8.cssRem)
@@ -68,7 +78,7 @@ object AppStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
 				padding(.8.cssRem)
 				margin(0.px)
@@ -89,14 +99,14 @@ object AppStyle : StyleSheet() {
 		margin(0.px, 0.px, 3.cssRem)
 		padding(1.cssRem, 1.5.cssRem)
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+		media(mediaMaxWidth(mobileFirstBreak)) {
 			self {
 				fontSize(1.8.cssRem)
 				padding(.8.cssRem, 1.4.cssRem)
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
 				fontSize(1.6.cssRem)
 				marginBottom(1.8.cssRem)
@@ -126,7 +136,7 @@ object AppStyle : StyleSheet() {
 			)
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
 				size(max(7.cssRem, 30.vw))
 			}

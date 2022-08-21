@@ -1,7 +1,6 @@
 package pages
 
 import androidx.compose.runtime.Composable
-import header.HeaderStyle
 import markdownParagraph
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
@@ -78,7 +77,7 @@ object ExperiencesStyle : StyleSheet() {
 				lineHeight(1.6.cssRem)
 			}
 			
-			media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+			media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 				self {
 					padding(.5.cssRem, .8.cssRem)
 				}

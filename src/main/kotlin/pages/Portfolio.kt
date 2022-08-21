@@ -1,7 +1,6 @@
 package pages
 
 import androidx.compose.runtime.Composable
-import header.HeaderStyle
 import localImage
 import markdownParagraph
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -111,7 +110,7 @@ object PortfolioStyle : StyleSheet() {
 			stop(Color(backgroundGradientEnd))
 		})
 		
-		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
 			self {
 				padding(1.2.cssRem, .8.cssRem)
 			}
@@ -128,7 +127,7 @@ object PortfolioStyle : StyleSheet() {
 		
 		textAlign(TextAlign.Right)
 		
-		media(mediaMinWidth(HeaderStyle.mobileFirstBreak + 1.px)) {
+		media(mediaMinWidth(AppStyle.mobileFirstBreak + 1.px)) {
 			self + nthChild(Nth.Even) style {
 				textAlign(TextAlign.Left)
 				flexDirection(FlexDirection.RowReverse)
@@ -183,7 +182,7 @@ object PortfolioStyle : StyleSheet() {
 			width(auto)
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
 				flexDirection(FlexDirection.Column)
 				alignItems(AlignItems.Stretch)
@@ -200,7 +199,7 @@ object PortfolioStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
 			self {
 				"img" {
 					height(auto)

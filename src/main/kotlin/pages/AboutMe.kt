@@ -274,7 +274,6 @@ object AboutMeStyle : StyleSheet() {
 	
 	init {
 		"html" {
-			property("scroll-behavior", "smooth")
 			property("scroll-padding-top", HeaderStyle.navbarHeight.value() + timelineDefaultOffset.px)
 		}
 		
@@ -283,14 +282,14 @@ object AboutMeStyle : StyleSheet() {
 			timelineOffset(1.5.cssRem)
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			id("main") style {
 				timelineSize(max(4.cssRem, 5.vw))
 				timelineOffset(1.cssRem)
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			id("main") style {
 				timelineSize(0.px)
 				timelineOffset((-5).cssRem)
@@ -417,7 +416,7 @@ object AboutMeStyle : StyleSheet() {
 			width(thickness)
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			className("round") + className("selected") + after style {
 				left(50.percent)
 				transform { translateX((-50).percent) }
@@ -435,7 +434,7 @@ object AboutMeStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			style {
 				display(DisplayStyle.None)
 			}
@@ -528,13 +527,13 @@ object AboutMeStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			self {
 				marginLeft(timelineSize.value() * 1.5)
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			self {
 				titleHeight(1.5.cssRem)
 				marginLeft(0.px)

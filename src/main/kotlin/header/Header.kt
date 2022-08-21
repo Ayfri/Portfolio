@@ -14,6 +14,8 @@ import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Header
 import org.jetbrains.compose.web.dom.I
+import style.AppStyle.mobileFirstBreak
+import style.AppStyle.mobileSecondBreak
 import style.utils.Cursor
 import style.utils.clamp
 import style.utils.cursor
@@ -65,10 +67,6 @@ object HeaderStyle : StyleSheet() {
 	const val navbarColor = "#2A2B36"
 	const val navbarColorSelected = "#1e1c28"
 	val navbarHeight by variable<CSSNumeric>()
-	val mobileFirstBreak = 890.px
-	val mobileSecondBreak = 810.px
-	val mobileThirdBreak = 510.px
-	val mobileFourthBreak = 386.px
 	
 	init {
 		root {

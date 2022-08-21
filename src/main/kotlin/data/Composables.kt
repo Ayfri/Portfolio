@@ -8,10 +8,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.web.events.SyntheticMouseEvent
-import header.HeaderStyle
 import markdownParagraph
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.AttrsScope
+import org.jetbrains.compose.web.attributes.alt
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.Div
@@ -22,6 +22,7 @@ import org.jetbrains.compose.web.dom.P
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.HTMLDivElement
 import pages.TextIcon
+import pages.skills
 import style.AppStyle
 import style.utils.*
 import kotlin.js.Date
@@ -29,6 +30,9 @@ import kotlin.js.Date
 @Composable
 fun HomeCard(repository: GitHubRepository) {
 	H3 {
+		Img(skills.first { it.language.name == repository.language }.language.iconUrl) {
+			alt(repository.language!!)
+		}
 		Text(repository.name)
 	}
 	
@@ -124,24 +128,26 @@ object DataStyle : StyleSheet() {
 	val homeCard by style {
 		borderRadius(.8.cssRem)
 		overflow(Overflow.Hidden)
-		width(25.cssRem)
+		width(clamp(17.5.cssRem, 25.vw, 25.cssRem))
 		
-		transitions {
-			ease(AnimationTimingFunction.EaseInOut)
-			duration(.2.s)
-			
-			properties("transform")
-		}
-		
-		transform {
-			scale(1.0)
-		}
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		justifyContent(JustifyContent.SpaceBetween)
 		
 		"h3" {
+			display(DisplayStyle.Flex)
+			justifyContent(JustifyContent.Center)
+			alignItems(AlignItems.Center)
+			gap(.5.cssRem)
+			
 			backgroundColor(Color(homeCardTitleBackground))
 			color(Color.white)
 			margin(0.px)
 			padding(1.cssRem)
+			
+			"img" {
+				size(1.3.cssRem)
+			}
 		}
 		
 		"p" {
@@ -154,8 +160,10 @@ object DataStyle : StyleSheet() {
 			
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Column)
+			justifyContent(JustifyContent.SpaceBetween)
 			gap(3.cssRem)
 			
+			height(100.percent)
 			padding(1.cssRem)
 		}
 		
@@ -278,14 +286,14 @@ object DataStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFirstBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
 				maxSize(8.cssRem)
 				padding(1.cssRem)
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			self {
 				imageSize(3.cssRem)
 				height(auto)

@@ -1,6 +1,5 @@
 import androidx.compose.runtime.Composable
 import header.GITHUB_LINK
-import header.HeaderStyle
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -201,7 +200,7 @@ object FooterStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			self {
 				boxSizing("border-box")
 				padding(1.5.cssRem)
@@ -269,7 +268,7 @@ object FooterStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			self {
 				display(DisplayStyle.Flex)
 				flexDirection(FlexDirection.Column)
@@ -373,7 +372,7 @@ object FooterStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			self {
 				className("top") style {
 					gap(1.cssRem)

@@ -8,7 +8,6 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import data.GitHubRepository
 import data.data
-import header.HeaderStyle
 import localImage
 import markdownParagraph
 import org.jetbrains.compose.web.css.*
@@ -101,6 +100,12 @@ data class Skill(
 			section("GitHub Projects:", githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } })
 			section("School Projects:", schoolProjects)
 		}
+	}
+	
+	@Composable
+	fun DisplaySimple() {
+		Img(language.iconUrl, alt = language.name)
+		P(language.name, AppStyle.monoFont)
 	}
 }
 
@@ -263,6 +268,7 @@ fun Skills() {
 				}
 				
 				Div({
+					id(skill.language.name)
 					classes(SkillsStyle.skill)
 				}) {
 					skill.Display()
@@ -286,7 +292,7 @@ object SkillsStyle : StyleSheet() {
 		gap(2.cssRem)
 		
 		
-		media(mediaMaxWidth(HeaderStyle.mobileThirdBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			self {
 				display(DisplayStyle.Flex)
 				flexDirection(FlexDirection.Column)
@@ -316,6 +322,8 @@ object SkillsStyle : StyleSheet() {
 			}
 		} padding-box,
 			$borderGradient border-box""")
+		
+		color(Color.white)
 		
 		"img" {
 			size(3.5.cssRem)
@@ -410,7 +418,7 @@ object SkillsStyle : StyleSheet() {
 			}
 		}
 		
-		media(mediaMaxWidth(HeaderStyle.mobileSecondBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
 			self {
 				desc(className("description"), type("p")) style {
 					fontSize(.85.cssRem)
@@ -419,7 +427,7 @@ object SkillsStyle : StyleSheet() {
 		}
 		
 		
-		media(mediaMaxWidth(HeaderStyle.mobileFourthBreak)) {
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			self {
 				desc(className("top"), className("info")) style {
 					flexDirection(FlexDirection.Column)

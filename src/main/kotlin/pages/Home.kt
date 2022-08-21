@@ -1,6 +1,7 @@
 package pages
 
-import Carousel
+import A
+import FooterStyle.buttonColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
@@ -11,10 +12,12 @@ import data.HomeCard
 import data.data
 import localImage
 import markdownParagraph
+import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType.Enum.Screen
 import org.jetbrains.compose.web.css.CSSMediaQuery.Only
+import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H2
 import org.jetbrains.compose.web.dom.H3
@@ -24,10 +27,13 @@ import org.jetbrains.compose.web.dom.Section
 import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import style.AppStyle
+import style.utils.Cursor
 import style.utils.TextAlign
-import style.utils.clamp
+import style.utils.cursor
 import style.utils.linearGradient
+import style.utils.size
 import style.utils.textAlign
+import style.utils.transitions
 import kotlin.js.Date
 
 inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
@@ -96,13 +102,45 @@ fun Home() {
 				data.then { gitHubData ->
 					homeRepositories += gitHubData.repos.sortedBy {
 						it.stargazersCount
-					}.reversed().take(6)
+					}.reversed().take(3)
 				}
 			}
 		}
 		
-		Carousel(homeRepositories, "${HomeStyle.repositoriesCarousel} ${AppStyle.monoFont}", DataStyle.homeCard) {
-			HomeCard(it)
+		Section({
+			classes(HomeStyle.section)
+		}) {
+			Div({
+				classes("list", "repos")
+			}) {
+				homeRepositories.forEach {
+					Div({
+						classes(DataStyle.homeCard, "repo")
+					}) {
+						HomeCard(it)
+					}
+				}
+			}
+			
+			A("/projects", "See all projects", "button")
+		}
+		
+		Section({
+			classes(HomeStyle.section)
+		}) {
+			Div({
+				classes("list", "skills")
+			}) {
+				skills.forEach {
+					A("/skills#${it.language.name}", {
+						classes("skill")
+					}) {
+						it.DisplaySimple()
+					}
+				}
+			}
+			
+			A("/skills", "See all skills", "button")
 		}
 	}
 }
@@ -120,13 +158,20 @@ object HomeStyle : StyleSheet() {
 				stop(Color("#302F39"), 90.percent)
 			})
 			
-			padding(1.cssRem, 20.vw)
-			
-			media(Only(MediaType(Screen), mediaMaxWidth(900.px))) {
-				id("main") style {
-					paddingLeft(10.vw)
-					paddingRight(10.vw)
-				}
+			padding(1.cssRem, 10.vw)
+		}
+		
+		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFirstBreak))) {
+			id("main") style {
+				paddingLeft(5.vw)
+				paddingRight(5.vw)
+			}
+		}
+		
+		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFourthBreak))) {
+			id("main") style {
+				paddingLeft(2.vw)
+				paddingRight(2.vw)
 			}
 		}
 	}
@@ -136,11 +181,11 @@ object HomeStyle : StyleSheet() {
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
 		textAlign(TextAlign.Center)
+		maxWidth(100.percent)
 	}
 	
 	val topInfo by style {
 		height(80.percent)
-		width(clamp(34.cssRem, 23.vw, 38.cssRem))
 		
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
@@ -170,7 +215,73 @@ object HomeStyle : StyleSheet() {
 		}
 	}
 	
-	val repositoriesCarousel by style {
-		gap(4.cssRem)
+	@OptIn(ExperimentalComposeWebApi::class)
+	val section by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		alignItems(AlignItems.Center)
+		gap(1.2.cssRem)
+		marginTop(2.4.cssRem)
+		padding(0.px, 1.cssRem)
+		
+		className("skills") style {
+			flexWrap(FlexWrap.Wrap)
+		}
+		
+		className("button") style {
+			backgroundColor(buttonColor.value(Color("#252525")))
+			borderRadius(.4.cssRem)
+			color(Color.white)
+			fontSize(1.1.cssRem)
+			fontWeight(700)
+			padding(.7.cssRem, 1.2.cssRem)
+			
+			cursor(Cursor.Pointer)
+			
+			filter {
+				brightness(.8)
+			}
+			
+			transitions {
+				delay(.25.s)
+				properties("filter")
+			}
+			
+			group(hover(self), self + active) style {
+				filter {
+					brightness(1.0)
+				}
+			}
+		}
+		
+		className("list") style {
+			display(DisplayStyle.Flex)
+			flexDirection(FlexDirection.Row)
+			justifyContent(JustifyContent.Center)
+			gap(1.cssRem)
+			
+			className("skill") style {
+				backgroundColor(Color("#252525"))
+				borderRadius(.4.cssRem)
+				color(Color.white)
+				padding(.3.cssRem, .5.cssRem)
+				
+				"img" {
+					borderRadius(.4.cssRem)
+					size(3.5.cssRem)
+				}
+			}
+		}
+		
+		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFirstBreak))) {
+			className("repos") style {
+				flexDirection(FlexDirection.Column)
+				alignItems(AlignItems.Center)
+				
+				className("repo") style {
+					maxWidth(95.percent)
+				}
+			}
+		}
 	}
 }
