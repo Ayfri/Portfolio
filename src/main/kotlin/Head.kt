@@ -2,6 +2,7 @@ import androidx.compose.runtime.Composable
 import kotlinx.browser.document
 import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.dom.TagElement
+import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.HTMLLinkElement
 import org.w3c.dom.HTMLScriptElement
 import style.AppStyle
@@ -12,6 +13,10 @@ fun Head() {
 	Link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;300;400;500;700&display=swap", rel = "stylesheet")
 	Link(href = "https://dev-cats.github.io/code-snippets/JetBrainsMono.css", rel = "stylesheet")
 	Script(src = "https://kit.fontawesome.com/74fed0e2b5.js", crossOrigin = CrossOrigin.ANONYMOUS)
+	Script(src = "https://www.googletagmanager.com/gtag/js?id=G-TS3BHPVFKK", mode = ScriptMode.ASYNC)
+	Script(
+		content = "function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag('js',new Date),gtag('config','G-TS3BHPVFKK')"
+	)
 }
 
 @Composable
@@ -47,6 +52,13 @@ fun Script(src: String, crossOrigin: CrossOrigin = CrossOrigin.NONE, mode: Scrip
 				else -> Unit
 			}
 	}) {}
+}
+
+@Composable
+fun Script(content: String) {
+	TagElement<HTMLScriptElement>("script", null) {
+		Text(content)
+	}
 }
 
 fun setTitle(title: String) {
