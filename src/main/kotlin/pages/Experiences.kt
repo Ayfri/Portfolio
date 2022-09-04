@@ -32,16 +32,16 @@ fun Experiences() {
 						"""
 							## [BlueFrog](https://www.bluefrog.fr/) Internship in 2022
 							
-							[BlueFrog](https://www.bluefrog.fr/) is a company that develops websites mainly in [PHP](https://www.php.net) for particulars, it is only composed of one employee. From June 2022 to August 2022, I made an internship in the company.
-							Starting by learning PHP from scratch, while also learning [WordPress](https://wordpress.org) and then creating multiple websites & plugins. It was pretty interesting to learn a lot of new technologies and to work on a team.
-							Also learned [Git](https://git-scm.com/) & [GitHub](https://github.com) and a few other technologies to my boss, so we could work together more efficiently.
+							[BlueFrog](https://www.bluefrog.fr/) is a company that develops websites mainly in [PHP](https://www.php.net) for individuals, it is only composed of one employee. From June 2022 to August 2022, I had an internship in the company.
+							Starting by learning PHP from scratch, while also learning [WordPress](https://wordpress.org) and then creating multiple websites & plugins. It was pretty interesting to learn a lot of new technologies and team working.
+							Also taught [Git](https://git-scm.com/) & [GitHub](https://github.com) and a few other technologies to my boss, so we could work together more efficiently.
 							
 							My boss was very nice and was creating the mock-ups for the websites, I was only integrating the code and the design. We were also often talking about the animations which lead me to improve my CSS skills a lot.
 							The internship was 2 months long with good environment, it was pretty far from my home, but I adapt easily thus it wasn't a big deal.
 							
-							Maybe it was a bit repetitive because it was only WordPress websites and no big plugins that changes the experience.
+							Maybe it was a bit repetitive because it was only WordPress websites and no big plugins that change the experience.
 							
-							My days were from 10am to 18pm with the possibility to ask for home working if we needed to.
+							My days were from 10am to 6pm with the possibility to ask for home working if we needed to.
 						""".trimIndent()
 					)
 				})

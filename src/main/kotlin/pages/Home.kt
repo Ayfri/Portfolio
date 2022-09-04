@@ -87,7 +87,7 @@ fun Home() {
 		P({
 			markdownParagraph(
 				"""
-					Hi, it's me, Pierre Roy, I am a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/) and I am passionate about computer science and especially programming.
+					Hi, it's me, Pierre Roy, I'm a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/) and I'm passionate about computer science and especially programming.
 					I'm making all sort of projects and programming by myself for years. This is my portfolio, welcome!
 				""".trimIndent(), true, AppStyle.monoFont
 			)

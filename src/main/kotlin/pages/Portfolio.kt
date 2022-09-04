@@ -32,7 +32,7 @@ fun Portfolio() {
 				I created this portfolio first because my school asked me to create one to validate my first year. But also to have something to show for recruiters other than just my GitHub profile.
 				I can clearly explain what do I do, how, why, when I started etc. This is why I created it using new technologies that I don’t know and designed it using method my boss learned me during this time.
 			""".trimIndent(),
-			"In first place, why?",
+			"In the first place, why?",
 			localImage("portfolio-1.png")
 		)
 		
