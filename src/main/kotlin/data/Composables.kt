@@ -190,6 +190,7 @@ object DataStyle : StyleSheet() {
 		}
 	}
 	
+	@OptIn(ExperimentalComposeWebApi::class)
 	val projectCard by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
@@ -201,8 +202,8 @@ object DataStyle : StyleSheet() {
 		cursor(Cursor.Pointer)
 		
 		transitions {
-			ease(AnimationTimingFunction.EaseInOut)
-			duration(.5.s)
+			defaultTimingFunction(AnimationTimingFunction.EaseInOut)
+			defaultDuration(.5.s)
 			properties("max-height")
 		}
 		

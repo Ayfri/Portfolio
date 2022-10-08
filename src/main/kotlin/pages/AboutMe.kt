@@ -370,8 +370,8 @@ object AboutMeStyle : StyleSheet() {
 			position(Position.Relative)
 			
 			transitions {
-				delay(.4.s)
-				ease(AnimationTimingFunction.cubicBezier(.47, 2.0, .41, .8))
+				defaultDelay(.4.s)
+				defaultTimingFunction(AnimationTimingFunction.cubicBezier(.47, 2.0, .41, .8))
 				properties("transform", "box-shadow")
 			}
 			
@@ -469,8 +469,8 @@ object AboutMeStyle : StyleSheet() {
 			position(Position.Relative)
 			
 			transitions {
-				duration(.3.s)
-				ease(AnimationTimingFunction.EaseInOut)
+				defaultDuration(.3.s)
+				defaultTimingFunction(AnimationTimingFunction.EaseInOut)
 				properties("transform")
 			}
 			

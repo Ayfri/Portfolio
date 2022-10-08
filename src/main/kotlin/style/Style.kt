@@ -5,6 +5,7 @@ import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import style.utils.*
 
+@OptIn(ExperimentalComposeWebApi::class)
 object AppStyle : StyleSheet() {
 	const val contentBackgroundColor = "#212125"
 	const val monoFontFamily = "JetBrains Mono"
@@ -34,7 +35,7 @@ object AppStyle : StyleSheet() {
 		
 		"a" style {
 			transitions {
-				delay(.25.s)
+				defaultDelay(.25.s)
 				properties("background-color", "color")
 			}
 			
@@ -53,7 +54,7 @@ object AppStyle : StyleSheet() {
 			property("border", "none")
 			
 			transitions {
-				delay(.25.s)
+				defaultDelay(.25.s)
 				properties("background-color", "color")
 			}
 		}
@@ -140,7 +141,7 @@ object AppStyle : StyleSheet() {
 		}
 		
 		transitions {
-			delay(.25.s)
+			defaultDelay(.25.s)
 			properties("filter")
 		}
 		

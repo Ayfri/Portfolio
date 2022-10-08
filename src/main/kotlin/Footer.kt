@@ -278,6 +278,7 @@ object FooterStyle : StyleSheet() {
 		}
 	}
 	
+	@OptIn(ExperimentalComposeWebApi::class)
 	val footerCVButton by style {
 		val buttonBackgroundColor = Color("#252525")
 		
@@ -297,7 +298,7 @@ object FooterStyle : StyleSheet() {
 			lineHeight(3.cssRem)
 			color(Color("#69CF75"))
 			transitions {
-				delay(.25.s)
+				defaultDelay(.25.s)
 				properties("color")
 			}
 			

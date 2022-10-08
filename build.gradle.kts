@@ -1,5 +1,3 @@
-import org.jetbrains.compose.compose
-
 plugins {
 	kotlin("js")
 	kotlin("plugin.serialization")

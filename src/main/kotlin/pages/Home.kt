@@ -11,7 +11,6 @@ import data.HomeCard
 import data.data
 import localImage
 import markdownParagraph
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType.Enum.Screen
@@ -211,7 +210,6 @@ object HomeStyle : StyleSheet() {
 		}
 	}
 	
-	@OptIn(ExperimentalComposeWebApi::class)
 	val section by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
