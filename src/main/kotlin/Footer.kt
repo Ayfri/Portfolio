@@ -8,7 +8,6 @@ import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.maxLength
 import org.jetbrains.compose.web.attributes.minLength
 import org.jetbrains.compose.web.attributes.placeholder
-import org.jetbrains.compose.web.attributes.required
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
@@ -60,7 +59,7 @@ fun FooterContactField(
 		} else {
 			Input(type) {
 				id(id)
-				if (required) required()
+				if (required) attr("required", "")
 				placeholder(label)
 				minLength(range?.first ?: 0)
 				maxLength(range?.last ?: Int.MAX_VALUE)
