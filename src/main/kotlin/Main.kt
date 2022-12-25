@@ -27,7 +27,8 @@ fun main() {
 	renderComposableInBody {
 		BrowserRouter("/") {
 			val pathname = document.location?.pathname ?: "404"
-			setTitle("${pathname.removePrefix("/").replace("/", " ").titlecase()} - Pierre Roy")
+			val currentPageName = pathname.removePrefix("/").replace("/", " ").titlecase()
+			setTitle("${currentPageName.ifEmpty { "Home" }} - Pierre Roy")
 
 			Header()
 
