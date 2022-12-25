@@ -3,6 +3,7 @@
 import app.softwork.routingcompose.BrowserRouter
 import header.Header
 import kotlinx.browser.document
+import kotlinx.browser.window
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.renderComposable
 import org.jetbrains.compose.web.renderComposableInBody
@@ -68,6 +69,8 @@ fun main() {
 			noMatch {
 				redirect("/", true)
 			}
+
+			window.scroll(0.0, 0.0)
 		}
 	}
 }
