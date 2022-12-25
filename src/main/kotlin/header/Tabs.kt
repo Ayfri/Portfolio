@@ -20,7 +20,7 @@ val tabs = listOf(
 fun Tab(tab: Tab, onClick: (SyntheticMouseEvent) -> Unit = {}) {
 	NavLink(tab.link, { selected ->
 		if (selected) classes("active")
-		
+
 		onClick(onClick)
 	}) {
 		Text(tab.name)

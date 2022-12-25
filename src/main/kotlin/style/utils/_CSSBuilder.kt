@@ -26,7 +26,7 @@ interface ObjectFit : StylePropertyEnum {
 		inline val Fill get() = ObjectFit("fill")
 		inline val None get() = ObjectFit("none")
 		inline val ScaleDown get() = ObjectFit("scale-down")
-		
+
 		inline val Inherit get() = ObjectFit("inherit")
 		inline val Initial get() = ObjectFit("initial")
 		inline val Revert get() = ObjectFit("revert")
@@ -60,11 +60,17 @@ fun StyleScope.width(value: SizeKeyword) {
 
 fun StyleScope.height(value: SizeKeyword) {
 	property("height", value)
-	
+
 	2.vw..5.vw
 }
 
-fun StyleScope.boxShadow(color: CSSColorValue, offset: CSSNumeric = 0.number, blur: CSSNumeric = 0.number, spread: CSSNumeric = 0.number, inset: Boolean = false) {
+fun StyleScope.boxShadow(
+	color: CSSColorValue,
+	offset: CSSNumeric = 0.number,
+	blur: CSSNumeric = 0.number,
+	spread: CSSNumeric = 0.number,
+	inset: Boolean = false
+) {
 	property("box-shadow", "${if (inset) "inset " else ""}${offset} $blur $spread $color")
 }
 
@@ -78,7 +84,7 @@ interface Resize : StylePropertyEnum {
 		inline val Horizontal get() = Resize("horizontal")
 		inline val None get() = Resize("none")
 		inline val Vertical get() = Resize("vertical")
-		
+
 		inline val Inherit get() = Resize("inherit")
 		inline val Initial get() = Resize("initial")
 		inline val Revert get() = Resize("revert")
@@ -155,7 +161,7 @@ interface Overflow : StylePropertyEnum {
 		inline val Hidden get() = Overflow("hidden")
 		inline val Scroll get() = Overflow("scroll")
 		inline val Visible get() = Overflow("visible")
-		
+
 		inline val Inherit get() = Overflow("inherit")
 		inline val Initial get() = Overflow("initial")
 		inline val Revert get() = Overflow("revert")
@@ -177,7 +183,7 @@ interface TextAlign : StylePropertyEnum {
 		inline val Justify get() = TextAlign("justify")
 		inline val Start get() = TextAlign("start")
 		inline val End get() = TextAlign("end")
-		
+
 		inline val Inherit get() = TextAlign("inherit")
 		inline val Initial get() = TextAlign("initial")
 		inline val Revert get() = TextAlign("revert")

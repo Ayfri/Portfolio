@@ -30,7 +30,7 @@ val data by lazy {
 			localStorage.removeItem("data")
 		}
 	}
-	
+
 	CoroutineScope(window.asCoroutineDispatcher()).promise {
 		try {
 			val text = ktorClient.get(DATA_URL).bodyAsText()

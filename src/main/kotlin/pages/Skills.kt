@@ -11,15 +11,7 @@ import data.data
 import localImage
 import markdownParagraph
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.H1
-import org.jetbrains.compose.web.dom.H4
-import org.jetbrains.compose.web.dom.Img
-import org.jetbrains.compose.web.dom.Li
-import org.jetbrains.compose.web.dom.P
-import org.jetbrains.compose.web.dom.Section
-import org.jetbrains.compose.web.dom.Text
-import org.jetbrains.compose.web.dom.Ul
+import org.jetbrains.compose.web.dom.*
 import style.AppStyle
 import style.utils.*
 
@@ -54,13 +46,13 @@ data class Skill(
 					Img(language.iconUrl, alt = language.name)
 					P(language.name, AppStyle.monoFont)
 				}
-				
-				
+
+
 				P({
 					val learnedAndNowUserFor =
 						if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
 						else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
-					
+
 					markdownParagraph(
 						"""
 							Since: ${language.since}$learnedAndNowUserFor
@@ -69,25 +61,25 @@ data class Skill(
 					)
 				})
 			}
-			
+
 			P({
 				markdownParagraph(language.description, false, AppStyle.monoFont, "description")
 			})
 		}
-		
+
 		Div({
 			classes("bottom")
 		}) {
 			@Composable
 			fun section(name: String, list: List<GitHubRepository>) {
 				if (list.isEmpty()) return
-				
+
 				H4({
 					classes(AppStyle.monoFont)
 				}) {
 					Text(name)
 				}
-				
+
 				Ul {
 					list.distinctBy { it.fullName }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name }).forEach {
 						Li {
@@ -96,12 +88,12 @@ data class Skill(
 					}
 				}
 			}
-			
+
 			section("GitHub Projects:", githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } })
 			section("School Projects:", schoolProjects)
 		}
 	}
-	
+
 	@Composable
 	fun DisplaySimple() {
 		Img(language.iconUrl, alt = language.name)
@@ -135,7 +127,15 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = devIcon("javascript"),
 		githubProjects = listOf("Les-Laboratoires-JS/tips"),
-		schoolProjects = listOf("Ayfri/TP-JS", "Ayfri/VersionCraft", "Ayfri/Challenge-Discovery", "Ayfri/Hangman-Web", "Ayfri/Infra-Website", "Ayfri/Cat-in-Space", "antaww/game-overflow")
+		schoolProjects = listOf(
+			"Ayfri/TP-JS",
+			"Ayfri/VersionCraft",
+			"Ayfri/Challenge-Discovery",
+			"Ayfri/Hangman-Web",
+			"Ayfri/Infra-Website",
+			"Ayfri/Cat-in-Space",
+			"antaww/game-overflow"
+		)
 	),
 	Language(
 		name = "CSS", since = 2017, learnedFor = "Styling websites.", nowUsing = "Styling websites.", level = 5,
@@ -194,10 +194,16 @@ val skills = listOf(
 		""".trimIndent(), iconUrl = devIcon("csharp")
 	),
 	Language(
-		name = "PHP", since = 2022, learnedFor = "Creating websites/plugins with WordPress.", nowUsing = "Creating websites/plugins with WordPress.", level = 4, description = """
+		name = "PHP",
+		since = 2022,
+		learnedFor = "Creating websites/plugins with WordPress.",
+		nowUsing = "Creating websites/plugins with WordPress.",
+		level = 4,
+		description = """
 			PHP is a server side scripting language that is embedded in HTML. It is used to manage dynamic content, databases, session tracking, even build entire e-commerce sites.
 			It is integrated with a number of popular databases, including MySQL, PostgreSQL, Oracle, Sybase, Informix, and Microsoft SQL Server.
-		""".trimIndent(), iconUrl = devIcon("php")
+		""".trimIndent(),
+		iconUrl = devIcon("php")
 	),
 	Language(
 		name = "Python", since = 2014, learnedFor = "Trying programmation.", nowUsing = "Creating scripts/CLI.", level = 3, description = """
@@ -231,9 +237,9 @@ val skills = listOf(
 @Composable
 fun Skills() {
 	Style(SkillsStyle)
-	
+
 	val repos = remember { mutableStateListOf<GitHubRepository>() }
-	
+
 	if (repos.isEmpty()) {
 		LaunchedEffect(Unit) {
 			data.then { gitHubData ->
@@ -241,7 +247,7 @@ fun Skills() {
 			}
 		}
 	}
-	
+
 	Div({
 		classes(AppStyle.sections, SkillsStyle.skills)
 	}) {
@@ -250,30 +256,31 @@ fun Skills() {
 		}) {
 			Text("My Skills:")
 		}
-		
+
 		Section({
 			classes(SkillsStyle.skillsList)
 		}) {
-			skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }.thenBy { it.language.name }).forEach { skill ->
-				if (skill.githubProjects.isEmpty()) {
-					skill.githubProjects += repos.filter {
-						it.language!!.equals(skill.language.name, true)
-					} + repos.filter { it.fullName in skill.language.githubProjects }
+			skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }.thenBy { it.language.name })
+				.forEach { skill ->
+					if (skill.githubProjects.isEmpty()) {
+						skill.githubProjects += repos.filter {
+							it.language!!.equals(skill.language.name, true)
+						} + repos.filter { it.fullName in skill.language.githubProjects }
+					}
+
+					if (skill.schoolProjects.isEmpty()) {
+						skill.schoolProjects += repos.filter {
+							it.language!!.equals(skill.language.name, true) && it.description?.contains("school") == true
+						} + repos.filter { it.fullName in skill.language.schoolProjects }
+					}
+
+					Div({
+						id(skill.language.name)
+						classes(SkillsStyle.skill)
+					}) {
+						skill.Display()
+					}
 				}
-				
-				if (skill.schoolProjects.isEmpty()) {
-					skill.schoolProjects += repos.filter {
-						it.language!!.equals(skill.language.name, true) && it.description?.contains("school") == true
-					} + repos.filter { it.fullName in skill.language.schoolProjects }
-				}
-				
-				Div({
-					id(skill.language.name)
-					classes(SkillsStyle.skill)
-				}) {
-					skill.Display()
-				}
-			}
 		}
 	}
 }
@@ -281,17 +288,17 @@ fun Skills() {
 object SkillsStyle : StyleSheet() {
 	const val skillsBackgroundColor = "#363636"
 	const val skillBackgroundColor = "#141414"
-	
+
 	val skills by style {
 		backgroundColor(Color(skillsBackgroundColor))
 	}
-	
+
 	val skillsList by style {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns(repeat("auto-fill", minmax(22.5.cssRem, 1.fr)))
 		gap(2.cssRem)
-		
-		
+
+
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			self {
 				display(DisplayStyle.Flex)
@@ -299,7 +306,7 @@ object SkillsStyle : StyleSheet() {
 			}
 		}
 	}
-	
+
 	val skill by style {
 		val borderGradient = linearGradient(135.deg) {
 			stop(Color("#701CB3"))
@@ -307,14 +314,14 @@ object SkillsStyle : StyleSheet() {
 			stop(Color("#A24598"))
 			stop(Color("#033596"))
 		}
-		
+
 		borderRadius(.8.cssRem)
 		border {
 			color(Color.transparent)
 			style(LineStyle.Solid)
 			width(.1.cssRem)
 		}
-		
+
 		background("""${
 			linearGradient {
 				stop(Color(skillBackgroundColor))
@@ -322,65 +329,65 @@ object SkillsStyle : StyleSheet() {
 			}
 		} padding-box,
 			$borderGradient border-box""")
-		
+
 		color(Color.white)
-		
+
 		"img" {
 			size(3.5.cssRem)
 			borderRadius(.3.cssRem)
 		}
-		
+
 		"p" {
 			fontSize(.92.cssRem)
 		}
-		
+
 		child(self, type("div")) + not(empty) style {
 			padding(max(1.cssRem, 1.5.vw))
 		}
-		
+
 		className("top") style {
 			textAlign(TextAlign.Center)
-			
+
 			group(className("description"), desc(className("description"), type("p"))) style {
 				margin(1.2.cssRem, 0.px, 0.px)
 			}
-			
+
 			className("info") style {
 				display(DisplayStyle.Flex)
 				flexDirection(FlexDirection.Row)
 				alignItems(AlignItems.Center)
 				gap(.8.cssRem)
-				
+
 				textAlign(TextAlign.Start)
-				
+
 				className("left") style {
 					backgroundColor(Color("#00000070"))
 					borderRadius(.5.cssRem)
 					padding(.7.cssRem)
 					textAlign(TextAlign.Center)
 					size(fitContent)
-					
+
 					"p" {
 						margin(.5.cssRem, 0.px, 0.px)
 					}
 				}
-				
+
 				child(self, type("p")) style {
 					fontWeight(700)
 					margin(0.px)
 					lineHeight(1.5.cssRem)
-					
+
 					"p" {
 						margin(0.px)
 					}
-					
+
 					"i" {
 						color(Color("#FFE547"))
 					}
 				}
 			}
 		}
-		
+
 		className("bottom") style {
 			self + not(empty) style {
 				borderTop {
@@ -390,34 +397,34 @@ object SkillsStyle : StyleSheet() {
 				borderImageSource(borderGradient)
 				borderImageSlice(1)
 			}
-			
+
 			"h4" {
 				margin(0.px)
-				
+
 				self + nthOfType(2.n) style {
 					marginTop(1.2.cssRem)
 				}
 			}
-			
+
 			"ul" {
 				paddingLeft(2.cssRem)
-				
+
 				"li" + selector("::marker") style {
 					fontSize(.8.cssRem)
 				}
 			}
-			
+
 			"a" {
 				color(Color(AppStyle.linkColor))
 				textDecoration("none")
-				
+
 				hover {
 					color(Color(AppStyle.linkHoverColor))
 					textDecoration("underline")
 				}
 			}
 		}
-		
+
 		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
 			self {
 				desc(className("description"), type("p")) style {
@@ -425,17 +432,17 @@ object SkillsStyle : StyleSheet() {
 				}
 			}
 		}
-		
-		
+
+
 		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			self {
 				desc(className("top"), className("info")) style {
 					flexDirection(FlexDirection.Column)
-					
+
 					child(self, type("p")) style {
 						alignSelf(AlignSelf.Start)
 					}
-					
+
 					className("left") style {
 						padding(.8.cssRem, 1.5.cssRem)
 					}

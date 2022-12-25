@@ -7,7 +7,7 @@ import org.jetbrains.compose.web.css.keywords.CSSAutoKeyword
 
 data class CSSSizeValueRange<T : CSSUnit>(val min: CSSSizeValue<T>, val max: CSSSizeValue<T>) {
 	operator fun contains(value: CSSSizeValue<T>) = value.value >= min.value && value.value <= max.value
-	
+
 	override fun toString() = throw UnsupportedOperationException("Cannot convert CSSSizeValueRange to string.")
 }
 
@@ -34,16 +34,16 @@ fun clamp(
 
 class CSSMin<T : CSSUnit>(vararg val values: CSSSizeValue<out T>) : CSSNumericValue<T> {
 	override fun toString() = "min(${values.joinToString(", ")})"
-	
+
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
 		if (other !is CSSMin<*>) return false
-		
+
 		if (!values.contentEquals(other.values)) return false
-		
+
 		return true
 	}
-	
+
 	override fun hashCode() = values.contentHashCode()
 }
 
@@ -51,16 +51,16 @@ fun min(vararg values: CSSSizeValue<out CSSUnit>) = CSSMin(*values)
 
 class CSSMax<T : CSSUnit>(vararg val values: CSSSizeValue<out T>) : CSSNumericValue<T> {
 	override fun toString() = "max(${values.joinToString(", ")})"
-	
+
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
 		if (other !is CSSMax<*>) return false
-		
+
 		if (!values.contentEquals(other.values)) return false
-		
+
 		return true
 	}
-	
+
 	override fun hashCode() = values.contentHashCode()
 }
 
@@ -69,19 +69,19 @@ fun max(vararg values: CSSSizeValue<out CSSUnit>) = CSSMax(*values)
 class CSSMinMax<T : CSSUnit>(val min: CSSSizeValue<out T>, val max: CSSSizeValue<out T>) : CSSNumericValue<T> {
 	constructor(min: CSSSizeValue<out T>, max: CSSAutoKeyword) : this(min, max.unsafeCast<CSSSizeValue<out T>>())
 	constructor(min: CSSAutoKeyword, max: CSSSizeValue<out T>) : this(min.unsafeCast<CSSSizeValue<out T>>(), max)
-	
+
 	override fun toString() = "minmax($min, $max)"
-	
+
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
 		if (other !is CSSMinMax<*>) return false
-		
+
 		if (min != other.min) return false
 		if (max != other.max) return false
-		
+
 		return true
 	}
-	
+
 	override fun hashCode() = min.hashCode() * 31 + max.hashCode()
 }
 

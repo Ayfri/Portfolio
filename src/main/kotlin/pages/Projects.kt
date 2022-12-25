@@ -24,9 +24,9 @@ import style.utils.repeat
 fun Projects() {
 	Style(ProjectsStyle)
 	Style(DataStyle)
-	
+
 	val repos = remember { mutableStateListOf<GitHubRepository>() }
-	
+
 	if (repos.isEmpty()) {
 		LaunchedEffect(Unit) {
 			data.then { gitHubData ->
@@ -34,7 +34,7 @@ fun Projects() {
 			}
 		}
 	}
-	
+
 	Div({
 		classes(AppStyle.sections, ProjectsStyle.projects)
 	}) {
@@ -43,7 +43,7 @@ fun Projects() {
 		}) {
 			Text("My Projects:")
 		}
-		
+
 		Section({
 			classes(ProjectsStyle.projectsList)
 		}) {
@@ -56,7 +56,7 @@ fun Projects() {
 						rowsCount > 2 -> rowsCount - 1
 						else -> rowsCount
 					}
-					
+
 					list.style.setProperty("--${DataStyle.gridColumnStartVar.name}", gridColumnStart.toString())
 				}
 			}
@@ -66,17 +66,17 @@ fun Projects() {
 
 object ProjectsStyle : StyleSheet() {
 	const val projectsBackgroundColor = "#15151C"
-	
+
 	val projects by style {
 		backgroundColor(Color(projectsBackgroundColor))
 	}
-	
+
 	val projectsList by style {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns(repeat("auto-fill", minmax(22.5.cssRem, 1.fr)))
 		gap(2.cssRem)
 		padding(0.px)
-		
+
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
 				display(DisplayStyle.Flex)

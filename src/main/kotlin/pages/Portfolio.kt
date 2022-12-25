@@ -7,23 +7,14 @@ import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.css.selectors.Nth
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.H2
-import org.jetbrains.compose.web.dom.Img
-import org.jetbrains.compose.web.dom.P
-import org.jetbrains.compose.web.dom.Section
-import org.jetbrains.compose.web.dom.Text
+import org.jetbrains.compose.web.dom.*
 import style.AppStyle
-import style.utils.ObjectFit
-import style.utils.TextAlign
-import style.utils.linearGradient
-import style.utils.objectFit
-import style.utils.textAlign
+import style.utils.*
 
 @Composable
 fun Portfolio() {
 	Style(PortfolioStyle)
-	
+
 	Div({
 		classes(PortfolioStyle.portfolio)
 	}) {
@@ -35,7 +26,7 @@ fun Portfolio() {
 			"In the first place, why?",
 			localImage("portfolio-1.png")
 		)
-		
+
 		PortfolioSection(
 			"""
 				The design, conception and general idea of the portfolio was realised on Figma.
@@ -45,7 +36,7 @@ fun Portfolio() {
 			"Conception",
 			localImage("portfolio-2.png")
 		)
-		
+
 		PortfolioSection(
 			"""
 				The website was programmed using the language Kotlin, and the framework Compose for Web. I’m practicing with Kotlin since 2 to 3 years, so I know well how to program using it and I only knew about Compose for Desktop.
@@ -55,7 +46,7 @@ fun Portfolio() {
 			"Realisation",
 			localImage("portfolio-3.png")
 		)
-		
+
 		PortfolioSection(
 			"""
 				The website is statically hosted on GitHub by the service GitHub Pages, statically means that the content of the website will be the same for everyone at a given time. As it is just showing information, I don’t need to have something dynamic.
@@ -76,12 +67,12 @@ fun PortfolioSection(text: String, title: String, image: String) {
 			H2 {
 				Text(title)
 			}
-			
+
 			P({
 				markdownParagraph(text, true)
 			})
 		}
-		
+
 		Div {
 			Img(image, alt = "")
 		}
@@ -91,32 +82,32 @@ fun PortfolioSection(text: String, title: String, image: String) {
 object PortfolioStyle : StyleSheet() {
 	const val titleGradientStart = "#D375EB"
 	const val titleGradientEnd = "#6276E0"
-	
+
 	const val backgroundGradientStart = "#1E1D40"
 	const val backgroundGradientMiddle = "#1D2736"
 	const val backgroundGradientEnd = "#1F0C29"
 	val sectionsGap = 4.cssRem
-	
+
 	val portfolio by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		gap(sectionsGap)
-		
+
 		padding(2.cssRem)
-		
+
 		background(linearGradient(225.deg) {
 			stop(Color(backgroundGradientStart))
 			stop(Color(backgroundGradientMiddle))
 			stop(Color(backgroundGradientEnd))
 		})
-		
+
 		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
 			self {
 				padding(1.2.cssRem, .8.cssRem)
 			}
 		}
 	}
-	
+
 	@OptIn(ExperimentalComposeWebApi::class)
 	val section by style {
 		display(DisplayStyle.Flex)
@@ -124,81 +115,81 @@ object PortfolioStyle : StyleSheet() {
 		justifyContent(JustifyContent.Center)
 		position(Position.Relative)
 		gap(2.5.cssRem)
-		
+
 		textAlign(TextAlign.Right)
-		
+
 		media(mediaMinWidth(AppStyle.mobileFirstBreak + 1.px)) {
 			self + nthChild(Nth.Even) style {
 				textAlign(TextAlign.Left)
 				flexDirection(FlexDirection.RowReverse)
 			}
 		}
-		
+
 		self + not(lastChild) + after style {
 			val height = .5.cssRem
 			property("content", "''")
-			
+
 			display(DisplayStyle.Block)
 			height(height)
 			width(4.vw)
-			
+
 			position(Position.Absolute)
 			bottom((sectionsGap * -.5) - height)
 			left(50.percent)
 			transform {
 				translateX((-50).percent)
 			}
-			
+
 			backgroundColor(Color.white)
 			borderRadius(3.px)
 		}
-		
+
 		"h2" {
 			background(linearGradient(20.deg) {
 				stop(Color(titleGradientStart))
 				stop(Color(titleGradientEnd))
 			})
-			
+
 			fontSize(2.5.cssRem)
 			marginTop(0.px)
 			marginBottom(1.cssRem)
-			
+
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
 			property("-moz-text-fill-color", "transparent")
 			property("-moz-background-clip", "text")
 		}
-		
+
 		"p" {
 			lineHeight(1.3.cssRem)
 		}
-		
+
 		"img" {
 			borderRadius(.8.cssRem)
 			property("box-shadow", "0 0 .75rem #71A0E8")
-			
+
 			height(14.cssRem)
 			objectFit(ObjectFit.Cover)
 			width(auto)
 		}
-		
+
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
 				flexDirection(FlexDirection.Column)
 				alignItems(AlignItems.Stretch)
 				justifyContent(JustifyContent.Center)
 				textAlign(TextAlign.Center)
-				
+
 				"h2" {
 					fontSize(2.cssRem)
 				}
-				
+
 				"img" {
 					maxWidth(100.percent)
 				}
 			}
 		}
-		
+
 		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
 			self {
 				"img" {

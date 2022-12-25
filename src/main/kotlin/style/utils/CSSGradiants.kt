@@ -1,17 +1,13 @@
 package style.utils
 
-import org.jetbrains.compose.web.css.CSSAngleValue
-import org.jetbrains.compose.web.css.CSSColorValue
-import org.jetbrains.compose.web.css.CSSSizeValue
-import org.jetbrains.compose.web.css.CSSUnit
-import org.jetbrains.compose.web.css.deg
+import org.jetbrains.compose.web.css.*
 
 data class LinearGradient(
 	val angle: CSSAngleValue = 0.deg,
 	var stops: List<Stop> = emptyList(),
 ) {
 	override fun toString() = "linear-gradient($angle, ${stops.joinToString(", ") { it.toString() }})"
-	
+
 	fun stop(color: CSSColorValue, start: CSSSizeValue<out CSSUnit>? = null, end: CSSSizeValue<out CSSUnit>? = null) {
 		stops += Stop(color, start, end)
 	}
