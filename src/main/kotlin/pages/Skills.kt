@@ -89,7 +89,10 @@ data class Skill(
 				}
 			}
 
-			section("GitHub Projects:", githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } })
+			val githubNotSchoolProjects = githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
+			val (contributedProjects, ownProjects) = githubNotSchoolProjects.partition { it.fork || it.owner.login != "Ayfri" }
+			section("GitHub Projects:", ownProjects)
+			section("Contributed Projects:", contributedProjects)
 			section("School Projects:", schoolProjects)
 		}
 	}
