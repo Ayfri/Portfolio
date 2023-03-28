@@ -38,7 +38,7 @@ fun Home() {
 		Div({
 			classes(HomeStyle.topInfo)
 		}) {
-			Img(localImage("avatar.jpg"), "avatar") {
+			Img(localImage("avatar.png"), "avatar") {
 				classes(AppStyle.avatar)
 			}
 

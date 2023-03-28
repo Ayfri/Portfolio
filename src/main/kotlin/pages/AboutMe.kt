@@ -59,7 +59,7 @@ val sections = listOf(
 			I’m making all sort of projects and programming by myself since years and this is my portfolio, welcome !
 		""".trimIndent(), 2002, true, "me"
 	) {
-		Img(localImage("avatar.jpg"), "avatar") {
+		Img(localImage("avatar.png"), "avatar") {
 			classes(AppStyle.avatar)
 		}
 	},
@@ -142,7 +142,7 @@ val sections = listOf(
 			I know a lot about the concepts of Minecraft and how they are programmed, this is what motivated me to create a Minecraft-like game, _4 times_. Approaching more what I want and performances needed for a game like this each time.
 		""".trimIndent(), 2018, id = "minecraft"
 	) {
-		TextIcon("Minecraft", localImage("minecraft.svg"))
+		TextIcon("Minecraft", localImage("minecraft.png"))
 	},
 
 	AboutMeSection(
