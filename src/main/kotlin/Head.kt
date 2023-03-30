@@ -12,7 +12,16 @@ fun Head() {
 	Style(AppStyle)
 	Link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:wght@100;300;400;500;700&display=swap", rel = "stylesheet")
 	Link(href = "https://dev-cats.github.io/code-snippets/JetBrainsMono.css", rel = "stylesheet")
-	Script(src = "https://kit.fontawesome.com/74fed0e2b5.js", crossOrigin = CrossOrigin.ANONYMOUS)
+
+	TagElement<HTMLScriptElement>("link", {
+		attr("rel", "preload")
+		attr("fetchpriority", "high")
+		attr("as", "image")
+		attr("href", localImage("avatar.webp"))
+		attr("type", "image/webp")
+	}) {}
+
+	Script(src = "https://kit.fontawesome.com/74fed0e2b5.js", CrossOrigin.ANONYMOUS, ScriptMode.DEFER)
 	Script(src = "https://www.googletagmanager.com/gtag/js?id=G-TS3BHPVFKK", mode = ScriptMode.ASYNC)
 	Script(
 		content = "function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag('js',new Date),gtag('config','G-TS3BHPVFKK')"
