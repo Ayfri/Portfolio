@@ -125,7 +125,6 @@ object AppStyle : StyleSheet() {
 		color(Color(specialTextColor))
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val button by style {
 		backgroundColor(buttonColor.value(Color("#252525")))
 		borderRadius(.4.cssRem)
@@ -152,7 +151,6 @@ object AppStyle : StyleSheet() {
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val avatar by style {
 		objectFit(ObjectFit.Cover)
 		borderRadius(100.vmax)

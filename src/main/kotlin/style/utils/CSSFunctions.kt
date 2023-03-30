@@ -39,9 +39,7 @@ class CSSMin<T : CSSUnit>(vararg val values: CSSSizeValue<out T>) : CSSNumericVa
 		if (this === other) return true
 		if (other !is CSSMin<*>) return false
 
-		if (!values.contentEquals(other.values)) return false
-
-		return true
+		return values.contentEquals(other.values)
 	}
 
 	override fun hashCode() = values.contentHashCode()
@@ -56,9 +54,7 @@ class CSSMax<T : CSSUnit>(vararg val values: CSSSizeValue<out T>) : CSSNumericVa
 		if (this === other) return true
 		if (other !is CSSMax<*>) return false
 
-		if (!values.contentEquals(other.values)) return false
-
-		return true
+		return values.contentEquals(other.values)
 	}
 
 	override fun hashCode() = values.contentHashCode()
@@ -77,9 +73,7 @@ class CSSMinMax<T : CSSUnit>(val min: CSSSizeValue<out T>, val max: CSSSizeValue
 		if (other !is CSSMinMax<*>) return false
 
 		if (min != other.min) return false
-		if (max != other.max) return false
-
-		return true
+		return max == other.max
 	}
 
 	override fun hashCode() = min.hashCode() * 31 + max.hashCode()
