@@ -32,12 +32,12 @@ fun Experiences() {
 							Starting by learning PHP from scratch, while also learning [WordPress](https://wordpress.org) and then creating multiple websites & plugins. It was pretty interesting to learn a lot of new technologies and team working.
 							Also taught [Git](https://git-scm.com/) & [GitHub](https://github.com) and a few other technologies to my boss, so we could work together more efficiently.
 							
-							My boss was very nice and was creating the mock-ups for the websites, I was only integrating the code and the design. We were also often talking about the animations which lead me to improve my CSS skills a lot.
-							The internship was 2 months long with good environment, it was pretty far from my home, but I adapt easily thus it wasn't a big deal.
+							My boss was very nice and was creating the mock-ups for the websites, I was only integrating the code and the design. We were also often talking about the animations, which lead me to improve my CSS skills a lot.
+							The internship was 2 months long with good environment, it was pretty far from my home, but I adapt easily thus it was not a big deal.
 							
 							Maybe it was a bit repetitive because it was only WordPress websites and no big plugins that change the experience.
 							
-							My days were from 10am to 6pm with the possibility to ask for home working if we needed to.
+							My days were from 10AM to 6PM with the option to ask for home working if we needed to.
 						""".trimIndent()
 					)
 				})

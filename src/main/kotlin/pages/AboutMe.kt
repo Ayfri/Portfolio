@@ -56,21 +56,21 @@ val sections = listOf(
 	AboutMeSection(
 		"""
 			Hi, it’s me, Pierre Roy, I am a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/), and I am passionate about computer science and especially programming.
-			I’m making all sort of projects and programming by myself since years and this is my portfolio, welcome !
+			I have been working on various projects and programming by myself for several years. This is my portfolio. Welcome!
 		""".trimIndent(), 2002, true, "me"
 	) {
-		Img(localImage("avatar.png"), "avatar") {
+		Img(localImage("avatar.webp"), "avatar") {
 			classes(AppStyle.avatar)
 		}
 	},
 
 	AboutMeSection(
 		"""
-			First started programming in 2014 by watching a conference about programming in a library.
-			I first tried some experiments in Python with a [book](https://www.eyrolles.com/Informatique/Livre/python-pour-les-kids-9782212140880) that my dad bought me, did some beginner projects, etc.
+			I started programming in 2014 by attended a conference about programming in a library.
+			I first tried some beginner projects in Python with a [book](https://www.eyrolles.com/Informatique/Livre/python-pour-les-kids-9782212140880) that my dad bought me, did some beginner projects, etc.
 
-			After that, I created some random projects I found on YouTube, like programming a Minecraft-like game in C++ or making some little games in Unity.
-			But I didn't understand much of what I was doing and was almost only copying the tutorials without trying to create things by myself.
+			After that, I created random projects I found on YouTube, such as programming a Minecraft-like game in C++ or making some little games in Unity.
+			However, I found myself mostly copying the tutorials without attempting to create projects on my own, and therefore didn't have a deep understanding of what I was doing.
 		""".trimIndent(), 2014, id = "intro"
 	) {
 		TextIcon("Introduction to programming", FontAwesomeType.SOLID, "computer")
@@ -78,13 +78,29 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-			After creating my own [Discord server](https://discord.gg/BySjRNQ9Je) for my community from [Youtube](https://www.youtube.com/c/Ayfri), I wanted to create a Discord Bot. So I created a bot in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) using [Node.JS](https://nodejs.org) in early 2018 by following tutorials, I created CommunAyBot.
-			Back in the days it was not that common to create a bot for your own community and Discord was not so reputed. Because of that, there was no really great tutorials and I got a lot of help from a Discord Server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons and some others helped me a lot to understand and create my bot.
+			In 2015, I created my first project with a Graphical User Interface using the [Processing](https://processing.org) software and programming language.
+			I heard about this program from watching videos from [The Coding Train](https://www.youtube.com/c/TheCodingTrain). I created a lot of little experiments using this library and learned some interesting things about 3D graphics, how it works, how to optimise it, etc.
+			My biggest 3D experiment was a [Minecraft-like](https://github.com/Ayfri/ProceCraft) game and my most significant program with Processing was a tool to convert an [image into Minecraft Pixel-Art](https://github.com/Ayfri/Image2Minecraft) using only blocks from Minecraft as pixels.
 
-			After about a year I was pretty good at creating a bot, but I realised that my project was kinda... ugly. So I recreated it, [AyBot 2](https://github.com/Ayfri/AyBot-2) was born in early 2019. It was pretty clean, and I wanted people to use my bot, so I changed a lot of the code, so it was working on multiple servers with configurations etc.
+			After some years of making some Discord Bots in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript), I heard that a library in JavaScript existed that was exactly like Processing, [p5.js](https://p5js.org) _(which was created by the same foundation)_, and used it for some little projects, even created a [port](https://github.com/Ayfri/TypeCraft) of the Minecraft-like game in [TypeScript](https://www.typescriptlang.org).
+			But it was too simplistic and not enough expandable for me. So I looked for another library to make my own games with more depth and customisation.
+
+			[PIXI.js](https://pixijs.com) was the library I stumbled upon, and I create a few projects with it for a long time. My first big game with it was a [2D Minecraft-like game](https://github.com/Ayfri/2d-minecraft) (again yes hehe).
+			Then a [2D Portal game](https://github.com/Ayfri/portal-2d) experiment. Also a [Cookie-Clicker-like](https://github.com/Ayfri/atom-clicker) game about atoms, Atom Clicker. And recently I’m recreating my [2D Minecraft-Game](https://github.com/Ayfri/Minekraft-2D) in Kotlin, still using PIXI, named Minekraft-2D.
+		""".trimIndent(), 2015, id = "processing"
+	) {
+		TextIcon("Processing", "https://upload.wikimedia.org/wikipedia/commons/c/cb/Processing_2021_logo.svg")
+	},
+
+	AboutMeSection(
+		"""
+			After creating my own [Discord server](https://discord.gg/BySjRNQ9Je) for my community from [Youtube](https://www.youtube.com/c/Ayfri), I wanted to create a Discord Bot. So I created a bot in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) using [Node.JS](https://nodejs.org) in early 2018 by following tutorials, I created CommunAyBot.
+			Back in the days, it was not that common to create a bot for your own community and Discord was not so reputed. Because of that, there were no great tutorials and I got a lot of help from a Discord Server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons and some others helped me a lot to understand and create my bot.
+
+			About a year later, I was pretty good at creating a bot, but I realised that my project was kinda... ugly. So I recreated it, [AyBot 2](https://github.com/Ayfri/AyBot-2) was born in early 2019. It was pretty clean, and I wanted people to use my bot, so I changed a lot of the code, so it was working on multiple servers with configurations etc.
 			
-			At this time I created some other little utilities bots or test bots.
-			AyBot 2 was taken down in end of 2019 because of [Galileo](#galileo).
+			At that time, I created some other little utilities bots or test bots.
+			AyBot 2 was taken down in the end of 2019 because of [Galileo](#galileo).
 		""".trimIndent(), 2018, id = "second-intro"
 	) {
 		TextIcon("Second Introduction to Programming", FontAwesomeType.BRAND, "discord", Color("#5865f2"))
@@ -92,17 +108,30 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-			At my high-school, for 3 years, I used arduino a lot, only creating big projects on the last year but still. It has let me learn a lot on low-level programming, [C++](https://cplusplus.com) basics and microcontrollers.
+			At my high school, for 3 years, I used arduino a lot, only creating big projects in the last year but still. It has let me learn a lot on low-level programming, [C++](https://cplusplus.com) basics and microcontrollers.
 			By doing my own researches I learned a lot about C++ compilation, assembler, reverse engineering, optimisation and other low-level subjects.
-			I even tried a bit writing assembler x86. I created some little programs using C++.
+			I even tried a bit of writing assembler x86. I created some little programs using C++.
 			
-			Back in 2015 I followed a [tutorial to create a Minecraft-like game](https://www.youtube.com/watch?v=GACpZp8oquU) in C++ using [OpenGL](https://www.opengl.org/) and a bunch of libraries.
+			Back in 2015, I followed a [tutorial to create a Minecraft-like game](https://www.youtube.com/watch?v=GACpZp8oquU) in C++ using [OpenGL](https://www.opengl.org/) and a bunch of libraries.
 			It was interesting to go after some years, back on this project and fix some issues and finally understand the code and learn more about OpenGL and low-level graphics processing.
 
-			I currently still have my own arduino that I bought during high-school.
+			I still currently have my own arduino that I bought during high-school.
 		""".trimIndent(), 2018, id = "arduino"
 	) {
 		TextIcon("Arduino", localImage("arduino.svg"))
+	},
+
+	AboutMeSection(
+		"""
+			[Minecraft](https://minecraft.net) is my favorite game of all time, I started playing it back in 2010, I know it by heart.
+			Heard about it randomly on an old computer blog that my dad was subscribed to where on an article they spoke about _"this new game with an interesting concept"_.
+
+			Since I own the game, I played a hundred of hours in Minecraft, created numerous maps, technical maps using command blocks, datapacks, mods, even created mods since around 2018. In [Java](https://www.java.com) using [Forge](https://files.minecraftforge.net/net/minecraftforge/forge), [Fabric](https://fabricmc.net) since 2020 and in [Kotlin](https://kotlinlang.org) since 2021.
+
+			I know a lot about the concepts of Minecraft and how they are programmed, this is what motivated me to create a Minecraft-like game, _4 times_. Approaching more what I want and performances needed for a game like this each time.
+		""".trimIndent(), 2018, id = "minecraft"
+	) {
+		TextIcon("Minecraft", localImage("minecraft.png"))
 	},
 
 	AboutMeSection(
@@ -118,42 +147,13 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-			In 2015, I created my first project with a Graphical User Interface using [Processing](https://processing.org) and [Java](https://www.java.com).
-			I heard about this program from watching videos from [The Coding Train](https://www.youtube.com/c/TheCodingTrain). I created a lot of little experiments using this library.
-			I learned some interesting things about 3D graphics, how it works, how to optimise it etc. My biggest 3D experiment was a [Minecraft-like](https://github.com/Ayfri/ProceCraft) game and my greatest program with Processing was a program to convert an [image to a Minecraft Pixel-Art](https://github.com/Ayfri/Image2Minecraft) using only blocks from Minecraft as pixels.
-
-			After some years of making some Discord Bots in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript), I heard that a library in JavaScript existed that was exactly like Processing, [p5.js](https://p5js.org) _(which was created by the same foundation)_, and used it for some little projects, even created a [port](https://github.com/Ayfri/TypeCraft) of the Minecraft-like game in [TypeScript](https://www.typescriptlang.org).
-			But it was too simplistic and not enough expandable for me. So I looked for another library in order to make my own games with more depth and customisation.
-
-			[PIXI.js](https://pixijs.com) was the library I stumbled upon, and I programmed a lot with it, I’m still actually using it for saying. My first big game with it was a [2D Minecraft-like game](https://github.com/Ayfri/2d-minecraft) (again yes hehe).
-			Then a [2D Portal game](https://github.com/Ayfri/portal-2d) experiment. Also a [Cookie-Clicker-like](https://github.com/Ayfri/atom-clicker) game about atoms, Atom Clicker. And recently I’m recreating my [2D Minecraft-Game](https://github.com/Ayfri/Minekraft-2D) in Kotlin, still using PIXI, named Minekraft-2D.
-		""".trimIndent(), 2015, id = "processing"
-	) {
-		TextIcon("Processing", "https://upload.wikimedia.org/wikipedia/commons/c/cb/Processing_2021_logo.svg")
-	},
-
-	AboutMeSection(
-		"""
-			[Minecraft](https://minecraft.net) is my favorite game of all time, I started playing it back in 2010, I know it by heart.
-			Heard about it randomly on an old computer blog that my dad was subscribed to where on an article they spoked about _"this new game with an interesting concept"_.
-
-			I played a hundred of hours on Minecraft, created numerous maps, technical maps using command blocks, datapacks, mods, even created mods since around 2018. In [Java](https://www.java.com) using [Forge](https://files.minecraftforge.net/net/minecraftforge/forge), [Fabric](https://fabricmc.net) since 2020 and in [Kotlin](https://kotlinlang.org) since 2021.
-
-			I know a lot about the concepts of Minecraft and how they are programmed, this is what motivated me to create a Minecraft-like game, _4 times_. Approaching more what I want and performances needed for a game like this each time.
-		""".trimIndent(), 2018, id = "minecraft"
-	) {
-		TextIcon("Minecraft", localImage("minecraft.png"))
-	},
-
-	AboutMeSection(
-		"""
 			After getting graduated from high-school, I got accepted into a private school named [Ynov](https://ynov.com).
-			We learned so far [GoLang](https://go.dev), [Python](https://www.python.org), pretty complex [C++](https://cplusplus.com) and POO into C++, some network basics, how to use [REST API](https://wikipedia.org/wiki/Representational_state_transfer)s, the team JS/HTML/CSS, databases and [MySQL](https://www.mysql.com), and other useful technologies.
-			I was already knowing some, but I appreciated a lot GoLang’s GoHTML Templates, C++ and my teacher who I chatted a lot with and understanding a lot more how network work.
+			We learned so far [GoLang](https://go.dev), [Python](https://www.python.org), pretty complex [C++](https://cplusplus.com) and OOP into C++, some network basics, how to use [REST API](https://wikipedia.org/wiki/Representational_state_transfer)s, team JS/HTML/CSS, databases with [MySQL](https://www.mysql.com), and other useful technologies.
+			I greatly appreciated GoLang’s GoHTML Templates, C++ and my teacher who I discussed a lot with, and understanding a lot more how computer network works.
 	
 			We created a bunch of projects, starting with little training projects in GoLang/<wbr>Python/<wbr>C++/<wbr>JavaScript, done some websites using only front, but also using an API, and using MySQL creating an entire forum.
 	
-			It is for me a great experience being in this school, and I’m excited for the next 4 years !
+			It is for me a great experience being in this school, and I’m excited for the next 3 years !
 		""".trimIndent(), 2021, id = "ynov"
 	) {
 		TextIcon("Post-Bac and Ynov", "https://www.ynov.com/wp-content/themes/ynov/assets/images/favicons/apple-touch-icon.png")
@@ -161,16 +161,16 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-		My school required me to have an internship of 6 weeks in any enterprise to have a first professional experience.
-		I got in contact with [BlueFrog](https://www.bluefrog.fr/index.html), a company creating websites, and after some interviews got accepted !
-
-		I learned [PHP](https://www.php.net) and [WordPress](https://wordpress.org) and created a few websites & plugins during my internship, and it was a great experience for me.
-		Learning a bunch of useful technologies, the difference between personal project and real projects and seeing a developer's everyday job.
-	""".trimIndent(), 2022, id = "first-internship"
+			My school required me to have an internship of 6 weeks in any enterprise to have a first professional experience.
+			I got in contact with [BlueFrog](https://www.bluefrog.fr/index.html), a company creating websites, and after some interviews got accepted !
+	
+			I learned [PHP](https://www.php.net) and [WordPress](https://wordpress.org) and created a few websites & plugins during my internship, and it was a great experience for me.
+			Learning a bunch of useful technologies, the difference between personal project and real projects and seeing a developer's everyday job.
+		""".trimIndent(), 2022, id = "first-internship"
 	) {
 		TextIcon("BlueFrog", "https://www.bluefrog.fr/images/logo.png")
 	},
-).sortedBy { it.date }
+)
 
 const val timelineDefaultOffset = 125.0
 

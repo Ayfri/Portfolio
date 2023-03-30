@@ -110,13 +110,13 @@ val skills = listOf(
 	Language(
 		name = "Kotlin", since = 2020, learnedFor = "Improving Java projects.", nowUsing = "Pretty much everything.", level = 5, description = """
 			Kotlin is a static type, object-oriented programing (OOP) language that is interoperable with the Java virtual machine, Java libraries and Android.
-			Kotlin saves time for developers as the less verbose language provides briefer and less redundant code. Kotlin can be compiled into JavaScript or an LLVM encoder.
+			Kotlin saves time for developers as the less verbose language provides briefer and less redundant code. It can be compiled into JavaScript or an LLVM encoder.
 		""".trimIndent(), iconUrl = localImage("Kotlin Logo.svg"), schoolProjects = listOf("Ayfri/Ayfri.github.io", "HelysioFR/FallenKingdom")
 	),
 	Language(
 		name = "TypeScript", since = 2019, learnedFor = "Improving JavaScript projects.", nowUsing = "Bots & web games.", level = 5, description = """
 			TypeScript is an open-source, object-oriented language developed and maintained by Microsoft, licensed under Apache 2 license.
-			TypeScript extends JavaScript by adding data types, classes, and other object-oriented features with type-checking. It is a typed superset of JavaScript that compiles to plain JavaScript.
+			TypeScript extends JavaScript by adding data types, classes and other object-oriented features with type-checking. It is a typed superset of JavaScript that compiles to plain JavaScript.
 		""".trimIndent(), iconUrl = devIcon("typescript")
 	),
 	Language(
@@ -154,7 +154,7 @@ val skills = listOf(
 	),
 	Language(
 		name = "HTML", since = 2017, learnedFor = "Creating websites.", nowUsing = "Creating websites.", level = 5, description = """
-			HyperText Markup Language (HTML) is the basic scripting language used by web browsers to render pages on the world wide web. HyperText allows a user to click a link and be redirected to a new page referenced by that link.
+			HyperText Markup Language (HTML) is the basic scripting language used by web browsers to render pages on the World Wide Web. HyperText allows a user to click a link and be redirected to a new page referenced by that link.
 		""".trimIndent(), iconUrl = devIcon("html5"),
 		schoolProjects = listOf(
 			"Ayfri/Infra-Website", "Ayfri/Cat-in-Space", "Ayfri/Hangman-Web", "antaww/game-overflow", "Ayfri/VersionCraft",
@@ -435,7 +435,6 @@ object SkillsStyle : StyleSheet() {
 				}
 			}
 		}
-
 
 		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			self {
