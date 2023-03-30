@@ -49,9 +49,8 @@ data class Skill(
 
 
 				P({
-					val learnedAndNowUserFor =
-						if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
-						else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
+					val learnedAndNowUserFor = if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
+					else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
 
 					markdownParagraph(
 						"""
@@ -108,16 +107,123 @@ fun devIcon(name: String, suffix: String = "original") = "https://cdn.jsdelivr.n
 
 val skills = listOf(
 	Language(
-		name = "Kotlin", since = 2020, learnedFor = "Improving Java projects.", nowUsing = "Pretty much everything.", level = 5, description = """
-			Kotlin is a static type, object-oriented programing (OOP) language that is interoperable with the Java virtual machine, Java libraries and Android.
-			Kotlin saves time for developers as the less verbose language provides briefer and less redundant code. It can be compiled into JavaScript or an LLVM encoder.
-		""".trimIndent(), iconUrl = localImage("Kotlin Logo.svg"), schoolProjects = listOf("Ayfri/Ayfri.github.io", "HelysioFR/FallenKingdom")
+		name = "Bash",
+		since = 2022,
+		learnedFor = "Creating scripts on Linux.",
+		nowUsing = "Creating scripts on Linux.",
+		level = 2,
+		description = """
+			Bash is a sh-compatible command language interpreter that executes commands read from the standard input or from a file.
+			bash also incorporates useful features from the Korn and C shells (ksh and csh).
+		""".trimIndent(),
+		iconUrl = devIcon("bash")
 	),
 	Language(
-		name = "TypeScript", since = 2019, learnedFor = "Improving JavaScript projects.", nowUsing = "Bots & web games.", level = 5, description = """
-			TypeScript is an open-source, object-oriented language developed and maintained by Microsoft, licensed under Apache 2 license.
-			TypeScript extends JavaScript by adding data types, classes and other object-oriented features with type-checking. It is a typed superset of JavaScript that compiles to plain JavaScript.
-		""".trimIndent(), iconUrl = devIcon("typescript")
+		name = "C++",
+		since = 2016,
+		learnedFor = "Testing low-level programmation.",
+		nowUsing = "Low-level games.",
+		level = 4,
+		description = """
+			C++ is an object-oriented programming (OOP) language that is viewed by many as the best language for creating large-scale applications.
+			C++ is a superset of the C language. A related programming language, Java, is based on C++ but optimized for the distribution of program objects in a network such as the Internet.
+		""".trimIndent(),
+		iconUrl = devIcon("cplusplus"),
+		schoolProjects = listOf(
+			"Ayfri/Cpp-TP1",
+			"Ayfri/Cpp-TP2",
+			"Ayfri/Cpp-TP3",
+			"Ayfri/Cpp-TP4",
+			"Ayfri/Cpp-TP5"
+		)
+	),
+	Language(
+		name = "C#",
+		since = 2017,
+		learnedFor = "Creating games in Unity.",
+		nowUsing = "Creating games in Unity.",
+		level = 3,
+		description = """
+			C# (pronounced "C-sharp") is an object-oriented programming language from Microsoft that aims to combine the computing power of C++ with the programming ease of Visual Basic.
+			C# is based on C++ and contains features similar to those of Java.
+		""".trimIndent(),
+		iconUrl = devIcon("csharp")
+	),
+	Language(
+		name = "CSS",
+		since = 2017,
+		learnedFor = "Styling websites.",
+		nowUsing = "Styling websites.",
+		level = 5,
+		description = """
+			Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML (including XML dialects such as SVG, MathML or XHTML).
+			CSS describes how elements should be rendered on screen, on paper, in speech, or on other media.
+		""".trimIndent(),
+		iconUrl = devIcon("css3"),
+		schoolProjects = listOf(
+			"antaww/game-overflow",
+			"Ayfri/Cat-in-Space",
+			"Ayfri/Challenge-Discovery",
+			"Ayfri/Hangman-Web",
+			"Ayfri/HTML-Menu",
+			"Ayfri/HTML-TP1",
+			"Ayfri/Infra-Website",
+			"Ayfri/VersionCraft",
+			"B-One-Ynov/Extranet-Ynov",
+		),
+	),
+	Language(
+		name = "GoLang",
+		since = 2021,
+		learnedFor = "Creating websites/APIs.",
+		nowUsing = "Creating websites/APIs.",
+		level = 4,
+		description = """
+			It is a statically typed language with syntax loosely derived from that of C, adding garbage collection, type safety, some dynamic-typing capabilities, additional built-in types such as variable-length arrays & key-value maps, and a large standard library.
+		""".trimIndent(),
+		iconUrl = devIcon("go", "original-wordmark"),
+		schoolProjects = listOf(
+			"Ayfri/Cat-in-Space",
+			"Ayfri/Challenge-Go",
+			"Ayfri/hangman-classic",
+			"Ayfri/Hangman-Web",
+			"Ayfri/Project-Red",
+		),
+		githubProjects = listOf(
+			"Ayfri/VersionCraft"
+		)
+	),
+	Language(
+		name = "Godot",
+		since = 2023,
+		learnedFor = "Creating games.",
+		nowUsing = "Creating games.",
+		level = 3,
+		description = """
+			Godot is a feature-packed, cross-platform game engine to create 2D and 3D games from a unified interface.
+			Godot provides a comprehensive set of common tools, so you can just focus on making your game without reinventing the wheel.
+		""".trimIndent(),
+		iconUrl = devIcon("godot"),
+		schoolProjects = listOf(
+			"Ayfri/Cat-aclysm-Claw-of-the-Dead",
+		),
+	),
+	Language(
+		name = "Java",
+		since = 2016,
+		learnedFor = "Minecraft mods/Bots/Games.",
+		nowUsing = "Backend of websites.",
+		level = 4,
+		description = """
+			Java is a widely used object-oriented programming language and software platform that runs on billions of devices, including notebook computers, mobile devices, gaming consoles, medical devices and many others.
+			The rules and syntax of Java are based on the C and C++ languages.
+		""".trimIndent(),
+		iconUrl = devIcon("java"),
+		schoolProjects = listOf(
+			"Ayfri/Java-TP1",
+			"Ayfri/Java-TP2",
+			"Ayfri/Java-TP3",
+		)
 	),
 	Language(
 		name = "JavaScript",
@@ -131,70 +237,74 @@ val skills = listOf(
 		iconUrl = devIcon("javascript"),
 		githubProjects = listOf("Les-Laboratoires-JS/tips"),
 		schoolProjects = listOf(
-			"Ayfri/TP-JS",
-			"Ayfri/VersionCraft",
+			"antaww/game-overflow",
+			"Ayfri/Cat-in-Space",
 			"Ayfri/Challenge-Discovery",
 			"Ayfri/Hangman-Web",
 			"Ayfri/Infra-Website",
-			"Ayfri/Cat-in-Space",
-			"antaww/game-overflow"
+			"Ayfri/TP-JS",
+			"Ayfri/VersionCraft",
 		)
 	),
 	Language(
-		name = "CSS", since = 2017, learnedFor = "Styling websites.", nowUsing = "Styling websites.", level = 5,
+		name = "HTML",
+		since = 2017,
+		learnedFor = "Creating websites.",
+		nowUsing = "Creating websites.",
+		level = 5,
 		description = """
-			Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML (including XML dialects such as SVG, MathML or XHTML).
-			CSS describes how elements should be rendered on screen, on paper, in speech, or on other media.
-		""".trimIndent(),
-		iconUrl = devIcon("css3"),
-		schoolProjects = listOf(
-			"Ayfri/Infra-Website", "Ayfri/Cat-in-Space", "Ayfri/Hangman-Web", "antaww/game-overflow", "Ayfri/VersionCraft",
-			"Ayfri/Challenge-Discovery", "Ayfri/HTML-Menu", "Ayfri/HTML-TP1"
-		),
-	),
-	Language(
-		name = "HTML", since = 2017, learnedFor = "Creating websites.", nowUsing = "Creating websites.", level = 5, description = """
 			HyperText Markup Language (HTML) is the basic scripting language used by web browsers to render pages on the World Wide Web. HyperText allows a user to click a link and be redirected to a new page referenced by that link.
-		""".trimIndent(), iconUrl = devIcon("html5"),
-		schoolProjects = listOf(
-			"Ayfri/Infra-Website", "Ayfri/Cat-in-Space", "Ayfri/Hangman-Web", "antaww/game-overflow", "Ayfri/VersionCraft",
-			"Ayfri/Challenge-Discovery", "Ayfri/HTML-Menu", "Ayfri/HTML-TP1"
-		),
+		""".trimIndent(),
+		iconUrl = devIcon("html5"),
 		githubProjects = listOf(
 			"Ayfri/atom-clicker"
-		)
-	),
-	Language(
-		name = "Java", since = 2016, learnedFor = "Minecraft mods/Bots/Games.", nowUsing = "Backend of websites.", level = 4, description = """
-			Java is a widely used object-oriented programming language and software platform that runs on billions of devices, including notebook computers, mobile devices, gaming consoles, medical devices and many others.
-			The rules and syntax of Java are based on the C and C++ languages.
-		""".trimIndent(), iconUrl = devIcon("java")
-	),
-	Language(
-		name = "Go", since = 2021, learnedFor = "Creating websites/APIs.", nowUsing = "Creating websites/APIs.", level = 4, description = """
-			It is a statically typed language with syntax loosely derived from that of C, adding garbage collection, type safety, some dynamic-typing capabilities, additional built-in types such as variable-length arrays & key-value maps, and a large standard library.
-		""".trimIndent(), iconUrl = devIcon("go", "original-wordmark"),
-		schoolProjects = listOf(
-			"Ayfri/Cat-in-Space", "Ayfri/Challenge-Go", "Ayfri/Hangman-Web", "Ayfri/Project-Red", "Ayfri/hangman-classic"
 		),
-		githubProjects = listOf(
-			"Ayfri/VersionCraft"
-		)
-	),
-	Language(
-		name = "C++", since = 2016, learnedFor = "Testing low-level programmation.", nowUsing = "Low-level games.", level = 4, description = """
-			C++ is an object-oriented programming (OOP) language that is viewed by many as the best language for creating large-scale applications.
-			C++ is a superset of the C language. A related programming language, Java, is based on C++ but optimized for the distribution of program objects in a network such as the Internet.
-		""".trimIndent(), iconUrl = devIcon("cplusplus"),
 		schoolProjects = listOf(
-			"Ayfri/Cpp-TP1", "Ayfri/Cpp-TP2", "Ayfri/Cpp-TP3", "Ayfri/Cpp-TP4", "Ayfri/Cpp-TP5"
+			"antaww/game-overflow",
+			"Ayfri/Cat-in-Space",
+			"Ayfri/Challenge-Discovery",
+			"Ayfri/Hangman-Web",
+			"Ayfri/HTML-Menu",
+			"Ayfri/HTML-TP1",
+			"Ayfri/Infra-Website",
+			"Ayfri/VersionCraft",
 		)
 	),
 	Language(
-		name = "C#", since = 2017, learnedFor = "Creating games in Unity.", nowUsing = "Creating games in Unity.", level = 3, description = """
-			C# (pronounced "C-sharp") is an object-oriented programming language from Microsoft that aims to combine the computing power of C++ with the programming ease of Visual Basic.
-			C# is based on C++ and contains features similar to those of Java.
-		""".trimIndent(), iconUrl = devIcon("csharp")
+		name = "Kotlin",
+		since = 2020,
+		learnedFor = "Improving Java projects.",
+		nowUsing = "Pretty much everything.",
+		level = 5,
+		description = """
+			Kotlin is a static type, object-oriented programing (OOP) language that is interoperable with the Java virtual machine, Java libraries and Android.
+			Kotlin saves time for developers as the less verbose language provides briefer and less redundant code. It can be compiled into JavaScript or an LLVM encoder.
+		""".trimIndent(),
+		iconUrl = localImage("Kotlin Logo.svg"),
+		schoolProjects = listOf(
+			"Ayfri/Ayfri.github.io",
+			"HelysioFR/FallenKingdom",
+		)
+	),
+	Language(
+		name = "MySQL",
+		since = 2019,
+		learnedFor = "Storing data other than in a JSON.",
+		nowUsing = "Storing data efficiently.",
+		level = 4,
+		description = """
+			MySQL is an Oracle-backed open source relational database management system (RDBMS) based on Structured Query Language (SQL).
+			MySQL runs on virtually all platforms, including Linux, UNIX and Windows.
+		""".trimIndent(),
+		iconUrl = devIcon("mysql"),
+		githubProjects = listOf(
+			"Galileo-Bot/galileo",
+			"Galileo-Bot/Rocket-Pub-Manager"
+		),
+		schoolProjects = listOf(
+			"antaww/game-overflow",
+			"B-One-Ynov/Extranet-Ynov",
+		)
 	),
 	Language(
 		name = "PHP",
@@ -209,31 +319,33 @@ val skills = listOf(
 		iconUrl = devIcon("php")
 	),
 	Language(
-		name = "Python", since = 2014, learnedFor = "Trying programmation.", nowUsing = "Creating scripts/CLI.", level = 3, description = """
+		name = "Python",
+		since = 2014,
+		learnedFor = "Trying programmation.",
+		nowUsing = "Creating scripts/CLI.",
+		level = 3,
+		description = """
 			Python is a computer programming language often used to build websites and software, automate tasks, and conduct data analysis.
 			Python is a general-purpose language, meaning it can be used to create a variety of different programs and isn't specialized for any specific problems.
-		""".trimIndent(), iconUrl = devIcon("python"),
+		""".trimIndent(),
+		iconUrl = devIcon("python"),
 		schoolProjects = listOf(
-			"Ayfri/Python-TP1", "Ayfri/Python-TP2", "Ayfri/Python-TP3"
+			"Ayfri/Python-TP1",
+			"Ayfri/Python-TP2",
+			"Ayfri/Python-TP3"
 		)
 	),
 	Language(
-		name = "MySQL", since = 2019, learnedFor = "Storing data other than in a JSON.", nowUsing = "Storing data efficiently.", level = 4, description = """
-			MySQL is an Oracle-backed open source relational database management system (RDBMS) based on Structured Query Language (SQL).
-			MySQL runs on virtually all platforms, including Linux, UNIX and Windows.
-		""".trimIndent(), iconUrl = devIcon("mysql"),
-		githubProjects = listOf(
-			"Galileo-Bot/galileo", "Galileo-Bot/Rocket-Pub-Manager"
-		),
-		schoolProjects = listOf(
-			"antaww/game-overflow"
-		)
-	),
-	Language(
-		name = "Bash", since = 2022, learnedFor = "Creating scripts on Linux.", nowUsing = "Creating scripts on Linux.", level = 2, description = """
-			Bash is a sh-compatible command language interpreter that executes commands read from the standard input or from a file.
-			bash also incorporates useful features from the Korn and C shells (ksh and csh).
-		""".trimIndent(), iconUrl = devIcon("bash")
+		name = "TypeScript",
+		since = 2019,
+		learnedFor = "Improving JavaScript projects.",
+		nowUsing = "Bots & web games.",
+		level = 4,
+		description = """
+			TypeScript is an open-source, object-oriented language developed and maintained by Microsoft, licensed under Apache 2 license.
+			TypeScript extends JavaScript by adding data types, classes and other object-oriented features with type-checking. It is a typed superset of JavaScript that compiles to plain JavaScript.
+		""".trimIndent(),
+		iconUrl = devIcon("typescript")
 	),
 ).map(::Skill)
 
