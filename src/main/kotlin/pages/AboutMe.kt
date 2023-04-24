@@ -21,7 +21,13 @@ import org.w3c.dom.HTMLElement
 import style.AppStyle
 import style.utils.*
 
-data class AboutMeSection(val content: String, val date: Int, val image: Boolean = false, val id: String, val title: (@Composable () -> Unit)? = null) {
+data class AboutMeSection(
+	val content: String,
+	val date: Int,
+	val image: Boolean = false,
+	val id: String,
+	val title: (@Composable () -> Unit)? = null
+) {
 	var htmlElement: HTMLElement? = null
 
 	@Composable
@@ -156,7 +162,10 @@ val sections = listOf(
 			It is for me a great experience being in this school, and I’m excited for the next 3 years !
 		""".trimIndent(), 2021, id = "ynov"
 	) {
-		TextIcon("Post-Bac and Ynov", "https://www.ynov.com/wp-content/themes/ynov/assets/images/favicons/apple-touch-icon.png")
+		TextIcon(
+			"Post-Bac and Ynov",
+			"https://www.ynov.com/wp-content/themes/ynov/assets/images/favicons/apple-touch-icon.png"
+		)
 	},
 
 	AboutMeSection(
@@ -188,7 +197,8 @@ fun AboutMe() {
 		}
 
 		window.addEventListener("scroll", {
-			val footerOffset = document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as Double? ?: return@addEventListener
+			val footerOffset = document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as Double?
+				?: return@addEventListener
 
 			if (window.scrollY + window.innerHeight < footerOffset) {
 				timelineOffset = window.scrollY + timelineDefaultOffset * .8

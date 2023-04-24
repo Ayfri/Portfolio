@@ -49,8 +49,9 @@ data class Skill(
 
 
 				P({
-					val learnedAndNowUserFor = if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
-					else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
+					val learnedAndNowUserFor =
+						if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
+						else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
 
 					markdownParagraph(
 						"""
@@ -80,15 +81,17 @@ data class Skill(
 				}
 
 				Ul {
-					list.distinctBy { it.fullName }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name }).forEach {
-						Li {
-							A(it.htmlUrl, it.name)
+					list.distinctBy { it.fullName }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
+						.forEach {
+							Li {
+								A(it.htmlUrl, it.name)
+							}
 						}
-					}
 				}
 			}
 
-			val githubNotSchoolProjects = githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
+			val githubNotSchoolProjects =
+				githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
 			val (contributedProjects, ownProjects) = githubNotSchoolProjects.partition { it.fork || it.owner.login != "Ayfri" }
 			section("GitHub Projects:", ownProjects)
 			section("Contributed Projects:", contributedProjects)
@@ -103,7 +106,8 @@ data class Skill(
 	}
 }
 
-fun devIcon(name: String, suffix: String = "original") = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/$name/$name-$suffix.svg"
+fun devIcon(name: String, suffix: String = "original") =
+	"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/$name/$name-$suffix.svg"
 
 val skills = listOf(
 	Language(
@@ -375,7 +379,8 @@ fun Skills() {
 		Section({
 			classes(SkillsStyle.skillsList)
 		}) {
-			skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }.thenBy { it.language.name })
+			skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
+				.thenBy { it.language.name })
 				.forEach { skill ->
 					if (skill.githubProjects.isEmpty()) {
 						skill.githubProjects += repos.filter {
@@ -385,7 +390,10 @@ fun Skills() {
 
 					if (skill.schoolProjects.isEmpty()) {
 						skill.schoolProjects += repos.filter {
-							it.language!!.equals(skill.language.name, true) && it.description?.contains("school") == true
+							it.language!!.equals(
+								skill.language.name,
+								true
+							) && it.description?.contains("school") == true
 						} + repos.filter { it.fullName in skill.language.schoolProjects }
 					}
 
@@ -480,7 +488,6 @@ object SkillsStyle : StyleSheet() {
 					borderRadius(.5.cssRem)
 					padding(.7.cssRem)
 					textAlign(TextAlign.Center)
-					size(fitContent)
 
 					"p" {
 						margin(.5.cssRem, 0.px, 0.px)

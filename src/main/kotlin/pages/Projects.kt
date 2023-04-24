@@ -30,7 +30,10 @@ fun Projects() {
 	if (repos.isEmpty()) {
 		LaunchedEffect(Unit) {
 			data.then { gitHubData ->
-				repos += gitHubData.repos.sortedWith(compareByDescending<GitHubRepository> { it.stargazersCount }.thenBy(String.CASE_INSENSITIVE_ORDER) { it.fullName })
+				repos += gitHubData.repos.sortedWith(
+					compareByDescending<GitHubRepository> { it.stargazersCount }.thenBy(
+						String.CASE_INSENSITIVE_ORDER
+					) { it.fullName })
 			}
 		}
 	}

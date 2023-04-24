@@ -19,26 +19,13 @@ fun StyleScope.size(height: CSSAutoKeyword, width: CSSAutoKeyword = height) {
 	width(width)
 }
 
-interface ObjectFit : StylePropertyEnum {
-	companion object {
-		inline val Contain get() = ObjectFit("contain")
-		inline val Cover get() = ObjectFit("cover")
-		inline val Fill get() = ObjectFit("fill")
-		inline val None get() = ObjectFit("none")
-		inline val ScaleDown get() = ObjectFit("scale-down")
-
-		inline val Inherit get() = ObjectFit("inherit")
-		inline val Initial get() = ObjectFit("initial")
-		inline val Revert get() = ObjectFit("revert")
-		inline val Unset get() = ObjectFit("unset")
-	}
+fun StyleScope.size(value: SizeKeyword) {
+	height(value)
+	width(value)
 }
 
-fun ObjectFit(value: String) = value.unsafeCast<ObjectFit>()
-
-fun StyleScope.objectFit(value: ObjectFit) {
-	property("object-fit", value)
-}
+fun StyleScope.height(value: SizeKeyword) = property("height", value)
+fun StyleScope.width(value: SizeKeyword) = property("width", value)
 
 interface SizeKeyword : StylePropertyEnum
 
@@ -48,21 +35,11 @@ inline val minContent get() = SizeKeyword("min-content")
 
 fun SizeKeyword(value: String) = value.unsafeCast<SizeKeyword>()
 
-val CSSStyleRuleBuilder.self: CSSSelector get() = selector(":scope")
 
-fun StyleScope.size(value: SizeKeyword) {
-	property("size", value)
-}
+fun StyleScope.borderImageSource(value: String) = property("border-image-source", value)
+fun StyleScope.borderImageSlice(value: Int) = property("border-image-slice", value)
 
-fun StyleScope.width(value: SizeKeyword) {
-	property("width", value)
-}
-
-fun StyleScope.height(value: SizeKeyword) {
-	property("height", value)
-
-	2.vw..5.vw
-}
+fun StyleScope.borderTop(block: CSSBorder.() -> Unit) = property("border-top", CSSBorder().apply(block))
 
 fun StyleScope.boxShadow(
 	color: CSSColorValue,
@@ -70,35 +47,7 @@ fun StyleScope.boxShadow(
 	blur: CSSNumeric = 0.number,
 	spread: CSSNumeric = 0.number,
 	inset: Boolean = false
-) {
-	property("box-shadow", "${if (inset) "inset " else ""}${offset} $blur $spread $color")
-}
-
-fun StyleScope.zIndex(value: Int) {
-	property("z-index", value)
-}
-
-interface Resize : StylePropertyEnum {
-	companion object {
-		inline val Both get() = Resize("both")
-		inline val Horizontal get() = Resize("horizontal")
-		inline val None get() = Resize("none")
-		inline val Vertical get() = Resize("vertical")
-
-		inline val Inherit get() = Resize("inherit")
-		inline val Initial get() = Resize("initial")
-		inline val Revert get() = Resize("revert")
-		inline val Unset get() = Resize("unset")
-	}
-}
-
-fun Resize(value: String) = value.unsafeCast<Resize>()
-
-fun StyleScope.resize(value: Resize) {
-	property("resize", value)
-}
-
-val SelectorsScope.placeholder get() = slotted(selector("placeholder"))
+) = property("box-shadow", "${if (inset) "inset " else ""}${offset} $blur $spread $color")
 
 interface Cursor : StylePropertyEnum {
 	companion object {
@@ -142,18 +91,39 @@ interface Cursor : StylePropertyEnum {
 }
 
 fun Cursor(value: String) = value.unsafeCast<Cursor>()
+fun StyleScope.cursor(value: Cursor) = property("cursor", value)
 
-fun StyleScope.cursor(value: Cursor) {
-	property("cursor", value)
+fun StyleScope.inset(top: CSSNumeric, right: CSSNumeric, bottom: CSSNumeric, left: CSSNumeric) =
+	property("inset", "$top $right $bottom $left")
+
+fun StyleScope.inset(top: CSSNumeric, horizontal: CSSNumeric, bottom: CSSNumeric) =
+	property("inset", "$top $horizontal $bottom")
+
+fun StyleScope.inset(vertical: CSSNumeric, horizontal: CSSNumeric) = property("inset", "$vertical $horizontal")
+fun StyleScope.inset(value: CSSNumeric) = property("inset", value)
+
+
+fun StyleScope.margin(value: CSSNumeric, auto: CSSAutoKeyword) = property("margin", "$value $auto")
+fun StyleScope.margin(auto: CSSAutoKeyword, value: CSSNumeric) = property("margin", "$auto $value")
+fun StyleScope.margin(value: CSSAutoKeyword) = property("margin", value)
+
+interface ObjectFit : StylePropertyEnum {
+	companion object {
+		inline val Contain get() = ObjectFit("contain")
+		inline val Cover get() = ObjectFit("cover")
+		inline val Fill get() = ObjectFit("fill")
+		inline val None get() = ObjectFit("none")
+		inline val ScaleDown get() = ObjectFit("scale-down")
+
+		inline val Inherit get() = ObjectFit("inherit")
+		inline val Initial get() = ObjectFit("initial")
+		inline val Revert get() = ObjectFit("revert")
+		inline val Unset get() = ObjectFit("unset")
+	}
 }
 
-fun StyleScope.margin(value: CSSNumeric, auto: CSSAutoKeyword) {
-	property("margin", "$value $auto")
-}
-
-fun StyleScope.margin(auto: CSSAutoKeyword, value: CSSNumeric) {
-	property("margin", "$auto $value")
-}
+fun ObjectFit(value: String) = value.unsafeCast<ObjectFit>()
+fun StyleScope.objectFit(value: ObjectFit) = property("object-fit", value)
 
 interface Overflow : StylePropertyEnum {
 	companion object {
@@ -170,10 +140,7 @@ interface Overflow : StylePropertyEnum {
 }
 
 fun Overflow(value: String) = value.unsafeCast<Overflow>()
-
-fun StyleScope.overflow(value: Overflow) {
-	property("overflow", value)
-}
+fun StyleScope.overflow(value: Overflow) = property("overflow", value)
 
 interface TextAlign : StylePropertyEnum {
 	companion object {
@@ -191,42 +158,29 @@ interface TextAlign : StylePropertyEnum {
 	}
 }
 
-fun TextAlign(value: String) = value.unsafeCast<TextAlign>()
+interface Resize : StylePropertyEnum {
+	companion object {
+		inline val Both get() = Resize("both")
+		inline val Horizontal get() = Resize("horizontal")
+		inline val None get() = Resize("none")
+		inline val Vertical get() = Resize("vertical")
 
-fun StyleScope.textAlign(value: TextAlign) {
-	property("text-align", value)
+		inline val Inherit get() = Resize("inherit")
+		inline val Initial get() = Resize("initial")
+		inline val Revert get() = Resize("revert")
+		inline val Unset get() = Resize("unset")
+	}
 }
+
+fun Resize(value: String) = value.unsafeCast<Resize>()
+fun StyleScope.resize(value: Resize) = property("resize", value)
+
+fun TextAlign(value: String) = value.unsafeCast<TextAlign>()
+fun StyleScope.textAlign(value: TextAlign) = property("text-align", value)
+
+fun StyleScope.zIndex(value: Int) = property("z-index", value)
+
+val SelectorsScope.placeholder get() = slotted(selector("placeholder"))
+val CSSStyleRuleBuilder.self get() = selector(":scope")
 
 val Int.n get() = Nth.Functional(this)
-
-fun StyleScope.inset(top: CSSNumeric, right: CSSNumeric, bottom: CSSNumeric, left: CSSNumeric) {
-	property("inset", "$top $right $bottom $left")
-}
-
-fun StyleScope.inset(top: CSSNumeric, horizontal: CSSNumeric, bottom: CSSNumeric) {
-	property("inset", "$top $horizontal $bottom")
-}
-
-fun StyleScope.inset(vertical: CSSNumeric, horizontal: CSSNumeric) {
-	property("inset", "$vertical $horizontal")
-}
-
-fun StyleScope.inset(value: CSSNumeric) {
-	property("inset", value)
-}
-
-fun StyleScope.borderImageSource(value: String) {
-	property("border-image-source", value)
-}
-
-fun StyleScope.borderImageSlice(value: Int) {
-	property("border-image-slice", value)
-}
-
-fun StyleScope.borderTop(block: CSSBorder.() -> Unit) {
-	property("border-top", CSSBorder().apply(block))
-}
-
-fun StyleScope.margin(value: CSSAutoKeyword) {
-	property("margin", value)
-}
