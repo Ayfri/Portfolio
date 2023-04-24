@@ -21,7 +21,6 @@ kotlin {
 				sourceMaps = false
 			}
 		}
-		generateTypeScriptDefinitions()
 		binaries.executable()
 	}
 }

@@ -22,6 +22,10 @@ object AppStyle : StyleSheet() {
 
 	val buttonColor by variable<CSSColorValue>()
 
+	val scrollbarColor = Color("#2D2D2D")
+	val scrollbarThumbColor = Color("#555555")
+	val scrollbarWidth = 13.px
+
 	init {
 		"html" {
 			property("scroll-behavior", "smooth")
@@ -31,6 +35,21 @@ object AppStyle : StyleSheet() {
 		"body" {
 			fontFamily("Open Sans", "sans-serif")
 			margin(0.px)
+
+			scrollbarColor(scrollbarColor, scrollbarThumbColor)
+			scrollbarWidth(scrollbarWidth)
+
+			webkitScrollbar {
+				width(scrollbarWidth)
+			}
+
+			webkitScrollbarThumb {
+				backgroundColor(scrollbarThumbColor)
+			}
+
+			webkitScrollbarTrack {
+				backgroundColor(scrollbarColor)
+			}
 		}
 
 		"a" style {
