@@ -1,6 +1,8 @@
 @file:Suppress("JS_NAME_CLASH", "JS_FAKE_NAME_CLASH")
 
 import app.softwork.routingcompose.BrowserRouter
+import externals.TextRenderer
+import externals.use
 import header.Header
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -16,13 +18,13 @@ fun main() {
 		Head()
 	}
 
-	val renderer = object : marked.TextRenderer() {
+	val renderer = object : TextRenderer() {
 		override fun link(href: String?, title: String?, text: String) = """
 			<a href="$href" ${title?.let { "title=$it" } ?: ""} class="link">$text</a>
 		""".trimIndent()
 	}
 
-	marked.use(jso { this.renderer = renderer })
+	use(jso { this.renderer = renderer })
 
 	renderComposableInBody {
 		BrowserRouter("/") {

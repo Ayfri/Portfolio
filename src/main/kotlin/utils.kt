@@ -1,3 +1,4 @@
+import externals.parse
 import org.jetbrains.compose.web.attributes.AttrsScope
 import org.w3c.dom.HTMLParagraphElement
 
@@ -10,7 +11,7 @@ fun AttrsScope<HTMLParagraphElement>.markdownParagraph(text: String, breaks: Boo
 		if (classes.isNotEmpty()) it.classList.add(*classes)
 
 		val textToParse = if (breaks) text.replace("\n", "<br>") else text
-		it.innerHTML = marked.parse(textToParse)
+		it.innerHTML = parse(textToParse)
 
 		onDispose {}
 	}
