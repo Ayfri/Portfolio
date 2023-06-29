@@ -15,7 +15,7 @@ import style.utils.*
 import kotlin.js.Date
 
 const val DISCORD_LINK = "https://discord.gg/BySjRNQ9Je"
-const val LINKEDIN_LINK = "https://www.linkedin.com/in/pierre-roy-411a6821b/"
+const val LINKEDIN_LINK = "https://www.linkedin.com/in/pierre-roy-ayfri/"
 const val TWITCH_LINK = "https://www.twitch.tv/ayfri_"
 const val TWITTER_LINK = "https://twitter.com/@ayfri_"
 
