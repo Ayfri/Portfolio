@@ -23,9 +23,10 @@ object GitHubAPI {
 
 		install(ContentNegotiation) {
 			json(Json {
-				useAlternativeNames = false
-				ignoreUnknownKeys = true
+				coerceInputValues = true
 				explicitNulls = true
+				ignoreUnknownKeys = true
+				useAlternativeNames = false
 			})
 		}
 	}
