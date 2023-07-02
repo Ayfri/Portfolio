@@ -3,7 +3,6 @@ package entities
 import GitHubAPI
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -156,21 +155,22 @@ data class Repository(
 	}.let {
 		when (it.status) {
 			HttpStatusCode.NotFound -> null
+
 			else -> {
 				val encoded = it.body<ReadMe>().content
 				String(Base64.getMimeDecoder().decode(encoded))
 			}
 		}
 	}
-	
+
 	suspend fun getCommitsCount() = GitHubAPI.ktorClient.get {
 		url("${this@Repository.url}/commits?sha=${defaultBranch}&per_page=1&page=1")
 	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 1
-	
+
 	suspend fun getWatchersCount() = GitHubAPI.ktorClient.get {
 		url("${this@Repository.url}/subscribers?per_page=1&page=1")
 	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 0
-	
+
 	suspend fun getContributorsCount() = GitHubAPI.ktorClient.get {
 		url("${this@Repository.url}/contributors?per_page=1&page=1")
 	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 0
