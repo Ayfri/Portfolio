@@ -28,7 +28,7 @@ data class ResultUser(
 			createdAt = user.createdAt,
 			followers = user.followers,
 			following = user.following,
-			hireable = user.hireable,
+			hireable = user.hireable ?: false,
 			htmlUrl = user.htmlUrl,
 			login = user.login,
 			name = user.name,

@@ -10,7 +10,7 @@ data class User(
 	val bio: String,
 	val blog: String,
 	val collaborators: Int,
-	val company: String,
+	val company: String?,
 	@SerialName("created_at")
 	val createdAt: String,
 	@SerialName("disk_usage")
@@ -28,7 +28,7 @@ data class User(
 	val gistsUrl: String,
 	@SerialName("gravatar_id")
 	val gravatarId: String,
-	val hireable: Boolean,
+	val hireable: Boolean?,
 	@SerialName("html_url")
 	val htmlUrl: String,
 	val id: Int,

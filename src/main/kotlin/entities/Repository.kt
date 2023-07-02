@@ -163,17 +163,17 @@ data class Repository(
 		}
 	}
 
-	suspend fun getCommitsCount() = GitHubAPI.ktorClient.get {
-		url("${this@Repository.url}/commits?sha=${defaultBranch}&per_page=1&page=1")
-	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 1
+	suspend fun getCount(url: String, default: Int = 0): Int {
+		return GitHubAPI.ktorClient.get {
+			url(url)
+		}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: default
+	}
 
-	suspend fun getWatchersCount() = GitHubAPI.ktorClient.get {
-		url("${this@Repository.url}/subscribers?per_page=1&page=1")
-	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 0
+	suspend fun getCommitsCount() = getCount("${this@Repository.url}/commits?sha=${defaultBranch}&per_page=1&page=1", 1)
 
-	suspend fun getContributorsCount() = GitHubAPI.ktorClient.get {
-		url("${this@Repository.url}/contributors?per_page=1&page=1")
-	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: 0
+	suspend fun getWatchersCount() = getCount("${this@Repository.url}/subscribers?per_page=1&page=1")
+
+	suspend fun getContributorsCount() = getCount("${this@Repository.url}/contributors?per_page=1&page=1")
 }
 
 @Serializable
