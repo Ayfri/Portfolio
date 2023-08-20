@@ -1,5 +1,7 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
+
 plugins {
-	kotlin("js")
+	kotlin("multiplatform")
 	kotlin("plugin.serialization")
 	id("org.jetbrains.compose")
 }
@@ -21,23 +23,30 @@ kotlin {
 				sourceMaps = false
 			}
 		}
+
 		binaries.executable()
+	}
+
+	sourceSets {
+		val jsMain by getting {
+			dependencies {
+				implementation(compose.html.core)
+				implementation(compose.runtime)
+				implementation("app.softwork:routing-compose:${project.extra["compose.routing"]}")
+				implementation(npm("marked", project.extra["npm.marked.version"].toString()))
+
+				val ktorVersion = project.extra["ktor.version"] as String
+				implementation("io.ktor:ktor-client-core:$ktorVersion")
+				implementation("io.ktor:ktor-client-js:$ktorVersion")
+
+				implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${project.extra["serialization.json.version"]}")
+			}
+		}
 	}
 }
 
-dependencies {
-	implementation(compose.html.core)
-	implementation(compose.runtime)
-	implementation("app.softwork:routing-compose:${project.extra["compose.routing"]}")
-	implementation(npm("marked", project.extra["npm.marked.version"].toString()))
-
-	val ktorVersion = project.extra["ktor.version"] as String
-	implementation("io.ktor:ktor-client-core:$ktorVersion")
-	implementation("io.ktor:ktor-client-js:$ktorVersion")
-
-	implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${project.extra["serialization.json.version"]}")
-}
-
-task("compose") {
-	val app = project.file("app")
+tasks.withType<KotlinJsCompile>().configureEach {
+	kotlinOptions.freeCompilerArgs += listOf(
+		"-Xklib-enable-signature-clash-checks=false",
+	)
 }

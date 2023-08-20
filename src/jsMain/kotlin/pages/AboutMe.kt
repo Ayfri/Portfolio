@@ -26,12 +26,12 @@ data class AboutMeSection(
 	val date: Int,
 	val image: Boolean = false,
 	val id: String,
-	val title: (@Composable () -> Unit)? = null
+	val title: (@Composable () -> Unit),
 ) {
 	var htmlElement: HTMLElement? = null
 
 	@Composable
-	fun Display(selected: Boolean = false) {
+	fun Display(selected: Boolean = false) =
 		Section({
 			if (image) classes(AboutMeStyle.withImage)
 			if (selected) classes("selected")
@@ -42,20 +42,18 @@ data class AboutMeSection(
 				onDispose {}
 			}
 		}) {
-			title?.let {
-				if (image) it()
-				else H2({
-					classes(AboutMeStyle.textIcon)
-				}) {
-					it()
-				}
+
+			if (image) title()
+			else H2({
+				classes(AboutMeStyle.textIcon)
+			}) {
+				title()
 			}
 
 			P({
 				markdownParagraph(content, true)
 			})
 		}
-	}
 }
 
 val sections = listOf(

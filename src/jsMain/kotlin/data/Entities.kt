@@ -1,19 +1,16 @@
-@file:OptIn(ExperimentalJsExport::class)
-
 package data
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
-@JsExport
 @Serializable
 data class GitHubData(
 	val ayfri: GitHubUser,
 	val repos: Array<GitHubRepository>,
 )
 
-@JsExport
+
 @Serializable
 data class GitHubUser(
 	val bio: String,
@@ -29,7 +26,7 @@ data class GitHubUser(
 	val updatedAt: String,
 )
 
-@JsExport
+
 @Serializable
 data class GitHubRepository(
 	val archived: Boolean,
@@ -60,7 +57,7 @@ data class GitHubRepository(
 	val watchersCount: Int,
 )
 
-@JsExport
+
 @Serializable
 data class PartialUser(
 	@SerialName("avatar_url")
