@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GitHubData(
 	val ayfri: GitHubUser,
-	val repos: Array<GitHubRepository>,
+	val repos: List<GitHubRepository>,
 )
 
 
@@ -51,7 +51,7 @@ data class GitHubRepository(
 	val readmeContent: String?,
 	val size: Int,
 	val stargazersCount: Int,
-	val topics: Array<String>,
+	val topics: List<String>,
 	val updatedAt: String,
 	val visibility: String,
 	val watchersCount: Int,
