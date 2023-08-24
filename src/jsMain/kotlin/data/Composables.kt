@@ -121,12 +121,12 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 }
 
 object DataStyle : StyleSheet() {
-	const val homeCardBackground = "#181818"
-	const val homeCardTitleBackground = "#0e0e0e"
-	const val homeCardColor = "#cacaca"
-	const val projectCardClosedBackground = "#2a2b36"
-	const val projectCardOpenBackgroundStart = "#66085190"
-	const val projectCardOpenBackgroundEnd = "#39379490"
+	const val HOME_CARD_BACKGROUND = "#181818"
+	const val HOME_CARD_TITLE_BACKGROUND = "#0e0e0e"
+	const val HOME_CARD_COLOR = "#cacaca"
+	const val PROJECT_CARD_CLOSED_BACKGROUND = "#2a2b36"
+	const val PROJECT_CARD_OPEN_BACKGROUND_START = "#66085190"
+	const val PROJECT_CARD_OPEN_BACKGROUND_END = "#39379490"
 
 	val gridColumnStartVar by variable<StylePropertyNumber>()
 	val imageSize by variable<CSSSizeValue<*>>()
@@ -147,7 +147,7 @@ object DataStyle : StyleSheet() {
 			alignItems(AlignItems.Center)
 			gap(.5.cssRem)
 
-			backgroundColor(Color(homeCardTitleBackground))
+			backgroundColor(Color(HOME_CARD_TITLE_BACKGROUND))
 			margin(0.px)
 			padding(1.cssRem)
 
@@ -161,11 +161,11 @@ object DataStyle : StyleSheet() {
 		}
 
 		"p" {
-			color(Color(homeCardColor))
+			color(Color(HOME_CARD_COLOR))
 		}
 
 		child(self, selector("div")) style {
-			backgroundColor(Color(homeCardBackground))
+			backgroundColor(Color(HOME_CARD_BACKGROUND))
 			textAlign(TextAlign.Start)
 
 			display(DisplayStyle.Flex)
@@ -201,9 +201,11 @@ object DataStyle : StyleSheet() {
 			properties("max-height")
 		}
 
-		"img" {
-			size(imageSize.value())
-			borderRadius(imageSize.value())
+		className("top") style {
+			"img" {
+				size(imageSize.value())
+				borderRadius(imageSize.value())
+			}
 		}
 	}
 
@@ -214,9 +216,10 @@ object DataStyle : StyleSheet() {
 		gridColumn("${gridColumnStartVar.value()} span")
 
 		backgroundImage(linearGradient(135.deg) {
-			stop(Color(projectCardOpenBackgroundStart))
-			stop(Color(projectCardOpenBackgroundEnd))
+			stop(Color(PROJECT_CARD_OPEN_BACKGROUND_START))
+			stop(Color(PROJECT_CARD_OPEN_BACKGROUND_END))
 		})
+
 		maxHeight(500.cssRem)
 
 		className("top") style {
@@ -259,8 +262,62 @@ object DataStyle : StyleSheet() {
 				marginTop(0.px)
 			}
 
-			"code" {
-				whiteSpace("pre-wrap")
+			"pre" {
+				backgroundColor(Color("#00000020"))
+				borderRadius(.5.cssRem)
+				overflowX("auto")
+				padding(1.cssRem)
+
+				self + webkitScrollbar style {
+					height(8.px)
+				}
+
+				self + webkitScrollbarThumb style {
+					backgroundColor(Color("#ffffff40"))
+					borderRadius(.5.cssRem)
+				}
+
+				self + webkitScrollbarTrack style {
+					backgroundColor(Color.transparent)
+				}
+
+			}
+
+			"blockquote" {
+				borderLeft {
+					color(Color("#ffffff20"))
+					style(LineStyle.Solid)
+					width(4.px)
+				}
+				marginLeft(1.5.cssRem)
+				paddingLeft(.8.cssRem)
+			}
+
+			"table" {
+				borderRadius(.5.cssRem)
+				property("border-collapse", "collapse")
+				property("border-spacing", "0")
+				margin(1.cssRem, 0.px)
+				fontSize(.9.cssRem)
+				overflow(Overflow.Hidden)
+				width(100.percent)
+
+				"th" {
+					backgroundColor(Color("#ffffff20"))
+					padding(.5.cssRem)
+				}
+
+				"td" {
+					padding(.5.cssRem)
+				}
+
+				"tr" {
+					borderBottom {
+						color(Color("#ffffff20"))
+						style(LineStyle.Solid)
+						width(1.px)
+					}
+				}
 			}
 		}
 
@@ -283,7 +340,7 @@ object DataStyle : StyleSheet() {
 		flexDirection(FlexDirection.Row)
 		imageSize(3.5.cssRem)
 
-		backgroundColor(Color(projectCardClosedBackground))
+		backgroundColor(Color(PROJECT_CARD_CLOSED_BACKGROUND))
 		height(maxSize.value())
 		maxHeight(maxSize.value())
 

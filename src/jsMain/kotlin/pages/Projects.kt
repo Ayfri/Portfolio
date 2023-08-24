@@ -68,10 +68,10 @@ fun Projects() {
 }
 
 object ProjectsStyle : StyleSheet() {
-	const val projectsBackgroundColor = "#15151C"
+	const val PROJECTS_BACKGROUND_COLOR = "#15151C"
 
 	val projects by style {
-		backgroundColor(Color(projectsBackgroundColor))
+		backgroundColor(Color(PROJECTS_BACKGROUND_COLOR))
 	}
 
 	val projectsList by style {
