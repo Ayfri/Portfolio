@@ -25,6 +25,11 @@ import kotlin.js.Date
 
 inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
 
+const val MAIN_PRESENTATION = """
+Hi, I'm Pierre Roy, an IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/), and I'm passionate about computer science and especially programming.
+I'm making all sorts of projects and programming by myself for years. This is my portfolio, welcome!
+"""
+
 @Composable
 fun Home() {
 	val homeRepositories = remember { mutableStateListOf<GitHubRepository>() }
@@ -76,12 +81,7 @@ fun Home() {
 		}
 
 		P({
-			markdownParagraph(
-				"""
-					Hi, it's me, Pierre Roy, I'm a first year IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/) and I'm passionate about computer science and especially programming.
-					I'm making all sort of projects and programming by myself for years. This is my portfolio, welcome!
-				""".trimIndent(), true, AppStyle.monoFont
-			)
+			markdownParagraph(MAIN_PRESENTATION.trimIndent(), true, AppStyle.monoFont)
 		})
 
 		if (homeRepositories.isEmpty()) {
@@ -118,7 +118,9 @@ fun Home() {
 			Div({
 				classes("list", "skills")
 			}) {
-				skills.forEach {
+				skills.sortedWith(
+					compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
+				).take(8).forEach {
 					A("/skills#${it.language.name}", {
 						classes("skill")
 					}) {
