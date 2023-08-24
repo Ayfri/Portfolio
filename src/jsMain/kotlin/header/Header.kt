@@ -11,9 +11,9 @@ import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.A
-import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Header
 import org.jetbrains.compose.web.dom.I
+import org.jetbrains.compose.web.dom.Nav
 import style.AppStyle.mobileFirstBreak
 import style.AppStyle.mobileSecondBreak
 import style.utils.*
@@ -29,7 +29,7 @@ fun Header() {
 	Header({
 		classes(HeaderStyle.navbar)
 	}) {
-		Div({
+		Nav({
 			classes(HeaderStyle.navbarPart, HeaderStyle.navbarLinks)
 			if (open) classes("open")
 		}) {
@@ -60,19 +60,19 @@ fun Header() {
 }
 
 object HeaderStyle : StyleSheet() {
-	const val navbarColor = "#2A2B36"
-	const val navbarColorSelected = "#1e1c28"
+	const val NAVBAR_COLOR = "#2A2B36"
+	const val NAVBAR_COLOR_SELECTED = "#1e1c28"
 	val navbarHeight by variable<CSSNumeric>()
 
 	init {
 		root {
-			navbarHeight(5.cssRem)
+			navbarHeight(4.5.cssRem)
 		}
 	}
 
 	val navbar by style {
 		alignItems(AlignItems.Center)
-		backgroundColor(Color(navbarColor))
+		backgroundColor(Color(NAVBAR_COLOR))
 		boxSizing("border-box")
 		display(DisplayStyle.Flex)
 		justifyContent(JustifyContent.SpaceBetween)
@@ -116,7 +116,7 @@ object HeaderStyle : StyleSheet() {
 			padding(0.px, clamp(1.5.cssRem, 3.vw, 2.8.cssRem))
 
 			group(self + className("active"), hover(self)) style {
-				backgroundColor(Color(navbarColorSelected))
+				backgroundColor(Color(NAVBAR_COLOR_SELECTED))
 			}
 		}
 
@@ -128,7 +128,7 @@ object HeaderStyle : StyleSheet() {
 				left(0.px)
 				width(100.percent)
 
-				backgroundColor(Color(navbarColor))
+				backgroundColor(Color(NAVBAR_COLOR))
 
 				self + className("open") style {
 					display(DisplayStyle.Flex)
@@ -145,13 +145,13 @@ object HeaderStyle : StyleSheet() {
 	}
 
 	val navbarGithub by style {
-		borderRadius(1.5.cssRem)
+		borderRadius(.5.cssRem)
 		gap(1.cssRem)
-		marginRight(.3.cssRem)
+		marginRight(1.vw)
 		padding(.5.cssRem, 1.cssRem)
 
 		hover(self) style {
-			backgroundColor(Color(navbarColorSelected))
+			backgroundColor(Color(NAVBAR_COLOR_SELECTED))
 		}
 
 		media(mediaMaxWidth(mobileFirstBreak)) {

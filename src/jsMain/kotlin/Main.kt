@@ -6,7 +6,7 @@ import externals.use
 import header.Header
 import kotlinx.browser.document
 import kotlinx.browser.window
-import org.jetbrains.compose.web.dom.Div
+import org.jetbrains.compose.web.dom.Main
 import org.jetbrains.compose.web.renderComposable
 import org.jetbrains.compose.web.renderComposableInBody
 import pages.*
@@ -34,7 +34,7 @@ fun main() {
 
 			Header()
 
-			Div({
+			Main({
 				id("main")
 			}) {
 				route("/") {
