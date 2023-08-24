@@ -10,6 +10,7 @@ import data.ProjectCard
 import data.data
 import kotlinx.browser.document
 import kotlinx.browser.window
+import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H1
@@ -55,12 +56,8 @@ fun Projects() {
 					val list = document.querySelector(".${ProjectsStyle.projectsList}").unsafeCast<HTMLElement>()
 					val style = window.getComputedStyle(list)
 					val rowsCount = style.getPropertyValue("grid-template-columns").split(" ").size
-					val gridColumnStart = when {
-						rowsCount > 2 -> rowsCount - 1
-						else -> rowsCount
-					}
 
-					list.style.setProperty("--${DataStyle.gridColumnStartVar.name}", gridColumnStart.toString())
+					list.style.setProperty("--${DataStyle.gridColumnStartVar.name}", rowsCount.toString())
 				}
 			}
 		}
@@ -74,6 +71,7 @@ object ProjectsStyle : StyleSheet() {
 		backgroundColor(Color(PROJECTS_BACKGROUND_COLOR))
 	}
 
+	@OptIn(ExperimentalComposeWebApi::class)
 	val projectsList by style {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns(repeat("auto-fill", minmax(22.5.cssRem, 1.fr)))

@@ -35,10 +35,14 @@ inline val minContent get() = SizeKeyword("min-content")
 
 fun SizeKeyword(value: String) = value.unsafeCast<SizeKeyword>()
 
+fun StyleScope.accentColor(value: CSSColorValue) = property("accent-color", value)
 
 fun StyleScope.borderImageSource(value: String) = property("border-image-source", value)
 fun StyleScope.borderImageSlice(value: Int) = property("border-image-slice", value)
 
+fun StyleScope.borderBottom(block: CSSBorder.() -> Unit) = property("border-bottom", CSSBorder().apply(block))
+fun StyleScope.borderLeft(block: CSSBorder.() -> Unit) = property("border-left", CSSBorder().apply(block))
+fun StyleScope.borderRight(block: CSSBorder.() -> Unit) = property("border-right", CSSBorder().apply(block))
 fun StyleScope.borderTop(block: CSSBorder.() -> Unit) = property("border-top", CSSBorder().apply(block))
 
 fun StyleScope.boxShadow(
@@ -46,7 +50,7 @@ fun StyleScope.boxShadow(
 	offset: CSSNumeric = 0.number,
 	blur: CSSNumeric = 0.number,
 	spread: CSSNumeric = 0.number,
-	inset: Boolean = false
+	inset: Boolean = false,
 ) = property("box-shadow", "${if (inset) "inset " else ""}${offset} $blur $spread $color")
 
 interface Cursor : StylePropertyEnum {

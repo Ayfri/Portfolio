@@ -151,8 +151,8 @@ fun Footer() {
 }
 
 object FooterStyle : StyleSheet() {
-	const val footerColor = "#1a1120"
-	const val footerLinkHover = "#cccccc"
+	const val FOOTER_COLOR = "#1a1120"
+	const val FOOTER_LINK_HOVER = "#b3b3b3"
 
 	val footerCVButtonHover by keyframes {
 		from {
@@ -314,7 +314,7 @@ object FooterStyle : StyleSheet() {
 	}
 
 	val footerInfo by style {
-		backgroundColor(Color(footerColor))
+		backgroundColor(Color(FOOTER_COLOR))
 		color(Color.white)
 		padding(2.cssRem, 0.px, .5.cssRem)
 		textAlign("center")
@@ -333,7 +333,7 @@ object FooterStyle : StyleSheet() {
 				fontSize(2.5.cssRem)
 
 				hover(self) style {
-					color(Color(footerLinkHover))
+					color(Color(FOOTER_LINK_HOVER))
 				}
 			}
 		}
