@@ -37,7 +37,7 @@ jobs:
       - name: Save sample
         uses: actions/upload-pages-artifact@v1
         with:
-          path: build/distributions
+          path: build/dist/js/productionExecutable
 
       - name: Deploy to GitHub Pages
         id: deployment
