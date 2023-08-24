@@ -326,8 +326,8 @@ val skills = listOf(
 		name = "Python",
 		since = 2014,
 		learnedFor = "Trying programmation.",
-		nowUsing = "Creating scripts/CLI.",
-		level = 3,
+		nowUsing = "Creating AIs, scripts & websites.",
+		level = 4,
 		description = """
 			Python is a computer programming language often used to build websites and software, automate tasks, and conduct data analysis.
 			Python is a general-purpose language, meaning it can be used to create a variety of different programs and isn't specialized for any specific problems.
@@ -343,7 +343,7 @@ val skills = listOf(
 		name = "TypeScript",
 		since = 2019,
 		learnedFor = "Improving JavaScript projects.",
-		nowUsing = "Bots & web games.",
+		nowUsing = "Creating typed JS libraries.",
 		level = 4,
 		description = """
 			TypeScript is an open-source, object-oriented language developed and maintained by Microsoft, licensed under Apache 2 license.
