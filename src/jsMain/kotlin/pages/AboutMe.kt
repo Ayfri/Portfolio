@@ -203,6 +203,26 @@ val sections = listOf(
 	) {
 		TextIcon("Cat'aClysm: Claw Of The Dead", localImage("cat-aclysm.png"))
 	},
+
+	AboutMeSection(
+		"""
+			AI has been a very important subject these last years, a lot more since the release of [ChatGPT](https://chat.openai.com/).
+			I have always been interested in AI, and I wanted to create my own AI or at least a project using AI.
+			During June, I've made a little project using [Kotlin](https://kotlinlang.org), [Compose for Desktop](https://www.jetbrains.com/fr-fr/lp/compose-multiplatform/) and the [GPT-4 API](https://platform.openai.com/docs/api-reference), name [Artificial-Infiltration](https://github.com/Ayfri/Artificial-Infiltration).
+			The concept is a chat room where you can talk with five other people, but an AI is also in the room, and you have to find who is the AI.
+			This was really interesting and amusing to use GPT API, but at that time I was not a pro in prompt engineering, so the AI was not that good until we switched to GPT-4, which is about 20 times more costly.
+			
+			For validating my second year at Ynov, I had to found a stage in a company for 6 weeks or more.
+			But the school also proposed a stage organized by the Data Engineering teacher, so I applied for it and got accepted.
+			We've done a lot of searches about ChatGPT, autonomous agents (like [AutoGPT](https://news.agpt.co/), [SuperAGI](https://superagi.com/)) and expanding context of GPT (like [ChatGPT-Memory](https://github.com/continuum-llms/chatgpt-memory)).
+			Finally, we found other technologies to better create our project, and we started working on it.
+
+			The project is named ScriptGraf, its purpose is to automatically create posts for your company's social media.
+			We are working on it since July 2023, and we are planning to finish as soon as we can.
+		""".trimIndent(), 2023, id = "scriptgraf"
+	) {
+		TextIcon("ScriptGraf", localImage("chatgpt.png"))
+	}
 )
 
 const val TIMELINE_DEFAULT_OFFSET = 125.0
