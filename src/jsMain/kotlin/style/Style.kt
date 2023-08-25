@@ -7,24 +7,24 @@ import style.utils.*
 
 @OptIn(ExperimentalComposeWebApi::class)
 object AppStyle : StyleSheet() {
-	const val contentBackgroundColor = "#212125"
-	const val monoFontFamily = "JetBrains Mono"
-	const val linkColor = "#75C9CE"
-	const val linkHoverColor = "#95fbff"
-	const val titleBackgroundColor = "#252525"
-	const val titleBorderColor = "#797979"
-	const val specialTextColor = "#B4BBFF"
+	const val CONTENT_BACKGROUND_COLOR = "#212125"
+	const val LINK_COLOR = "#75C9CE"
+	const val LINK_HOVER_COLOR = "#95fbff"
+	const val MONO_FONT_FAMILY = "JetBrains Mono"
+	const val SPECIAL_TEXT_COLOR = "#B4BBFF"
+	const val TITLE_BACKGROUND_COLOR = "#252525"
+	const val TITLE_BORDER_COLOR = "#797979"
 
 	val mobileFirstBreak = 890.px
 	val mobileSecondBreak = 810.px
 	val mobileThirdBreak = 510.px
 	val mobileFourthBreak = 386.px
 
-	val buttonColor by variable<CSSColorValue>()
-
 	val scrollbarColor = Color("#2D2D2D")
 	val scrollbarThumbColor = Color("#555555")
 	val scrollbarWidth = 13.px
+
+	val buttonColor by variable<CSSColorValue>()
 
 	init {
 		"html" {
@@ -62,10 +62,10 @@ object AppStyle : StyleSheet() {
 		}
 
 		desc("p", "a") style {
-			color(Color(linkColor))
+			color(Color(LINK_COLOR))
 
 			hover(desc("p", "a")) style {
-				color(Color(linkHoverColor))
+				color(Color(LINK_HOVER_COLOR))
 			}
 		}
 
@@ -79,7 +79,7 @@ object AppStyle : StyleSheet() {
 		}
 
 		id("main") style {
-			backgroundColor(Color(contentBackgroundColor))
+			backgroundColor(Color(CONTENT_BACKGROUND_COLOR))
 			color(Color.white)
 			marginTop(HeaderStyle.navbarHeight.value())
 		}
@@ -109,9 +109,9 @@ object AppStyle : StyleSheet() {
 	}
 
 	val title by style {
-		backgroundColor(Color(titleBackgroundColor))
+		backgroundColor(Color(TITLE_BACKGROUND_COLOR))
 		border {
-			color(Color(titleBorderColor))
+			color(Color(TITLE_BORDER_COLOR))
 			style(LineStyle.Solid)
 			width(2.px)
 		}
@@ -137,11 +137,11 @@ object AppStyle : StyleSheet() {
 	}
 
 	val monoFont by style {
-		fontFamily(monoFontFamily, "monospace")
+		fontFamily(MONO_FONT_FAMILY, "monospace")
 	}
 
 	val numberColor by style {
-		color(Color(specialTextColor))
+		color(Color(SPECIAL_TEXT_COLOR))
 	}
 
 	val button by style {

@@ -205,13 +205,13 @@ val sections = listOf(
 	},
 )
 
-const val timelineDefaultOffset = 125.0
+const val TIMELINE_DEFAULT_OFFSET = 125.0
 
 @Composable
 fun AboutMe() {
 	Style(AboutMeStyle)
 
-	var timelineOffset by mutableStateOf(timelineDefaultOffset)
+	var timelineOffset by mutableStateOf(TIMELINE_DEFAULT_OFFSET)
 	var roundSelected by mutableStateOf(0)
 
 	Aside({
@@ -225,7 +225,7 @@ fun AboutMe() {
 				document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as Double? ?: return@addEventListener
 
 			if (window.scrollY + window.innerHeight < footerOffset) {
-				timelineOffset = window.scrollY + timelineDefaultOffset * .8
+				timelineOffset = window.scrollY + TIMELINE_DEFAULT_OFFSET * .8
 			}
 		})
 	}) {
@@ -260,7 +260,7 @@ fun AboutMe() {
 		sections.forEachIndexed { index, section ->
 			if (index == roundSelected) return@forEachIndexed
 			val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
-			val elementOffset = element.asDynamic().offsetTop as Double - timelineDefaultOffset * 2
+			val elementOffset = element.asDynamic().offsetTop as Double - TIMELINE_DEFAULT_OFFSET * 2
 			val elementHeight = element.asDynamic().offsetHeight as Double
 
 			val elementRange = elementOffset..(elementOffset + elementHeight)
@@ -302,7 +302,7 @@ object AboutMeStyle : StyleSheet() {
 
 	init {
 		"html" {
-			property("scroll-padding-top", HeaderStyle.navbarHeight.value() + timelineDefaultOffset.px)
+			property("scroll-padding-top", HeaderStyle.navbarHeight.value() + TIMELINE_DEFAULT_OFFSET.px)
 		}
 
 		id("main") style {
@@ -509,7 +509,7 @@ object AboutMeStyle : StyleSheet() {
 			titleHeight(max(2.cssRem, 3.vw))
 
 			backgroundColor(Color(BACKGROUND_SECTION_ODD_COLOR))
-			fontFamily(AppStyle.monoFontFamily)
+			fontFamily(AppStyle.MONO_FONT_FAMILY)
 			padding(1.5.cssRem, titleHeight.value())
 			position(Position.Relative)
 

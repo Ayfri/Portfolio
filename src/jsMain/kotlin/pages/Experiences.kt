@@ -47,19 +47,20 @@ fun Experiences() {
 }
 
 object ExperiencesStyle : StyleSheet() {
-	const val experiencesBackgroundColor = "#363636"
-	const val experienceBackgroundColor = "#1E1E1E"
+	const val EXPERIENCES_BACKGROUND_COLOR = "#363636"
+	const val EXPERIENCE_BACKGROUND_COLOR = "#1E1E1E"
 
 	val experiences by style {
-		backgroundColor(Color(experiencesBackgroundColor))
+		backgroundColor(Color(EXPERIENCES_BACKGROUND_COLOR))
 	}
 
 	val experiencesList by style {
 		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
 		gap(2.cssRem)
 
 		"section" {
-			backgroundColor(Color(experienceBackgroundColor))
+			backgroundColor(Color(EXPERIENCE_BACKGROUND_COLOR))
 			borderRadius(.75.cssRem)
 			padding(.5.cssRem, 1.5.cssRem)
 

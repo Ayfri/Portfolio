@@ -409,11 +409,11 @@ fun Skills() {
 }
 
 object SkillsStyle : StyleSheet() {
-	const val skillsBackgroundColor = "#363636"
-	const val skillBackgroundColor = "#141414"
+	const val SKILLS_BACKGROUND_COLOR = "#363636"
+	const val SKILL_BACKGROUND_COLOR = "#141414"
 
 	val skills by style {
-		backgroundColor(Color(skillsBackgroundColor))
+		backgroundColor(Color(SKILLS_BACKGROUND_COLOR))
 	}
 
 	val skillsList by style {
@@ -447,8 +447,8 @@ object SkillsStyle : StyleSheet() {
 
 		background("""${
 			linearGradient {
-				stop(Color(skillBackgroundColor))
-				stop(Color(skillBackgroundColor))
+				stop(Color(SKILL_BACKGROUND_COLOR))
+				stop(Color(SKILL_BACKGROUND_COLOR))
 			}
 		} padding-box,
 			$borderGradient border-box""")
@@ -537,11 +537,11 @@ object SkillsStyle : StyleSheet() {
 			}
 
 			"a" {
-				color(Color(AppStyle.linkColor))
+				color(Color(AppStyle.LINK_COLOR))
 				textDecoration("none")
 
 				hover {
-					color(Color(AppStyle.linkHoverColor))
+					color(Color(AppStyle.LINK_HOVER_COLOR))
 					textDecoration("underline")
 				}
 			}

@@ -10,7 +10,6 @@ import data.ProjectCard
 import data.data
 import kotlinx.browser.document
 import kotlinx.browser.window
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H1
@@ -71,7 +70,6 @@ object ProjectsStyle : StyleSheet() {
 		backgroundColor(Color(PROJECTS_BACKGROUND_COLOR))
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val projectsList by style {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns(repeat("auto-fill", minmax(22.5.cssRem, 1.fr)))
