@@ -1,12 +1,13 @@
+rootProject.name = "portfolio"
+
 pluginManagement {
 	repositories {
 		mavenCentral()
 	}
 
 	plugins {
-		kotlin("jvm").version(extra["kotlin.version"] as String)
-		kotlin("plugin.serialization").version(extra["kotlin.version"] as String)
+		val kotlinVersion = extra["kotlin.version"] as String
+		kotlin("jvm") version kotlinVersion
+		kotlin("plugin.serialization") version kotlinVersion
 	}
 }
-
-rootProject.name = "portfolio"

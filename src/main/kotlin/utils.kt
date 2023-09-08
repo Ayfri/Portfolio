@@ -1,3 +1,15 @@
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
+
+suspend fun <T, R> List<T>.mapConcurrently(mapper: suspend (T) -> R) = runBlocking {
+	map {
+		async {
+			mapper(it)
+		}
+	}.awaitAll()
+}
+
 fun Any.prettyPrint(): String {
 	var indentLevel = 0
 	val indentWidth = 4

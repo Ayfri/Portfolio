@@ -103,11 +103,9 @@ data class Repository(
 		}
 	}
 
-	suspend fun getCount(url: String, default: Int = 0): Int {
-		return GitHubAPI.ktorClient.get {
-			url(url)
-		}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: default
-	}
+	suspend fun getCount(url: String, default: Int = 0) = GitHubAPI.ktorClient.get {
+		url(url)
+	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: default
 
 	suspend fun getCommitsCount() = getCount("${this@Repository.url}/commits?sha=${defaultBranch}&per_page=1&page=1", 1)
 

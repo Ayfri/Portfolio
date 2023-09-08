@@ -18,9 +18,9 @@ dependencies {
 }
 
 application {
-	mainClass.set("MainKt")
+	mainClass = "MainKt"
 }
 
 tasks.wrapper {
-	gradleVersion = "8.2"
+	gradleVersion = "8.3"
 }

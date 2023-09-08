@@ -5,7 +5,6 @@ import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -47,6 +46,7 @@ object GitHubAPI {
 		page: Int = 1,
 	) = ktorClient.get {
 		url("$BASE_URL/users/$USER/repos")
+
 		parameter("type", type.name.lowercase())
 		parameter("sort", sort.name.lowercase())
 		parameter("direction", direction.name.lowercase())
@@ -66,12 +66,10 @@ object GitHubAPI {
 		val response = ktorClient.get {
 			url("$BASE_URL/users/$USER/repos")
 
-			parameters {
-				this["type"] = type.name.lowercase()
-				this["sort"] = sort.name.lowercase()
-				this["direction"] = direction.name.lowercase()
-				this["per_page"] = "100"
-			}
+			parameter("type", type.name.lowercase())
+			parameter("sort", sort.name.lowercase())
+			parameter("direction", direction.name.lowercase())
+			parameter("per_page", 100)
 		}
 
 		list.addAll(response.body())

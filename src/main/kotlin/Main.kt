@@ -24,8 +24,9 @@ suspend fun main() {
 	println("Got ${repos.size} repos.")
 
 	repos.sortWith(compareBy({ it.owner.login }, { it.private }, { it.archived }, { it.name }))
+	println("Sorted repos.")
 
-	val result = Result(ResultUser.fromUser(ayfri), repos.map { ResultRepository.fromRepository(it) })
+	val result = Result(ResultUser.fromUser(ayfri), repos.mapConcurrently { ResultRepository.fromRepository(it) })
 	println("Got result, mapped repositories, got commits/readme/watchers count.")
 
 	val resultJson = json.encodeToString(result)
