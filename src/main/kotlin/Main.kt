@@ -1,11 +1,18 @@
 import entities.Result
 import entities.ResultRepository
 import entities.ResultUser
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 import java.io.File
 
 private const val RESULT_JSON = "result.json"
+
+@OptIn(ExperimentalSerializationApi::class)
+private val json = Json {
+	namingStrategy = JsonNamingStrategy.SnakeCase
+}
 
 suspend fun main() {
 	println("Getting data from GitHub...")
@@ -21,7 +28,7 @@ suspend fun main() {
 	val result = Result(ResultUser.fromUser(ayfri), repos.map { ResultRepository.fromRepository(it) })
 	println("Got result, mapped repositories, got commits/readme/watchers count.")
 
-	val resultJson = Json.encodeToString(result)
+	val resultJson = json.encodeToString(result)
 	val file = File(RESULT_JSON)
 	file.writeText(resultJson)
 
