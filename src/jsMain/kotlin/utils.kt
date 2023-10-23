@@ -1,6 +1,5 @@
+
 import externals.parse
-import kotlinx.serialization.InternalSerializationApi
-import org.intellij.lang.annotations.Language
 import org.jetbrains.compose.web.attributes.AttrsScope
 import org.w3c.dom.HTMLParagraphElement
 
@@ -8,9 +7,8 @@ fun localImage(path: String) = "images/$path"
 
 inline fun <T> jso(block: T.() -> Unit = {}) = (js("{}") as T).apply(block)
 
-@OptIn(InternalSerializationApi::class)
 fun AttrsScope<HTMLParagraphElement>.markdownParagraph(
-	@Language("markdown") text: String,
+	text: String,
 	breaks: Boolean = false,
 	vararg classes: String,
 ) {
