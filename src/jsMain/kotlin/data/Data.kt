@@ -9,10 +9,18 @@ import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.promise
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonNamingStrategy
 import org.w3c.dom.get
 import org.w3c.dom.set
 import kotlin.js.Promise.Companion.resolve
+
+@OptIn(ExperimentalSerializationApi::class)
+val json = Json {
+	ignoreUnknownKeys = true
+	namingStrategy = JsonNamingStrategy.SnakeCase
+}
 
 val ktorClient = HttpClient(JsClient())
 
@@ -21,7 +29,7 @@ const val DATA_URL = "https://raw.githubusercontent.com/Ayfri/Ayfri.github.io/ap
 val data by lazy {
 	val resolve = runCatching {
 		localStorage["data"]?.let {
-			return@runCatching Json.decodeFromString<GitHubData>(it)
+			return@runCatching json.decodeFromString<GitHubData>(it)
 		}
 	}
 
@@ -33,7 +41,7 @@ val data by lazy {
 				val response = ktorClient.get(DATA_URL)
 				val result = response.bodyAsText()
 				localStorage["data"] = result
-				return@promise Json.decodeFromString<GitHubData>(result)
+				return@promise json.decodeFromString<GitHubData>(result)
 			}
 		}
 
