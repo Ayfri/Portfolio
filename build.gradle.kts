@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
+import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsBinaryMode
+import org.jetbrains.kotlin.gradle.targets.js.ir.JsIrBinary
 
 plugins {
 	kotlin("multiplatform")
@@ -20,15 +22,28 @@ kotlin {
 		browser {
 			commonWebpackConfig {
 				devServer?.open = false
-				sourceMaps = false
 			}
 		}
 
 		binaries.executable()
+
+		binaries.withType<JsIrBinary>().configureEach {
+			val isRelease = this.mode == KotlinJsBinaryMode.PRODUCTION
+			linkTask.configure {
+				kotlinOptions {
+					if (isRelease) {
+						sourceMap = false
+					} else {
+						sourceMap = true
+						sourceMapEmbedSources = "always"
+					}
+				}
+			}
+		}
 	}
 
 	sourceSets {
-		val jsMain by getting {
+		jsMain {
 			dependencies {
 				implementation(compose.html.core)
 				implementation(compose.runtime)
