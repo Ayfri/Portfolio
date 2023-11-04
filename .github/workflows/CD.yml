@@ -34,14 +34,9 @@ jobs:
       - name: Gradle Build
         run: gradle jsBrowserDistribution
 
-      - name: Save sample
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: build/dist/js/productionExecutable
-
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          command: pages deploy --project-name=ayfri-deploy --dir=build/dist/js/productionExecutable
+          workingDirectory: build/dist/js/productionExecutable
