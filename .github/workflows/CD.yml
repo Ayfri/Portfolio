@@ -39,4 +39,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
-          workingDirectory: build/dist/js/productionExecutable
+          command: pages deploy build/dist/js/productionExecutable --project-name=ayfri-deploy
