@@ -6,7 +6,6 @@ on:
       - master
 
   workflow_dispatch:
-  pull_request:
 
 permissions:
   contents: read
@@ -14,12 +13,13 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
     runs-on: ubuntu-latest
+    timeout-minutes: 60
 
     steps:
       - uses: actions/checkout@v3
@@ -39,6 +39,9 @@ jobs:
         with:
           path: build/dist/js/productionExecutable
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@main
+      - name: Build & Deploy Worker
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CF_API_TOKEN }}
+          accountId: ${{ secrets.CF_ACCOUNT_ID }}
+          command: pages deploy --project-name=ayfri-deploy
