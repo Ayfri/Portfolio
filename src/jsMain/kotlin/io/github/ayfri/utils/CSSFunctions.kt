@@ -1,4 +1,4 @@
-package io.github.ayfri.style.utils
+package io.github.ayfri.utils
 
 import org.jetbrains.compose.web.css.CSSNumericValue
 import org.jetbrains.compose.web.css.CSSSizeValue

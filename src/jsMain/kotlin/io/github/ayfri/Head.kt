@@ -1,7 +1,6 @@
 package io.github.ayfri
 
 import androidx.compose.runtime.Composable
-import io.github.ayfri.style.AppStyle
 import kotlinx.browser.document
 import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.dom.TagElement

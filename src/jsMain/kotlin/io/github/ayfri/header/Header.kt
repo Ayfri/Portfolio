@@ -4,12 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import io.github.ayfri.AppStyle.mobileFirstBreak
+import io.github.ayfri.AppStyle.mobileSecondBreak
 import io.github.ayfri.FontAwesomeType
 import io.github.ayfri.I
 import io.github.ayfri.P
-import io.github.ayfri.style.AppStyle.mobileFirstBreak
-import io.github.ayfri.style.AppStyle.mobileSecondBreak
-import io.github.ayfri.style.utils.*
+import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*

@@ -1,4 +1,4 @@
-package io.github.ayfri.style.utils
+package io.github.ayfri.utils
 
 import io.github.ayfri.pages.HomeStyle.selector
 import org.jetbrains.compose.web.css.*

@@ -5,14 +5,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.core.Page
+import io.github.ayfri.AppStyle
 import io.github.ayfri.FontAwesomeType
 import io.github.ayfri.FooterStyle
 import io.github.ayfri.I
 import io.github.ayfri.header.HeaderStyle
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.style.AppStyle
-import io.github.ayfri.style.utils.*
+import io.github.ayfri.utils.*
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi

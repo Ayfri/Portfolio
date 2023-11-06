@@ -1,7 +1,7 @@
-package io.github.ayfri.style
+package io.github.ayfri
 
 import io.github.ayfri.header.HeaderStyle
-import io.github.ayfri.style.utils.*
+import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 

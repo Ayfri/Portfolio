@@ -2,8 +2,7 @@ package io.github.ayfri
 
 import androidx.compose.runtime.Composable
 import io.github.ayfri.header.GITHUB_LINK
-import io.github.ayfri.style.AppStyle
-import io.github.ayfri.style.utils.*
+import io.github.ayfri.utils.*
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi

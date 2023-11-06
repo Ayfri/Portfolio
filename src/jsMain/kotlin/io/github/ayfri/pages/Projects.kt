@@ -5,13 +5,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.core.Page
+import io.github.ayfri.AppStyle
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
 import io.github.ayfri.data.data
-import io.github.ayfri.style.AppStyle
-import io.github.ayfri.style.utils.minmax
-import io.github.ayfri.style.utils.repeat
+import io.github.ayfri.utils.minmax
+import io.github.ayfri.utils.repeat
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.*

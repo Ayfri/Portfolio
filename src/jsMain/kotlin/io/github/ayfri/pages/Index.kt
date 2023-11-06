@@ -10,11 +10,10 @@ import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.HomeCard
 import io.github.ayfri.data.data
-import io.github.ayfri.style.AppStyle
-import io.github.ayfri.style.utils.TextAlign
-import io.github.ayfri.style.utils.linearGradient
-import io.github.ayfri.style.utils.size
-import io.github.ayfri.style.utils.textAlign
+import io.github.ayfri.utils.TextAlign
+import io.github.ayfri.utils.linearGradient
+import io.github.ayfri.utils.size
+import io.github.ayfri.utils.textAlign
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType.Enum.Screen

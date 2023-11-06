@@ -2,10 +2,10 @@ package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.Page
+import io.github.ayfri.AppStyle
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.style.AppStyle
-import io.github.ayfri.style.utils.*
+import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
