@@ -32,6 +32,7 @@ fun AppEntry(content: @Composable () -> Unit) {
 @InitKobweb
 fun initKobweb(context: InitKobwebContext) {
 	context.router.setErrorHandler {
-		context.router.navigateTo("/", updateHistoryMode = UpdateHistoryMode.REPLACE)
+		if (it != 404) return@setErrorHandler
+		context.router.navigateTo("https://ayfri.com", updateHistoryMode = UpdateHistoryMode.REPLACE)
 	}
 }
