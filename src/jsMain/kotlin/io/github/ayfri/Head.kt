@@ -25,8 +25,8 @@ fun Head() {
 		attr("type", "image/webp")
 	}) {}
 
-	Script(src = "https://kit.fontawesome.com/74fed0e2b5.js", CrossOrigin.ANONYMOUS, ScriptMode.DEFER)
-	Script(src = "https://www.googletagmanager.com/gtag/js?id=G-TS3BHPVFKK", mode = ScriptMode.ASYNC)
+	Script(src = "https://kit.fontawesome.com/74fed0e2b5.js", CrossOrigin.ANONYMOUS, ScriptMode.ASYNC)
+	Script(src = "https://www.googletagmanager.com/gtag/js?id=G-TS3BHPVFKK", mode = ScriptMode.DEFER)
 	Script(
 		content = "function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag('js',new Date),gtag('config','G-TS3BHPVFKK')"
 	)
