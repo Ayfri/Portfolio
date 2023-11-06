@@ -2,7 +2,8 @@ package io.github.ayfri.header
 
 import androidx.compose.runtime.Composable
 import androidx.compose.web.events.SyntheticMouseEvent
-import app.softwork.routingcompose.NavLink
+import com.varabyte.kobweb.navigation.Anchor
+import kotlinx.browser.window
 import org.jetbrains.compose.web.dom.Text
 
 data class Tab(val name: String, val link: String)
@@ -18,8 +19,8 @@ val tabs = listOf(
 
 @Composable
 fun Tab(tab: Tab, onClick: (SyntheticMouseEvent) -> Unit = {}) {
-	NavLink(tab.link, { selected ->
-		if (selected) classes("active")
+	Anchor(tab.link, {
+		if (tab.link == window.location.pathname) classes("active")
 
 		onClick(onClick)
 	}) {
