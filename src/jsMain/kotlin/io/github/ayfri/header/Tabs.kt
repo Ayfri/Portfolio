@@ -10,7 +10,7 @@ data class Tab(val name: String, val link: String)
 
 val tabs = listOf(
 	Tab("Home", "/"),
-	Tab("About Me", "/about"),
+	Tab("About Me", "/about-me"),
 	Tab("My Skills", "/skills"),
 	Tab("My Projects", "/projects"),
 	Tab("Experiences", "/experiences"),

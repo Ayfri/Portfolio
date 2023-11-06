@@ -229,7 +229,7 @@ val sections = listOf(
 
 const val TIMELINE_DEFAULT_OFFSET = 125.0
 
-@Page
+@Page("/about-me")
 @Composable
 fun AboutMe() {
 	PageLayout("About Me") {
