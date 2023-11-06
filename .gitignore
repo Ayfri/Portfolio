@@ -4,3 +4,7 @@ yarn.lock
 
 ### IntelliJ IDEA ###
 .idea
+
+### Kobweb ###
+.kobweb/*
+!.kobweb/conf.yaml
