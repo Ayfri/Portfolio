@@ -1,23 +1,38 @@
+import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsBinaryMode
 import org.jetbrains.kotlin.gradle.targets.js.ir.JsIrBinary
 
 plugins {
-	kotlin("multiplatform")
-	kotlin("plugin.serialization")
-	id("org.jetbrains.compose")
+	alias(libs.plugins.kotlin.multiplatform)
+
+	alias(libs.plugins.jetbrains.compose)
+	alias(libs.plugins.kobweb.application)
+	alias(libs.plugins.kobwebx.markdown)
+	alias(libs.plugins.kotlinx.serialization)
 }
 
-group = "fr.ayfri"
+group = "io.github.ayfri"
 version = "1.0-SNAPSHOT"
 
 repositories {
 	google()
 	mavenCentral()
 	maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+	maven("https://us-central1-maven.pkg.dev/varabyte-repos/public")
+}
+
+kobweb {
+	app {
+		index {
+			description.set("Powered by Kobweb")
+		}
+	}
 }
 
 kotlin {
+	configAsKobwebApplication("portfolio")
+
 	js(IR) {
 		browser {
 			commonWebpackConfig {
@@ -47,14 +62,15 @@ kotlin {
 			dependencies {
 				implementation(compose.html.core)
 				implementation(compose.runtime)
-				implementation("app.softwork:routing-compose:${project.extra["compose.routing"]}")
+				implementation(libs.kobwebx.markdown)
+				implementation(libs.kobweb.core)
+
+				implementation(libs.compose.routing)
 				implementation(npm("marked", project.extra["npm.marked.version"].toString()))
 
-				val ktorVersion = project.extra["ktor.version"] as String
-				implementation("io.ktor:ktor-client-core:$ktorVersion")
-				implementation("io.ktor:ktor-client-js:$ktorVersion")
-
-				implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${project.extra["serialization.json.version"]}")
+				implementation(libs.kord.core)
+				implementation(libs.kord.js)
+				implementation(libs.kord.serialization.json)
 			}
 		}
 	}
