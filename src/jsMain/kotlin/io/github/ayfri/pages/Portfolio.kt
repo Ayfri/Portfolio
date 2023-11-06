@@ -3,6 +3,7 @@ package io.github.ayfri.pages
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
+import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.*
@@ -15,56 +16,58 @@ import org.jetbrains.compose.web.dom.*
 @Page
 @Composable
 fun Portfolio() {
-	Style(PortfolioStyle)
+	PageLayout("Portfolio") {
+		Style(PortfolioStyle)
 
-	Div({
-		classes(PortfolioStyle.portfolio)
-	}) {
-		PortfolioSection(
-			"""
+		Div({
+			classes(PortfolioStyle.portfolio)
+		}) {
+			PortfolioSection(
+				"""
 				I created this portfolio first because my school asked me to create one to validate my first year.
 				But also to have something to show for recruiters other than just a GitHub profile.
 				I can explain what do I do, how, why, when I started etc.
 				This is why I created it using new technologies that I don’t know and designed it using the method my boss learned me during this time.
 			""".trimIndent(),
-			"In the first place, why?",
-			localImage("portfolio-1.png")
-		)
+				"In the first place, why?",
+				localImage("portfolio-1.png")
+			)
 
-		PortfolioSection(
-			"""
+			PortfolioSection(
+				"""
 				The design, conception and general idea of the portfolio was realized on Figma.
 				A tool to create mock-ups, usually for websites.
 				All repeatable parts of the site are a composant that I can reuse and modify once to modify all, with also the ability to create variations of composants.
 				It is also working very well for teams as changes are seen in real time.<br>
 				Overall, it is a great tool to visualise and design pages alone or for a team and is almost completely free, paid parts are optional and useful only for big teams.
 			""".trimIndent(),
-			"Conception",
-			localImage("portfolio-2.png")
-		)
+				"Conception",
+				localImage("portfolio-2.png")
+			)
 
-		PortfolioSection(
-			"""
+			PortfolioSection(
+				"""
 				The website was programmed using the language Kotlin and the framework Compose for Web.
 				I’m practicing with Kotlin since 2020, so I know well how to program using it. I only knew about Compose for Desktop.
 				Both have great documentation, so it is pretty easy to learn them, Compose is pretty recent, so support is maybe a bit tedious to find.
 				The force of Kotlin is to be able to compile to JVM (like Java) but also to JavaScript, Native, and WebAssembler was recently started.
 				And once you join the Slack workspace for Kotlin, you’ll have response to your problems very easily and quickly.
 			""".trimIndent(),
-			"Realisation",
-			localImage("portfolio-3.png")
-		)
+				"Realisation",
+				localImage("portfolio-3.png")
+			)
 
-		PortfolioSection(
-			"""
+			PortfolioSection(
+				"""
 				The website is statically hosted on GitHub by the service GitHub Pages, statically means that the content of the website will be the same for everyone at a given time
 				As it is just showing information, I don’t need to have something dynamic.<br>
 				GitHub Pages is a free service when you have GitHub Pro, which is given freely by my school.
 				Namecheap provides the host domain, it is a paid service, but it is not expensive, and it is very easy to use.
 			""".trimIndent(),
-			"Upload to the World",
-			localImage("portfolio-4.png")
-		)
+				"Upload to the World",
+				localImage("portfolio-4.png")
+			)
+		}
 	}
 }
 

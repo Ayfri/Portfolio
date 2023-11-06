@@ -10,6 +10,7 @@ import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
 import io.github.ayfri.data.data
+import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.minmax
 import io.github.ayfri.utils.repeat
 import kotlinx.browser.document
@@ -24,41 +25,43 @@ import org.w3c.dom.HTMLElement
 @Page
 @Composable
 fun Projects() {
-	Style(ProjectsStyle)
-	Style(DataStyle)
+	PageLayout("Projects") {
+		Style(ProjectsStyle)
+		Style(DataStyle)
 
-	val repos = remember { mutableStateListOf<GitHubRepository>() }
+		val repos = remember { mutableStateListOf<GitHubRepository>() }
 
-	if (repos.isEmpty()) {
-		LaunchedEffect(Unit) {
-			data.then { gitHubData ->
-				repos += gitHubData.repos.sortedWith(
-					compareByDescending<GitHubRepository> { it.stargazersCount }.thenBy(
-						String.CASE_INSENSITIVE_ORDER
-					) { it.fullName })
+		if (repos.isEmpty()) {
+			LaunchedEffect(Unit) {
+				data.then { gitHubData ->
+					repos += gitHubData.repos.sortedWith(
+						compareByDescending<GitHubRepository> { it.stargazersCount }.thenBy(
+							String.CASE_INSENSITIVE_ORDER
+						) { it.fullName })
+				}
 			}
 		}
-	}
 
-	Div({
-		classes(AppStyle.sections, ProjectsStyle.projects)
-	}) {
-		H1({
-			classes(AppStyle.monoFont, AppStyle.title)
+		Div({
+			classes(AppStyle.sections, ProjectsStyle.projects)
 		}) {
-			Text("My Projects:")
-		}
+			H1({
+				classes(AppStyle.monoFont, AppStyle.title)
+			}) {
+				Text("My Projects:")
+			}
 
-		Section({
-			classes(ProjectsStyle.projectsList)
-		}) {
-			repos.forEach {
-				ProjectCard(it) onClick@{
-					val list = document.querySelector(".${ProjectsStyle.projectsList}").unsafeCast<HTMLElement>()
-					val style = window.getComputedStyle(list)
-					val rowsCount = style.getPropertyValue("grid-template-columns").split(" ").size
+			Section({
+				classes(ProjectsStyle.projectsList)
+			}) {
+				repos.forEach {
+					ProjectCard(it) onClick@{
+						val list = document.querySelector(".${ProjectsStyle.projectsList}").unsafeCast<HTMLElement>()
+						val style = window.getComputedStyle(list)
+						val rowsCount = style.getPropertyValue("grid-template-columns").split(" ").size
 
-					list.style.setProperty("--${DataStyle.gridColumnStartVar.name}", rowsCount.toString())
+						list.style.setProperty("--${DataStyle.gridColumnStartVar.name}", rowsCount.toString())
+					}
 				}
 			}
 		}

@@ -8,6 +8,7 @@ import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.data
+import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -353,55 +354,57 @@ val skills = listOf(
 @Page
 @Composable
 fun Skills() {
-	Style(SkillsStyle)
+	PageLayout("Skills") {
+		Style(SkillsStyle)
 
-	val repos = remember { mutableStateListOf<GitHubRepository>() }
+		val repos = remember { mutableStateListOf<GitHubRepository>() }
 
-	if (repos.isEmpty()) {
-		LaunchedEffect(Unit) {
-			data.then { gitHubData ->
-				repos += gitHubData.repos.filter { it.language != null }
+		if (repos.isEmpty()) {
+			LaunchedEffect(Unit) {
+				data.then { gitHubData ->
+					repos += gitHubData.repos.filter { it.language != null }
+				}
 			}
 		}
-	}
 
-	Div({
-		classes(AppStyle.sections, SkillsStyle.skills)
-	}) {
-		H1({
-			classes(AppStyle.monoFont, AppStyle.title)
+		Div({
+			classes(AppStyle.sections, SkillsStyle.skills)
 		}) {
-			Text("My Skills:")
-		}
+			H1({
+				classes(AppStyle.monoFont, AppStyle.title)
+			}) {
+				Text("My Skills:")
+			}
 
-		Section({
-			classes(SkillsStyle.skillsList)
-		}) {
-			skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
-				.thenBy { it.language.name })
-				.forEach { skill ->
-					if (skill.githubProjects.isEmpty()) {
-						skill.githubProjects += repos.filter {
-							it.language!!.equals(skill.language.name, true)
-						} + repos.filter { it.fullName in skill.language.githubProjects }
-					}
+			Section({
+				classes(SkillsStyle.skillsList)
+			}) {
+				skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
+					.thenBy { it.language.name })
+					.forEach { skill ->
+						if (skill.githubProjects.isEmpty()) {
+							skill.githubProjects += repos.filter {
+								it.language!!.equals(skill.language.name, true)
+							} + repos.filter { it.fullName in skill.language.githubProjects }
+						}
 
-					if (skill.schoolProjects.isEmpty()) {
-						skill.schoolProjects += repos.filter {
-							it.language!!.equals(
-								skill.language.name,
-								true
-							) && it.description?.contains("school") == true
-						} + repos.filter { it.fullName in skill.language.schoolProjects }
-					}
+						if (skill.schoolProjects.isEmpty()) {
+							skill.schoolProjects += repos.filter {
+								it.language!!.equals(
+									skill.language.name,
+									true
+								) && it.description?.contains("school") == true
+							} + repos.filter { it.fullName in skill.language.schoolProjects }
+						}
 
-					Div({
-						id(skill.language.name)
-						classes(SkillsStyle.skill)
-					}) {
-						skill.Display()
+						Div({
+							id(skill.language.name)
+							classes(SkillsStyle.skill)
+						}) {
+							skill.Display()
+						}
 					}
-				}
+			}
 		}
 	}
 }

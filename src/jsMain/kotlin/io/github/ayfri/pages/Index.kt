@@ -10,6 +10,7 @@ import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.HomeCard
 import io.github.ayfri.data.data
+import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.TextAlign
 import io.github.ayfri.utils.linearGradient
 import io.github.ayfri.utils.size
@@ -31,105 +32,107 @@ I'm making all sorts of projects and programming by myself for years. This is my
 @Page
 @Composable
 fun Home() {
-	val homeRepositories = remember { mutableStateListOf<GitHubRepository>() }
+	PageLayout("Home") {
+		val homeRepositories = remember { mutableStateListOf<GitHubRepository>() }
 
-	Style(HomeStyle)
-	Style(DataStyle)
+		Style(HomeStyle)
+		Style(DataStyle)
 
-	Section({
-		classes(HomeStyle.top)
-	}) {
-		Div({
-			classes(HomeStyle.topInfo)
+		Section({
+			classes(HomeStyle.top)
 		}) {
-			Img(localImage("avatar.webp"), "avatar") {
-				classes(AppStyle.avatar)
-				fetchPriority(Priority.HIGH)
-			}
-
-			H2 {
-				Text("Pierre Roy ")
-
-				Span {
-					Text("alias")
+			Div({
+				classes(HomeStyle.topInfo)
+			}) {
+				Img(localImage("avatar.webp"), "avatar") {
+					classes(AppStyle.avatar)
+					fetchPriority(Priority.HIGH)
 				}
 
-				Span {
-					Text(" Ayfri")
+				H2 {
+					Text("Pierre Roy ")
+
+					Span {
+						Text("alias")
+					}
+
+					Span {
+						Text(" Ayfri")
+					}
+				}
+
+				H3 {
+					Text("Born ")
+
+					Span({
+						classes(AppStyle.monoFont, AppStyle.numberColor)
+					}) {
+						Text(years.toInt().toString())
+					}
+
+					Text(" years ago")
+				}
+
+				H3 {
+					Text("IT Student")
+				}
+
+				H3 {
+					Text("France")
 				}
 			}
 
-			H3 {
-				Text("Born ")
+			P({
+				markdownParagraph(MAIN_PRESENTATION.trimIndent(), true, AppStyle.monoFont)
+			})
 
-				Span({
-					classes(AppStyle.monoFont, AppStyle.numberColor)
+			if (homeRepositories.isEmpty()) {
+				LaunchedEffect(Unit) {
+					data.then { gitHubData ->
+						homeRepositories += gitHubData.repos.sortedBy {
+							it.stargazersCount
+						}.reversed().take(3)
+					}
+				}
+			}
+
+			Section({
+				classes(HomeStyle.section)
+			}) {
+				Div({
+					classes("list", "repos")
 				}) {
-					Text(years.toInt().toString())
-				}
-
-				Text(" years ago")
-			}
-
-			H3 {
-				Text("IT Student")
-			}
-
-			H3 {
-				Text("France")
-			}
-		}
-
-		P({
-			markdownParagraph(MAIN_PRESENTATION.trimIndent(), true, AppStyle.monoFont)
-		})
-
-		if (homeRepositories.isEmpty()) {
-			LaunchedEffect(Unit) {
-				data.then { gitHubData ->
-					homeRepositories += gitHubData.repos.sortedBy {
-						it.stargazersCount
-					}.reversed().take(3)
-				}
-			}
-		}
-
-		Section({
-			classes(HomeStyle.section)
-		}) {
-			Div({
-				classes("list", "repos")
-			}) {
-				homeRepositories.forEach {
-					Div({
-						classes(DataStyle.homeCard, "repo")
-					}) {
-						HomeCard(it)
+					homeRepositories.forEach {
+						Div({
+							classes(DataStyle.homeCard, "repo")
+						}) {
+							HomeCard(it)
+						}
 					}
 				}
+
+				A("/projects", "See all projects", AppStyle.button)
 			}
 
-			A("/projects", "See all projects", AppStyle.button)
-		}
-
-		Section({
-			classes(HomeStyle.section)
-		}) {
-			Div({
-				classes("list", "skills")
+			Section({
+				classes(HomeStyle.section)
 			}) {
-				skills.sortedWith(
-					compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
-				).take(8).forEach {
-					A("/skills#${it.language.name}", {
-						classes("skill")
-					}) {
-						it.DisplaySimple()
+				Div({
+					classes("list", "skills")
+				}) {
+					skills.sortedWith(
+						compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
+					).take(8).forEach {
+						A("/skills#${it.language.name}", {
+							classes("skill")
+						}) {
+							it.DisplaySimple()
+						}
 					}
 				}
-			}
 
-			A("/skills", "See all skills", AppStyle.button)
+				A("/skills", "See all skills", AppStyle.button)
+			}
 		}
 	}
 }

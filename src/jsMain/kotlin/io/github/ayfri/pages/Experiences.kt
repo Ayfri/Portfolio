@@ -3,6 +3,7 @@ package io.github.ayfri.pages
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
+import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -23,22 +24,24 @@ fun Experience(
 @Page
 @Composable
 fun Experiences() {
-	Style(ExperiencesStyle)
+	PageLayout("Experiences") {
 
-	Div({
-		classes(AppStyle.monoFont, AppStyle.sections, ExperiencesStyle.experiences)
-	}) {
-		H1({
-			classes(AppStyle.title)
-		}) {
-			Text("Experiences:")
-		}
+		Style(ExperiencesStyle)
 
 		Div({
-			classes(ExperiencesStyle.experiencesList)
+			classes(AppStyle.monoFont, AppStyle.sections, ExperiencesStyle.experiences)
 		}) {
-			Experience(
-				"""
+			H1({
+				classes(AppStyle.title)
+			}) {
+				Text("Experiences:")
+			}
+
+			Div({
+				classes(ExperiencesStyle.experiencesList)
+			}) {
+				Experience(
+					"""
 					## [BlueFrog](https://www.bluefrog.fr/) Internship in 2022
 					
 					[BlueFrog](https://www.bluefrog.fr/) is a company that develops websites mainly in [PHP](https://www.php.net) for individuals, it is only composed of one employee. From June 2022 to August 2022, I had an internship in the company.
@@ -52,10 +55,10 @@ fun Experiences() {
 					
 					My days were from 10AM to 6PM with the option to ask for home working if we needed to.
 				""".trimIndent()
-			)
+				)
 
-			Experience(
-				"""
+				Experience(
+					"""
 					## [Ynov](https://www.ynov.com/) Internship in 2023
 					
 					[Ynov](https://www.ynov.com/) is a school teaching computer science, I'm currently as of August 2023 in the second year of the [Computer Science](https://www.ynov.com/formations/ecole-informatique/) course.<br>
@@ -68,7 +71,8 @@ fun Experiences() {
 					
 					This was a really great experience, I've learned a lot about AI and how to use it.
 				""".trimIndent()
-			)
+				)
+			}
 		}
 	}
 }

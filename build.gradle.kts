@@ -65,7 +65,6 @@ kotlin {
 				implementation(libs.kobwebx.markdown)
 				implementation(libs.kobweb.core)
 
-				implementation(libs.compose.routing)
 				implementation(npm("marked", project.extra["npm.marked.version"].toString()))
 
 				implementation(libs.kord.core)

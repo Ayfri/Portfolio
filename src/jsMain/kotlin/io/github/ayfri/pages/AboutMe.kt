@@ -10,6 +10,7 @@ import io.github.ayfri.FontAwesomeType
 import io.github.ayfri.FooterStyle
 import io.github.ayfri.I
 import io.github.ayfri.header.HeaderStyle
+import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.*
@@ -231,72 +232,74 @@ const val TIMELINE_DEFAULT_OFFSET = 125.0
 @Page
 @Composable
 fun AboutMe() {
-	Style(AboutMeStyle)
+	PageLayout("About Me") {
+		Style(AboutMeStyle)
 
-	var timelineOffset by mutableStateOf(TIMELINE_DEFAULT_OFFSET)
-	var roundSelected by mutableStateOf(0)
+		var timelineOffset by mutableStateOf(TIMELINE_DEFAULT_OFFSET)
+		var roundSelected by mutableStateOf(0)
 
-	Aside({
-		classes(AboutMeStyle.timeline)
-		style {
-			top(timelineOffset.px)
-		}
-
-		window.addEventListener("scroll", {
-			val footerOffset =
-				document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as Double? ?: return@addEventListener
-
-			if (window.scrollY + window.innerHeight < footerOffset) {
-				timelineOffset = window.scrollY + TIMELINE_DEFAULT_OFFSET * .8
-			}
-		})
-	}) {
-		sections.forEachIndexed { index, section ->
-			if (index > 0) {
-				Div({
-					classes("separator")
-				})
+		Aside({
+			classes(AboutMeStyle.timeline)
+			style {
+				top(timelineOffset.px)
 			}
 
-			Div({
-				attr("data-date", section.date.toString())
-				classes("round")
-				if (index == roundSelected) classes("selected")
+			window.addEventListener("scroll", {
+				val footerOffset =
+					document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as Double? ?: return@addEventListener
 
-				onClick {
-					window.location.hash = "#${section.id}"
+				if (window.scrollY + window.innerHeight < footerOffset) {
+					timelineOffset = window.scrollY + TIMELINE_DEFAULT_OFFSET * .8
 				}
-			}) {
-				A(href = "#${section.id}")
+			})
+		}) {
+			sections.forEachIndexed { index, section ->
+				if (index > 0) {
+					Div({
+						classes("separator")
+					})
+				}
+
+				Div({
+					attr("data-date", section.date.toString())
+					classes("round")
+					if (index == roundSelected) classes("selected")
+
+					onClick {
+						window.location.hash = "#${section.id}"
+					}
+				}) {
+					A(href = "#${section.id}")
+				}
 			}
 		}
-	}
 
-	Div({
-		classes(AboutMeStyle.content)
-	}) {
-		sections.forEachIndexed { index, it -> it.Display(index == roundSelected) }
-	}
+		Div({
+			classes(AboutMeStyle.content)
+		}) {
+			sections.forEachIndexed { index, it -> it.Display(index == roundSelected) }
+		}
 
-	val callback = callback@{
-		sections.forEachIndexed { index, section ->
-			if (index == roundSelected) return@forEachIndexed
-			val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
-			val elementOffset = element.asDynamic().offsetTop as Double - TIMELINE_DEFAULT_OFFSET * 2
-			val elementHeight = element.asDynamic().offsetHeight as Double
+		val callback = callback@{
+			sections.forEachIndexed { index, section ->
+				if (index == roundSelected) return@forEachIndexed
+				val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
+				val elementOffset = element.asDynamic().offsetTop as Double - TIMELINE_DEFAULT_OFFSET * 2
+				val elementHeight = element.asDynamic().offsetHeight as Double
 
-			val elementRange = elementOffset..(elementOffset + elementHeight)
+				val elementRange = elementOffset..(elementOffset + elementHeight)
 
-			if (window.scrollY in elementRange) {
-				roundSelected = index
-				return@callback
+				if (window.scrollY in elementRange) {
+					roundSelected = index
+					return@callback
+				}
 			}
 		}
-	}
 
-	window.addEventListener("resize", { callback() })
-	window.addEventListener("scroll", { callback() })
-	document.addEventListener("DOMContentLoaded", { callback() })
+		window.addEventListener("resize", { callback() })
+		window.addEventListener("scroll", { callback() })
+		document.addEventListener("DOMContentLoaded", { callback() })
+	}
 }
 
 @Composable
