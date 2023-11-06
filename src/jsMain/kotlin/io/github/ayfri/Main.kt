@@ -5,6 +5,9 @@ package io.github.ayfri
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.App
 import com.varabyte.kobweb.core.KobwebApp
+import com.varabyte.kobweb.core.init.InitKobweb
+import com.varabyte.kobweb.core.init.InitKobwebContext
+import com.varabyte.kobweb.navigation.UpdateHistoryMode
 import io.github.ayfri.externals.TextRenderer
 import io.github.ayfri.externals.use
 
@@ -23,5 +26,12 @@ fun AppEntry(content: @Composable () -> Unit) {
 
 	KobwebApp {
 		content()
+	}
+}
+
+@InitKobweb
+fun initKobweb(context: InitKobwebContext) {
+	context.router.setErrorHandler {
+		context.router.navigateTo("/", updateHistoryMode = UpdateHistoryMode.REPLACE)
 	}
 }
