@@ -7,6 +7,7 @@ import com.varabyte.kobweb.core.App
 import com.varabyte.kobweb.core.KobwebApp
 import com.varabyte.kobweb.core.init.InitKobweb
 import com.varabyte.kobweb.core.init.InitKobwebContext
+import com.varabyte.kobweb.navigation.OpenLinkStrategy
 import com.varabyte.kobweb.navigation.UpdateHistoryMode
 import io.github.ayfri.externals.TextRenderer
 import io.github.ayfri.externals.use
@@ -33,6 +34,11 @@ fun AppEntry(content: @Composable () -> Unit) {
 fun initKobweb(context: InitKobwebContext) {
 	context.router.setErrorHandler {
 		if (it != 404) return@setErrorHandler
-		context.router.navigateTo("https://ayfri.com", updateHistoryMode = UpdateHistoryMode.REPLACE)
+		context.router.navigateTo(
+			"https://ayfri.com",
+			openExternalLinksStrategy = OpenLinkStrategy.IN_PLACE,
+			openInternalLinksStrategy = OpenLinkStrategy.IN_PLACE,
+			updateHistoryMode = UpdateHistoryMode.REPLACE
+		)
 	}
 }
