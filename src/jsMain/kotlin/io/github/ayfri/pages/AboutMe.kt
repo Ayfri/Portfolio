@@ -5,14 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.core.Page
-import io.github.ayfri.AppStyle
-import io.github.ayfri.FontAwesomeType
-import io.github.ayfri.FooterStyle
-import io.github.ayfri.I
+import io.github.ayfri.*
 import io.github.ayfri.header.HeaderStyle
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.localImage
-import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.*
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -21,6 +16,7 @@ import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
+import org.jetbrains.compose.web.dom.A
 import org.w3c.dom.HTMLElement
 
 data class AboutMeSection(
@@ -223,7 +219,7 @@ val sections = listOf(
 			We are working on it since July 2023, and we are planning to finish as soon as we can.
 		""".trimIndent(), 2023, id = "scriptgraf"
 	) {
-		TextIcon("ScriptGraf", localImage("chatgpt.png"))
+		TextIcon("ScriptGraf", localImage("ChatGPT.png"))
 	}
 )
 
