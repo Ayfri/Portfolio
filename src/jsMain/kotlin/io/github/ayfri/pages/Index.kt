@@ -49,16 +49,18 @@ fun Home() {
 					fetchPriority(Priority.HIGH)
 				}
 
+				H1 {
+					Text("Pierre Roy")
+					Span("alias")
+					Span(" Ayfri")
+				}
+
 				H2 {
-					Text("Pierre Roy ")
+					Text("IT Student")
+				}
 
-					Span {
-						Text("alias")
-					}
-
-					Span {
-						Text(" Ayfri")
-					}
+				H2 {
+					Text("France")
 				}
 
 				H3 {
@@ -71,14 +73,6 @@ fun Home() {
 					}
 
 					Text(" years ago")
-				}
-
-				H3 {
-					Text("IT Student")
-				}
-
-				H3 {
-					Text("France")
 				}
 			}
 
@@ -188,22 +182,31 @@ object HomeStyle : StyleSheet() {
 			marginBottom(.2.cssRem)
 		}
 
-		"h2" style {
-			fontSize(1.7.cssRem)
+		"h1" style {
+			fontSize(2.cssRem)
+			display(DisplayStyle.Flex)
+			alignItems(AlignItems.Baseline)
+			gap(.5.cssRem)
 
 			universal style {
-				fontSize(1.2.cssRem)
+				fontSize(1.5.cssRem)
 				fontWeight(400)
 			}
 
 			lastChild style {
+				fontSize(1.8.cssRem)
 				fontWeight(700)
-				fontSize(1.4.cssRem)
 			}
+		}
+
+		"h2" style {
+			fontSize(1.6.cssRem)
+			fontWeight(400)
 		}
 
 		"h3" {
 			fontWeight(400)
+			marginBottom(1.cssRem)
 		}
 	}
 

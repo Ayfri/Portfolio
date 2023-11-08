@@ -33,6 +33,15 @@ fun P(text: String, vararg classes: String = emptyArray()) {
 }
 
 @Composable
+fun Span(text: String, vararg classes: String = emptyArray()) {
+	org.jetbrains.compose.web.dom.Span({
+		classes(*classes)
+	}) {
+		Text(text)
+	}
+}
+
+@Composable
 fun A(href: String, content: String = "", vararg classes: String = arrayOf("link")) {
 	A(href, {
 		classes(*classes)
