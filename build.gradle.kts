@@ -101,12 +101,10 @@ kotlin {
 				implementation(compose.runtime)
 				implementation(libs.kobwebx.markdown)
 				implementation(libs.kobweb.core)
+				implementation(libs.kotlinx.wrappers.browser)
+				implementation(libs.kotlinx.serialization.json)
 
 				implementation(npm("marked", project.extra["npm.marked.version"].toString()))
-
-				implementation(libs.kord.core)
-				implementation(libs.kord.js)
-				implementation(libs.kord.serialization.json)
 			}
 		}
 	}

@@ -2,8 +2,8 @@
 compose-routing = "0.2.12"
 jetbrains-compose = "1.5.10"
 kobweb = "0.15.0"
-kord = "2.3.5"
 kotlin = "1.9.20"
+kotlinx-wrappers-js = "1.0.0-pre.639"
 kotlinx-serialization-json = "1.6.0"
 
 [libraries]
@@ -11,10 +11,9 @@ compose-routing = { module = "app.softwork:routing-compose", version.ref = "comp
 kobweb-api = { module = "com.varabyte.kobweb:kobweb-api", version.ref = "kobweb" }
 kobweb-core = { module = "com.varabyte.kobweb:kobweb-core ", version.ref = "kobweb" }
 kobwebx-markdown = { module = "com.varabyte.kobwebx:kobwebx-markdown", version.ref = "kobweb" }
-kord-core = { module = "io.ktor:ktor-client-core", version.ref = "kord" }
-kord-js = { module = "io.ktor:ktor-client-js", version.ref = "kord" }
-kord-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
-silk-icons-fa = { module = "com.varabyte.kobwebx:silk-icons-fa", version.ref = "kobweb" }
+kotlinx-wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser", version.ref = "kotlinx-wrappers-js" }
+kotlinx-wrappers-js = { module = "org.jetbrains.kotlin-wrappers:kotlin-js", version.ref = "kotlinx-wrappers-js" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
 [plugins]
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose" }

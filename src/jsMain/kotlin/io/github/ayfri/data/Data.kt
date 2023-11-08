@@ -1,9 +1,6 @@
 package io.github.ayfri.data
 
-import io.ktor.client.*
-import io.ktor.client.engine.js.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
+import js.promise.await
 import kotlinx.browser.localStorage
 import kotlinx.browser.window
 import kotlinx.coroutines.CoroutineScope
@@ -14,6 +11,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import org.w3c.dom.get
 import org.w3c.dom.set
+import web.http.fetchAsync
 import kotlin.js.Promise.Companion.resolve
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -22,13 +20,12 @@ val json = Json {
 	namingStrategy = JsonNamingStrategy.SnakeCase
 }
 
-val ktorClient = HttpClient(JsClient())
-
 const val DATA_URL = "https://raw.githubusercontent.com/Ayfri/Ayfri.github.io/api/result.json"
+const val LOCAL_DATA_KEY = "data"
 
 val data by lazy {
 	val resolve = runCatching {
-		localStorage["io.github.ayfri/dataithub.ayfri/data"]?.let {
+		localStorage[LOCAL_DATA_KEY]?.let {
 			return@runCatching json.decodeFromString<GitHubData>(it)
 		}
 	}
@@ -38,10 +35,11 @@ val data by lazy {
 	return@lazy when {
 		resolve.isFailure || resolved == null -> {
 			CoroutineScope(window.asCoroutineDispatcher()).promise {
-				val response = ktorClient.get(DATA_URL)
-				val result = response.bodyAsText()
-				localStorage["io.github.ayfri/dataithub.ayfri/data"] = result
-				return@promise json.decodeFromString<GitHubData>(result)
+				val response = fetchAsync(DATA_URL).await()
+				val jsonData = response.text().await()
+				val result = json.decodeFromString<GitHubData>(jsonData)
+				localStorage[LOCAL_DATA_KEY] = jsonData
+				return@promise result
 			}
 		}
 
