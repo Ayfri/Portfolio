@@ -35,7 +35,7 @@ fun Portfolio() {
 
 			PortfolioSection(
 				"""
-				The design, conception and general idea of the portfolio was realized on Figma.
+				The design, conception, and general idea of the portfolio was realized on Figma.
 				A tool to create mock-ups, usually for websites.
 				All repeatable parts of the site are a composant that I can reuse and modify once to modify all, with also the ability to create variations of composants.
 				It is also working very well for teams as changes are seen in real time.<br>
@@ -47,9 +47,9 @@ fun Portfolio() {
 
 			PortfolioSection(
 				"""
-				The website was programmed using the language Kotlin and the framework Compose for Web.
-				I’m practicing with Kotlin since 2020, so I know well how to program using it. I only knew about Compose for Desktop.
-				Both have great documentation, so it is pretty easy to learn them, Compose is pretty recent, so support is maybe a bit tedious to find.
+				The website was programmed using the language Kotlin, and the framework Kobweb built on top of Compose HTML.
+				I’m practicing with Kotlin since 2020, meaning I know well how to program in Kotlin.
+				It has pretty good documentation, and it is pretty straightforward to learn, Compose is pretty recent, so support is maybe a bit tedious to find.
 				The force of Kotlin is to be able to compile to JVM (like Java) but also to JavaScript, Native, and WebAssembler was recently started.
 				And once you join the Slack workspace for Kotlin, you’ll have response to your problems very easily and quickly.
 			""".trimIndent(),
@@ -59,10 +59,13 @@ fun Portfolio() {
 
 			PortfolioSection(
 				"""
-				The website is statically hosted on GitHub by the service GitHub Pages, statically means that the content of the website will be the same for everyone at a given time
-				As it is just showing information, I don’t need to have something dynamic.<br>
-				GitHub Pages is a free service when you have GitHub Pro, which is given freely by my school.
-				Namecheap provides the host domain, it is a paid service, but it is not expensive, and it is very easy to use.
+				This website is statically hosted on Cloudflare using the Cloudflare Pages service.
+				When we say `statically`, it means the website isn't dynamic; it's simply a collection of files.
+				Since it primarily displays information, there's no need for dynamic functionality.
+
+				Cloudflare Pages is a free service that allows you to host your website on Cloudflare.
+				It's user-friendly and doesn't require any payment.
+				Namecheap provides the domain hosting, which is a paid service, but it's cost-effective and straightforward to use.
 			""".trimIndent(),
 				"Upload to the World",
 				localImage("portfolio-4.png")

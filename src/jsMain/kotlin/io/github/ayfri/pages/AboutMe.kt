@@ -52,14 +52,13 @@ data class AboutMeSection(
 	}
 }
 
-val sections = listOf(
-	AboutMeSection(
-		MAIN_PRESENTATION.trimIndent().trimIndent(), 2002, true, id = "me"
-	) {
-		Img(localImage("avatar.webp"), "avatar") {
-			classes(AppStyle.avatar)
-		}
-	},
+val sections = listOf(AboutMeSection(
+	MAIN_PRESENTATION.trimIndent().trimIndent(), 2002, true, id = "me"
+) {
+	Img(localImage("avatar.webp"), "avatar") {
+		classes(AppStyle.avatar)
+	}
+},
 
 	AboutMeSection(
 		"""
@@ -92,12 +91,12 @@ val sections = listOf(
 	AboutMeSection(
 		"""
 			After creating my own [Discord server](https://discord.gg/BySjRNQ9Je) for my community from [YouTube](https://www.youtube.com/c/Ayfri), I wanted to create a Discord Bot. So I created a bot in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) using [Node.JS](https://nodejs.org) in early 2018 by following tutorials, I created CommunAyBot.
-			Back in the days, it was not that common to create a bot for your own community, and Discord was not so reputed. Because of that, there were no great tutorials, and I got a lot of help from a Discord Server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons and some others helped me a lot to understand and create my bot.
+			Back in the days, it was not that common to create a bot for your own community, and Discord was not so reputed. Because of that, there were no great tutorials. I got a lot of help from a Discord Server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons, and some others helped me a lot to understand and create my bot.
 
-			About a year later, I was pretty good at creating a bot, but I realized that my project was kinda... ugly. So I recreated it, [AyBot 2](https://github.com/Ayfri/AyBot-2) was born in early 2019. It was pretty clean, and I wanted people to use my bot, so I changed a lot of the code, so it was working on multiple servers with configurations, etc.
+			About a year later, I was pretty good at creating a bot, but I realized that my project was kind of... ugly. So I recreated it, [AyBot 2](https://github.com/Ayfri/AyBot-2) was born in early 2019. It was pretty clean, and I wanted people to use my bot, so I changed a lot of the code, so it was working on multiple servers with configurations, etc.
 			
 			At that time, I created some other little utilities bots or test bots.
-			AyBot 2 was taken down in the end of 2019 because of [Galileo](#galileo).
+			AyBot 2 was taken down at the end of 2019 because of [Galileo](#galileo).
 		""".trimIndent(), 2018, id = "second-intro"
 	) {
 		TextIcon("Second Introduction to Programming", FontAwesomeType.BRAND, "discord", Color("#5865f2"))
@@ -133,8 +132,8 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-			During this time, I was administrator (and I’m still) on a [big Discord server](https://discord.gg/sDT7W8mNmq) at the time about sharing your server or website. And I was friend with the other administrator, Antow, who also created his own bot, I was helping him sometimes.
-			After some discussions, we agreed to merge our bots together, as we were both passionate about astronomy, we named it [Galileo](https://github.com/Galileo-Bot/galileo).
+			During this time, I was administrator (and I’m still) on a [big Discord server](https://discord.gg/sDT7W8mNmq) at the time about sharing your server or website. And I was the friend of the other administrator, Antow, who also created his own bot, I was helping him sometimes.
+			After some discussions, we agreed to merge our bots, as we were both passionate about astronomy, we named it [Galileo](https://github.com/Galileo-Bot/galileo).
 
 			But these times were complicated for me personally and due to a lack of time and motivations because I was making almost only discord bots since about 2 years. I stopped developing it and moved away to other interesting projects.
 		""".trimIndent(), 2019, id = "galileo"
@@ -146,16 +145,14 @@ val sections = listOf(
 		"""
 			After getting graduated from high-school, I got accepted into a private school named [Ynov](https://ynov.com).
 			We learned so far [GoLang](https://go.dev), [Python](https://www.python.org), pretty complex [C++](https://cplusplus.com) and OOP into C++, some network basics, how to use [REST API](https://wikipedia.org/wiki/Representational_state_transfer)s, team JS/HTML/CSS, databases with [MySQL](https://www.mysql.com), and other useful technologies.
-			I greatly appreciated GoLang’s GoHTML Templates, C++ and my teacher, who I discussed a lot with, and understanding a lot more how computer network works.
+			I greatly appreciated GoLang’s GoHTML Templates, C++, and my teacher, who I discussed a lot with, and understanding a lot more how computer network works.
 	
 			We created a bunch of projects, starting with little training projects in GoLang/<wbr>Python/<wbr>C++/<wbr>JavaScript, done some websites using only front, but also using an API, and using MySQL creating an entire forum.
 	
 			It is for me a great experience being in this school, and I’m excited for the next 3 years !
 		""".trimIndent(), 2021, id = "ynov"
 	) {
-		TextIcon(
-			"Post-Bac and Ynov", "https://www.ynov.com/wp-content/themes/ynov/assets/images/favicons/apple-touch-icon.png"
-		)
+		TextIcon("Post-Bac and Ynov", localImage("ynov-icon.png"))
 	},
 
 	AboutMeSection(
@@ -194,7 +191,7 @@ val sections = listOf(
 			
 			We collaborated with another team to use the same universe for the story, and we created a Tower Defense game in 2D using [Godot](https://godotengine.org) 4.0.
 			This was my first experience with Godot, this was really exciting and interesting, Godot is really a good game engine (I prefer it over Unity).
-			We created our own sprites and animations, sounds and music were used from diverse sources from the internet.
+			We created our own sprites and animations, the sounds and musics were used from diverse sources from the internet.
 			The game was finished in its first Alpha in around the end of May 2023, and it is planned to create Beta the next year.
 			The beta will be recreated from scratch to be more organized and have a better codebase.
 		""".trimIndent(), 2023, id = "cat-aclysm"
@@ -204,7 +201,7 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-			AI has been a very important subject these last years, a lot more since the release of [ChatGPT](https://chat.openai.com/).
+			AI has been a crucial subject these last years, a lot more since the release of [ChatGPT](https://chat.openai.com/).
 			I have always been interested in AI, and I wanted to create my own AI or at least a project using AI.
 			During June, I've made a little project using [Kotlin](https://kotlinlang.org), [Compose for Desktop](https://www.jetbrains.com/fr-fr/lp/compose-multiplatform/) and the [GPT-4 API](https://platform.openai.com/docs/api-reference), name [Artificial-Infiltration](https://github.com/Ayfri/Artificial-Infiltration).
 			The concept is a chat room where you can talk with five other people, but an AI is also in the room, and you have to find who is the AI.
@@ -220,8 +217,7 @@ val sections = listOf(
 		""".trimIndent(), 2023, id = "scriptgraf"
 	) {
 		TextIcon("ScriptGraf", localImage("ChatGPT.png"))
-	}
-)
+	})
 
 const val TIMELINE_DEFAULT_OFFSET = 125.0
 
