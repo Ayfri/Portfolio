@@ -37,7 +37,12 @@ kobweb {
 			val url = "https://ayfri.com"
 			val author = "Pierre Roy"
 			val twitterHandle = "@Ayfri_"
-			val description = "Portfolio of Pierre Roy, student at Ynov and developer."
+
+			val description = """
+				Hi, I'm Pierre Roy, an IT student at Ynov Aix school, and I'm passionate about computer science and especially programming.
+				I'm making all sorts of projects and programming by myself for years. This is my portfolio, welcome!
+			""".trimIndent()
+
 			val image = "$url/images/avatar.webp"
 			val title = "$author - Portfolio"
 
