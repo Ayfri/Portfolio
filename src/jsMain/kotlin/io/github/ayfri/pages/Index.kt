@@ -1,7 +1,6 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.core.Page
@@ -81,12 +80,10 @@ fun Home() {
 			})
 
 			if (homeRepositories.isEmpty()) {
-				LaunchedEffect(Unit) {
-					data.then { gitHubData ->
-						homeRepositories += gitHubData.repos.sortedBy {
-							it.stargazersCount
-						}.reversed().take(3)
-					}
+				data.then { gitHubData ->
+					homeRepositories += gitHubData.repos.sortedBy {
+						it.stargazersCount
+					}.reversed().take(3)
 				}
 			}
 

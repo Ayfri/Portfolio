@@ -1,7 +1,6 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.core.Page
@@ -360,10 +359,8 @@ fun Skills() {
 		val repos = remember { mutableStateListOf<GitHubRepository>() }
 
 		if (repos.isEmpty()) {
-			LaunchedEffect(Unit) {
-				data.then { gitHubData ->
-					repos += gitHubData.repos.filter { it.language != null }
-				}
+			data.then { gitHubData ->
+				repos += gitHubData.repos.filter { it.language != null }
 			}
 		}
 
