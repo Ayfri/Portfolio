@@ -137,6 +137,7 @@ fun Footer() {
 					Li {
 						A(it.url, {
 							attr("target", "_blank")
+							title(it.iconName.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() })
 						}) {
 							I(FontAwesomeType.BRAND, it.iconName)
 						}

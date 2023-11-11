@@ -43,6 +43,7 @@ fun Header() {
 		A(GITHUB_LINK, {
 			target(ATarget.Blank)
 			classes(HeaderStyle.navbarPart, HeaderStyle.navbarGithub)
+			title("GitHub")
 		}) {
 			P("Ayfri")
 
