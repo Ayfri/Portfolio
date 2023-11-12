@@ -2,10 +2,8 @@ package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.Page
-import io.github.ayfri.AppStyle
+import io.github.ayfri.*
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.localImage
-import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
@@ -29,8 +27,10 @@ fun Portfolio() {
 				I can explain what do I do, how, why, when I started etc.
 				This is why I created it using new technologies that I don’t know and designed it using the method my boss learned me during this time.
 			""".trimIndent(),
-				"In the first place, why?",
-				localImage("portfolio-1.png")
+				title = "In the first place, why?",
+				image = localImage("portfolio-1-small.png"),
+				width = 367,
+				height = 226
 			)
 
 			PortfolioSection(
@@ -41,8 +41,10 @@ fun Portfolio() {
 				It is also working very well for teams as changes are seen in real time.<br>
 				Overall, it is a great tool to visualise and design pages alone or for a team and is almost completely free, paid parts are optional and useful only for big teams.
 			""".trimIndent(),
-				"Conception",
-				localImage("portfolio-2.png")
+				title = "Conception",
+				image = localImage("portfolio-2-small.png"),
+				width = 480,
+				height = 270
 			)
 
 			PortfolioSection(
@@ -53,8 +55,10 @@ fun Portfolio() {
 				The force of Kotlin is to be able to compile to JVM (like Java) but also to JavaScript, Native, and WebAssembler was recently started.
 				And once you join the Slack workspace for Kotlin, you’ll have response to your problems very easily and quickly.
 			""".trimIndent(),
-				"Realisation",
-				localImage("portfolio-3.png")
+				title = "Realisation",
+				image = localImage("portfolio-3-small.png"),
+				width = 480,
+				height = 258
 			)
 
 			PortfolioSection(
@@ -67,15 +71,17 @@ fun Portfolio() {
 				It's user-friendly and doesn't require any payment.
 				Namecheap provides the domain hosting, which is a paid service, but it's cost-effective and straightforward to use.
 			""".trimIndent(),
-				"Upload to the World",
-				localImage("portfolio-4.png")
+				title = "Upload to the World",
+				image = localImage("portfolio-4-small.png"),
+				width = 480,
+				height = 270
 			)
 		}
 	}
 }
 
 @Composable
-fun PortfolioSection(text: String, title: String, image: String) {
+fun PortfolioSection(text: String, title: String, image: String, width: Int, height: Int) {
 	Section({
 		classes(PortfolioStyle.section, AppStyle.monoFont)
 	}) {
@@ -90,7 +96,10 @@ fun PortfolioSection(text: String, title: String, image: String) {
 		}
 
 		Div {
-			Img(image, alt = "")
+			Img(image, alt = "Portfolio creation") {
+				height(height)
+				width(width)
+			}
 		}
 	}
 }
