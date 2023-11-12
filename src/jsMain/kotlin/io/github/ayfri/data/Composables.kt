@@ -24,7 +24,7 @@ import kotlin.js.Date
 fun HomeCard(repository: GitHubRepository) {
 	H3 {
 		Img(skills.first { it.language.name == repository.language }.language.iconUrl) {
-			alt(repository.language!!)
+			alt("${repository.language} language")
 		}
 		A("/projects#${repository.name}", repository.name)
 	}

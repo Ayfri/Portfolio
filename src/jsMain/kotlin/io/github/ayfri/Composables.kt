@@ -1,11 +1,10 @@
 package io.github.ayfri
 
 import androidx.compose.runtime.Composable
+import org.jetbrains.compose.web.attributes.AttrsScope
 import org.jetbrains.compose.web.css.StyleScope
-import org.jetbrains.compose.web.dom.A
-import org.jetbrains.compose.web.dom.I
-import org.jetbrains.compose.web.dom.P
-import org.jetbrains.compose.web.dom.Text
+import org.jetbrains.compose.web.dom.*
+import org.w3c.dom.HTMLImageElement
 
 enum class FontAwesomeType(val value: String) {
 	REGULAR("far"),
@@ -34,7 +33,7 @@ fun P(text: String, vararg classes: String = emptyArray()) {
 
 @Composable
 fun Span(text: String, vararg classes: String = emptyArray()) {
-	org.jetbrains.compose.web.dom.Span({
+	Span({
 		classes(*classes)
 	}) {
 		Text(text)
@@ -48,4 +47,15 @@ fun A(href: String, content: String = "", vararg classes: String = arrayOf("link
 	}) {
 		Text(content)
 	}
+}
+
+@Composable
+fun Img(attrs: AttrsScope<HTMLImageElement>.() -> Unit = {}) {
+	TagElement<HTMLImageElement>(
+		elementBuilder = ElementBuilder.createBuilder("img"),
+		applyAttrs = {
+			apply(attrs)
+		},
+		content = null
+	)
 }

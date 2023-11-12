@@ -17,14 +17,6 @@ fun Head() {
 	)
 	Link(href = "https://dev-cats.github.io/code-snippets/JetBrainsMono.css", rel = "stylesheet")
 
-	TagElement<HTMLScriptElement>("link", {
-		attr("rel", "preload")
-		attr("fetchpriority", "high")
-		attr("as", "image")
-		attr("href", localImage("avatar.webp"))
-		attr("type", "image/webp")
-	}) {}
-
 	Script(src = "https://kit.fontawesome.com/74fed0e2b5.js", CrossOrigin.ANONYMOUS, ScriptMode.ASYNC)
 	Script(src = "https://www.googletagmanager.com/gtag/js?id=G-TS3BHPVFKK", mode = ScriptMode.DEFER)
 	Script(

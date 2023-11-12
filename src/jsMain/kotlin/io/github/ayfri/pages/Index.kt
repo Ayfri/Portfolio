@@ -43,9 +43,10 @@ fun Home() {
 			Div({
 				classes(HomeStyle.topInfo)
 			}) {
-				Img(localImage("avatar.webp"), "avatar") {
+				Img(localImage("avatar@300x300.webp"), "avatar") {
 					classes(AppStyle.avatar)
-					fetchPriority(Priority.HIGH)
+					height(300)
+					width(300)
 				}
 
 				H1 {

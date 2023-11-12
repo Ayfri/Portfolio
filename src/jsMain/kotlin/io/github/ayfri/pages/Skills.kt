@@ -40,10 +40,9 @@ data class Skill(
 				Div({
 					classes("left")
 				}) {
-					Img(language.iconUrl, alt = language.name)
+					Img(language.iconUrl, alt = "${language.name} icon")
 					P(language.name, AppStyle.monoFont)
 				}
-
 
 				P({
 					val learnedAndNowUserFor =
@@ -98,7 +97,7 @@ data class Skill(
 
 	@Composable
 	fun DisplaySimple() {
-		Img(language.iconUrl, alt = language.name)
+		Img(language.iconUrl, alt = "${language.name} language")
 		P(language.name, AppStyle.monoFont)
 	}
 }
