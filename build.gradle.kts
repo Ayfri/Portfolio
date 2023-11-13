@@ -1,3 +1,4 @@
+
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import kotlinx.html.HEAD
 import kotlinx.html.meta
@@ -32,6 +33,10 @@ fun HEAD.meta(property: String, content: String) {
 }
 
 kobweb {
+	export {
+		includeSourceMap = false
+	}
+
 	app {
 		index {
 			val url = "https://ayfri.com"
