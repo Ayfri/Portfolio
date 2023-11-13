@@ -41,29 +41,6 @@ kobweb {
 		routeOverride = { route ->
 			"/articles/${route.splitCamelCase().joinToString("-") { word -> word.lowercase() }}"
 		}
-
-		val files = files(markdownPath).files
-		// write into a kotlin file the list of files
-		val buildDirectory = layout.buildDirectory
-		logger.warn(genDir.get())
-		logger.warn(baseGenDir.get())
-		val groupName = group.toString().replace('.', '/')
-		val file =
-			File("${buildDirectory.asFile.get().absolutePath}/${genDir.get()}/src/jsMain/kotlin/${groupName}/markdown/MarkdownFiles.kt").absoluteFile
-		logger.warn("Writing markdown files list into ${file.absolutePath}")
-		file.parentFile.mkdirs()
-		file.createNewFile()
-		file.writeText(
-			"""
-			package io.github.ayfri.markdown
-			
-			public object MarkdownFiles {
-				val files = listOf(
-					${files.joinToString(",\n") { "\"${it.path}\"" }}
-				)
-			}
-		""".trimIndent()
-		)
 	}
 
 	app {
