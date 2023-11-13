@@ -1,7 +1,9 @@
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
+import com.varabyte.kobwebx.gradle.markdown.children
 import kotlinx.html.HEAD
 import kotlinx.html.meta
+import org.commonmark.node.Text
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsBinaryMode
 import org.jetbrains.kotlin.gradle.targets.js.ir.JsIrBinary
@@ -40,6 +42,22 @@ kobweb {
 	markdown {
 		routeOverride = { route ->
 			"/articles/${route.splitCamelCase().joinToString("-") { word -> word.lowercase() }}"
+		}
+
+		handlers {
+			img.set { image ->
+				val altText = image.children()
+					.filterIsInstance<Text>()
+					.map { it.literal.escapeSingleQuotedText() }
+					.joinToString("")
+				this.childrenOverride = emptyList()
+
+				""" org.jetbrains.compose.web.dom.Img(src="${image.destination}", alt="$altText") {
+					|   attr("loading", "lazy")
+					|   attr("decoding", "async")
+					|}
+				""".trimMargin()
+			}
 		}
 	}
 
