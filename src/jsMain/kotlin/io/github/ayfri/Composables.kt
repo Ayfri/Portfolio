@@ -59,3 +59,14 @@ fun Img(attrs: AttrsScope<HTMLImageElement>.() -> Unit = {}) {
 		content = null
 	)
 }
+
+@Composable
+fun CodeBlock(text: String, lang: String? = null) {
+	Pre {
+		Code(attrs = {
+			classes(lang?.let { "language-$it" } ?: "nohighlight")
+		}) {
+			Text(text)
+		}
+	}
+}

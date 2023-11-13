@@ -51,11 +51,17 @@ kobweb {
 					.joinToString("")
 				this.childrenOverride = emptyList()
 
-				""" org.jetbrains.compose.web.dom.Img(src="${image.destination}", alt="$altText") {
+				"""org.jetbrains.compose.web.dom.Img(src="${image.destination}", alt="$altText") {
 					|   attr("loading", "lazy")
 					|   attr("decoding", "async")
 					|}
 				""".trimMargin()
+			}
+
+			code.set { code ->
+				val text = "\"\"\"${code.literal.escapeTripleQuotedText()}\"\"\""
+
+				"""io.github.ayfri.CodeBlock($text, "${code.info.takeIf { it.isNotBlank() }}")"""
 			}
 		}
 	}
@@ -73,6 +79,7 @@ kobweb {
 
 			val image = "$url/images/avatar.webp"
 			val title = "$author - Portfolio"
+			val highlightTheme = "atom-one-dark"
 
 			this.description = description
 
@@ -98,6 +105,13 @@ kobweb {
 
 					link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap", rel = "stylesheet")
 					link(href = "https://dev-cats.github.io/code-snippets/JetBrainsMono.css", rel = "stylesheet")
+					link(
+						href = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/$highlightTheme.min.css",
+						rel = "stylesheet"
+					)
+
+					script(src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js") {}
+					script(src = "https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js") {}
 
 					script(src = "https://kit.fontawesome.com/74fed0e2b5.js", type = "text/javascript") {
 						async = true

@@ -31,6 +31,8 @@ fun DocLayout(content: @Composable () -> Unit) {
 
 	LaunchedEffect(title) {
 		setTitle("$title - Pierre Roy")
+
+		js("hljs.highlightAll();") as Unit
 	}
 
 	Header()
