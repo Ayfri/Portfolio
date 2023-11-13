@@ -5,26 +5,25 @@ import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.compose.css.margin
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
+import io.github.ayfri.AppStyle
 import io.github.ayfri.Footer
-import io.github.ayfri.Head
 import io.github.ayfri.header.Header
 import io.github.ayfri.setTitle
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
 import io.github.ayfri.utils.webkitScrollbarTrack
-import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.Article
 import org.jetbrains.compose.web.dom.Main
-import org.jetbrains.compose.web.renderComposable
 
 
 @Composable
 fun DocLayout(content: @Composable () -> Unit) {
 	Style(MarkdownStyle)
+	Style(AppStyle)
 
 	val context = rememberPageContext()
 	val markdownData = context.markdown!!.frontMatter
@@ -32,10 +31,6 @@ fun DocLayout(content: @Composable () -> Unit) {
 
 	LaunchedEffect(title) {
 		setTitle("$title - Pierre Roy")
-	}
-
-	renderComposable(root = document.querySelector("head")!!) {
-		Head()
 	}
 
 	Header()

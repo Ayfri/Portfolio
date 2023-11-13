@@ -1,8 +1,7 @@
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
-import kotlinx.html.HEAD
-import kotlinx.html.meta
+import kotlinx.html.*
 import org.commonmark.node.Text
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsBinaryMode
@@ -79,6 +78,7 @@ kobweb {
 
 			head.apply {
 				add {
+					title(title)
 					meta(charset = "utf-8")
 					meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
 					meta(name = "Author", content = author)
@@ -95,6 +95,27 @@ kobweb {
 					meta(property = "twitter:image", content = image)
 					meta(property = "twitter:title", content = title)
 					meta(property = "twitter:site", content = twitterHandle)
+
+					link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap", rel = "stylesheet")
+					link(href = "https://dev-cats.github.io/code-snippets/JetBrainsMono.css", rel = "stylesheet")
+
+					script(src = "https://kit.fontawesome.com/74fed0e2b5.js", type = "text/javascript") {
+						async = true
+					}
+
+					script(src = "https://www.googletagmanager.com/gtag/js?id=G-TS3BHPVFKK", type = "text/javascript") {
+						defer = true
+					}
+
+					script(type = "text/javascript") {
+						unsafe {
+							raw(
+								"""
+							function gtag(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],gtag('js',new Date),gtag('config','G-TS3BHPVFKK')
+							""".trimIndent()
+							)
+						}
+					}
 				}
 			}
 		}
