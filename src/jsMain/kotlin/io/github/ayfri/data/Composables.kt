@@ -276,7 +276,6 @@ object DataStyle : StyleSheet() {
 				self + webkitScrollbarTrack style {
 					backgroundColor(Color.transparent)
 				}
-
 			}
 
 			"blockquote" {

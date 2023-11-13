@@ -114,7 +114,7 @@ object HeaderStyle : StyleSheet() {
 			height(100.percent)
 			display(DisplayStyle.InlineBlock)
 			lineHeight(navbarHeight.value())
-			padding(0.px, clamp(1.5.cssRem, 3.vw, 2.8.cssRem))
+			padding(0.px, clamp(1.3.cssRem, 2.5.vw, 2.3.cssRem))
 
 			group(self + className("active"), hover(self)) style {
 				backgroundColor(Color(NAVBAR_COLOR_SELECTED))
