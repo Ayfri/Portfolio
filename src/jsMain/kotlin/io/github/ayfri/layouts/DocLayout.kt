@@ -2,6 +2,7 @@ package io.github.ayfri.layouts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import com.varabyte.kobweb.compose.css.margin
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
 import io.github.ayfri.Footer
@@ -59,9 +60,43 @@ object MarkdownStyle : StyleSheet() {
 		margin(0.px, auto)
 		maxWidth(800.px)
 		padding(3.cssRem, 1.cssRem)
+		fontSize(1.05.cssRem)
+		lineHeight(1.5.em)
+		property("tab-size", 4)
 
-		"p" + lastOfType {
-			marginBottom(0.px)
+		"h1" {
+			fontSize(2.5.cssRem)
+			lineHeight(1.3.em)
+			margin(top = 0.cssRem, bottom = 1.cssRem)
+		}
+
+		"h2" {
+			fontSize(1.75.cssRem)
+		}
+
+		"h3" {
+			fontSize(1.35.cssRem)
+		}
+
+		"h4" {
+			fontSize(1.25.cssRem)
+		}
+
+		"p" {
+			"code" {
+				backgroundColor(Color("#00000020"))
+				borderRadius(.5.cssRem)
+				padding(.5.cssRem)
+			}
+
+			self + lastOfType style {
+				marginBottom(0.px)
+			}
+		}
+
+		"img" {
+			maxWidth(100.percent)
+			borderRadius(.5.cssRem)
 		}
 
 		"pre" {
