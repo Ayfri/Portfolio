@@ -6,6 +6,7 @@ import com.varabyte.kobweb.compose.css.margin
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
 import io.github.ayfri.AppStyle
+import io.github.ayfri.CodeTheme
 import io.github.ayfri.Footer
 import io.github.ayfri.header.Header
 import io.github.ayfri.setTitle
@@ -24,6 +25,7 @@ import org.jetbrains.compose.web.dom.Main
 fun DocLayout(content: @Composable () -> Unit) {
 	Style(MarkdownStyle)
 	Style(AppStyle)
+	Style(CodeTheme)
 
 	val context = rememberPageContext()
 	val markdownData = context.markdown!!.frontMatter
@@ -32,7 +34,7 @@ fun DocLayout(content: @Composable () -> Unit) {
 	LaunchedEffect(title) {
 		setTitle("$title - Pierre Roy")
 
-		js("hljs.highlightAll();") as Unit
+//		js("hljs.highlightAll();") as Unit
 	}
 
 	Header()

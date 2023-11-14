@@ -64,7 +64,7 @@ fun Img(attrs: AttrsScope<HTMLImageElement>.() -> Unit = {}) {
 fun CodeBlock(text: String, lang: String? = null) {
 	Pre {
 		Code(attrs = {
-			classes(lang?.let { "language-$it" } ?: "nohighlight")
+			classes(lang?.let { "language-$it" } ?: "nohighlight", "line-numbers")
 		}) {
 			Text(text)
 		}
