@@ -12,13 +12,20 @@ import com.varabyte.kobweb.navigation.OpenLinkStrategy
 import com.varabyte.kobweb.navigation.UpdateHistoryMode
 import io.github.ayfri.externals.TextRenderer
 import io.github.ayfri.externals.use
+import io.github.ayfri.jsonld.generateJsonLD
 import kotlinx.browser.document
 import kotlinx.browser.window
-import web.http.fetch
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 const val MAIL_TO = "pierre.ayfri@gmail.com"
 
-external fun require(path: String): dynamic
+@OptIn(ExperimentalSerializationApi::class)
+val jsonEncoder = Json {
+	encodeDefaults = true
+	explicitNulls = false
+}
 
 @App
 @Composable
@@ -32,16 +39,10 @@ fun AppEntry(content: @Composable () -> Unit) {
 	use(jso { this.renderer = renderer })
 
 	LaunchedEffect(Unit) {
-		val currentSlug = window.location.pathname.replace(Regex("/$"), "").substringAfterLast("/")
-		val currentArticle = currentSlug.split("-")
-			.joinToString("") { word -> word.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() } }
-		fetch("/json-ld/$currentArticle.json").json().then {
-			val script = document.createElement("script")
-			script.setAttribute("type", "application/ld+json")
-			script.innerHTML = JSON.stringify(it.asDynamic())
-			document.head?.appendChild(script)
-
-		}
+		val script = document.createElement("script")
+		script.setAttribute("type", "application/ld+json")
+		script.innerHTML = jsonEncoder.encodeToString(generateJsonLD(window.location.pathname))
+		document.head?.appendChild(script)
 	}
 
 	KobwebApp {

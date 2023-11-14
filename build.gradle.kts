@@ -1,4 +1,3 @@
-
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
@@ -164,6 +163,7 @@ data class BlogEntry(
 	val date: String,
 	val title: String,
 	val desc: String,
+	val navTitle: String,
 	val tags: List<String>,
 )
 
@@ -190,8 +190,8 @@ val generateBlogSourceTask = task("generateBlogSource") {
 			rootNode.accept(visitor)
 
 			val fm = visitor.frontMatter
-			val requiredFields = listOf("title", "description", "date")
-			val (title, desc, date) = requiredFields
+			val requiredFields = listOf("title", "description", "date", "nav-title")
+			val (title, desc, date, navTitle) = requiredFields
 				.map { key -> fm[key]?.singleOrNull() }
 				.takeIf { values -> values.all { it != null } }
 				?.requireNoNulls()
@@ -202,53 +202,32 @@ val generateBlogSourceTask = task("generateBlogSource") {
 				}
 
 			val tags = fm["tags"] ?: emptyList()
-			blogEntries.add(BlogEntry(blogArticle.relativeTo(blogInputDir.asFile), date, title, desc, tags))
+			blogEntries.add(BlogEntry(blogArticle.relativeTo(blogInputDir.asFile), date, title, desc, navTitle, tags))
 		}
 
-		blogGenDir.file("/$group/pages/articles/Index.kt").asFile.apply {
+		blogGenDir.file("/$group/articles.kt").asFile.apply {
 			parentFile.mkdirs()
 			writeText(buildString {
 				appendLine(
 					"""
 					|// This file is generated. Modify the build script if you need to change it.
 					|
-					|package io.github.ayfri.pages.articles
+					|package io.github.ayfri.articles
 					|
-					|import androidx.compose.runtime.*
-					|import com.varabyte.kobweb.core.Page
-					|import io.github.ayfri.layouts.PageLayout
 					|import io.github.ayfri.components.ArticleEntry
-					|import io.github.ayfri.components.ArticleList
-					|import io.github.ayfri.components.ArticleListStyle
-					|import org.jetbrains.compose.web.css.Style
 					|
-					|
-					|@Page("/articles/")
-					|@Composable
-					|fun BlogListingsPage() {
-					|    PageLayout("Blog Posts") {
-					|        Style(ArticleListStyle)
-					|
-					|        val entries = listOf(
+					|val articlesEntries = listOf(
                     """.trimMargin()
 				)
-
 				blogEntries.sortedByDescending { it.date }.forEach { entry ->
 					appendLine(
-						"""            ArticleEntry("/articles/${
+						"""    ArticleEntry("/articles/${
 							entry.file.path.substringBeforeLast(".md").splitCamelCase().joinToString("-") { word -> word.lowercase() }
-						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}"),"""
+						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}"),"""
 					)
 				}
 
-				appendLine(
-					"""
-							)
-							ArticleList(entries)
-						}
-					}
-                    """.trimIndent()
-				)
+				appendLine(")")
 			})
 
 			println("Generated $absolutePath")
@@ -286,6 +265,7 @@ kotlin {
 	sourceSets {
 		jsMain {
 			kotlin.srcDir(generateBlogSourceTask)
+
 			dependencies {
 				implementation(compose.html.core)
 				implementation(compose.runtime)
