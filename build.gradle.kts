@@ -172,6 +172,7 @@ fun String.escapeQuotes() = this.replace("\"", "\\\"")
 val generateBlogSourceTask = task("generateBlogSource") {
 	group = "io/github/ayfri"
 	val blogGenDir = layout.buildDirectory.dir("generated/ayfri/src/jsMain/kotlin").get()
+	blogInputDir.asFile.mkdirs()
 
 	inputs.dir(blogInputDir)
 		.withPropertyName("blogArticles")
@@ -216,7 +217,7 @@ val generateBlogSourceTask = task("generateBlogSource") {
 					|
 					|import io.github.ayfri.components.ArticleEntry
 					|
-					|val articlesEntries = listOf(
+					|val articlesEntries = listOf${if (blogEntries.isEmpty()) "<ArticleEntry>" else ""}(
                     """.trimMargin()
 				)
 				blogEntries.sortedByDescending { it.date }.forEach { entry ->
