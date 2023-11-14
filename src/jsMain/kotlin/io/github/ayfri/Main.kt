@@ -35,7 +35,7 @@ fun initKobweb(context: InitKobwebContext) {
 	context.router.setErrorHandler {
 		if (it != 404) return@setErrorHandler
 		context.router.navigateTo(
-			"https://ayfri.com",
+			"/",
 			openExternalLinksStrategy = OpenLinkStrategy.IN_PLACE,
 			openInternalLinksStrategy = OpenLinkStrategy.IN_PLACE,
 			updateHistoryMode = UpdateHistoryMode.REPLACE
