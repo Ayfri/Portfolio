@@ -80,12 +80,14 @@ object MarkdownStyle : StyleSheet() {
 			fontSize(1.25.cssRem)
 		}
 
+		child(not(type("pre")), type("code")) style {
+			backgroundColor(Color("#1d1d20"))
+			borderRadius(.5.cssRem)
+			padding(.3.cssRem, .5.cssRem)
+		}
+
 		"p" {
-			"code" {
-				backgroundColor(Color("#00000020"))
-				borderRadius(.5.cssRem)
-				padding(.5.cssRem)
-			}
+
 
 			self + lastOfType style {
 				marginBottom(0.px)
