@@ -1,7 +1,13 @@
+
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
+import com.varabyte.kobwebx.gradle.markdown.yamlStringToKotlinString
 import kotlinx.html.*
+import org.commonmark.ext.front.matter.YamlFrontMatterBlock
+import org.commonmark.ext.front.matter.YamlFrontMatterVisitor
+import org.commonmark.node.AbstractVisitor
+import org.commonmark.node.CustomBlock
 import org.commonmark.node.Text
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsBinaryMode
@@ -106,7 +112,9 @@ kobweb {
 					link(href = "https://dev-cats.github.io/code-snippets/JetBrainsMono.css", rel = "stylesheet")
 
 					link(href = "/prism.min.css", rel = "stylesheet")
-					script(src = "/prism.min.js", type = "text/javascript") {}
+					script(src = "/prism.min.js", type = "text/javascript") {
+						attributes += "data-manual" to ""
+					}
 
 					script(src = "https://kit.fontawesome.com/74fed0e2b5.js", type = "text/javascript") {
 						async = true
@@ -127,6 +135,122 @@ kobweb {
 					}
 				}
 			}
+		}
+	}
+}
+
+class MarkdownVisitor : AbstractVisitor() {
+	private val _frontMatter = mutableMapOf<String, List<String>>()
+	val frontMatter: Map<String, List<String>> = _frontMatter
+
+	override fun visit(customBlock: CustomBlock) {
+		if (customBlock is YamlFrontMatterBlock) {
+			val yamlVisitor = YamlFrontMatterVisitor()
+			customBlock.accept(yamlVisitor)
+			_frontMatter.putAll(
+				yamlVisitor.data
+					.mapValues { (_, values) ->
+						values.map { it.yamlStringToKotlinString() }
+					}
+			)
+		}
+	}
+}
+
+data class BlogEntry(
+	val file: File,
+	val date: String,
+	val title: String,
+	val desc: String,
+	val tags: List<String>,
+)
+
+fun String.escapeQuotes() = this.replace("\"", "\\\"")
+
+val generateBlogSourceTask = task("generateBlogSource") {
+	group = "io/github/ayfri"
+	val blogInputDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
+	val blogGenDir = layout.buildDirectory.dir("generated/ayfri/src/jsMain/kotlin").get()
+
+	inputs.dir(blogInputDir)
+		.withPropertyName("blogArticles")
+		.withPathSensitivity(PathSensitivity.RELATIVE)
+	outputs.dir(blogGenDir)
+		.withPropertyName("blogGeneratedSource")
+
+	doLast {
+		val parser = kobweb.markdown.features.createParser()
+		val blogEntries = mutableListOf<BlogEntry>()
+
+		blogInputDir.asFileTree.forEach { blogArticle ->
+			val rootNode = parser.parse(blogArticle.readText())
+			val visitor = MarkdownVisitor()
+
+			rootNode.accept(visitor)
+
+			val fm = visitor.frontMatter
+			val requiredFields = listOf("title", "description", "date")
+			val (title, desc, date) = requiredFields
+				.map { key -> fm[key]?.singleOrNull() }
+				.takeIf { values -> values.all { it != null } }
+				?.requireNoNulls()
+				?: run {
+					val missingFields = requiredFields.filter { key -> fm[key] == null }
+					println("Skipping $blogArticle in the listing as it is missing required frontmatter fields ($missingFields)")
+					return@forEach
+				}
+
+			val tags = fm["tags"] ?: emptyList()
+			blogEntries.add(BlogEntry(blogArticle.relativeTo(blogInputDir.asFile), date, title, desc, tags))
+		}
+
+		blogGenDir.file("/$group/pages/articles/Index.kt").asFile.apply {
+			parentFile.mkdirs()
+			writeText(buildString {
+				appendLine(
+					"""
+					|// This file is generated. Modify the build script if you need to change it.
+					|
+					|package io.github.ayfri.pages.articles
+					|
+					|import androidx.compose.runtime.*
+					|import com.varabyte.kobweb.core.Page
+					|import io.github.ayfri.layouts.PageLayout
+					|import io.github.ayfri.components.ArticleEntry
+					|import io.github.ayfri.components.ArticleList
+					|import io.github.ayfri.components.ArticleListStyle
+					|import org.jetbrains.compose.web.css.Style
+					|
+					|
+					|@Page("/articles/")
+					|@Composable
+					|fun BlogListingsPage() {
+					|    PageLayout("Blog Posts") {
+					|        Style(ArticleListStyle)
+					|
+					|        val entries = listOf(
+                    """.trimMargin()
+				)
+
+				blogEntries.sortedByDescending { it.date }.forEach { entry ->
+					appendLine(
+						"""            ArticleEntry("/articles/${
+							entry.file.path.substringBeforeLast(".md").splitCamelCase().joinToString("-") { word -> word.lowercase() }
+						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}"),"""
+					)
+				}
+
+				appendLine(
+					"""
+							)
+							ArticleList(entries)
+						}
+					}
+                    """.trimIndent()
+				)
+			})
+
+			println("Generated $absolutePath")
 		}
 	}
 }
@@ -160,6 +284,7 @@ kotlin {
 
 	sourceSets {
 		jsMain {
+			kotlin.srcDir(generateBlogSourceTask)
 			dependencies {
 				implementation(compose.html.core)
 				implementation(compose.runtime)

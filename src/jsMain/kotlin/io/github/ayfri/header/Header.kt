@@ -106,13 +106,10 @@ object HeaderStyle : StyleSheet() {
 
 	val navbarLinks by style {
 		"a" style {
-			display(DisplayStyle.Flex)
-			justifyContent(JustifyContent.Center)
-			alignItems(AlignItems.Center)
-
 			color(Color.white)
-			height(100.percent)
 			display(DisplayStyle.InlineBlock)
+			fontSize(0.95.cssRem)
+			height(100.percent)
 			lineHeight(navbarHeight.value())
 			padding(0.px, clamp(1.3.cssRem, 2.5.vw, 2.3.cssRem))
 

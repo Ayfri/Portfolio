@@ -4,6 +4,19 @@ import io.github.ayfri.header.HeaderStyle
 import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.selectors.CSSSelector
+
+fun StyleSheet.linkStyle(parent: CSSSelector) {
+	desc(parent, "a") style {
+		color(Color(AppStyle.LINK_COLOR))
+
+		hover(desc(parent, "a")) style {
+			color(Color(AppStyle.LINK_HOVER_COLOR))
+		}
+	}
+}
+
+fun StyleSheet.linkStyle(parent: String) = linkStyle(selector(parent))
 
 @OptIn(ExperimentalComposeWebApi::class)
 object AppStyle : StyleSheet() {
@@ -33,6 +46,7 @@ object AppStyle : StyleSheet() {
 		}
 
 		"body" {
+			backgroundColor(Color(CONTENT_BACKGROUND_COLOR))
 			fontFamily("Open Sans", "sans-serif")
 			margin(0.px)
 
@@ -61,13 +75,7 @@ object AppStyle : StyleSheet() {
 			textDecoration("none")
 		}
 
-		desc("p", "a") style {
-			color(Color(LINK_COLOR))
-
-			hover(desc("p", "a")) style {
-				color(Color(LINK_HOVER_COLOR))
-			}
-		}
+		linkStyle("p")
 
 		"button" {
 			property("border", "none")
@@ -79,7 +87,6 @@ object AppStyle : StyleSheet() {
 		}
 
 		id("main") style {
-			backgroundColor(Color(CONTENT_BACKGROUND_COLOR))
 			color(Color.white)
 			marginTop(HeaderStyle.navbarHeight.value())
 		}
