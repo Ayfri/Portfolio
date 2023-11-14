@@ -39,6 +39,8 @@ fun HEAD.meta(property: String, content: String) {
 	}
 }
 
+val blogInputDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
+
 kobweb {
 	export {
 		includeSourceMap = false
@@ -169,7 +171,6 @@ fun String.escapeQuotes() = this.replace("\"", "\\\"")
 
 val generateBlogSourceTask = task("generateBlogSource") {
 	group = "io/github/ayfri"
-	val blogInputDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
 	val blogGenDir = layout.buildDirectory.dir("generated/ayfri/src/jsMain/kotlin").get()
 
 	inputs.dir(blogInputDir)
