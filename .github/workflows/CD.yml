@@ -50,20 +50,11 @@ jobs:
           path: ~/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ steps.browser-cache-id.outputs.value }}
 
-      - name: Fetch kobweb
-        uses: robinraju/release-downloader@v1.7
-        with:
-          repository: "varabyte/kobweb-cli"
-          tag: "v${{ env.KOBWEB_CLI_VERSION }}"
-          fileName: "kobweb-${{ env.KOBWEB_CLI_VERSION }}.zip"
-          tarBall: false
-          zipBall: false
+      - name: Ensure gradle wrapper is executable
+        run: chmod +x gradlew
 
-      - name: Unzip kobweb
-        run: unzip kobweb-${{ env.KOBWEB_CLI_VERSION }}.zip
-
-      - name: Run export
-        run: kobweb-${{ env.KOBWEB_CLI_VERSION }}/bin/kobweb export --notty --layout static
+      - name: Run Kobweb export
+        run: ./gradlew kobwebExport -PkobwebExportLayout=STATIC -PkobwebBuildTarget=RELEASE -PkobwebReuseServer=false
 
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@v3
