@@ -134,7 +134,7 @@ dataPack("my_datapack") {
 		execute {
 			asTarget(allEntities { type = EntityType.CREEPER })
 			run {
-				teleportTo(nearestPlayer())
+				teleport(nearestPlayer())
 			}
 		}
 	}
@@ -241,25 +241,25 @@ the [Kore documentation](https://github.com/Ayfri/Kore/wiki/Scoreboards) on Scor
 Now that you have a solid foundation for creating datapacks with Kore, you may be wondering - what's next? How can I take my datapacks to
 the next level? Here are some ideas for going further with Kore:
 
-## Custom Recipes
+### Custom Recipes
 
 Kore enables the creation of recipes beyond the standard options in vanilla Minecraft, such as specialized recipes for blasting and smoking.
 The [recipe documentation](https://minecraft.fandom.com/wiki/Recipe) covers how to customize ingredients, results, shapeless recipes, shaped
 recipes, and more.
 
-## Custom Advancements
+### Custom Advancements
 
 With Kore, all aspects of advancements can be customized like icons, frames, titles, descriptions, criteria and triggers. Players can be
 rewarded for any achievement with things like experience and loot tables. See
 the [advancement documentation](https://minecraft.fandom.com/wiki/Advancement) for more details.
 
-## Custom Loot Tables
+### Custom Loot Tables
 
 Kore's loot table system provides control over when and how items are generated from events like block breaking and mob drops. The number of
 rolls, item pools, and loot conditions are configurable. Refer to
 the [loot table documentation](https://minecraft.fandom.com/wiki/Loot_table) for more information.
 
-## Custom World Generation
+### Custom World Generation
 
 By integrating external libraries, Kore enables fully customized world generation. Unique overworlds, nether worlds, end worlds and more can
 be procedurally created from scratch with custom terrain, structures and features. See
