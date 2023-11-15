@@ -5,11 +5,8 @@ import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.compose.css.margin
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
-import io.github.ayfri.AppStyle
-import io.github.ayfri.CodeTheme
-import io.github.ayfri.Footer
+import io.github.ayfri.*
 import io.github.ayfri.header.Header
-import io.github.ayfri.setTitle
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
@@ -86,9 +83,9 @@ object MarkdownStyle : StyleSheet() {
 			padding(.3.cssRem, .5.cssRem)
 		}
 
+		linkStyle(desc(self, "li"))
+
 		"p" {
-
-
 			self + lastOfType style {
 				marginBottom(0.px)
 			}
