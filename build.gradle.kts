@@ -208,6 +208,7 @@ val generateBlogSourceTask = task("generateBlogSource") {
 
 		blogGenDir.file("/$group/articles.kt").asFile.apply {
 			parentFile.mkdirs()
+			createNewFile()
 			writeText(buildString {
 				appendLine(
 					"""

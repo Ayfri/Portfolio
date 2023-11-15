@@ -9,5 +9,3 @@ pluginManagement {
 }
 
 rootProject.name = "portfolio"
-
-include(":json-ld")
