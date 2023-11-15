@@ -55,7 +55,7 @@ data class AboutMeSection(
 val sections = listOf(AboutMeSection(
 	MAIN_PRESENTATION.trimIndent().trimIndent(), 2002, true, id = "me"
 ) {
-	Img(localImage("avatar.webp"), "avatar") {
+	Img(localImage("avatar@300x300.webp"), "avatar") {
 		classes(AppStyle.avatar)
 	}
 },
