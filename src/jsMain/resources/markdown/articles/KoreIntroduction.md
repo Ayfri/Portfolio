@@ -61,11 +61,19 @@ Creating a datapack is a fantastic way to add new content to Minecraft, and with
 ```kotlin
 val myDatapack = dataPack("my_datapack")
 myDatapack.generate() // generates datapack in "out" folder
-myDatapack.generateZip() // generates datapack in "out" folder and zips it
 ```
 
 As you can see, creating a datapack is as simple as calling the `dataPack` function and passing in the name of your datapack.
 Let's dive into how you can customize your datapack by changing its output folder and adding an icon.
+
+### Generating the Datapack as a Zip File
+
+If you want to generate your datapack as a zip file, you can use the `generateZip` function:
+
+```kotlin
+val myDatapack = dataPack("my_datapack")
+myDatapack.generateZip() // generates datapack as a zip file in "out" folder
+```
 
 #### Changing Output Folder
 
