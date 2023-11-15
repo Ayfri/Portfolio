@@ -54,7 +54,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run Kobweb export
-        run: ./gradlew kobwebExport -PkobwebExportLayout=STATIC -PkobwebBuildTarget=RELEASE -PkobwebReuseServer=false
+        run: ./gradlew kobwebExport -PkobwebExportLayout=STATIC -PkobwebBuildTarget=RELEASE -PkobwebReuseServer=false --stacktrace --no-daemon --info
 
       - name: Build & Deploy Worker
         uses: cloudflare/wrangler-action@v3
