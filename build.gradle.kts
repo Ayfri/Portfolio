@@ -208,7 +208,8 @@ val generateBlogSourceTask = task("generateBlogSource") {
 
 		blogGenDir.file("/$group/articles.kt").asFile.apply {
 			parentFile.mkdirs()
-			createNewFile()
+			logger.lifecycle("My absolute path is $absolutePath")
+			logger.lifecycle("Parent exists? ${parentFile.exists()}")
 			writeText(buildString {
 				appendLine(
 					"""
