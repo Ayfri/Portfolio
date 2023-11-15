@@ -206,10 +206,8 @@ val generateBlogSourceTask = task("generateBlogSource") {
 			blogEntries.add(BlogEntry(blogArticle.relativeTo(blogInputDir.asFile), date, title, desc, navTitle, tags))
 		}
 
-		blogGenDir.file("/$group/articles.kt").asFile.apply {
+		blogGenDir.file("$group/articles.kt").asFile.apply {
 			parentFile.mkdirs()
-			logger.lifecycle("My absolute path is $absolutePath")
-			logger.lifecycle("Parent exists? ${parentFile.exists()}")
 			writeText(buildString {
 				appendLine(
 					"""
