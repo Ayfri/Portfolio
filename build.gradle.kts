@@ -81,17 +81,15 @@ kobweb {
 
 			val description = """
 				Hi, I'm Pierre Roy, an IT student at Ynov Aix school, and I'm passionate about computer science and especially programming.
-				I'm making all sorts of projects and programming by myself for years. This is my portfolio, welcome!
+				I'm making all sorts of projects and programming by myself for years.
 			""".trimIndent()
 
 			val image = "$url/images/avatar.webp"
-			val title = "$author - Portfolio"
 
 			this.description = description
 
 			head.apply {
 				add {
-					title(title)
 					meta(charset = "utf-8")
 					meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
 					meta(name = "Author", content = author)
