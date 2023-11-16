@@ -80,8 +80,8 @@ kobweb {
 			val twitterHandle = "@Ayfri_"
 
 			val description = """
-				Hi, I'm Pierre Roy, an IT student at Ynov Aix school, and I'm passionate about computer science and especially programming.
-				I'm making all sorts of projects and programming by myself for years.
+				Hi, I'm Pierre Roy, an IT student, and I'm passionate about computer science and especially programming.
+				Discover my projects and my blog on this website.
 			""".trimIndent()
 
 			val image = "$url/images/avatar.webp"
@@ -96,7 +96,6 @@ kobweb {
 
 					meta(property = "og:description", content = description)
 					meta(property = "og:image", content = image)
-//					meta(property = "og:title", content = title)
 					meta(property = "og:type", content = "website")
 					meta(property = "og:url", content = url)
 
@@ -104,7 +103,6 @@ kobweb {
 					meta(property = "twitter:creator", content = twitterHandle)
 					meta(property = "twitter:description", content = description)
 					meta(property = "twitter:image", content = image)
-//					meta(property = "twitter:title", content = title)
 					meta(property = "twitter:site", content = twitterHandle)
 
 					link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap", rel = "stylesheet")

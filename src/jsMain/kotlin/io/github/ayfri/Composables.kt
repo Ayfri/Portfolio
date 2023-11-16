@@ -5,7 +5,6 @@ import org.jetbrains.compose.web.attributes.AttrsScope
 import org.jetbrains.compose.web.css.StyleScope
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLImageElement
-import org.w3c.dom.HTMLMetaElement
 import org.w3c.dom.HTMLTitleElement
 
 enum class FontAwesomeType(val value: String) {
@@ -85,13 +84,24 @@ fun Title(text: String) {
 }
 
 @Composable
-fun Meta(property: String, content: String) {
-	TagElement<HTMLMetaElement>(
+fun Meta(attrs: AttrsScope<HTMLImageElement>.() -> Unit = {}) {
+	TagElement<HTMLImageElement>(
 		elementBuilder = ElementBuilder.createBuilder("meta"),
 		applyAttrs = {
-			attr("property", property)
-			attr("content", content)
+			apply(attrs)
 		},
 		content = null
 	)
+}
+
+@Composable
+fun MetaProperty(property: String, content: String) = Meta {
+	attr("property", property)
+	attr("content", content)
+}
+
+@Composable
+fun MetaName(name: String, content: String) = Meta {
+	attr("name", name)
+	attr("content", content)
 }

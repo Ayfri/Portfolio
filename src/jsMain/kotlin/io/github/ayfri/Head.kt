@@ -8,8 +8,8 @@ import org.w3c.dom.asList
 fun setTitle(title: String) = renderComposable(document.head!!) {
 	document.querySelector("title")?.remove()
 	Title(title)
-	Meta("og:title", title)
-	Meta("twitter:title", title)
+	MetaProperty("og:title", title)
+	MetaProperty("twitter:title", title)
 }
 
 fun setDescription(description: String) = renderComposable(document.head!!) {
@@ -19,7 +19,7 @@ fun setDescription(description: String) = renderComposable(document.head!!) {
 	}
 	document.querySelector("meta[name=description]")?.remove()
 
-	Meta("description", description)
-	Meta("og:description", description)
-	Meta("twitter:description", description)
+	MetaName("description", description)
+	MetaProperty("og:description", description)
+	MetaProperty("twitter:description", description)
 }
