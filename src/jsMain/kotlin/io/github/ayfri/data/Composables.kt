@@ -57,7 +57,7 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 			classes("top", AppStyle.monoFont)
 		}) {
 			if (open) {
-				Img(src = repository.owner.avatarUrl)
+				Img(src = repository.owner.avatarUrl, alt = "${repository.owner.login} avatar")
 				H2 { Text(repository.name) }
 
 				Div({
