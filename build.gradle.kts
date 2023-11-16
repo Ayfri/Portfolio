@@ -161,6 +161,7 @@ data class BlogEntry(
 	val desc: String,
 	val navTitle: String,
 	val tags: List<String>,
+	val dateModified: String,
 )
 
 fun String.escapeQuotes() = this.replace("\"", "\\\"")
@@ -187,19 +188,36 @@ val generateBlogSourceTask = task("generateBlogSource") {
 			rootNode.accept(visitor)
 
 			val fm = visitor.frontMatter
-			val requiredFields = listOf("title", "description", "date", "nav-title")
-			val (title, desc, date, navTitle) = requiredFields
-				.map { key -> fm[key]?.singleOrNull() }
-				.takeIf { values -> values.all { it != null } }
-				?.requireNoNulls()
-				?: run {
-					val missingFields = requiredFields.filter { key -> fm[key] == null }
-					println("Skipping $blogArticle in the listing as it is missing required frontmatter fields ($missingFields)")
-					return@forEach
-				}
+			val requiredFields = listOf("title", "description", "date-created", "date-modified", "nav-title")
+			val title = fm["title"]?.firstOrNull()
+			val desc = fm["description"]?.firstOrNull()
+			val dateCreated = fm["date-created"]?.firstOrNull()
+			val dateModified = fm["date-modified"]?.firstOrNull()
+			val navTitle = fm["nav-title"]?.firstOrNull()
+
+			if (title == null || desc == null || dateCreated == null || dateModified == null || navTitle == null) {
+				println("Skipping '${blogArticle.name}', missing required fields in front matter of ${blogArticle.name}: ${requiredFields.filter { fm[it] == null }}")
+				return@forEach
+			}
 
 			val tags = fm["tags"] ?: emptyList()
-			blogEntries.add(BlogEntry(blogArticle.relativeTo(blogInputDir.asFile), date, title, desc, navTitle, tags))
+			// Dates are only formatted in this format "2023-11-13"
+			val dateCreatedComplete = dateCreated.split("-").let { (year, month, day) ->
+				"$year-$month-${day}T00:00:00.000000000+01:00"
+			}
+			val dateModifiedComplete = dateModified.split("-").let { (year, month, day) ->
+				"$year-$month-${day}T00:00:00.000000000+01:00"
+			}
+			val newEntry = BlogEntry(
+				blogArticle.relativeTo(blogInputDir.asFile),
+				dateCreatedComplete,
+				title,
+				desc,
+				navTitle,
+				tags,
+				dateModifiedComplete
+			)
+			blogEntries.add(newEntry)
 		}
 
 		blogGenDir.file("$group/articles.kt").asFile.apply {
@@ -220,7 +238,9 @@ val generateBlogSourceTask = task("generateBlogSource") {
 					appendLine(
 						"""    ArticleEntry("/articles/${
 							entry.file.path.substringBeforeLast(".md").splitCamelCase().joinToString("-") { word -> word.lowercase() }
-						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}"),"""
+						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}",
+							|listOf${if (entry.tags.isEmpty()) "<String>" else ""}(${entry.tags.joinToString { "\"$it\"" }}), "${entry.dateModified}"),
+						""".trimMargin()
 					)
 				}
 

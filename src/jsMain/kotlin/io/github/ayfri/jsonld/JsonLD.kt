@@ -18,6 +18,7 @@ class BlogArticleJsonLD(
 	val url: String,
 	val author: PersonJsonLD,
 	val datePublished: String,
+	val dateModified: String? = null,
 	val image: String? = null,
 	val keywords: List<String>? = null,
 ) : JsonLD() {

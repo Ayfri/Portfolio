@@ -11,7 +11,15 @@ import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
 
 
-data class ArticleEntry(val path: String, val date: String, val title: String, val desc: String, val navTitle: String)
+data class ArticleEntry(
+	val path: String,
+	val date: String,
+	val title: String,
+	val desc: String,
+	val navTitle: String,
+	val tags: List<String>,
+	val dateModified: String,
+)
 
 @Composable
 fun ArticleList(entries: List<ArticleEntry>) {
