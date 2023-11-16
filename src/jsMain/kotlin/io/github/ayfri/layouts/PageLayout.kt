@@ -1,7 +1,6 @@
 package io.github.ayfri.layouts
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import io.github.ayfri.AppStyle
 import io.github.ayfri.Footer
 import io.github.ayfri.header.Header
@@ -13,9 +12,7 @@ import org.jetbrains.compose.web.dom.Main
 @Composable
 fun PageLayout(title: String, content: @Composable () -> Unit) {
 	Style(AppStyle)
-	LaunchedEffect(title) {
-		setTitle("$title - Pierre Roy")
-	}
+	setTitle("$title - Pierre Roy")
 
 	Header()
 

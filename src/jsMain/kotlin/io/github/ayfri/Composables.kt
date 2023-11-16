@@ -5,6 +5,8 @@ import org.jetbrains.compose.web.attributes.AttrsScope
 import org.jetbrains.compose.web.css.StyleScope
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLImageElement
+import org.w3c.dom.HTMLMetaElement
+import org.w3c.dom.HTMLTitleElement
 
 enum class FontAwesomeType(val value: String) {
 	REGULAR("far"),
@@ -69,4 +71,27 @@ fun CodeBlock(text: String, lang: String? = null) {
 			Text(text)
 		}
 	}
+}
+
+@Composable
+fun Title(text: String) {
+	TagElement<HTMLTitleElement>(
+		elementBuilder = ElementBuilder.createBuilder("title"),
+		applyAttrs = {},
+		content = {
+			Text(text)
+		}
+	)
+}
+
+@Composable
+fun Meta(property: String, content: String) {
+	TagElement<HTMLMetaElement>(
+		elementBuilder = ElementBuilder.createBuilder("meta"),
+		applyAttrs = {
+			attr("property", property)
+			attr("content", content)
+		},
+		content = null
+	)
 }

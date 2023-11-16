@@ -27,9 +27,11 @@ fun DocLayout(content: @Composable () -> Unit) {
 	val context = rememberPageContext()
 	val markdownData = context.markdown!!.frontMatter
 	val title = markdownData["nav-title"]?.get(0) ?: "Title not found"
+	val description = markdownData["description"]?.get(0) ?: "Description not found"
 
+	setTitle("$title - Pierre Roy")
+	setDescription(description)
 	LaunchedEffect(title) {
-		setTitle("$title - Pierre Roy")
 		js("window.Prism.highlightAll()").unsafeCast<Unit>()
 	}
 

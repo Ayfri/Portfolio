@@ -17,6 +17,10 @@ fun Portfolio() {
 	PageLayout("Portfolio") {
 		Style(PortfolioStyle)
 
+		H1 {
+			Text("Portfolio")
+		}
+
 		Div({
 			classes(PortfolioStyle.portfolio)
 		}) {

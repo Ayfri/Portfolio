@@ -96,7 +96,7 @@ kobweb {
 
 					meta(property = "og:description", content = description)
 					meta(property = "og:image", content = image)
-					meta(property = "og:title", content = title)
+//					meta(property = "og:title", content = title)
 					meta(property = "og:type", content = "website")
 					meta(property = "og:url", content = url)
 
@@ -104,7 +104,7 @@ kobweb {
 					meta(property = "twitter:creator", content = twitterHandle)
 					meta(property = "twitter:description", content = description)
 					meta(property = "twitter:image", content = image)
-					meta(property = "twitter:title", content = title)
+//					meta(property = "twitter:title", content = title)
 					meta(property = "twitter:site", content = twitterHandle)
 
 					link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap", rel = "stylesheet")
