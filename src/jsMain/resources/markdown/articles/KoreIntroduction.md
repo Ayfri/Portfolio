@@ -3,14 +3,14 @@ nav-title: Kore Introduction
 title: Introduction to Datapack Creation with Kore in Kotlin
 description: Learn how to create Minecraft datapacks using Kore in Kotlin.
 date-created: 2023-11-13
-date-modified: 2023-11-16
+date-modified: 2023-11-18
 root: .layouts.DocLayout
 ---
 
 # Introduction to Datapack Creation with Kore in Kotlin
 
 Welcome to the world of Minecraft datapack creation! If you've ever dreamed of creating your
-own [Minecraft datapack](https://minecraft.fandom.com/wiki/Data_pack) but thought you were limited to using just the traditional tools, we
+own [Minecraft datapack](https://minecraft.wiki/w/Data_pack) but thought you were limited to using just the traditional tools, we
 have exciting news for you. [Kore](https://github.com/Ayfri/Kore), a Kotlin-based library, is here to revolutionize the way you develop
 datapacks for Minecraft.
 
@@ -145,7 +145,7 @@ dataPack("my_datapack") {
 ## Managing Scoreboards with Kore
 
 Now that we've seen how to create a datapack and functions, let's explore more advanced features of Kore. In this section, we'll learn how
-to manage [scoreboards](https://minecraft.fandom.com/wiki/Scoreboard) using Kore, including adding objectives and creating scoreboard
+to manage [scoreboards](https://minecraft.wiki/w/Scoreboard) using Kore, including adding objectives and creating scoreboard
 displays.
 
 Scoreboards are a powerful feature in Minecraft that allow you to keep track of player scores, objectives, and other game events. With Kore,
@@ -245,7 +245,7 @@ the next level? Here are some ideas for going further with Kore:
 ### Custom Recipes
 
 Kore enables the creation of recipes beyond the standard options in vanilla Minecraft, such as specialized recipes for blasting and smoking.
-The [recipe documentation](https://minecraft.fandom.com/wiki/Recipe) covers how to customize ingredients, results, shapeless recipes, shaped
+The [recipe documentation](https://minecraft.wiki/w/Recipe) covers how to customize ingredients, results, shapeless recipes, shaped
 recipes, and more.
 
 ```kotlin
@@ -264,7 +264,7 @@ dataPack("my_datapack") {
 
 With Kore, all aspects of advancements can be customized like icons, frames, titles, descriptions, criteria and triggers. Players can be
 rewarded for any achievement with things like experience and loot tables. See
-the [advancement documentation](https://minecraft.fandom.com/wiki/Advancement) for more details.
+the [advancement documentation](https://minecraft.wiki/w/Advancement) for more details.
 
 ```kotlin
 dataPack("my_datapack") {
@@ -296,7 +296,7 @@ dataPack("my_datapack") {
 
 Kore's loot table system provides control over when and how items are generated from events like block breaking and mob drops. The number of
 rolls, item pools, and loot conditions are configurable. Refer to
-the [loot table documentation](https://minecraft.fandom.com/wiki/Loot_table) for more information.
+the [loot table documentation](https://minecraft.wiki/w/Loot_table) for more information.
 
 ```kotlin
 dataPack("my_datapack") {
@@ -321,7 +321,7 @@ dataPack("my_datapack") {
 
 By integrating external libraries, Kore enables fully customized world generation. Unique overworlds, nether worlds, end worlds and more can
 be procedurally created from scratch with custom terrain, structures and features. See
-the [world generation documentation](https://minecraft.fandom.com/wiki/Custom_world_generation) for possibilities.
+the [world generation documentation](https://minecraft.wiki/w/Custom_world_generation) for possibilities.
 
 ```kotlin
 dataPack("my_datapack") {
