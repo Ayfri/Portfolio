@@ -9,8 +9,6 @@ import org.commonmark.node.AbstractVisitor
 import org.commonmark.node.CustomBlock
 import org.commonmark.node.Text
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
-import org.jetbrains.kotlin.gradle.targets.js.dsl.KotlinJsBinaryMode
-import org.jetbrains.kotlin.gradle.targets.js.ir.JsIrBinary
 
 plugins {
 	alias(libs.plugins.kotlin.multiplatform)
@@ -258,25 +256,13 @@ kotlin {
 	js(IR) {
 		browser {
 			commonWebpackConfig {
+				val isDev = project.findProperty("kobwebEnv") == "DEV"
+				sourceMaps = isDev
 				devServer?.open = false
 			}
 		}
 
 		binaries.executable()
-
-		binaries.withType<JsIrBinary>().configureEach {
-			val isRelease = this.mode == KotlinJsBinaryMode.PRODUCTION
-			linkTask.configure {
-				kotlinOptions {
-					if (isRelease) {
-						sourceMap = false
-					} else {
-						sourceMap = true
-						sourceMapEmbedSources = "always"
-					}
-				}
-			}
-		}
 	}
 
 	sourceSets {
