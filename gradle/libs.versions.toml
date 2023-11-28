@@ -1,13 +1,11 @@
 [versions]
-compose-routing = "0.2.12"
-jetbrains-compose = "1.5.10"
-kobweb = "0.15.0"
-kotlin = "1.9.20"
+jetbrains-compose = "1.5.11"
+kobweb = "0.15.2"
+kotlin = "1.9.21"
 kotlinx-wrappers-js = "1.0.0-pre.639"
 kotlinx-serialization-json = "1.6.0"
 
 [libraries]
-compose-routing = { module = "app.softwork:routing-compose", version.ref = "compose-routing" }
 kobweb-api = { module = "com.varabyte.kobweb:kobweb-api", version.ref = "kobweb" }
 kobweb-core = { module = "com.varabyte.kobweb:kobweb-core ", version.ref = "kobweb" }
 kobwebx-markdown = { module = "com.varabyte.kobwebx:kobwebx-markdown", version.ref = "kobweb" }
