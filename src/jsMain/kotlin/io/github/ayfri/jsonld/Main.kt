@@ -15,6 +15,6 @@ fun generateJsonLD(path: String) = articlesEntries.find { it.path == path }?.let
 		dateModified = it.dateModified,
 		headline = it.title,
 		keywords = it.navTitle.split(" "),
-		url = "https://ayfri.com/${it.path}",
+		url = "https://ayfri.com${it.path}",
 	)
 }
