@@ -35,14 +35,21 @@ fun DocLayout(content: @Composable () -> Unit) {
 
 	setTitle("$title - Pierre Roy")
 	setDescription(description)
-	LaunchedEffect(title) {
-		js("window.Prism.highlightAll()").unsafeCast<Unit>()
 
 	val currentStub = context.route
 	var canonicalUrl = "https://ayfri.com$currentStub"
 	if (!canonicalUrl.endsWith("/")) canonicalUrl += "/"
 	setCanonical(canonicalUrl)
 
+	renderComposable(document.head!!) {
+		Script {
+			attr("type", "application/ld+json")
+			ref {
+				it.innerHTML = jsonEncoder.encodeToString(generateJsonLD(window.location.pathname))
+
+				onDispose {}
+			}
+		}
 	}
 
 	LaunchedEffect(currentStub) {
