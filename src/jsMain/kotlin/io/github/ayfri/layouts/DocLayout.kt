@@ -7,19 +7,14 @@ import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
 import io.github.ayfri.*
 import io.github.ayfri.header.Header
-import io.github.ayfri.jsonld.generateJsonLD
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
 import io.github.ayfri.utils.webkitScrollbarTrack
-import kotlinx.browser.document
-import kotlinx.browser.window
-import kotlinx.serialization.encodeToString
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.Article
 import org.jetbrains.compose.web.dom.Main
-import org.jetbrains.compose.web.renderComposable
 
 
 @Composable
@@ -41,16 +36,7 @@ fun DocLayout(content: @Composable () -> Unit) {
 	if (!canonicalUrl.endsWith("/")) canonicalUrl += "/"
 	setCanonical(canonicalUrl)
 
-	renderComposable(document.head!!) {
-		Script {
-			attr("type", "application/ld+json")
-			ref {
-				it.innerHTML = jsonEncoder.encodeToString(generateJsonLD(window.location.pathname))
-
-				onDispose {}
-			}
-		}
-	}
+	setJsonLD()
 
 	LaunchedEffect(currentStub) {
 		js("window.Prism.highlightAll()").unsafeCast<Unit>()
