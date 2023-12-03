@@ -23,3 +23,7 @@ fun setDescription(description: String) = renderComposable(document.head!!) {
 	MetaProperty("og:description", description)
 	MetaProperty("twitter:description", description)
 }
+
+fun setCanonical(url: String) = renderComposable(document.head!!) {
+	Link("canonical", url)
+}
