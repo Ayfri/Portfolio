@@ -33,9 +33,8 @@ fun Projects() {
 		if (repos.isEmpty()) {
 			data.then { gitHubData ->
 				repos += gitHubData.repos.sortedWith(
-					compareByDescending<GitHubRepository> { it.stargazersCount }.thenBy(
-						String.CASE_INSENSITIVE_ORDER
-					) { it.fullName })
+					compareByDescending(GitHubRepository::stargazersCount).thenBy(String.CASE_INSENSITIVE_ORDER, GitHubRepository::fullName)
+				)
 			}
 		}
 

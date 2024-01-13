@@ -180,22 +180,15 @@ object DataStyle : StyleSheet() {
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val projectCard by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
 		gap(1.cssRem)
-		padding(clamp(1.6.cssRem, 2.vw, 3.5.cssRem))
+		padding(clamp(1.6.cssRem, 2.vw, 3.cssRem))
 		borderRadius(.75.cssRem)
 
 		cursor(Cursor.Pointer)
-
-		transitions {
-			defaultTimingFunction(AnimationTimingFunction.EaseInOut)
-			defaultDuration(.5.s)
-			properties("max-height")
-		}
 
 		className("top") style {
 			"img" {
@@ -329,15 +322,10 @@ object DataStyle : StyleSheet() {
 	}
 
 	val projectCardClosed by style {
-		val maxSize by variable<CSSSizeValue<*>>()
-		maxSize(6.cssRem)
-
 		flexDirection(FlexDirection.Row)
 		imageSize(3.5.cssRem)
 
 		backgroundColor(Color(PROJECT_CARD_CLOSED_BACKGROUND))
-		height(maxSize.value())
-		maxHeight(maxSize.value())
 
 		className("top") style {
 			display(DisplayStyle.Flex)
@@ -368,7 +356,6 @@ object DataStyle : StyleSheet() {
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
-				maxSize(8.cssRem)
 				padding(1.cssRem)
 			}
 		}
