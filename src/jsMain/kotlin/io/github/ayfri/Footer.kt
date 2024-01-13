@@ -120,9 +120,7 @@ fun Footer() {
 		Div({
 			classes(FooterStyle.footerInfo)
 		}) {
-			val cvPath = "${window.location.origin}/cv.pdf"
-
-			A(href = cvPath, {
+			A(href = "/cv.pdf", {
 				target(ATarget.Blank)
 				attr("download", "CV Pierre Roy.pdf")
 				classes(AppStyle.button, FooterStyle.footerCVButton)
