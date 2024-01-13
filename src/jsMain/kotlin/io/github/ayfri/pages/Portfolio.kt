@@ -17,13 +17,15 @@ fun Portfolio() {
 	PageLayout("Portfolio") {
 		Style(PortfolioStyle)
 
-		H1 {
-			Text("Portfolio")
-		}
-
 		Div({
 			classes(PortfolioStyle.portfolio)
 		}) {
+			H1({
+				classes(PortfolioStyle.title)
+			}) {
+				Text("This Portfolio")
+			}
+
 			PortfolioSection(
 				"""
 				I created this portfolio first because my school asked me to create one to validate my first year.
@@ -116,6 +118,12 @@ object PortfolioStyle : StyleSheet() {
 	const val BACKGROUND_GRADIENT_MIDDLE = "#1D2736"
 	const val BACKGROUND_GRADIENT_END = "#1F0C29"
 	val sectionsGap = 4.cssRem
+
+	val title by style {
+		fontSize(3.cssRem)
+		marginTop(0.px)
+		marginBottom(1.cssRem)
+	}
 
 	val portfolio by style {
 		display(DisplayStyle.Flex)
