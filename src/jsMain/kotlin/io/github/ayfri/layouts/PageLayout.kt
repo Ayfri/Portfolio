@@ -10,6 +10,7 @@ import io.github.ayfri.setTitle
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.dom.Main
+import web.url.URL
 
 @Composable
 fun PageLayout(title: String, content: @Composable () -> Unit) {
@@ -20,9 +21,12 @@ fun PageLayout(title: String, content: @Composable () -> Unit) {
 
 	val context = rememberPageContext()
 	val currentStub = context.route
-	var canonicalUrl = "https://ayfri.com$currentStub"
-	if (!canonicalUrl.endsWith("/")) canonicalUrl += "/"
-	setCanonical(canonicalUrl)
+	val url = URL(currentStub.path)
+	url.search = ""
+	url.hash = ""
+	if (!url.pathname.endsWith("/")) url.pathname += "/"
+
+	setCanonical("https://ayfri.com$url")
 
 	Main({
 		id("main")
