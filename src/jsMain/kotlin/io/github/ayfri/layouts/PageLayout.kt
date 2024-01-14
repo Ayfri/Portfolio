@@ -21,12 +21,12 @@ fun PageLayout(title: String, content: @Composable () -> Unit) {
 
 	val context = rememberPageContext()
 	val currentStub = context.route
-	val url = URL(currentStub.path)
+	val url = URL("https://ayfri.com${currentStub.path}")
 	url.search = ""
 	url.hash = ""
 	if (!url.pathname.endsWith("/")) url.pathname += "/"
 
-	setCanonical("https://ayfri.com$url")
+	setCanonical(url.toString())
 
 	Main({
 		id("main")
