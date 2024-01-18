@@ -3,6 +3,7 @@ package io.github.ayfri.components
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.navigation.Anchor
 import io.github.ayfri.P
+import io.github.ayfri.ensureSuffix
 import io.github.ayfri.linkStyle
 import io.github.ayfri.utils.margin
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -41,7 +42,7 @@ fun ArticleEntry(entry: ArticleEntry) {
 	Li({
 		classes(ArticleListStyle.articleEntry)
 	}) {
-		Anchor(href = entry.path) {
+		Anchor(href = entry.path.ensureSuffix("/")) {
 			Div {
 				H2 {
 					Text(entry.title)
