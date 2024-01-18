@@ -8,7 +8,7 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
-import io.github.ayfri.data.data
+import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.minmax
 import io.github.ayfri.utils.repeat
@@ -31,11 +31,9 @@ fun Projects() {
 		val repos = remember { mutableStateListOf<GitHubRepository>() }
 
 		if (repos.isEmpty()) {
-			data.then { gitHubData ->
-				repos += gitHubData.repos.sortedWith(
-					compareByDescending(GitHubRepository::stargazersCount).thenBy(String.CASE_INSENSITIVE_ORDER, GitHubRepository::fullName)
-				)
-			}
+			repos += gitHubData.repos.sortedWith(
+				compareByDescending(GitHubRepository::stargazersCount).thenBy(String.CASE_INSENSITIVE_ORDER, GitHubRepository::fullName)
+			)
 		}
 
 		Div({

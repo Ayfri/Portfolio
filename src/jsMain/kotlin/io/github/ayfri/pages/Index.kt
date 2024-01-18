@@ -8,7 +8,7 @@ import io.github.ayfri.*
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.HomeCard
-import io.github.ayfri.data.data
+import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.TextAlign
 import io.github.ayfri.utils.linearGradient
@@ -81,11 +81,7 @@ fun Home() {
 			})
 
 			if (homeRepositories.isEmpty()) {
-				data.then { gitHubData ->
-					homeRepositories += gitHubData.repos.sortedBy {
-						it.stargazersCount
-					}.reversed().take(3)
-				}
+				homeRepositories += gitHubData.repos.sortedBy { it.stargazersCount }.reversed().take(3)
 			}
 
 			Section({

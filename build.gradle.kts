@@ -9,6 +9,8 @@ import org.commonmark.node.AbstractVisitor
 import org.commonmark.node.CustomBlock
 import org.commonmark.node.Text
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
+import java.net.HttpURLConnection
+import java.net.URL
 
 plugins {
 	alias(libs.plugins.kotlin.multiplatform)
@@ -36,13 +38,46 @@ fun HEAD.meta(property: String, content: String) {
 	}
 }
 
+operator fun <K : Any, V : Any> MapProperty<K, V>.set(key: K, value: V) {
+	put(key, value)
+}
+
+operator fun <K : Any, V : Any> MapProperty<K, V>.get(key: K) = getting(key)
+
 val blogInputDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
 
-kobweb {
-	export {
-		includeSourceMap = false
-	}
+val downloadDataTask = tasks.register("downloadData") {
+	val file = layout.buildDirectory.file("generated/ayfri/src/jsMain/kotlin/io/github/ayfri/data/Data.kt").get().asFile
+	outputs.dir(file.parentFile)
 
+	doLast {
+		val dataLink = "https://raw.githubusercontent.com/Ayfri/Ayfri.github.io/api/result.json"
+		val url = URL(dataLink)
+		val connection = url.openConnection() as HttpURLConnection
+		connection.requestMethod = "GET"
+		connection.connect()
+		val responseCode = connection.responseCode
+		if (responseCode != 200) {
+			throw Exception("Error while downloading data, response code: $responseCode")
+		}
+
+		var data = connection.inputStream.readBytes().decodeToString()
+		data = data.replace(Regex("\\$"), "\\\${\"\\$\"}")
+		val tripleQuotes = "\"\"\""
+		val kotlinOutput = """
+			package io.github.ayfri.data
+			
+			const val rawData = $tripleQuotes$data$tripleQuotes
+		""".trimIndent()
+
+		file.parentFile.mkdirs()
+		file.writeText(kotlinOutput)
+		logger.lifecycle("Generated '$file'")
+	}
+}
+
+
+kobweb {
 	markdown {
 		routeOverride = { route ->
 			"/articles/${route.splitCamelCase().joinToString("-") { word -> word.lowercase() }}"
@@ -72,6 +107,10 @@ kobweb {
 	}
 
 	app {
+		export {
+			includeSourceMap = false
+		}
+
 		index {
 			val url = "https://ayfri.com"
 			val author = "Pierre Roy"
@@ -83,6 +122,10 @@ kobweb {
 			""".trimIndent()
 
 			val image = "$url/images/avatar.webp"
+
+			globals["author"] = author
+			globals["description"] = description
+			globals["url"] = url
 
 			this.description = description
 
@@ -268,6 +311,7 @@ kotlin {
 	sourceSets {
 		jsMain {
 			kotlin.srcDir(generateBlogSourceTask)
+			kotlin.srcDir(downloadDataTask)
 
 			dependencies {
 				implementation(compose.html.core)

@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
 import io.github.ayfri.data.GitHubRepository
-import io.github.ayfri.data.data
+import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.css.*
@@ -358,9 +358,7 @@ fun Skills() {
 		val repos = remember { mutableStateListOf<GitHubRepository>() }
 
 		if (repos.isEmpty()) {
-			data.then { gitHubData ->
-				repos += gitHubData.repos.filter { it.language != null }
-			}
+			repos += gitHubData.repos.filter { it.language != null }
 		}
 
 		Div({
