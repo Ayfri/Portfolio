@@ -75,6 +75,9 @@ fun Home() {
 
 			P({
 				markdownParagraph(MAIN_PRESENTATION.trimIndent(), true, AppStyle.monoFont)
+				style {
+					lineHeight(1.5.cssRem)
+				}
 			})
 
 			Section({
