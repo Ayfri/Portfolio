@@ -33,8 +33,7 @@ fun DocLayout(content: @Composable () -> Unit) {
 	setDescription(description)
 
 	val currentStub = context.route
-	var canonicalUrl = AppGlobals["url"] + currentStub
-	if (!canonicalUrl.endsWith("/")) canonicalUrl += "/"
+	val canonicalUrl = AppGlobals["url"] + currentStub.toString().ensureSuffix("/")
 	setCanonical(canonicalUrl)
 
 	setJsonLD()

@@ -1,6 +1,8 @@
 package io.github.ayfri.jsonld
 
+import com.varabyte.kobweb.core.AppGlobals
 import io.github.ayfri.articles.articlesEntries
+import io.github.ayfri.ensureSuffix
 
 fun generateJsonLD(path: String) = articlesEntries.find { it.path == path }?.let {
 	BlogArticleJsonLD(
@@ -9,12 +11,12 @@ fun generateJsonLD(path: String) = articlesEntries.find { it.path == path }?.let
 			sameAs = listOf(
 				"https://github.com/Ayfri"
 			),
-			url = "https://ayfri.com",
+			url = AppGlobals["url"],
 		),
 		datePublished = it.date,
 		dateModified = it.dateModified,
 		headline = it.title,
 		keywords = it.navTitle.split(" "),
-		url = "https://ayfri.com${it.path}",
+		url = AppGlobals["url"] + it.path.ensureSuffix("/"),
 	)
 }

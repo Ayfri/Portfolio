@@ -99,7 +99,7 @@ fun Home() {
 					}
 				}
 
-				A("/projects", "See all projects", AppStyle.button)
+				A("/projects/", "See all projects", AppStyle.button)
 			}
 
 			Section({
@@ -111,7 +111,7 @@ fun Home() {
 					skills.sortedWith(
 						compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
 					).take(8).forEach {
-						A("/skills#${it.language.name}", {
+						A("/skills/#${it.language.name}", {
 							classes("skill")
 						}) {
 							it.DisplaySimple()
@@ -119,7 +119,7 @@ fun Home() {
 					}
 				}
 
-				A("/skills", "See all skills", AppStyle.button)
+				A("/skills/", "See all skills", AppStyle.button)
 			}
 		}
 	}

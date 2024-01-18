@@ -26,7 +26,7 @@ fun HomeCard(repository: GitHubRepository) {
 		Img(skills.first { it.language.name == repository.language }.language.iconUrl) {
 			alt("${repository.language} language")
 		}
-		A("/projects#${repository.name}", repository.name)
+		A("/projects/#${repository.name}", repository.name)
 	}
 
 	Div {
