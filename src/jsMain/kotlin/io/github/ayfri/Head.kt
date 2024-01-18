@@ -31,6 +31,10 @@ fun setDescription(description: String) = renderComposable(document.head!!) {
 fun setCanonical(url: String) = renderComposable(document.head!!) {
 	selectAll("link[rel=canonical]").forEach(HTMLElement::remove)
 	Link("canonical", url)
+
+	selectAll("meta[property*=url]").forEach(HTMLElement::remove)
+	MetaProperty("og:url", url)
+	MetaProperty("twitter:url", url)
 }
 
 fun setJsonLD() = renderComposable(document.head!!) {

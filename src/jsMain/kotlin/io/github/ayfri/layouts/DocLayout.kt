@@ -3,6 +3,7 @@ package io.github.ayfri.layouts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.compose.css.margin
+import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
 import io.github.ayfri.*
@@ -28,11 +29,11 @@ fun DocLayout(content: @Composable () -> Unit) {
 	val title = markdownData["nav-title"]?.get(0) ?: "Title not found"
 	val description = markdownData["description"]?.get(0) ?: "Description not found"
 
-	setTitle("$title - Pierre Roy")
+	setTitle("$title - ${AppGlobals["author"]}'s Blog")
 	setDescription(description)
 
 	val currentStub = context.route
-	var canonicalUrl = "https://ayfri.com$currentStub"
+	var canonicalUrl = AppGlobals["url"] + currentStub
 	if (!canonicalUrl.endsWith("/")) canonicalUrl += "/"
 	setCanonical(canonicalUrl)
 

@@ -1,6 +1,7 @@
 package io.github.ayfri.layouts
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
 import io.github.ayfri.Footer
@@ -15,13 +16,13 @@ import web.url.URL
 @Composable
 fun PageLayout(title: String, content: @Composable () -> Unit) {
 	Style(AppStyle)
-	setTitle("$title - Pierre Roy")
+	setTitle("$title - ${AppGlobals["author"]}'s Portfolio")
 
 	Header()
 
 	val context = rememberPageContext()
 	val currentStub = context.route
-	val url = URL("https://ayfri.com${currentStub.path}")
+	val url = URL(AppGlobals["url"] + currentStub.path)
 	url.search = ""
 	url.hash = ""
 	if (!url.pathname.endsWith("/")) url.pathname += "/"
