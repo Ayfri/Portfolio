@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.varabyte.kobweb.compose.css.WhiteSpace
+import com.varabyte.kobweb.compose.css.whiteSpace
 import io.github.ayfri.AppStyle.mobileFirstBreak
 import io.github.ayfri.AppStyle.mobileSecondBreak
 import io.github.ayfri.FontAwesomeType
@@ -112,6 +114,7 @@ object HeaderStyle : StyleSheet() {
 			height(100.percent)
 			lineHeight(navbarHeight.value())
 			padding(0.px, clamp(1.3.cssRem, 2.5.vw, 2.3.cssRem))
+			whiteSpace(WhiteSpace.NoWrap)
 
 			group(self + className("active"), hover(self)) style {
 				backgroundColor(Color(NAVBAR_COLOR_SELECTED))
