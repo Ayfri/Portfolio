@@ -41,13 +41,16 @@ data class Skill(
 					classes("left")
 				}) {
 					Img(language.iconUrl, alt = "${language.name} icon")
-					P(language.name, AppStyle.monoFont)
+					H2({
+						classes(AppStyle.monoFont)
+					}) {
+						Text(language.name)
+					}
 				}
 
 				P({
-					val learnedAndNowUserFor =
-						if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
-						else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
+					val learnedAndNowUserFor = if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
+					else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
 
 					markdownParagraph(
 						"""
@@ -70,24 +73,22 @@ data class Skill(
 			fun section(name: String, list: List<GitHubRepository>) {
 				if (list.isEmpty()) return
 
-				H4({
+				H3({
 					classes(AppStyle.monoFont)
 				}) {
 					Text(name)
 				}
 
 				Ul {
-					list.distinctBy { it.fullName }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name })
-						.forEach {
-							Li {
-								A(it.htmlUrl, it.name)
-							}
+					list.distinctBy { it.fullName }.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.name }).forEach {
+						Li {
+							A(it.htmlUrl, it.name)
 						}
+					}
 				}
 			}
 
-			val githubNotSchoolProjects =
-				githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
+			val githubNotSchoolProjects = githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
 			val (contributedProjects, ownProjects) = githubNotSchoolProjects.partition { it.fork || it.owner.login != "Ayfri" }
 			section("GitHub Projects:", ownProjects)
 			section("Contributed Projects:", contributedProjects)
@@ -102,8 +103,7 @@ data class Skill(
 	}
 }
 
-fun devIcon(name: String, suffix: String = "original") =
-	"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/$name/$name-$suffix.svg"
+fun devIcon(name: String, suffix: String = "original") = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/$name/$name-$suffix.svg"
 
 val skills = listOf(
 	Language(
@@ -130,11 +130,7 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = devIcon("cplusplus"),
 		schoolProjects = listOf(
-			"Ayfri/Cpp-TP1",
-			"Ayfri/Cpp-TP2",
-			"Ayfri/Cpp-TP3",
-			"Ayfri/Cpp-TP4",
-			"Ayfri/Cpp-TP5"
+			"Ayfri/Cpp-TP1", "Ayfri/Cpp-TP2", "Ayfri/Cpp-TP3", "Ayfri/Cpp-TP4", "Ayfri/Cpp-TP5"
 		)
 	),
 	Language(
@@ -247,19 +243,11 @@ val skills = listOf(
 		)
 	),
 	Language(
-		name = "HTML",
-		since = 2017,
-		learnedFor = "Creating websites.",
-		nowUsing = "Creating websites.",
-		level = 5,
-		description = """
+		name = "HTML", since = 2017, learnedFor = "Creating websites.", nowUsing = "Creating websites.", level = 5, description = """
 			HyperText Markup Language (HTML) is the basic scripting language used by web browsers to render pages on the World Wide Web. HyperText allows a user to click a link and be redirected to a new page referenced by that link.
-		""".trimIndent(),
-		iconUrl = devIcon("html5"),
-		githubProjects = listOf(
+		""".trimIndent(), iconUrl = devIcon("html5"), githubProjects = listOf(
 			"Ayfri/atom-clicker"
-		),
-		schoolProjects = listOf(
+		), schoolProjects = listOf(
 			"antaww/game-overflow",
 			"Ayfri/Cat-in-Space",
 			"Ayfri/Challenge-Discovery",
@@ -298,8 +286,7 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = devIcon("mysql"),
 		githubProjects = listOf(
-			"Galileo-Bot/galileo",
-			"Galileo-Bot/Rocket-Pub-Manager"
+			"Galileo-Bot/galileo", "Galileo-Bot/Rocket-Pub-Manager"
 		),
 		schoolProjects = listOf(
 			"antaww/game-overflow",
@@ -330,9 +317,7 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = devIcon("python"),
 		schoolProjects = listOf(
-			"Ayfri/Python-TP1",
-			"Ayfri/Python-TP2",
-			"Ayfri/Python-TP3"
+			"Ayfri/Python-TP1", "Ayfri/Python-TP2", "Ayfri/Python-TP3"
 		)
 	),
 	Language(
@@ -373,31 +358,32 @@ fun Skills() {
 			Section({
 				classes(SkillsStyle.skillsList)
 			}) {
-				skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
-					.thenBy { it.language.name })
-					.forEach { skill ->
-						if (skill.githubProjects.isEmpty()) {
-							skill.githubProjects += repos.filter {
-								it.language!!.equals(skill.language.name, true)
-							} + repos.filter { it.fullName in skill.language.githubProjects }
-						}
-
-						if (skill.schoolProjects.isEmpty()) {
-							skill.schoolProjects += repos.filter {
-								it.language!!.equals(
-									skill.language.name,
-									true
-								) && it.description?.contains("school") == true
-							} + repos.filter { it.fullName in skill.language.schoolProjects }
-						}
-
-						Div({
-							id(skill.language.name)
-							classes(SkillsStyle.skill)
-						}) {
-							skill.Display()
-						}
+				skills.sortedWith(
+					compareByDescending<Skill> { it.language.level }
+						.thenByDescending { it.language.since }
+						.thenBy { it.language.name }
+				).forEach { skill ->
+					if (skill.githubProjects.isEmpty()) {
+						skill.githubProjects += repos.filter {
+							it.language!!.equals(skill.language.name, true)
+						} + repos.filter { it.fullName in skill.language.githubProjects }
 					}
+
+					if (skill.schoolProjects.isEmpty()) {
+						skill.schoolProjects += repos.filter {
+							it.language!!.equals(
+								skill.language.name, true
+							) && it.description?.contains("school") == true
+						} + repos.filter { it.fullName in skill.language.schoolProjects }
+					}
+
+					Div({
+						id(skill.language.name)
+						classes(SkillsStyle.skill)
+					}) {
+						skill.Display()
+					}
+				}
 			}
 		}
 	}
@@ -415,7 +401,6 @@ object SkillsStyle : StyleSheet() {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns(repeat("auto-fill", minmax(22.5.cssRem, 1.fr)))
 		gap(2.cssRem)
-
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			self {
@@ -453,6 +438,10 @@ object SkillsStyle : StyleSheet() {
 		"img" {
 			size(3.5.cssRem)
 			borderRadius(.3.cssRem)
+		}
+
+		"h2" {
+			fontSize(1.cssRem)
 		}
 
 		"p" {
@@ -515,7 +504,7 @@ object SkillsStyle : StyleSheet() {
 				borderImageSlice(1)
 			}
 
-			"h4" {
+			"h3" {
 				margin(0.px)
 
 				self + nthOfType(2.n) style {
