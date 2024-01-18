@@ -24,8 +24,9 @@ data class AboutMeSection(
 	val date: Int,
 	val image: Boolean = false,
 	val id: String,
-	val title: (@Composable () -> Unit),
+	val title: (@Composable AboutMeSection.() -> Unit),
 ) {
+	var additionalContent: (@Composable () -> Unit)? = null
 	var htmlElement: HTMLElement? = null
 
 	@Composable
@@ -46,19 +47,37 @@ data class AboutMeSection(
 			title()
 		}
 
-		P({
-			markdownParagraph(content, true)
-		})
+		if (additionalContent != null) {
+			Div({
+				classes(AboutMeStyle.additionalContent)
+			}) {
+				additionalContent!!()
+				P({
+					markdownParagraph(content, true)
+				})
+			}
+		} else {
+			P({
+				markdownParagraph(content, true)
+			})
+		}
 	}
 }
 
-val sections = listOf(AboutMeSection(
-	MAIN_PRESENTATION.trimIndent().trimIndent(), 2002, true, id = "me"
-) {
-	Img(localImage("avatar@300x300.webp"), "avatar") {
-		classes(AppStyle.avatar)
-	}
-},
+val sections = listOf(
+	AboutMeSection(
+		MAIN_PRESENTATION.trimIndent().trimIndent(), 2002, true, id = "me"
+	) {
+		Img(localImage("avatar@300x300.webp"), "avatar") {
+			classes(AppStyle.avatar)
+		}
+
+		additionalContent = {
+			H1 {
+				Text("About me")
+			}
+		}
+	},
 
 	AboutMeSection(
 		"""
@@ -344,6 +363,11 @@ object AboutMeStyle : StyleSheet() {
 		id("cat-aclysm") style {
 			property("image-rendering", "pixelated")
 		}
+
+		"h1" style {
+			fontSize(3.cssRem)
+			margin(0.px)
+		}
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
@@ -514,6 +538,12 @@ object AboutMeStyle : StyleSheet() {
 				flexDirection(FlexDirection.Column)
 			}
 		}
+	}
+
+	val additionalContent by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		gap(2.cssRem)
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
