@@ -11,7 +11,7 @@ import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
 
-@Page
+@Page("/portfolio/index")
 @Composable
 fun Portfolio() {
 	PageLayout("Portfolio") {

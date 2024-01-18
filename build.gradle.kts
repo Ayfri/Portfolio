@@ -80,7 +80,7 @@ val downloadDataTask = tasks.register("downloadData") {
 kobweb {
 	markdown {
 		routeOverride = { route ->
-			"/articles/${route.splitCamelCase().joinToString("-") { word -> word.lowercase() }}"
+			"/articles/${route.splitCamelCase().joinToString("-") { word -> word.lowercase() }}/index"
 		}
 
 		handlers {

@@ -334,7 +334,7 @@ val skills = listOf(
 	),
 ).map(::Skill)
 
-@Page
+@Page("/skills/index")
 @Composable
 fun Skills() {
 	PageLayout("Skills") {

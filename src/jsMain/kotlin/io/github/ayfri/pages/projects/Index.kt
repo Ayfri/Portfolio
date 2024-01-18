@@ -1,4 +1,4 @@
-package io.github.ayfri.pages
+package io.github.ayfri.pages.projects
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf

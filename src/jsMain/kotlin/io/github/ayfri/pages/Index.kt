@@ -28,7 +28,7 @@ Hi, I'm Pierre Roy, an IT student at [Ynov Aix school](https://www.ynov.com/camp
 I'm making all sorts of projects and programming by myself for years. This is my portfolio, welcome!
 """
 
-@Page
+@Page("/index")
 @Composable
 fun Home() {
 	PageLayout("Home") {

@@ -21,7 +21,7 @@ fun Experience(
 	}
 }
 
-@Page
+@Page("/experiences/index")
 @Composable
 fun Experiences() {
 	PageLayout("Experiences") {
