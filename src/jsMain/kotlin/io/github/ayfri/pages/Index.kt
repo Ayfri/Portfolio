@@ -1,12 +1,9 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
 import io.github.ayfri.data.DataStyle
-import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.HomeCard
 import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
@@ -32,7 +29,7 @@ I'm making all sorts of projects and programming by myself for years. This is my
 @Composable
 fun Home() {
 	PageLayout("Home") {
-		val homeRepositories = remember { mutableStateListOf<GitHubRepository>() }
+		val homeRepositories = gitHubData.repos.sortedBy { it.stargazersCount }.reversed().take(3)
 
 		Style(HomeStyle)
 		Style(DataStyle)
@@ -79,10 +76,6 @@ fun Home() {
 			P({
 				markdownParagraph(MAIN_PRESENTATION.trimIndent(), true, AppStyle.monoFont)
 			})
-
-			if (homeRepositories.isEmpty()) {
-				homeRepositories += gitHubData.repos.sortedBy { it.stargazersCount }.reversed().take(3)
-			}
 
 			Section({
 				classes(HomeStyle.section)
@@ -214,13 +207,18 @@ object HomeStyle : StyleSheet() {
 
 		className("skills") style {
 			flexWrap(FlexWrap.Wrap)
+			gap(1.cssRem)
+
+		}
+
+		className("repos") style {
+			gap(1.5.cssRem)
 		}
 
 		className("list") style {
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Row)
 			justifyContent(JustifyContent.Center)
-			gap(1.cssRem)
 
 			className("skill") style {
 				backgroundColor(Color("#252525"))
