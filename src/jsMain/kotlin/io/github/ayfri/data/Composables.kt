@@ -22,11 +22,26 @@ import kotlin.js.Date
 
 @Composable
 fun HomeCard(repository: GitHubRepository) {
-	H3 {
-		Img(skills.first { it.language.name == repository.language }.language.iconUrl) {
-			alt("${repository.language} language")
+	A("/projects/#${repository.name}", {
+		classes("title")
+	}) {
+		H3 {
+			Img(skills.first { it.language.name == repository.language }.language.iconUrl) {
+				alt("${repository.language} language")
+			}
+			Text(repository.name)
 		}
-		A("/projects/#${repository.name}", repository.name)
+
+		Span({
+			style {
+				display(DisplayStyle.Flex)
+				alignItems(AlignItems.Center)
+				gap(.5.cssRem)
+				marginTop(.5.cssRem)
+			}
+		}) {
+			TextIcon(repository.stargazersCount.toString(), FontAwesomeType.SOLID, "star", Color("#ffe218"))
+		}
 	}
 
 	Div {
@@ -137,18 +152,23 @@ object DataStyle : StyleSheet() {
 		flexDirection(FlexDirection.Column)
 		justifyContent(JustifyContent.SpaceBetween)
 
-		"h3" {
+		className("title") style {
+			color(Color.white)
+
 			display(DisplayStyle.Flex)
-			justifyContent(JustifyContent.Center)
+			flexDirection(FlexDirection.Column)
 			alignItems(AlignItems.Center)
-			gap(.5.cssRem)
+			justifyContent(JustifyContent.Center)
 
 			backgroundColor(Color(HOME_CARD_TITLE_BACKGROUND))
-			margin(0.px)
 			padding(1.cssRem)
 
-			"a" {
-				color(Color.white)
+			"h3" {
+				display(DisplayStyle.Flex)
+				alignItems(AlignItems.Center)
+				gap(.5.cssRem)
+
+				margin(0.px)
 			}
 
 			"img" {
