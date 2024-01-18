@@ -12,6 +12,7 @@ import web.url.URL
 
 @Composable
 fun PageLayout(title: String, content: @Composable () -> Unit) {
+	Style(AnimationsStyle)
 	Style(AppStyle)
 	setTitle("$title - ${AppGlobals["author"]}'s Portfolio")
 

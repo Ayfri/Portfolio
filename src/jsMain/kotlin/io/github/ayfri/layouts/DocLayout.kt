@@ -20,8 +20,9 @@ import org.jetbrains.compose.web.dom.Main
 
 @Composable
 fun DocLayout(content: @Composable () -> Unit) {
-	Style(MarkdownStyle)
+	Style(AnimationsStyle)
 	Style(AppStyle)
+	Style(MarkdownStyle)
 	Style(CodeTheme)
 
 	val context = rememberPageContext()

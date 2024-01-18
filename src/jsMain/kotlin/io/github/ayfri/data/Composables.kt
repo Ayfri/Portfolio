@@ -144,6 +144,13 @@ object DataStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val homeCard by style {
+		animation(AnimationsStyle.appearFromBelow) {
+			fillMode(AnimationFillMode.Forwards)
+			duration(1.s)
+			timingFunction(AnimationTimingFunction.cubicBezier(0.4, 0.0, 0.2, 1.0))
+		}
+		opacity(0)
+
 		borderRadius(.8.cssRem)
 		overflow(Overflow.Hidden)
 		width(clamp(17.5.cssRem, 25.vw, 25.cssRem))

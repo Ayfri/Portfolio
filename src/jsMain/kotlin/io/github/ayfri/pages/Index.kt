@@ -86,11 +86,14 @@ fun Home() {
 				Div({
 					classes("list", "repos")
 				}) {
-					homeRepositories.forEach {
+					homeRepositories.forEachIndexed { index, repository ->
 						Div({
 							classes(DataStyle.homeCard, "repo")
+							style {
+								property("animation-delay", (index * 0.2).s)
+							}
 						}) {
-							HomeCard(it)
+							HomeCard(repository)
 						}
 					}
 				}
@@ -106,11 +109,14 @@ fun Home() {
 				}) {
 					skills.sortedWith(
 						compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
-					).take(8).forEach {
-						A("/skills/#${it.language.name}", {
-							classes("skill")
+					).take(8).forEachIndexed { index, skill ->
+						A("/skills/#${skill.language.name}", {
+							classes(HomeStyle.skill)
+							style {
+								property("animation-delay", (index * 0.25 + 0.75).s)
+							}
 						}) {
-							it.DisplaySimple()
+							skill.DisplaySimple()
 						}
 					}
 				}
@@ -211,7 +217,6 @@ object HomeStyle : StyleSheet() {
 		className("skills") style {
 			flexWrap(FlexWrap.Wrap)
 			gap(1.cssRem)
-
 		}
 
 		className("repos") style {
@@ -222,18 +227,6 @@ object HomeStyle : StyleSheet() {
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Row)
 			justifyContent(JustifyContent.Center)
-
-			className("skill") style {
-				backgroundColor(Color("#252525"))
-				borderRadius(.4.cssRem)
-				color(Color.white)
-				padding(.3.cssRem, .5.cssRem)
-
-				"img" {
-					borderRadius(.4.cssRem)
-					size(3.5.cssRem)
-				}
-			}
 		}
 
 		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFirstBreak))) {
@@ -245,6 +238,29 @@ object HomeStyle : StyleSheet() {
 					maxWidth(95.percent)
 				}
 			}
+		}
+	}
+
+	val skill by style {
+		animation(AnimationsStyle.appear) {
+			duration(1.s)
+			fillMode(AnimationFillMode.Forwards)
+			timingFunction(AnimationTimingFunction.EaseInOut)
+		}
+		opacity(0)
+
+		backgroundColor(Color("#252525"))
+		borderRadius(.4.cssRem)
+		color(Color.white)
+		padding(.3.cssRem, .5.cssRem)
+
+		hover(self) style {
+			backgroundColor(Color("#1D1D1E"))
+		}
+
+		"img" {
+			borderRadius(.4.cssRem)
+			size(3.5.cssRem)
 		}
 	}
 }
