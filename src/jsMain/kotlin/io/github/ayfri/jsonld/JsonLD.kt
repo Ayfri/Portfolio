@@ -22,7 +22,7 @@ class GraphJsonLD(
 class BlogArticleJsonLD(
 	val headline: String,
 	val url: String,
-	val author: PersonJsonLD,
+	val author: JsonLD,
 	val datePublished: String,
 	val dateModified: String? = null,
 	val image: String? = null,
@@ -30,7 +30,7 @@ class BlogArticleJsonLD(
 	val keywords: List<String>? = null,
 ) : JsonLD() {
 	@Serializable
-	val mainEntityOfPage = WebPageJsonLD(headline, url, image, keywords)
+	val mainEntityOfPage: JsonLD = WebPageJsonLD(headline, url, image, keywords)
 }
 
 @Serializable
