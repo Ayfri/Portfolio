@@ -61,6 +61,9 @@ fun HomeCard(repository: GitHubRepository) {
 }
 
 @Composable
+fun AvatarImage(owner: PartialUser) = Img(owner.avatarUrl, "${owner.login} avatar")
+
+@Composable
 fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement>.(SyntheticMouseEvent) -> Unit = {}) {
 	var open by mutableStateOf(false)
 
@@ -77,7 +80,7 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 			classes("top", AppStyle.monoFont)
 		}) {
 			if (open) {
-				Img(src = repository.owner.avatarUrl, alt = "${repository.owner.login} avatar")
+				AvatarImage(repository.owner)
 				H2 { Text(repository.name) }
 
 				Div({
@@ -101,7 +104,7 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 					})
 				}
 			} else {
-				Img(src = repository.owner.avatarUrl)
+				AvatarImage(repository.owner)
 				Div({
 					classes("stars")
 				}) {
