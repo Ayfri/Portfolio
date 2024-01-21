@@ -4,10 +4,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.core.Page
-import io.github.ayfri.*
+import io.github.ayfri.AppStyle
+import io.github.ayfri.components.A
+import io.github.ayfri.components.P
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
+import io.github.ayfri.localImage
+import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*

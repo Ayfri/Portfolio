@@ -3,6 +3,8 @@ package io.github.ayfri.pages
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
+import io.github.ayfri.components.A
+import io.github.ayfri.components.Span
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.HomeCard
 import io.github.ayfri.data.gitHubData

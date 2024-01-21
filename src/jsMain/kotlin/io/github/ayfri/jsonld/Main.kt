@@ -1,7 +1,11 @@
 package io.github.ayfri.jsonld
 
 import com.varabyte.kobweb.core.AppGlobals
-import io.github.ayfri.*
+import io.github.ayfri.articlesEntries
+import io.github.ayfri.data.LINKEDIN_LINK
+import io.github.ayfri.data.TWITCH_LINK
+import io.github.ayfri.data.TWITTER_LINK
+import io.github.ayfri.ensureSuffix
 
 const val GITHUB_PROFILE = "https://github.com/Ayfri"
 

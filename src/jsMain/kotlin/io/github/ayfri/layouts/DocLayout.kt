@@ -7,7 +7,7 @@ import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
 import io.github.ayfri.*
-import io.github.ayfri.header.Header
+import io.github.ayfri.components.*
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb

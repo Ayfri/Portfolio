@@ -3,8 +3,10 @@ package io.github.ayfri.layouts
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
-import io.github.ayfri.*
-import io.github.ayfri.header.Header
+import io.github.ayfri.AnimationsStyle
+import io.github.ayfri.AppStyle
+import io.github.ayfri.components.*
+import io.github.ayfri.ensureSuffix
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.dom.Main

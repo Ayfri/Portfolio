@@ -1,4 +1,4 @@
-package io.github.ayfri.header
+package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.web.events.SyntheticMouseEvent

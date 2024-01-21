@@ -5,7 +5,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.web.events.SyntheticMouseEvent
-import io.github.ayfri.*
+import io.github.ayfri.AnimationsStyle
+import io.github.ayfri.AppStyle
+import io.github.ayfri.components.A
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.P
+import io.github.ayfri.markdownParagraph
 import io.github.ayfri.pages.TextIcon
 import io.github.ayfri.pages.skills
 import io.github.ayfri.utils.*

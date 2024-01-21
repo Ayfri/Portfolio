@@ -1,7 +1,10 @@
-package io.github.ayfri
+package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
-import io.github.ayfri.header.GITHUB_LINK
+import io.github.ayfri.AppStyle
+import io.github.ayfri.MAIL_TO
+import io.github.ayfri.data.*
+import io.github.ayfri.ifNotBlank
 import io.github.ayfri.utils.*
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -15,16 +18,11 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
 import kotlin.js.Date
 
-const val DISCORD_LINK = "https://discord.gg/BySjRNQ9Je"
-const val LINKEDIN_LINK = "https://www.linkedin.com/in/pierre-roy-ayfri/"
-const val TWITCH_LINK = "https://www.twitch.tv/ayfri_"
-const val TWITTER_LINK = "https://twitter.com/@ayfri_"
-
 data class FooterSocial(val iconName: String, val url: String)
 
 val footerSocials = listOf(
 	FooterSocial("discord", DISCORD_LINK),
-	FooterSocial("github", GITHUB_LINK),
+	FooterSocial("github", REPO_LINK),
 	FooterSocial("linkedin", LINKEDIN_LINK),
 	FooterSocial("twitch", TWITCH_LINK),
 	FooterSocial("twitter", TWITTER_LINK),

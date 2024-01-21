@@ -1,4 +1,4 @@
-package io.github.ayfri.header
+package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -8,9 +8,7 @@ import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.css.whiteSpace
 import io.github.ayfri.AppStyle.mobileFirstBreak
 import io.github.ayfri.AppStyle.mobileSecondBreak
-import io.github.ayfri.FontAwesomeType
-import io.github.ayfri.I
-import io.github.ayfri.P
+import io.github.ayfri.data.REPO_LINK
 import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
@@ -19,8 +17,6 @@ import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Header
 import org.jetbrains.compose.web.dom.I
 import org.jetbrains.compose.web.dom.Nav
-
-const val GITHUB_LINK = "https://github.com/Ayfri/Ayfri.github.io"
 
 @Composable
 fun Header() {
@@ -42,7 +38,7 @@ fun Header() {
 			}
 		}
 
-		A(GITHUB_LINK, {
+		A(REPO_LINK, {
 			target(ATarget.Blank)
 			classes(HeaderStyle.navbarPart, HeaderStyle.navbarGithub)
 			title("GitHub")

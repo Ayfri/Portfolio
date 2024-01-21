@@ -1,5 +1,6 @@
-package io.github.ayfri
+package io.github.ayfri.components
 
+import io.github.ayfri.jsonEncoder
 import io.github.ayfri.jsonld.generateJsonLD
 import kotlinx.browser.document
 import kotlinx.browser.window
