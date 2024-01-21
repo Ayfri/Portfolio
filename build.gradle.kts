@@ -102,7 +102,7 @@ kobweb {
 			code.set { code ->
 				val text = "\"\"\"${code.literal.escapeTripleQuotedText()}\"\"\""
 
-				"""io.github.ayfri.CodeBlock($text, "${code.info.takeIf { it.isNotBlank() }}")"""
+				"""io.github.ayfri.components.CodeBlock($text, "${code.info.takeIf { it.isNotBlank() }}")"""
 			}
 		}
 	}
