@@ -112,7 +112,7 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-			After creating my own [Discord server](https://discord.gg/BySjRNQ9Je) for my community from [YouTube](https://www.youtube.com/c/Ayfri), I wanted to create a Discord Bot. So I created a bot in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) using [Node.JS](https://nodejs.org) in early 2018 by following tutorials, I created CommunAyBot.
+			After creating my own [Discord server](https://discord.gg/invite/BySjRNQ9Je) for my community from [YouTube](https://www.youtube.com/c/Ayfri), I wanted to create a Discord Bot. So I created a bot in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) using [Node.JS](https://nodejs.org) in early 2018 by following tutorials, I created CommunAyBot.
 			Back in the days, it was not that common to create a bot for your own community, and Discord was not so reputed. Because of that, there were no great tutorials. I got a lot of help from a Discord Server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons, and some others helped me a lot to understand and create my bot.
 
 			About a year later, I was pretty good at creating a bot, but I realized that my project was kind of... ugly. So I recreated it, [AyBot 2](https://github.com/Ayfri/AyBot-2) was born in early 2019. It was pretty clean, and I wanted people to use my bot, so I changed a lot of the code, so it was working on multiple servers with configurations, etc.
@@ -154,7 +154,7 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-			During this time, I was administrator (and I’m still) on a [big Discord server](https://discord.gg/sDT7W8mNmq) at the time about sharing your server or website. And I was the friend of the other administrator, Antow, who also created his own bot, I was helping him sometimes.
+			During this time, I was administrator (and I’m still) on a [big Discord server](https://discord.gg/invite/sDT7W8mNmq) at the time about sharing your server or website. And I was the friend of the other administrator, Antow, who also created his own bot, I was helping him sometimes.
 			After some discussions, we agreed to merge our bots, as we were both passionate about astronomy, we named it [Galileo](https://github.com/Galileo-Bot/galileo).
 
 			But these times were complicated for me personally and due to a lack of time and motivations because I was making almost only discord bots since about 2 years. I stopped developing it and moved away to other interesting projects.
@@ -193,7 +193,7 @@ val sections = listOf(
 		"""
 			During my second year at Ynov, I though about creating an utility library for creating Minecraft Datapacks.
 			I was on a Discord community about Minecraft Datapacks since 2 years, and I was searching for any project that I could make in Kotlin.
-			So I started creating [Datapack-DSL](https://github.com/Ayfri/Datapack-DSL) in around november.
+			So I started creating [Datapack-DSL](https://github.com/Ayfri/Kore) in around november.
 			
 			This project has been a great experience for me, I learned a lot about Datapacks and Minecraft internal working, it was really a pleasure to create that.
 			The project contains functions (DSLs) for every commands in Minecraft, every JSONs Minecraft uses, Datapack creation, etc.

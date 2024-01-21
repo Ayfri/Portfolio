@@ -23,7 +23,7 @@ import kotlin.js.Date
 inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
 
 const val MAIN_PRESENTATION = """
-Hi, I'm Pierre Roy, an IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence/), and I'm passionate about computer science and especially programming.
+Hi, I'm Pierre Roy, an IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence), and I'm passionate about computer science and especially programming.
 I'm making all sorts of projects and programming by myself for years. This is my portfolio, welcome!
 """
 

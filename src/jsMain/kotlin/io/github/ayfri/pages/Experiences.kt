@@ -61,7 +61,7 @@ fun Experiences() {
 					"""
 					## [Ynov](https://www.ynov.com/) Internship in 2023
 					
-					[Ynov](https://www.ynov.com/) is a school teaching computer science, I'm currently as of August 2023 in the second year of the [Computer Science](https://www.ynov.com/formations/ecole-informatique/) course.<br>
+					[Ynov](https://www.ynov.com/) is a school teaching computer science, I'm currently as of August 2023 in the second year of the [Computer Science](https://www.ynov.com/formations/ecole-informatique) course.<br>
 					From June 2023 to August 2023, I had an internship organized by the school about AI.<br>
 					We've done a lot of searches about [ChatGPT](https://chat.openai.com/), autonomous agents and expanding context of GPT.
 					
