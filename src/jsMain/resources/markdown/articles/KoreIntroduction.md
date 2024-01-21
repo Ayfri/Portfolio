@@ -2,8 +2,9 @@
 nav-title: Kore Introduction
 title: Introduction to Datapack Creation with Kore in Kotlin
 description: Learn how to create Minecraft datapacks using Kore in Kotlin.
+keywords: minecraft, datapack, kore, kotlin, tutorial
 date-created: 2023-11-13
-date-modified: 2023-11-18
+date-modified: 2024-01-21
 root: .layouts.DocLayout
 ---
 
@@ -250,13 +251,13 @@ recipes, and more.
 
 ```kotlin
 dataPack("my_datapack") {
-   recipes {
-      craftingShapeless("my_recipe") {
-         ingredient(Items.DIAMOND)
-         ingredient(Items.GOLD_INGOT, 2)
-         result(Items.DIAMOND_SWORD)
-      }
-   }
+	recipes {
+		craftingShapeless("my_recipe") {
+			ingredient(Items.DIAMOND)
+			ingredient(Items.GOLD_INGOT, 2)
+			result(Items.DIAMOND_SWORD)
+		}
+	}
 }
 ```
 
@@ -268,27 +269,27 @@ the [advancement documentation](https://minecraft.wiki/w/Advancement) for more d
 
 ```kotlin
 dataPack("my_datapack") {
-   advancement("my_advancement") {
-      display(Items.DIAMOND_SWORD, title = "My Advancement", description = "This is my advancement!") {
-         frame = AdvancementFrameType.GOAL
-      }
+	advancement("my_advancement") {
+		display(Items.DIAMOND_SWORD, title = "My Advancement", description = "This is my advancement!") {
+			frame = AdvancementFrameType.GOAL
+		}
 
-      parent = Advancements.Story.ROOT
+		parent = Advancements.Story.ROOT
 
-      criteria(
-         name = "my_criterion",
-         triggerCondition = ConsumeItem(itemStack(Items.ENCHANTED_GOLDEN_APPLE))
-      ) {
-         randomChance(chance = 0.5f)
-      }
+		criteria(
+			name = "my_criterion",
+			triggerCondition = ConsumeItem(itemStack(Items.ENCHANTED_GOLDEN_APPLE))
+		) {
+			randomChance(chance = 0.5f)
+		}
 
-      rewards {
-         experience = 10
-         function = FunctionArgument(namespace = "my_datapack", function = "my_function")
+		rewards {
+			experience = 10
+			function = FunctionArgument(namespace = "my_datapack", function = "my_function")
 
-         loot = listOf(LootTables.Chests.DESERT_PYRAMID)
-      }
-   }
+			loot = listOf(LootTables.Chests.DESERT_PYRAMID)
+		}
+	}
 }
 ```
 
@@ -300,20 +301,20 @@ the [loot table documentation](https://minecraft.wiki/w/Loot_table) for more inf
 
 ```kotlin
 dataPack("my_datapack") {
-   lootTables {
-      blockLootTable(Blocks.DIAMOND_ORE) {
-         pool {
-            rolls = uniform(1, 3)
-            conditions {
-               weatherCheck(true)
-            }
+	lootTables {
+		blockLootTable(Blocks.DIAMOND_ORE) {
+			pool {
+				rolls = uniform(1, 3)
+				conditions {
+					weatherCheck(true)
+				}
 
-            entries {
-               lootTable(LootTables.Gameplay.PIGLIN_BARTERING)
-            }
-         }
-      }
-   }
+				entries {
+					lootTable(LootTables.Gameplay.PIGLIN_BARTERING)
+				}
+			}
+		}
+	}
 }
 ```
 
@@ -325,16 +326,16 @@ the [world generation documentation](https://minecraft.wiki/w/Custom_world_gener
 
 ```kotlin
 dataPack("my_datapack") {
-   dimension("my_flat_nether_dimension", type = DimensionTypes.THE_NETHER) {
-      flatGenerator(biome = Biomes.NETHER_WASTES) {
-         features = true
-         structureOverrides = listOf(StructureSets.NETHER_COMPLEXES)
+	dimension("my_flat_nether_dimension", type = DimensionTypes.THE_NETHER) {
+		flatGenerator(biome = Biomes.NETHER_WASTES) {
+			features = true
+			structureOverrides = listOf(StructureSets.NETHER_COMPLEXES)
 
-         layer(Blocks.NETHERRACK, 1)
-         layer(Blocks.LAVA, 2)
-         layer(Blocks.NETHERRACK, 10)
-      }
-   }
+			layer(Blocks.NETHERRACK, 1)
+			layer(Blocks.LAVA, 2)
+			layer(Blocks.NETHERRACK, 10)
+		}
+	}
 }
 ```
 

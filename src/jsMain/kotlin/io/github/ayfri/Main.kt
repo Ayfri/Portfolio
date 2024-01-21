@@ -20,6 +20,7 @@ const val MAIL_TO = "pierre.ayfri@gmail.com"
 val jsonEncoder = Json {
 	encodeDefaults = true
 	explicitNulls = false
+	classDiscriminator = "@type"
 }
 
 @App

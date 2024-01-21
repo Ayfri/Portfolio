@@ -1,3 +1,4 @@
+import com.varabyte.kobweb.common.text.ensureSurrounded
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
@@ -201,7 +202,7 @@ data class BlogEntry(
 	val title: String,
 	val desc: String,
 	val navTitle: String,
-	val tags: List<String>,
+	val keywords: List<String>,
 	val dateModified: String,
 )
 
@@ -241,7 +242,7 @@ val generateBlogSourceTask = task("generateBlogSource") {
 				return@forEach
 			}
 
-			val tags = fm["tags"] ?: emptyList()
+			val keywords = fm["keywords"]?.firstOrNull()?.split(Regex(",\\s*")) ?: emptyList()
 			// Dates are only formatted in this format "2023-11-13"
 			val dateCreatedComplete = dateCreated.split("-").let { (year, month, day) ->
 				"$year-$month-${day}T00:00:00.000000000+01:00"
@@ -250,13 +251,13 @@ val generateBlogSourceTask = task("generateBlogSource") {
 				"$year-$month-${day}T00:00:00.000000000+01:00"
 			}
 			val newEntry = BlogEntry(
-				blogArticle.relativeTo(blogInputDir.asFile),
-				dateCreatedComplete,
-				title,
-				desc,
-				navTitle,
-				tags,
-				dateModifiedComplete
+				file = blogArticle.relativeTo(blogInputDir.asFile),
+				date = dateCreatedComplete,
+				title = title,
+				desc = desc,
+				navTitle = navTitle,
+				keywords = keywords,
+				dateModified = dateModifiedComplete
 			)
 			blogEntries.add(newEntry)
 		}
@@ -268,19 +269,26 @@ val generateBlogSourceTask = task("generateBlogSource") {
 					"""
 					|// This file is generated. Modify the build script if you need to change it.
 					|
-					|package io.github.ayfri.articles
+					|package io.github.ayfri
 					|
 					|import io.github.ayfri.components.ArticleEntry
 					|
 					|val articlesEntries = listOf${if (blogEntries.isEmpty()) "<ArticleEntry>" else ""}(
                     """.trimMargin()
 				)
+
+				fun List<String>.asCode() = "listOf(${joinToString { "\"$it\"" }})"
+
 				blogEntries.sortedByDescending { it.date }.forEach { entry ->
 					appendLine(
 						"""    ArticleEntry("/articles/${
-							entry.file.path.substringBeforeLast(".md").splitCamelCase().joinToString("-") { word -> word.lowercase() }
-						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}",
-							|listOf${if (entry.tags.isEmpty()) "<String>" else ""}(${entry.tags.joinToString { "\"$it\"" }}), "${entry.dateModified}"),
+							entry.file.path.substringBeforeLast(".md")
+								.splitCamelCase()
+								.joinToString("-") { word -> word.lowercase() }
+								.ensureSurrounded("", "/")
+						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}", ${
+							entry.keywords.asCode()
+						}, "${entry.dateModified}"),
 						""".trimMargin()
 					)
 				}

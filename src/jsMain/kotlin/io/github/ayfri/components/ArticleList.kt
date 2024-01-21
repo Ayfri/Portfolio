@@ -18,7 +18,7 @@ data class ArticleEntry(
 	val title: String,
 	val desc: String,
 	val navTitle: String,
-	val tags: List<String>,
+	val keywords: List<String>,
 	val dateModified: String,
 )
 

@@ -26,6 +26,7 @@ fun PageLayout(title: String, content: @Composable () -> Unit) {
 	url.pathname = url.pathname.ensureSuffix("/")
 
 	setCanonical(url.toString())
+	setJsonLD()
 
 	Main({
 		id("main")

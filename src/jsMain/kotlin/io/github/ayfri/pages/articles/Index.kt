@@ -2,7 +2,7 @@ package io.github.ayfri.pages.articles
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.Page
-import io.github.ayfri.articles.articlesEntries
+import io.github.ayfri.articlesEntries
 import io.github.ayfri.components.ArticleList
 import io.github.ayfri.components.ArticleListStyle
 import io.github.ayfri.layouts.PageLayout
