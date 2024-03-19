@@ -12,8 +12,10 @@ root: .layouts.DocLayout
 
 Welcome to the world of Minecraft datapack creation! If you've ever dreamed of creating your
 own [Minecraft datapack](https://minecraft.wiki/w/Data_pack) but thought you were limited to using just the traditional tools, we
-have exciting news for you. [Kore](https://github.com/Ayfri/Kore), a Kotlin-based library, is here to revolutionize the way you develop
+have exciting news for you. [Kore](https://kore.ayfri.com), a Kotlin-based library, is here to revolutionize the way you develop
 datapacks for Minecraft.
+
+[![Kore website screenshot](/images/kore-introduction/kore-website-screenshot.png)](https://kore.ayfri.com)
 
 Kore brings the power of [Kotlin](https://kotlinlang.org/) to the realm of Minecraft, allowing you to write cleaner, more maintainable code
 with less effort. Whether you're a seasoned developer or just starting out, Kore provides a set of tools that simplifies the process of
