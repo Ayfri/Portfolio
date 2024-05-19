@@ -8,6 +8,8 @@ date-modified: 2024-05-19
 root: .layouts.DocLayout
 ---
 
+# Hello World Datapack with Kore
+
 Welcome to the world of Minecraft datapack creation! If you've ever wanted to create your own Minecraft datapack but felt limited by
 traditional tools, Kore, a Kotlin-based library, is here to make the process easier and more efficient. In this article, we'll guide you
 through creating a simple datapack that displays a "Hello World" message in the chat when the game loads. We'll show you how to do this
