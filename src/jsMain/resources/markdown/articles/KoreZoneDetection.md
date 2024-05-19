@@ -6,6 +6,7 @@ keywords: minecraft, datapack, kore, kotlin, tutorial, zone detection, predicate
 date-created: 2024-05-19
 date-modified: 2024-05-19
 root: .layouts.DocLayout
+routeOverride: /articles/kore-zone-detection/index
 ---
 
 # Zone Detection with a Minecraft DataPack created with Kore Kotlin

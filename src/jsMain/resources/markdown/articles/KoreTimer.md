@@ -6,6 +6,7 @@ keywords: minecraft, datapack, kore, kotlin, tutorial, timer
 date-created: 2024-05-19
 date-modified: 2024-05-19
 root: .layouts.DocLayout
+routeOverride: /articles/kore-timer/index
 ---
 
 # Creating a Simple Timer Datapack with Kore

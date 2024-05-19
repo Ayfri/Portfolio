@@ -6,6 +6,7 @@ keywords: minecraft, datapack, kore, kotlin, tutorial
 date-created: 2024-05-19
 date-modified: 2024-05-19
 root: .layouts.DocLayout
+routeOverride: /articles/kore-hello-world/index
 ---
 
 # Hello World Datapack with Kore

@@ -6,6 +6,7 @@ keywords: minecraft, datapack, kore, kotlin, tutorial
 date-created: 2023-11-13
 date-modified: 2024-01-21
 root: .layouts.DocLayout
+routeOverride: /articles/kore-introduction/index
 ---
 
 # Introduction to Datapack Creation with Kore in Kotlin
