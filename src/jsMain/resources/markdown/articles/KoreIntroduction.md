@@ -341,6 +341,13 @@ dataPack("my_datapack") {
 }
 ```
 
+## Tutorials
+
+For more in-depth tutorials on creating Minecraft datapacks with Kore, check out the following articles:
+
+- [Creating a Kore Timer Datapack](https://ayfri.com/articles/kore-timer/)
+- [Zone Detection with Kore](https://ayfri.com/articles/kore-zone-detection/)
+
 ## Conclusion
 
 In this article, we've explored the basics of creating Minecraft datapacks with the Kore library in Kotlin. We've seen how Kore simplifies
