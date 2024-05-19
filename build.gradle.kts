@@ -2,12 +2,7 @@ import com.varabyte.kobweb.common.text.ensureSurrounded
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
-import com.varabyte.kobwebx.gradle.markdown.yamlStringToKotlinString
 import kotlinx.html.*
-import org.commonmark.ext.front.matter.YamlFrontMatterBlock
-import org.commonmark.ext.front.matter.YamlFrontMatterVisitor
-import org.commonmark.node.AbstractVisitor
-import org.commonmark.node.CustomBlock
 import org.commonmark.node.Text
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import java.net.HttpURLConnection
@@ -77,6 +72,17 @@ val downloadDataTask = tasks.register("downloadData") {
 	}
 }
 
+data class BlogEntry(
+	val file: File,
+	val date: String,
+	val title: String,
+	val desc: String,
+	val navTitle: String,
+	val keywords: List<String>,
+	val dateModified: String,
+)
+
+fun String.escapeQuotes() = this.replace("\"", "\\\"")
 
 kobweb {
 	markdown {
@@ -104,6 +110,80 @@ kobweb {
 
 				"""io.github.ayfri.components.CodeBlock($text, "${code.info.takeIf { it.isNotBlank() }}")"""
 			}
+		}
+
+		process = { markdownFile ->
+			val blogEntries = mutableListOf<BlogEntry>()
+
+			markdownFile.forEach { entry ->
+				val path = File(entry.filePath)
+				val fileName = path.name
+				val fm = entry.frontMatter
+				val requiredFields = listOf("title", "description", "date-created", "date-modified", "nav-title")
+				val title = fm["title"]?.firstOrNull()
+				val desc = fm["description"]?.firstOrNull()
+				val dateCreated = fm["date-created"]?.firstOrNull()
+				val dateModified = fm["date-modified"]?.firstOrNull()
+				val navTitle = fm["nav-title"]?.firstOrNull()
+
+				if (title == null || desc == null || dateCreated == null || dateModified == null || navTitle == null) {
+					println("Skipping '$fileName', missing required fields in front matter of $fileName: ${requiredFields.filter { fm[it] == null }}")
+					return@forEach
+				}
+
+				val keywords = fm["keywords"]?.firstOrNull()?.split(Regex(",\\s*")) ?: emptyList()
+				// Dates are only formatted in this format "2023-11-13"
+				val dateCreatedComplete = dateCreated.split("-").let { (year, month, day) ->
+					"$year-$month-${day}T00:00:00.000000000+01:00"
+				}
+				val dateModifiedComplete = dateModified.split("-").let { (year, month, day) ->
+					"$year-$month-${day}T00:00:00.000000000+01:00"
+				}
+
+				blogEntries.add(
+					BlogEntry(
+						file = path,
+						date = dateCreatedComplete,
+						title = title,
+						desc = desc,
+						navTitle = navTitle,
+						keywords = keywords,
+						dateModified = dateModifiedComplete
+					)
+				)
+			}
+
+			generateKotlin("$group/articles.kt", buildString {
+				appendLine(
+					"""
+					|// This file is generated. Modify the build script if you need to change it.
+					|
+					|package io.github.ayfri
+					|
+					|import io.github.ayfri.components.ArticleEntry
+					|
+					|val articlesEntries = listOf${if (blogEntries.isEmpty()) "<ArticleEntry>" else ""}(
+					""".trimMargin()
+				)
+
+				fun List<String>.asCode() = "listOf(${joinToString { "\"$it\"" }})"
+
+				blogEntries.sortedByDescending { it.date }.forEach { entry ->
+					appendLine(
+						"""    ArticleEntry("/articles/${
+							entry.file.nameWithoutExtension
+								.splitCamelCase()
+								.joinToString("-") { word -> word.lowercase() }
+								.ensureSurrounded("", "/")
+						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}", ${
+							entry.keywords.asCode()
+						}, "${entry.dateModified}"),
+						""".trimMargin()
+					)
+				}
+
+				appendLine(")")
+			})
 		}
 	}
 
@@ -178,129 +258,6 @@ kobweb {
 	}
 }
 
-class MarkdownVisitor : AbstractVisitor() {
-	private val _frontMatter = mutableMapOf<String, List<String>>()
-	val frontMatter: Map<String, List<String>> = _frontMatter
-
-	override fun visit(customBlock: CustomBlock) {
-		if (customBlock is YamlFrontMatterBlock) {
-			val yamlVisitor = YamlFrontMatterVisitor()
-			customBlock.accept(yamlVisitor)
-			_frontMatter.putAll(
-				yamlVisitor.data
-					.mapValues { (_, values) ->
-						values.map { it.yamlStringToKotlinString() }
-					}
-			)
-		}
-	}
-}
-
-data class BlogEntry(
-	val file: File,
-	val date: String,
-	val title: String,
-	val desc: String,
-	val navTitle: String,
-	val keywords: List<String>,
-	val dateModified: String,
-)
-
-fun String.escapeQuotes() = this.replace("\"", "\\\"")
-
-val generateBlogSourceTask = task("generateBlogSource") {
-	group = "io/github/ayfri"
-	val blogGenDir = layout.buildDirectory.dir("generated/ayfri/src/jsMain/kotlin").get()
-	blogInputDir.asFile.mkdirs()
-
-	inputs.dir(blogInputDir)
-		.withPropertyName("blogArticles")
-		.withPathSensitivity(PathSensitivity.RELATIVE)
-	outputs.dir(blogGenDir)
-		.withPropertyName("blogGeneratedSource")
-
-	doLast {
-		val parser = kobweb.markdown.features.createParser()
-		val blogEntries = mutableListOf<BlogEntry>()
-
-		blogInputDir.asFileTree.forEach { blogArticle ->
-			val rootNode = parser.parse(blogArticle.readText())
-			val visitor = MarkdownVisitor()
-
-			rootNode.accept(visitor)
-
-			val fm = visitor.frontMatter
-			val requiredFields = listOf("title", "description", "date-created", "date-modified", "nav-title")
-			val title = fm["title"]?.firstOrNull()
-			val desc = fm["description"]?.firstOrNull()
-			val dateCreated = fm["date-created"]?.firstOrNull()
-			val dateModified = fm["date-modified"]?.firstOrNull()
-			val navTitle = fm["nav-title"]?.firstOrNull()
-
-			if (title == null || desc == null || dateCreated == null || dateModified == null || navTitle == null) {
-				println("Skipping '${blogArticle.name}', missing required fields in front matter of ${blogArticle.name}: ${requiredFields.filter { fm[it] == null }}")
-				return@forEach
-			}
-
-			val keywords = fm["keywords"]?.firstOrNull()?.split(Regex(",\\s*")) ?: emptyList()
-			// Dates are only formatted in this format "2023-11-13"
-			val dateCreatedComplete = dateCreated.split("-").let { (year, month, day) ->
-				"$year-$month-${day}T00:00:00.000000000+01:00"
-			}
-			val dateModifiedComplete = dateModified.split("-").let { (year, month, day) ->
-				"$year-$month-${day}T00:00:00.000000000+01:00"
-			}
-			val newEntry = BlogEntry(
-				file = blogArticle.relativeTo(blogInputDir.asFile),
-				date = dateCreatedComplete,
-				title = title,
-				desc = desc,
-				navTitle = navTitle,
-				keywords = keywords,
-				dateModified = dateModifiedComplete
-			)
-			blogEntries.add(newEntry)
-		}
-
-		blogGenDir.file("$group/articles.kt").asFile.apply {
-			parentFile.mkdirs()
-			writeText(buildString {
-				appendLine(
-					"""
-					|// This file is generated. Modify the build script if you need to change it.
-					|
-					|package io.github.ayfri
-					|
-					|import io.github.ayfri.components.ArticleEntry
-					|
-					|val articlesEntries = listOf${if (blogEntries.isEmpty()) "<ArticleEntry>" else ""}(
-                    """.trimMargin()
-				)
-
-				fun List<String>.asCode() = "listOf(${joinToString { "\"$it\"" }})"
-
-				blogEntries.sortedByDescending { it.date }.forEach { entry ->
-					appendLine(
-						"""    ArticleEntry("/articles/${
-							entry.file.path.substringBeforeLast(".md")
-								.splitCamelCase()
-								.joinToString("-") { word -> word.lowercase() }
-								.ensureSurrounded("", "/")
-						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}", ${
-							entry.keywords.asCode()
-						}, "${entry.dateModified}"),
-						""".trimMargin()
-					)
-				}
-
-				appendLine(")")
-			})
-
-			println("Generated $absolutePath")
-		}
-	}
-}
-
 kotlin {
 	configAsKobwebApplication("portfolio")
 
@@ -318,7 +275,6 @@ kotlin {
 
 	sourceSets {
 		jsMain {
-			kotlin.srcDir(generateBlogSourceTask)
 			kotlin.srcDir(downloadDataTask)
 
 			dependencies {
