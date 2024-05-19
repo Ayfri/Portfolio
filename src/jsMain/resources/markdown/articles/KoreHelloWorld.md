@@ -45,7 +45,7 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
             "pack_format": 41,
             "description": "Hello World Datapack"
         }
-    }
+   }
    ```
 
 2. Create a folder named `data` inside the `hello_world` folder.
@@ -66,7 +66,7 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 1. Inside the `data` folder, create a new folder named `hello_world`.
 2. Inside the `hello_world` folder, create a folder named `functions`.
 3. Inside the `functions` folder, create a file named `load.mcfunction` with the following content:
-    ```mcfunction
+    ```llvm
     tellraw @a {"text":"Hello World","color":"green"}
     ```
 
@@ -135,9 +135,9 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 
 Kore will generate the necessary files for your datapack based on the code you provide. The `load` function will create a function with a
 random name and add the `tellraw` command to it. So you don't need to worry about naming the function or creating the function file, this
-simplifies the process for beginners.
-The `pack` function will create the `pack.mcmeta` file with the specified description and format. The `dataPack` function will create the
-necessary folders and files for the datapack. The `generateZip` function will generate a zip file containing the datapack files.
+simplifies the process for beginners. The `pack` function will create the `pack.mcmeta` file with the specified description and format.
+The `dataPack` function will create the necessary folders and files for the datapack. The `generateZip` function will generate a zip file
+containing the datapack files.
 
 ## Conclusion
 

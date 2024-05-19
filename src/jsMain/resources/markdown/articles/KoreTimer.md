@@ -39,14 +39,14 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 2. **Create the `pack.mcmeta` File:**
 	- Inside the `timer_datapack` folder, create a file named `pack.mcmeta`.
 	- Add the following JSON content to the file:
-	  ```json
-	  {
-		"pack": {
-		  "pack_format": 41,
-		  "description": "A simple timer datapack"
-		}
-	  }
-	  ```
+   ```json
+   {
+	   "pack": {
+		   "pack_format": 41,
+		   "description": "A simple timer datapack"
+	   }
+   }
+   ```
 
 ### Step 2: Adding the Timer Functionality
 
@@ -58,18 +58,18 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 2. **Create the `tick.mcfunction` File:**
 	- Inside the `functions` folder, create a file named `tick.mcfunction`.
 	- Add the following commands to the file:
-	  ```
-	  scoreboard players add @a timer 1
-	  execute as @a[scores={timer=400..}] run say 20 seconds have passed!
-	  execute as @a[scores={timer=400..}] run scoreboard players set @a[scores={timer=400..}] timer 0
-	  ```
+   ```llvm
+   scoreboard players add @a timer 1
+   execute as @a[scores={timer=400..}] run say 20 seconds have passed!
+   execute as @a[scores={timer=400..}] run scoreboard players set @a[scores={timer=400..}] timer 0
+   ```
 
 3. **Create the `load.mcfunction` File:**
 	- Inside the `functions` folder, create a file named `load.mcfunction`.
 	- Add the following commands to the file:
-	  ```
-	  scoreboard objectives add timer dummy
-	  ```
+   ```llvm
+   scoreboard objectives add timer dummy
+   ```
 
 4. **Create the `tick.json` File:**
 	- Inside the `data` folder, create a folder named `minecraft`.
@@ -77,24 +77,24 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 	- Inside the `tags` folder, create a folder named `functions`.
 	- Inside the `functions` folder, create a file named `tick.json`.
 	- Add the following JSON content to the file:
-	  ```json
-	  {
-		"values": [
-		  "timer:tick"
-		]
-	  }
-	  ```
+   ```json
+   {
+	   "values": [
+		   "timer:tick"
+	   ]
+   }
+   ```
 
 5. **Create the `load.json` File:**
 	- Inside the `functions` folder, create a file named `load.json`.
 	- Add the following JSON content to the file:
-	  ```json
-	  {
-		"values": [
-		  "timer:load"
-		]
-	  }
-	  ```
+   ```json
+   {
+	   "values": [
+		   "timer:load"
+	   ]
+   }
+   ```
 
 ### Step 3: Loading the Datapack
 
