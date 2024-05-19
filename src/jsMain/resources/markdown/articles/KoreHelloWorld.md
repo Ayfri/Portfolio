@@ -22,6 +22,8 @@ Before we begin, make sure you have the following:
 - Kotlin and a Kotlin-compatible IDE (like IntelliJ IDEA or Pycharm) installed.
 - Kore library set up in your Kotlin project.
 
+Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for more information on how to set up Kore in your Kotlin project.
+
 ## Creating the Datapack with Commands
 
 ### Step 1: Setting Up the Datapack Folder

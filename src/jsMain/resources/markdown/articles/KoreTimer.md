@@ -23,6 +23,8 @@ Before we begin, ensure you have the following:
 - Basic understanding of Minecraft commands
 - Kotlin and Kore setup (refer to the [Kore Template](https://github.com/Ayfri/Kore-Template) for setup instructions)
 
+Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for more information on how to set up Kore in your Kotlin project.
+
 ## Creating the Timer Datapack with Commands
 
 ### Step 1: Setting Up the Datapack
