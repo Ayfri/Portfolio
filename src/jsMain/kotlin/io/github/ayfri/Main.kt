@@ -30,6 +30,13 @@ fun AppEntry(content: @Composable () -> Unit) {
 		override fun link(href: String?, title: String?, text: String) = """
 			<a href="$href" ${title?.let { "title=$it" } ?: ""} class="link">$text</a>
 		""".trimIndent()
+
+		override fun code(code: String, infoString: String, escaped: Boolean): String {
+			val language = if (infoString.isEmpty()) "nohighlight" else "language-$infoString"
+			return """
+				<pre><code class="$language line-numbers">$code</code></pre>
+			""".trimIndent()
+		}
 	}
 
 	use(jso { this.renderer = renderer })
