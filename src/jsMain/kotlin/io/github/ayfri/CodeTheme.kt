@@ -2,6 +2,7 @@ package io.github.ayfri
 
 import com.varabyte.kobweb.compose.css.FontStyle
 import com.varabyte.kobweb.compose.css.fontStyle
+import com.varabyte.kobweb.compose.css.textShadow
 import io.github.ayfri.utils.Cursor
 import io.github.ayfri.utils.cursor
 import org.jetbrains.compose.web.css.*
@@ -51,6 +52,7 @@ object CodeTheme : StyleSheet() {
 
 		child(type("pre") + attrContains("class", "language-"), type("code") + attrContains("class", "language-")) style {
 			color(textColor)
+			textShadow(color = transparent, offsetX = 0.px, offsetY = 0.px, blurRadius = 0.px)
 		}
 
 		scope("comment") style {
@@ -71,6 +73,7 @@ object CodeTheme : StyleSheet() {
 		}
 
 		scope("punctuation", "operator") style {
+			backgroundColor(transparent)
 			color(punctuationColor)
 		}
 
