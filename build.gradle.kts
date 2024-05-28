@@ -1,3 +1,4 @@
+
 import com.varabyte.kobweb.common.text.ensureSurrounded
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
@@ -6,7 +7,7 @@ import kotlinx.html.*
 import org.commonmark.node.Text
 import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 
 plugins {
 	alias(libs.plugins.kotlin.multiplatform)
@@ -48,7 +49,7 @@ val downloadDataTask = tasks.register("downloadData") {
 
 	doLast {
 		val dataLink = "https://raw.githubusercontent.com/Ayfri/Ayfri.github.io/api/result.json"
-		val url = URL(dataLink)
+		val url = URI(dataLink).toURL()
 		val connection = url.openConnection() as HttpURLConnection
 		connection.requestMethod = "GET"
 		connection.connect()
