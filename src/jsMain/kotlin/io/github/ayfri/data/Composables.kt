@@ -1,19 +1,18 @@
 package io.github.ayfri.data
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.web.events.SyntheticMouseEvent
 import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
 import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.P
+import io.github.ayfri.externals.Prism
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.pages.TextIcon
 import io.github.ayfri.pages.skills
 import io.github.ayfri.utils.*
+import js.symbol.PrimitiveHint
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.AttrsScope
@@ -23,6 +22,7 @@ import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLDivElement
+import web.scheduling.queueMicrotask
 import kotlin.js.Date
 
 @Composable
@@ -120,7 +120,9 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 				val readmeContent = repository.readmeContent ?: repository.description ?: repository.name
 
 				P({
-					markdownParagraph(readmeContent)
+					markdownParagraph(readmeContent) { element ->
+						Prism.highlightAllUnder(element)
+					}
 				})
 			} else {
 				H3 { Text(repository.name) }

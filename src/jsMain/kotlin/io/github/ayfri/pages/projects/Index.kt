@@ -1,10 +1,13 @@
 package io.github.ayfri.pages.projects
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
+import io.github.ayfri.CodeTheme
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
@@ -27,6 +30,7 @@ fun Projects() {
 	PageLayout("Projects") {
 		Style(ProjectsStyle)
 		Style(DataStyle)
+		Style(CodeTheme)
 
 		val repos = remember { mutableStateListOf<GitHubRepository>() }
 
