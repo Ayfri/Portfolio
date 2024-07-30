@@ -72,6 +72,10 @@ object CodeTheme : StyleSheet() {
 			fontStyle(FontStyle.Italic)
 		}
 
+		scope("property") style {
+			color(keywordColor)
+		}
+
 		scope("punctuation", "operator") style {
 			backgroundColor(transparent)
 			color(punctuationColor)
