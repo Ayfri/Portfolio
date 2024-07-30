@@ -8,6 +8,7 @@ import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
 import io.github.ayfri.*
 import io.github.ayfri.components.*
+import io.github.ayfri.externals.Prism
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
@@ -40,7 +41,7 @@ fun DocLayout(content: @Composable () -> Unit) {
 	setJsonLD()
 
 	LaunchedEffect(currentStub) {
-		js("window.Prism.highlightAll()").unsafeCast<Unit>()
+		Prism.highlightAll()
 	}
 
 	Header()
