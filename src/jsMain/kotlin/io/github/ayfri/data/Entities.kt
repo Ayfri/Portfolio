@@ -21,7 +21,6 @@ data class GitHubUser(
 	val login: String,
 	val name: String,
 	val publicRepos: Int,
-	val totalPrivateRepos: Int,
 	val updatedAt: String,
 )
 
