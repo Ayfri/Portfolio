@@ -19,7 +19,6 @@ data class ResultUser(
 	val login: String,
 	val name: String,
 	val publicRepos: Int,
-	val totalPrivateRepos: Int,
 	val updatedAt: String,
 ) {
 	companion object {
@@ -33,7 +32,6 @@ data class ResultUser(
 			login = user.login,
 			name = user.name,
 			publicRepos = user.publicRepos,
-			totalPrivateRepos = user.totalPrivateRepos,
 			updatedAt = user.updatedAt,
 		)
 	}
