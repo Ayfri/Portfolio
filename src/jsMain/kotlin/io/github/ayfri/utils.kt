@@ -12,13 +12,14 @@ fun AttrsScope<HTMLParagraphElement>.markdownParagraph(
 	text: String,
 	breaks: Boolean = false,
 	vararg classes: String,
+	additionalRefCallback: AttrsScope<HTMLParagraphElement>.(HTMLParagraphElement) -> Unit = {}
 ) {
 	ref {
 		if (classes.isNotEmpty()) it.classList.add(*classes)
 
 		val textToParse = if (breaks) text.replace("\n", "<br>") else text
 		it.innerHTML = parse(textToParse)
-
+		additionalRefCallback(it)
 		onDispose {}
 	}
 }
