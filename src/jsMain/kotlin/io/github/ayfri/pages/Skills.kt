@@ -115,7 +115,7 @@ val skills = listOf(
 		since = 2022,
 		learnedFor = "Creating scripts on Linux.",
 		nowUsing = "Creating scripts on Linux.",
-		level = 2,
+		level = 4,
 		description = """
 			Bash is a sh-compatible command language interpreter that executes commands read from the standard input or from a file.
 			bash also incorporates useful features from the Korn and C shells (ksh and csh).
@@ -203,7 +203,7 @@ val skills = listOf(
 		since = 2023,
 		learnedFor = "Creating games.",
 		nowUsing = "Creating games.",
-		level = 3,
+		level = 4,
 		description = """
 			Godot is a feature-packed, cross-platform game engine to create 2D and 3D games from a unified interface.
 			Godot provides a comprehensive set of common tools, so you can just focus on making your game without reinventing the wheel.
@@ -339,7 +339,7 @@ val skills = listOf(
 		since = 2014,
 		learnedFor = "Trying programmation.",
 		nowUsing = "Creating AIs, scripts & websites.",
-		level = 4,
+		level = 5,
 		description = """
 			Python is a computer programming language often used to build websites and software, automate tasks, and conduct data analysis.
 			Python is a general-purpose language, meaning it can be used to create a variety of different programs and isn't specialized for any specific problems.
@@ -359,7 +359,7 @@ val skills = listOf(
 		since = 2019,
 		learnedFor = "Improving JavaScript projects.",
 		nowUsing = "Creating typed JS libraries.",
-		level = 4,
+		level = 5,
 		description = """
 			TypeScript is an open-source, object-oriented language developed and maintained by Microsoft, licensed under Apache 2 license.
 			TypeScript extends JavaScript by adding data types, classes and other object-oriented features with type-checking. It is a typed superset of JavaScript that compiles to plain JavaScript.
