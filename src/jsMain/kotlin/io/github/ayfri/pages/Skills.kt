@@ -346,6 +346,18 @@ val skills = listOf(
 		)
 	),
 	Language(
+		name = "PowerShell",
+		since = 2022,
+		learnedFor = "Automating tasks on Windows.",
+		nowUsing = "Automating tasks on Windows.",
+		level = 3,
+		description = """
+			PowerShell is a task automation and configuration management framework from Microsoft, consisting of a command-line shell and associated scripting language.
+			Unlike most shells, which accept and return text, PowerShell is built on top of the .NET Common Language Runtime (CLR), and accepts and returns .NET objects.
+		""".trimIndent(),
+		iconUrl = devIcon("powershell")
+	),
+	Language(
 		name = "Python",
 		since = 2014,
 		learnedFor = "Trying programmation.",
