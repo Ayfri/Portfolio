@@ -369,6 +369,21 @@ val skills = listOf(
 			"Ayfri/Pokestore",
 		)
 	),
+	Language(
+		name = "Redis",
+		since = 2023,
+		learnedFor = "Caching data.",
+		nowUsing = "Caching data.",
+		level = 3,
+		description = """
+			Redis is an open-source, in-memory data structure store, used as a database, cache, and message broker.
+			It supports data structures such as strings, hashes, lists, sets, sorted sets with range queries, bitmaps, hyperloglogs, geospatial indexes with radius queries and streams.
+		""".trimIndent(),
+		iconUrl = devIcon("redis"),
+		schoolProjects = listOf(
+			"Ayfri/Redis-Cluster",
+		)
+	)
 ).map(::Skill)
 
 @Page("/skills/index")
