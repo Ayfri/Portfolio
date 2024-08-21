@@ -292,7 +292,7 @@ val skills = listOf(
 			Kotlin is a static type, object-oriented programing (OOP) language that is interoperable with the Java virtual machine, Java libraries and Android.
 			Kotlin saves time for developers as the less verbose language provides briefer and less redundant code. It can be compiled into JavaScript or an LLVM encoder.
 		""".trimIndent(),
-		iconUrl = localImage("Kotlin Logo.svg"),
+		iconUrl = devIcon("kotlin"),
 		schoolProjects = listOf(
 			"Ayfri/Artificial-Infiltration",
 			"Ayfri/MongoDB-ReplicaSet",
@@ -318,6 +318,17 @@ val skills = listOf(
 			"antaww/game-overflow",
 			"B-One-Ynov/Extranet-Ynov",
 		)
+	),
+	Language(
+		name = "MCFunction",
+		since = 2017,
+		learnedFor = "Runnin more efficiently Minecraft commands.",
+		nowUsing = "Create fully-fledged Minecraft datapacks.",
+		level = 5,
+		description = """
+			Functions are data pack files, allowing players to run lists of commands.
+		""".trimIndent(),
+		iconUrl = localImage("minecraft-new.png"),
 	),
 	Language(
 		name = "PHP",
