@@ -147,7 +147,10 @@ val skills = listOf(
 			C# (pronounced "C-sharp") is an object-oriented programming language from Microsoft that aims to combine the computing power of C++ with the programming ease of Visual Basic.
 			C# is based on C++ and contains features similar to those of Java.
 		""".trimIndent(),
-		iconUrl = devIcon("csharp")
+		iconUrl = devIcon("csharp"),
+		schoolProjects = listOf(
+			"Ayfri/AyBreak"
+		)
 	),
 	Language(
 		name = "CSS",
@@ -163,11 +166,13 @@ val skills = listOf(
 		schoolProjects = listOf(
 			"antaww/game-overflow",
 			"Ayfri/Cat-in-Space",
+			"Ayfri/challenge-48h",
 			"Ayfri/Challenge-Discovery",
 			"Ayfri/Hangman-Web",
 			"Ayfri/HTML-Menu",
 			"Ayfri/HTML-TP1",
 			"Ayfri/Infra-Website",
+			"Ayfri/Pokestore",
 			"Ayfri/VersionCraft",
 			"B-One-Ynov/Extranet-Ynov",
 		),
@@ -204,9 +209,39 @@ val skills = listOf(
 			Godot provides a comprehensive set of common tools, so you can just focus on making your game without reinventing the wheel.
 		""".trimIndent(),
 		iconUrl = devIcon("godot"),
+		githubProjects = listOf(
+			"Cat-aclsym/Cat-aclsym_Claw_of_the_dead",
+		),
 		schoolProjects = listOf(
 			"Ayfri/Cat-aclysm-Claw-of-the-Dead",
+			"Cat-aclsym/Cat-aclsym_Claw_of_the_dead",
 		),
+	),
+	Language(
+		name = "HTML",
+		since = 2017,
+		learnedFor = "Creating websites.",
+		nowUsing = "Creating websites.",
+		level = 5,
+		description = """
+			HyperText Markup Language (HTML) is the basic scripting language used by web browsers to render pages on the World Wide Web. HyperText allows a user to click a link and be redirected to a new page referenced by that link.
+		""".trimIndent(),
+		iconUrl = devIcon("html5"),
+		githubProjects = listOf(
+			"Ayfri/atom-clicker"
+		),
+		schoolProjects = listOf(
+			"antaww/game-overflow",
+			"Ayfri/Cat-in-Space",
+			"Ayfri/challenge-48h",
+			"Ayfri/Challenge-Discovery",
+			"Ayfri/Hangman-Web",
+			"Ayfri/HTML-Menu",
+			"Ayfri/HTML-TP1",
+			"Ayfri/Infra-Website",
+			"Ayfri/Pokestore",
+			"Ayfri/VersionCraft",
+		)
 	),
 	Language(
 		name = "Java",
@@ -239,26 +274,11 @@ val skills = listOf(
 		schoolProjects = listOf(
 			"antaww/game-overflow",
 			"Ayfri/Cat-in-Space",
+			"Ayfri/challenge-48h",
 			"Ayfri/Challenge-Discovery",
 			"Ayfri/Hangman-Web",
 			"Ayfri/Infra-Website",
 			"Ayfri/TP-JS",
-			"Ayfri/VersionCraft",
-		)
-	),
-	Language(
-		name = "HTML", since = 2017, learnedFor = "Creating websites.", nowUsing = "Creating websites.", level = 5, description = """
-			HyperText Markup Language (HTML) is the basic scripting language used by web browsers to render pages on the World Wide Web. HyperText allows a user to click a link and be redirected to a new page referenced by that link.
-		""".trimIndent(), iconUrl = devIcon("html5"), githubProjects = listOf(
-			"Ayfri/atom-clicker"
-		), schoolProjects = listOf(
-			"antaww/game-overflow",
-			"Ayfri/Cat-in-Space",
-			"Ayfri/Challenge-Discovery",
-			"Ayfri/Hangman-Web",
-			"Ayfri/HTML-Menu",
-			"Ayfri/HTML-TP1",
-			"Ayfri/Infra-Website",
 			"Ayfri/VersionCraft",
 		)
 	),
@@ -274,6 +294,8 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = localImage("Kotlin Logo.svg"),
 		schoolProjects = listOf(
+			"Ayfri/Artificial-Infiltration",
+			"Ayfri/MongoDB-ReplicaSet",
 			"Ayfri/Portfolio",
 			"HelysioFR/FallenKingdom",
 		)
@@ -307,7 +329,10 @@ val skills = listOf(
 			PHP is a server side scripting language that is embedded in HTML. It is used to manage dynamic content, databases, session tracking, even build entire e-commerce sites.
 			It is integrated with a number of popular databases, including MySQL, PostgreSQL, Oracle, Sybase, Informix, and Microsoft SQL Server.
 		""".trimIndent(),
-		iconUrl = devIcon("php")
+		iconUrl = devIcon("php"),
+		schoolProjects = listOf(
+			"Ayfri/Cyber-TP-1",
+		)
 	),
 	Language(
 		name = "Python",
@@ -321,7 +346,12 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = devIcon("python"),
 		schoolProjects = listOf(
-			"Ayfri/Python-TP1", "Ayfri/Python-TP2", "Ayfri/Python-TP3"
+			"Ayfri/docker-tp",
+			"Ayfri/Python-TP1",
+			"Ayfri/Python-TP2",
+			"Ayfri/Python-TP3",
+			"Ayfri/Redis-Cluster",
+			"Ayfri/UF_Project_B3"
 		)
 	),
 	Language(
@@ -334,7 +364,10 @@ val skills = listOf(
 			TypeScript is an open-source, object-oriented language developed and maintained by Microsoft, licensed under Apache 2 license.
 			TypeScript extends JavaScript by adding data types, classes and other object-oriented features with type-checking. It is a typed superset of JavaScript that compiles to plain JavaScript.
 		""".trimIndent(),
-		iconUrl = devIcon("typescript")
+		iconUrl = devIcon("typescript"),
+		schoolProjects = listOf(
+			"Ayfri/Pokestore",
+		)
 	),
 ).map(::Skill)
 
