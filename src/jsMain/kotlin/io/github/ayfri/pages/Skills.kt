@@ -274,7 +274,7 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = localImage("Kotlin Logo.svg"),
 		schoolProjects = listOf(
-			"Ayfri/Ayfri.github.io",
+			"Ayfri/Portfolio",
 			"HelysioFR/FallenKingdom",
 		)
 	),

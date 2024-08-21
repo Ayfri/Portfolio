@@ -48,7 +48,7 @@ val downloadDataTask = tasks.register("downloadData") {
 	outputs.dir(file.parentFile)
 
 	doLast {
-		val dataLink = "https://raw.githubusercontent.com/Ayfri/Ayfri.github.io/api/result.json"
+		val dataLink = "https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json"
 		val url = URI(dataLink).toURL()
 		val connection = url.openConnection() as HttpURLConnection
 		connection.requestMethod = "GET"
