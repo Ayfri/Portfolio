@@ -745,14 +745,14 @@ For their help and insights on the subject.
 
 ### Reference Implementation
 
-- **Custom Serializers
-  **: [CamelcaseSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/CamelcaseSerializer.kt)
-- **Enum Serializers
-  **: [UppercaseSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/UppercaseSerializer.kt), [LowercaseSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/LowercaseSerializer.kt)
-- **Polymorphic Serializer
-  **: [NamespacedPolymorphicSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/NamespacedPolymorphicSerializer.kt)
-- **Transforming Serializer
-  **: [ProviderSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/ProviderSerializer.kt)
+- **Custom Serializers**:
+  [CamelcaseSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/CamelcaseSerializer.kt)
+- **Enum Serializers**:
+  [UppercaseSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/UppercaseSerializer.kt), [LowercaseSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/LowercaseSerializer.kt)
+- **Polymorphic Serializer**:
+  [NamespacedPolymorphicSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/NamespacedPolymorphicSerializer.kt)
+- **Transforming Serializer**:
+  [ProviderSerializer.kt](https://github.com/Ayfri/Kore/blob/master/kore/src/main/kotlin/io/github/ayfri/kore/serializers/ProviderSerializer.kt)
 
 ### Further Reading
 
