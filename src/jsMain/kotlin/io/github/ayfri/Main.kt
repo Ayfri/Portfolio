@@ -1,5 +1,3 @@
-@file:Suppress("JS_NAME_CLASH", "JS_FAKE_NAME_CLASH")
-
 package io.github.ayfri
 
 import androidx.compose.runtime.Composable
@@ -11,12 +9,10 @@ import com.varabyte.kobweb.navigation.OpenLinkStrategy
 import com.varabyte.kobweb.navigation.UpdateHistoryMode
 import io.github.ayfri.externals.TextRenderer
 import io.github.ayfri.externals.use
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
 const val MAIL_TO = "pierre.ayfri@gmail.com"
 
-@OptIn(ExperimentalSerializationApi::class)
 val jsonEncoder = Json {
 	encodeDefaults = true
 	explicitNulls = false

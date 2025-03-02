@@ -1,18 +1,16 @@
-
 import com.varabyte.kobweb.common.text.ensureSurrounded
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
 import kotlinx.html.*
 import org.commonmark.node.Text
-import org.jetbrains.kotlin.gradle.dsl.KotlinJsCompile
 import java.net.HttpURLConnection
 import java.net.URI
 
 plugins {
 	alias(libs.plugins.kotlin.multiplatform)
+	alias(libs.plugins.kotlin.compose)
 
-	alias(libs.plugins.jetbrains.compose)
 	alias(libs.plugins.kobweb.application)
 	alias(libs.plugins.kobwebx.markdown)
 	alias(libs.plugins.kotlinx.serialization)
@@ -25,7 +23,6 @@ repositories {
 	google()
 	mavenCentral()
 	maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-	maven("https://us-central1-maven.pkg.dev/varabyte-repos/public")
 }
 
 fun HEAD.meta(property: String, content: String) {
@@ -87,10 +84,6 @@ fun String.escapeQuotes() = this.replace("\"", "\\\"")
 
 kobweb {
 	markdown {
-		routeOverride = { route ->
-			"/articles/${route.splitCamelCase().joinToString("-") { word -> word.lowercase() }}/index"
-		}
-
 		handlers {
 			img.set { image ->
 				val altText = image.children()
@@ -262,7 +255,7 @@ kobweb {
 kotlin {
 	configAsKobwebApplication("portfolio")
 
-	js(IR) {
+	js {
 		browser {
 			commonWebpackConfig {
 				val isDev = project.findProperty("kobwebEnv") == "DEV"
@@ -270,6 +263,13 @@ kotlin {
 				devServer?.open = false
 			}
 		}
+
+		compilerOptions {
+			target = "es2015"
+			useEsClasses = true
+		}
+
+		useEsModules()
 
 		binaries.executable()
 	}
@@ -279,21 +279,14 @@ kotlin {
 			kotlin.srcDir(downloadDataTask)
 
 			dependencies {
-				implementation(compose.html.core)
-				implementation(compose.runtime)
+				implementation(libs.compose.html.core)
+				implementation(libs.compose.runtime)
 				implementation(libs.kobwebx.markdown)
 				implementation(libs.kobweb.core)
 				implementation(libs.kotlinx.wrappers.browser)
 				implementation(libs.kotlinx.serialization.json)
-
 				implementation(npm("marked", project.extra["npm.marked.version"].toString()))
 			}
 		}
 	}
-}
-
-tasks.withType<KotlinJsCompile>().configureEach {
-	kotlinOptions.freeCompilerArgs += listOf(
-		"-Xklib-enable-signature-clash-checks=false",
-	)
 }

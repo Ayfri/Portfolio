@@ -266,7 +266,7 @@ object DataStyle : StyleSheet() {
 				width(fitContent)
 			}
 
-			inline fun subSpanColor(color: CSSColorValue, index: Int) {
+			fun subSpanColor(color: CSSColorValue, index: Int) {
 				child(type("p"), type("span")) + nthOfType(index.n) style {
 					color(color)
 				}

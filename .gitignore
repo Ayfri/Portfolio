@@ -1,5 +1,9 @@
+### Gradle ###
 .gradle
 build/
+
+### Kotlin ###
+.kotlin
 yarn.lock
 
 ### IntelliJ IDEA ###
