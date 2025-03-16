@@ -28,12 +28,13 @@ fun StyleScope.height(value: SizeKeyword) = property("height", value)
 fun StyleScope.width(value: SizeKeyword) = property("width", value)
 
 interface SizeKeyword : StylePropertyEnum
+fun SizeKeyword(value: String) = value.unsafeCast<SizeKeyword>()
 
 inline val fitContent get() = SizeKeyword("fit-content")
 inline val maxContent get() = SizeKeyword("max-content")
 inline val minContent get() = SizeKeyword("min-content")
 
-fun SizeKeyword(value: String) = value.unsafeCast<SizeKeyword>()
+inline val StyleScope.focusWithin get() = selector(":focus-within")
 
 fun StyleScope.accentColor(value: CSSColorValue) = property("accent-color", value)
 
