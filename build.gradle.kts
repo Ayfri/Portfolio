@@ -81,6 +81,7 @@ data class BlogEntry(
 )
 
 fun String.escapeQuotes() = this.replace("\"", "\\\"")
+fun String.escapeVariables() = this.replace(Regex("\\$"), "\\\${\"\\$\"}")
 
 kobweb {
 	markdown {
@@ -106,10 +107,10 @@ kobweb {
 			}
 		}
 
-		process = { markdownFile ->
+		process = { markdownFiles ->
 			val blogEntries = mutableListOf<BlogEntry>()
 
-			markdownFile.forEach { entry ->
+			markdownFiles.forEach { entry ->
 				val path = File(entry.filePath)
 				val fileName = path.name
 				val fm = entry.frontMatter
@@ -171,7 +172,7 @@ kobweb {
 								.ensureSurrounded("", "/")
 						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}", ${
 							entry.keywords.asCode()
-						}, "${entry.dateModified}"),
+						}, "${entry.dateModified}", ${"\"\"\""}${blogInputDir.asFile.resolve(entry.file.name).readText().escapeQuotes().escapeVariables().substringAfter("\n---")}${"\"\"\""}),
 						""".trimMargin()
 					)
 				}

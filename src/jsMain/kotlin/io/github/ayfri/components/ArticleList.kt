@@ -19,6 +19,7 @@ data class ArticleEntry(
 	val navTitle: String,
 	val keywords: List<String>,
 	val dateModified: String,
+	val content: String
 )
 
 @Composable
