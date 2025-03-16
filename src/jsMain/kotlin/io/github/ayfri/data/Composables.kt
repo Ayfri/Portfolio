@@ -1,7 +1,13 @@
 package io.github.ayfri.data
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.web.events.SyntheticMouseEvent
+import com.varabyte.kobweb.compose.css.ObjectFit
+import com.varabyte.kobweb.compose.css.boxShadow
+import com.varabyte.kobweb.compose.css.objectFit
 import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
@@ -12,7 +18,6 @@ import io.github.ayfri.markdownParagraph
 import io.github.ayfri.pages.TextIcon
 import io.github.ayfri.pages.skills
 import io.github.ayfri.utils.*
-import js.symbol.PrimitiveHint
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.AttrsScope
@@ -22,7 +27,6 @@ import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLDivElement
-import web.scheduling.queueMicrotask
 import kotlin.js.Date
 
 @Composable
@@ -68,11 +72,10 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 	var open by mutableStateOf(false)
 
 	Div({
-		classes(if (open) DataStyle.projectCardOpen else DataStyle.projectCardClosed, DataStyle.projectCard)
+		classes(DataStyle.projectCard)
 		id(repository.name)
 
 		onClick {
-			open = !open
 			onClick(it)
 		}
 	}) {
@@ -104,11 +107,37 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 					})
 				}
 			} else {
-				AvatarImage(repository.owner)
 				Div({
-					classes("stars")
+					classes("card-header")
 				}) {
-					TextIcon(repository.stargazersCount.toString(), FontAwesomeType.SOLID, "star")
+					AvatarImage(repository.owner)
+
+					Div({
+						classes("repo-info")
+					}) {
+						H3 { Text(repository.name) }
+
+						repository.language?.let {
+							Span({
+								classes("language")
+							}) {
+								Div({
+									classes("language-dot")
+									style {
+										backgroundColor(getLanguageColor(it))
+									}
+								})
+								Text(it)
+							}
+						}
+					}
+
+					Div({
+						classes("stats")
+					}) {
+						TextIcon(repository.stargazersCount.toString(), FontAwesomeType.SOLID, "star")
+						TextIcon(repository.forksCount.toString(), FontAwesomeType.SOLID, "code-branch")
+					}
 				}
 			}
 		}
@@ -125,8 +154,44 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 					}
 				})
 			} else {
-				H3 { Text(repository.name) }
-				P(repository.description ?: "No description provided.")
+				P({
+					classes("description")
+				}) {
+					Text(repository.description ?: "No description provided.")
+				}
+
+				Div({
+					classes("topics")
+				}) {
+					repository.topics.take(3).forEach { topic ->
+						Span({
+							classes("topic-tag")
+						}) {
+							Text(topic)
+						}
+					}
+
+					if (repository.topics.size > 3) {
+						Span({
+							classes("topic-more")
+						}) {
+							Text("+${repository.topics.size - 3}")
+						}
+					}
+				}
+
+				Div({
+					classes("footer")
+				}) {
+					Span({
+						classes("updated")
+					}) {
+						I({
+							classes("fas", "fa-history")
+						})
+						Text(" Updated ${formatRelativeTime(repository.updatedAt)}")
+					}
+				}
 			}
 		}
 
@@ -141,13 +206,55 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 	}
 }
 
+private fun formatRelativeTime(dateString: String): String {
+	val date = Date(dateString)
+	val now = Date()
+	val diffMs = now.getTime() - date.getTime()
+	val diffDays = (diffMs / (1000 * 60 * 60 * 24)).toInt()
+
+	return when {
+		diffDays == 0 -> "today"
+		diffDays == 1 -> "yesterday"
+		diffDays < 30 -> "$diffDays days ago"
+		diffDays < 365 -> "${(diffDays / 30)} months ago"
+		else -> "${(diffDays / 365)} years ago"
+	}
+}
+
+private fun getLanguageColor(language: String): CSSColorValue {
+	return Color(
+		when (language.lowercase()) {
+			"javascript" -> "#f1e05a"
+			"typescript" -> "#3178c6"
+			"html" -> "#e34c26"
+			"css" -> "#563d7c"
+			"python" -> "#3572A5"
+			"java" -> "#b07219"
+			"kotlin" -> "#A97BFF"
+			"go", "golang" -> "#00ADD8"
+			"rust" -> "#dea584"
+			"c#" -> "#178600"
+			"c++" -> "#f34b7d"
+			"php" -> "#4F5D95"
+			"ruby" -> "#701516"
+			"swift" -> "#ffac45"
+			"dart" -> "#00B4AB"
+			"shell" -> "#89e051"
+			else -> "#8257e6" // Default purple color
+		}
+	)
+}
+
 object DataStyle : StyleSheet() {
+	// Color constants
 	const val HOME_CARD_BACKGROUND = "#181818"
 	const val HOME_CARD_TITLE_BACKGROUND = "#0e0e0e"
 	const val HOME_CARD_COLOR = "#cacaca"
 	const val PROJECT_CARD_CLOSED_BACKGROUND = "#2a2b36"
-	const val PROJECT_CARD_OPEN_BACKGROUND_START = "#66085190"
-	const val PROJECT_CARD_OPEN_BACKGROUND_END = "#39379490"
+	const val PROJECT_CARD_HOVER_BACKGROUND = "#353648"
+	const val TOPIC_TAG_BACKGROUND = "#B4BBFF20"
+	const val TOPIC_TAG_COLOR = AppStyle.SPECIAL_TEXT_COLOR
+	const val TEXT_SECONDARY = "#ffffffaa"
 
 	val gridColumnStartVar by variable<StylePropertyNumber>()
 	val imageSize by variable<CSSSizeValue<*>>()
@@ -217,178 +324,28 @@ object DataStyle : StyleSheet() {
 		}
 	}
 
+	@OptIn(ExperimentalComposeWebApi::class)
 	val projectCard by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color(PROJECT_CARD_CLOSED_BACKGROUND))
+		borderRadius(0.75.cssRem)
+		cursor(Cursor.Pointer)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		alignItems(AlignItems.Center)
-		gap(1.cssRem)
-		padding(clamp(1.6.cssRem, 2.vw, 3.cssRem))
-		borderRadius(.75.cssRem)
+		gap(0.65.cssRem)
+		imageSize(2.5.cssRem)
+		padding(1.65.cssRem)
 
-		cursor(Cursor.Pointer)
-
-		className("top") style {
-			"img" {
-				size(imageSize.value())
-				borderRadius(imageSize.value())
-			}
-		}
-	}
-
-	val projectCardOpen by style {
-		flexDirection(FlexDirection.Column)
-		gap(2.cssRem)
-		imageSize(5.cssRem)
-		gridColumn("${gridColumnStartVar.value()} span")
-
-		backgroundImage(linearGradient(135.deg) {
-			stop(Color(PROJECT_CARD_OPEN_BACKGROUND_START))
-			stop(Color(PROJECT_CARD_OPEN_BACKGROUND_END))
-		})
-
-		maxHeight(500.cssRem)
-
-		className("top") style {
-			textAlign(TextAlign.Center)
-
-			"h2" {
-				fontSize(2.5.cssRem)
-				margin(1.cssRem, 0.px)
-			}
-
-			"p" {
-				textAlign(TextAlign.Start)
-				margin(0.px, 1.5.cssRem)
-			}
-
-			child(self, type("div")) style {
-				margin(auto)
-				width(fitContent)
-			}
-
-			fun subSpanColor(color: CSSColorValue, index: Int) {
-				child(type("p"), type("span")) + nthOfType(index.n) style {
-					color(color)
-				}
-			}
-
-			subSpanColor(Color("#B4BBFF"), 1)
-			subSpanColor(Color("#FFE24B"), 2)
-			subSpanColor(Color("#75C9CE"), 3)
-			subSpanColor(Color("#64E881"), 4)
-		}
-
-		className("bottom") style {
-			backgroundColor(Color("#ffffff20"))
-			borderRadius(.75.cssRem)
-			padding(clamp(2.cssRem, 2.vw, 3.5.cssRem))
-			maxWidth(90.percent)
-
-			"h1" {
-				marginTop(0.px)
-			}
-
-			"pre" {
-				backgroundColor(Color("#00000020"))
-				borderRadius(.5.cssRem)
-				overflowX("auto")
-				padding(1.cssRem)
-
-				self + webkitScrollbar style {
-					height(8.px)
-				}
-
-				self + webkitScrollbarThumb style {
-					backgroundColor(Color("#ffffff40"))
-					borderRadius(.5.cssRem)
-				}
-
-				self + webkitScrollbarTrack style {
-					backgroundColor(Color.transparent)
-				}
-			}
-
-			"blockquote" {
-				borderLeft {
-					color(Color("#ffffff20"))
-					style(LineStyle.Solid)
-					width(4.px)
-				}
-				marginLeft(1.5.cssRem)
-				paddingLeft(.8.cssRem)
-			}
-
-			"table" {
-				borderRadius(.5.cssRem)
-				property("border-collapse", "collapse")
-				property("border-spacing", "0")
-				margin(1.cssRem, 0.px)
-				fontSize(.9.cssRem)
-				overflow(Overflow.Hidden)
-				width(100.percent)
-
-				"th" {
-					backgroundColor(Color("#ffffff20"))
-					padding(.5.cssRem)
-				}
-
-				"td" {
-					padding(.5.cssRem)
-				}
-
-				"tr" {
-					borderBottom {
-						color(Color("#ffffff20"))
-						style(LineStyle.Solid)
-						width(1.px)
-					}
-				}
+		transitions {
+			properties("all") {
+				duration(0.3.s)
 			}
 		}
 
-		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
-			self {
-				padding(clamp(.8.cssRem, 1.vw, 1.6.cssRem))
-			}
-
-			className("bottom") style {
-				maxWidth(95.percent)
-				padding(clamp(.8.cssRem, 1.vw, 2.cssRem))
-			}
-		}
-	}
-
-	val projectCardClosed by style {
-		flexDirection(FlexDirection.Row)
-		imageSize(3.5.cssRem)
-
-		backgroundColor(Color(PROJECT_CARD_CLOSED_BACKGROUND))
-
-		className("top") style {
-			display(DisplayStyle.Flex)
-			flexDirection(FlexDirection.Column)
-			alignItems(AlignItems.Center)
-			textAlign(TextAlign.Center)
-			gap(.5.cssRem)
-
-			className("stars") style {
-				display(DisplayStyle.Flex)
-				flexDirection(FlexDirection.RowReverse)
-				alignItems(AlignItems.Center)
-				justifyContent(JustifyContent.Center)
-				gap(.5.cssRem)
-			}
-		}
-
-		className("bottom") style {
-			group(type("h3"), type("p")) style {
-				property("text-ellipsis", "ellipsis")
-				margin(0.px)
-			}
-
-			"h3" {
-				marginBottom(.5.cssRem)
-			}
+		self + hover style {
+			boxShadow(0.px, 5.px, 15.px, 0.px, Color("#00000030"))
+			backgroundColor(Color(PROJECT_CARD_HOVER_BACKGROUND))
+			transform { translateY((-5).px) }
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
@@ -399,13 +356,105 @@ object DataStyle : StyleSheet() {
 
 		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			self {
-				imageSize(3.cssRem)
+				imageSize(2.cssRem)
 				height(auto)
 				maxHeight("none")
+			}
+		}
+
+		className("top") style {
+			width(100.percent)
+
+			"img" {
+				size(imageSize.value())
+				borderRadius(50.percent)
+				objectFit(ObjectFit.Cover)
+			}
+		}
+
+		className("card-header") style {
+			display(DisplayStyle.Flex)
+			alignItems(AlignItems.Center)
+			width(100.percent)
+			gap(1.cssRem)
+
+			className("repo-info") style {
+				flex(1)
+				display(DisplayStyle.Flex)
+				flexDirection(FlexDirection.Column)
+				gap(0.25.cssRem)
 
 				"h3" {
-					fontSize(1.1.cssRem)
+					margin(0.px)
+					fontSize(1.2.cssRem)
+					fontWeight(600)
 				}
+
+				className("language") style {
+					display(DisplayStyle.Flex)
+					alignItems(AlignItems.Center)
+					gap(0.5.cssRem)
+					fontSize(0.9.cssRem)
+					color(Color(TEXT_SECONDARY))
+
+					className("language-dot") style {
+						size(0.8.cssRem)
+						borderRadius(50.percent)
+					}
+				}
+			}
+
+			className("stats") style {
+				display(DisplayStyle.Flex)
+				gap(1.cssRem)
+				color(Color(TEXT_SECONDARY))
+				fontSize(1.cssRem)
+			}
+		}
+
+		className("bottom") style {
+			width(100.percent)
+			display(DisplayStyle.Flex)
+			flexDirection(FlexDirection.Column)
+			gap(0.65.cssRem)
+
+			className("description") style {
+				margin(0.px)
+				fontSize(0.95.cssRem)
+				lineHeight(1.5.number)
+				color(Color.white)
+				property("display", "-webkit-box")
+				property("-webkit-line-clamp", "2")
+				property("-webkit-box-orient", "vertical")
+				overflow(Overflow.Hidden)
+			}
+
+			className("topics") style {
+				display(DisplayStyle.Flex)
+				flexWrap(FlexWrap.Wrap)
+				gap(0.5.cssRem)
+
+				className("topic-tag") style {
+					backgroundColor(Color(TOPIC_TAG_BACKGROUND))
+					color(Color(TOPIC_TAG_COLOR))
+					padding(0.3.cssRem, 0.6.cssRem)
+					borderRadius(1.cssRem)
+					fontSize(0.8.cssRem)
+				}
+
+				className("topic-more") style {
+					backgroundColor(Color("#ffffff15"))
+					color(Color.white)
+					padding(0.3.cssRem, 0.6.cssRem)
+					borderRadius(1.cssRem)
+					fontSize(0.8.cssRem)
+				}
+			}
+
+			className("footer") style {
+				marginTop(0.5.cssRem)
+				fontSize(0.85.cssRem)
+				color(Color(TEXT_SECONDARY))
 			}
 		}
 	}

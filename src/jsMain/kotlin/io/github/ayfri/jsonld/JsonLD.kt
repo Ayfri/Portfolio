@@ -58,3 +58,38 @@ class WebSiteJsonLD(
 	val name: String,
 	val sameAs: List<String>? = null,
 ) : JsonLD()
+
+@Serializable
+@SerialName("SoftwareSourceCode")
+class SoftwareSourceCodeJsonLD(
+	val name: String,
+	val description: String? = null,
+	val author: JsonLD,
+	val codeRepository: String,
+	val programmingLanguage: String? = null,
+	val dateCreated: String? = null,
+	val dateModified: String? = null,
+	val keywords: List<String>? = null,
+	val license: String? = null,
+	val url: String,
+) : JsonLD()
+
+@Serializable
+@SerialName("ItemList")
+class ItemListJsonLD(
+	val itemListElement: List<ListItemJsonLD>,
+	val numberOfItems: Int = itemListElement.size,
+) : JsonLD()
+
+@Serializable
+@SerialName("ListItem")
+class ListItemJsonLD(
+	val position: Int,
+	val item: JsonLD,
+) : JsonLD()
+
+@Serializable
+@SerialName("BreadcrumbList")
+class BreadcrumbListJsonLD(
+	val itemListElement: List<ListItemJsonLD>,
+) : JsonLD()
