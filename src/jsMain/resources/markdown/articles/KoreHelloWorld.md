@@ -5,7 +5,7 @@ description: Learn how to create a simple Minecraft datapack that displays a "He
 keywords: minecraft, datapack, kore, kotlin, tutorial
 date-created: 2024-05-19
 date-modified: 2024-05-19
-root: .layouts.DocLayout
+root: .layouts.ArticleLayout
 routeOverride: /articles/kore-hello-world/index
 ---
 

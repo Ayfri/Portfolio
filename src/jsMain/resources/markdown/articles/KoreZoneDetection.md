@@ -5,7 +5,7 @@ description: Detect when a player enters a specific area in Minecraft using a Ko
 keywords: minecraft, datapack, kore, kotlin, tutorial, zone detection, predicate, location check
 date-created: 2024-05-19
 date-modified: 2024-05-19
-root: .layouts.DocLayout
+root: .layouts.ArticleLayout
 routeOverride: /articles/kore-zone-detection/index
 ---
 

@@ -5,7 +5,7 @@ description: Learn about the most used and well-known datapack generators in 202
 keywords: minecraft, datapack, generators, kore, sandstone, beet
 date-created: 2025-03-02
 date-modified: 2025-03-02
-root: .layouts.DocLayout
+root: .layouts.ArticleLayout
 routeOverride: /articles/datapack-generators/index
 ---
 

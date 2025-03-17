@@ -5,7 +5,7 @@ description: Learn how to create Minecraft datapacks using Kore in Kotlin.
 keywords: minecraft, datapack, kore, kotlin, tutorial
 date-created: 2023-11-13
 date-modified: 2024-01-21
-root: .layouts.DocLayout
+root: .layouts.ArticleLayout
 routeOverride: /articles/kore-introduction/index
 ---
 

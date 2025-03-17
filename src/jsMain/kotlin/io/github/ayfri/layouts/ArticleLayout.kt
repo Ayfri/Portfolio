@@ -20,7 +20,7 @@ import org.jetbrains.compose.web.dom.Main
 
 
 @Composable
-fun DocLayout(content: @Composable () -> Unit) {
+fun ArticleLayout(content: @Composable () -> Unit) {
 	Style(AnimationsStyle)
 	Style(AppStyle)
 	Style(MarkdownStyle)

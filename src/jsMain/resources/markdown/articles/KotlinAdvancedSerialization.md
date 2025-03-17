@@ -5,7 +5,7 @@ description: Explore advanced techniques and tricks for mastering kotlinx.serial
 keywords: kotlinx.serialization, kotlin serialization, custom serializers, enum serialization, polymorphic serialization, performance optimization
 date-created: 2024-12-01
 date-modified: 2024-12-01
-root: .layouts.DocLayout
+root: .layouts.ArticleLayout
 routeOverride: /articles/kotlin-advanced-serialization/index
 ---
 

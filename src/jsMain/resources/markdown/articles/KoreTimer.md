@@ -5,7 +5,7 @@ description: Create a timer datapack that displays a message every 20 seconds us
 keywords: minecraft, datapack, kore, kotlin, tutorial, timer
 date-created: 2024-05-19
 date-modified: 2024-05-19
-root: .layouts.DocLayout
+root: .layouts.ArticleLayout
 routeOverride: /articles/kore-timer/index
 ---
 

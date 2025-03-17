@@ -47,7 +47,7 @@ description: Learn how to create a simple Minecraft datapack that displays a "He
 keywords: minecraft, datapack, kore, kotlin, tutorial
 date-created: 2024-05-19
 date-modified: 2024-05-19
-root: .layouts.DocLayout
+root: .layouts.ArticleLayout
 routeOverride: /articles/kore-hello-world/index
 ```
 
@@ -57,7 +57,7 @@ The `description` is the description of the article that will be used everywhere
 The `keywords` are the keywords of the article that will be used for SEO.
 The `date-created` is the date the article was created.
 The `date-modified` is the date the article was last modified.
-The `root` is the layout of the article, usually `.layouts.DocLayout` (which means the article will be displayed with the `src/jsMain/kotlin/layouts/DocLayout.kt` layout).
+The `root` is the layout of the article, usually `.layouts.ArticleLayout` (which means the article will be displayed with the `src/jsMain/kotlin/layouts/DocLayout.kt` layout).
 The `routeOverride` is the route of the article, it's the URL of the article.
 
 ## License
