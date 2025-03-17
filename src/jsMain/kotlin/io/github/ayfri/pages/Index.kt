@@ -1,6 +1,7 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.autoLength
 import com.varabyte.kobweb.compose.css.scale
 import com.varabyte.kobweb.compose.css.translateY
 import com.varabyte.kobweb.core.Page
@@ -40,14 +41,18 @@ From internships at [BlueFrog](https://www.bluefrog.fr/) where I developed WordP
 I've gained valuable experience in various technologies and collaborative environments.
 """
 
+const val ARTICLES_SUMMARY = """
+Explore my blog where I share insights, tutorials, and experiences in programming, particularly focusing on Kotlin, Minecraft modding, 
+and technical deep dives. Learn about my journey and discoveries in software development.
+"""
+
 @Page("/index")
 @Composable
 fun Home() {
 	PageLayout("Home") {
 		val homeRepositories = gitHubData.repos.sortedBy { it.stargazersCount }.reversed().take(3)
-		val featuredSkills = skills.sortedWith(
-			compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }
-		).take(8)
+		val featuredSkills =
+			skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }).take(8)
 
 		Style(HomeStyle)
 		Style(DataStyle)
@@ -247,13 +252,86 @@ fun Home() {
 				}
 
 				P({
-					markdownParagraph("""
-						Discover my journey in programming, from my first steps with Python in 2014 to my current projects with Kotlin and AI.
-						Learn about my passion for Minecraft, my experience with various technologies, and my educational path.
-					""".trimIndent(), true, AppStyle.monoFont)
+					markdownParagraph(
+						"""
+                        Discover my journey in programming, from my first steps with Python in 2014 to my current projects with Kotlin and AI.
+                        Learn about my passion for Minecraft, my experience with various technologies, and my educational path.
+                    """.trimIndent(), true, AppStyle.monoFont
+					)
 				})
 
 				A("/about-me/", "Read my story", AppStyle.button)
+			}
+
+			// Articles Section
+			Section({
+				classes(HomeStyle.section, HomeStyle.articlesSection)
+			}) {
+				H2({
+					classes(HomeStyle.sectionTitle)
+				}) {
+					I(FontAwesomeType.SOLID, "newspaper") {
+						marginRight(0.5.cssRem)
+					}
+					Text("My Articles")
+				}
+
+				P({
+					markdownParagraph(ARTICLES_SUMMARY.trimIndent(), true, AppStyle.monoFont)
+					style {
+						marginBottom(2.cssRem)
+					}
+				})
+
+				Div({
+					classes("list", "articles")
+				}) {
+					val recentArticles = articlesEntries.sortedByDescending { it.date }.take(3)
+					recentArticles.forEachIndexed { index, article ->
+						Div({
+							classes(HomeStyle.articlePreview)
+							style {
+								property("animation-delay", (index * 0.2).s)
+							}
+						}) {
+							A(article.path, {
+								classes(HomeStyle.articleLink)
+							}) {
+								H3 {
+									Text(article.navTitle)
+								}
+
+								P({
+									classes(HomeStyle.articleDesc)
+								}) {
+									Text(article.desc)
+								}
+
+								Div({
+									classes(HomeStyle.articleTags)
+								}) {
+									article.keywords.take(3).forEach { keyword ->
+										Span({
+											classes(HomeStyle.articleTag)
+										}) {
+											Text(keyword)
+										}
+									}
+
+									if (article.keywords.size > 3) {
+										Span({
+											classes(HomeStyle.articleTagMore)
+										}) {
+											Text("+${article.keywords.size - 3}")
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				A("/articles/", "Read all articles", AppStyle.button)
 			}
 
 			// Contact Section
@@ -608,5 +686,100 @@ object HomeStyle : StyleSheet() {
 			translateY((-5).px)
 			boxShadow(Color("#00000060"), 0.px, 4.px, 8.px)
 		}
+	}
+
+	val articlesSection by style {
+		backgroundColor(Color("#ffffff10"))
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val articlePreview by style {
+		backgroundColor(Color("#252525"))
+		borderRadius(0.8.cssRem)
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		height(280.px)
+		margin(0.5.cssRem)
+		minWidth(280.px)
+		padding(1.5.cssRem)
+		width(33.percent - 1.cssRem)
+
+		animation(AnimationsStyle.appear) {
+			duration(0.5.s)
+			fillMode(AnimationFillMode.Forwards)
+			timingFunction(AnimationTimingFunction.EaseInOut)
+		}
+		opacity(0)
+
+		transitions {
+			defaultDuration(0.3.s)
+			properties("all")
+		}
+
+		hover(self) style {
+			backgroundColor(Color("#2A2A2A"))
+			transform {
+				translateY((-5).px)
+			}
+			boxShadow(Color("#00000060"), 0.px, 4.px, 8.px)
+		}
+
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				width(50.percent - 1.cssRem)
+			}
+		}
+
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
+			self {
+				width(100.percent)
+			}
+		}
+	}
+
+	val articleLink by style {
+		color(Color.white)
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		height(100.percent)
+		textDecoration("none")
+
+		"h3" {
+			fontSize(1.2.cssRem)
+			marginTop(0.px)
+			marginBottom(0.8.cssRem)
+		}
+	}
+
+	val articleDesc by style {
+		fontSize(0.9.cssRem)
+		lineHeight(1.3.em)
+		opacity(0.8)
+		marginBottom(1.cssRem)
+		flex(1)
+		overflow(Overflow.Hidden)
+	}
+
+	val articleTags by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(0.5.cssRem)
+		marginTop(autoLength)
+	}
+
+	val articleTag by style {
+		backgroundColor(Color("#FFFFFF15"))
+		borderRadius(1.cssRem)
+		padding(0.3.cssRem, 0.8.cssRem)
+		fontSize(0.75.cssRem)
+		color(Color("#FFFFFFDD"))
+	}
+
+	val articleTagMore by style {
+		backgroundColor(Color("#FFFFFF10"))
+		borderRadius(1.cssRem)
+		padding(0.3.cssRem, 0.8.cssRem)
+		fontSize(0.75.cssRem)
+		color(Color("#FFFFFFAA"))
 	}
 }
