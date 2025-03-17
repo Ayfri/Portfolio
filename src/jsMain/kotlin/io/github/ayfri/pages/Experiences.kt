@@ -5,6 +5,7 @@ import com.varabyte.kobweb.compose.css.TransitionTimingFunction
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
+import io.github.ayfri.components.P
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -38,7 +39,6 @@ fun Experience(
 @Composable
 fun Experiences() {
 	PageLayout("Experiences") {
-
 		Style(ExperiencesStyle)
 
 		Div({
@@ -57,6 +57,8 @@ fun Experiences() {
 			}) {
 				Text("Experiences:")
 			}
+
+            P("My professional journey includes various roles in web development and AI research. Below is a timeline of my work experiences, showcasing my growth and the diverse projects I've contributed to.", ExperiencesStyle.experiencesDescription)
 
 			Div({
 				classes(ExperiencesStyle.experiencesList)
@@ -148,6 +150,13 @@ object ExperiencesStyle : StyleSheet() {
 			}
 		}
 	}
+
+    val experiencesDescription by style {
+        fontSize(1.2.cssRem)
+        lineHeight(1.5.number)
+        color(Color("#FFFFFF"))
+        padding(0.5.cssRem, 0.cssRem)
+    }
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val experiencesList by style {
