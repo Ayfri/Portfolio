@@ -81,16 +81,12 @@ object HeaderStyle : StyleSheet() {
 		zIndex(5)
 
 		"i" style {
-			fontSize(navbarHeight.value() * .6)
+			fontSize(navbarHeight.value() * .5)
 		}
 
 		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
 				padding(0.px, 1.cssRem)
-
-				"i" style {
-					fontSize(navbarHeight.value() * .4)
-				}
 			}
 		}
 	}
@@ -144,6 +140,7 @@ object HeaderStyle : StyleSheet() {
 	val navbarGithub by style {
 		borderRadius(.5.cssRem)
 		gap(1.cssRem)
+		height(80.percent)
 		marginRight(1.vw)
 		padding(.5.cssRem, 1.cssRem)
 
