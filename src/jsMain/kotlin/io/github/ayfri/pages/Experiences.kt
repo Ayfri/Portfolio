@@ -135,7 +135,6 @@ object ExperiencesStyle : StyleSheet() {
 	const val EXPERIENCES_BACKGROUND_COLOR = "#363636"
 	const val EXPERIENCE_BACKGROUND_COLOR = "#1E1E1E"
 	const val EXPERIENCE_BORDER_COLOR = "#444444"
-	const val EXPERIENCE_SHADOW_COLOR = "rgba(0, 0, 0, 0.3)"
 
 	val experiences by style {
 		backgroundColor(Color(EXPERIENCES_BACKGROUND_COLOR))
