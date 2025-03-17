@@ -1,4 +1,4 @@
-package io.github.ayfri.components
+package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.TextAlign
@@ -6,26 +6,14 @@ import com.varabyte.kobweb.compose.css.boxShadow
 import com.varabyte.kobweb.compose.css.textAlign
 import com.varabyte.kobweb.navigation.Anchor
 import io.github.ayfri.*
+import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.utils.margin
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
 import kotlin.js.Date
-import kotlin.math.max
-import kotlin.math.roundToInt
 
-
-data class ArticleEntry(
-	val path: String,
-	val date: String,
-	val title: String,
-	val desc: String,
-	val navTitle: String,
-	val keywords: List<String>,
-	val dateModified: String,
-	val content: String
-)
 
 @Composable
 fun ArticleList(entries: List<ArticleEntry>) {
@@ -36,14 +24,6 @@ fun ArticleList(entries: List<ArticleEntry>) {
 			ArticleEntry(entry)
 		}
 	}
-}
-
-// Calculate estimated reading time based on content
-private fun calculateReadingTime(content: String): Int {
-	// Average reading speed: 250 words per minute
-	val wordCount = content.split(Regex("\\s+")).size
-	val readingTimeMinutes = (wordCount / 250.0).roundToInt()
-	return max(1, readingTimeMinutes) // Minimum 1 minute
 }
 
 @Composable
@@ -150,6 +130,20 @@ fun ArticleEntry(entry: ArticleEntry) {
 }
 
 object ArticleListStyle : StyleSheet() {
+	// Color constants for various UI elements
+	const val ARTICLE_BACKGROUND_COLOR = "#FFFFFF09"
+	const val ARTICLE_BORDER_COLOR = "#FFFFFF40"
+	const val ARTICLE_SHADOW_COLOR = "#00000040"
+	const val ARTICLE_HOVER_BACKGROUND_COLOR = "#FFFFFF15"
+	const val ARTICLE_HOVER_SHADOW_COLOR = "#00000060"
+	const val PARAGRAPH_TEXT_COLOR = "#FFFFFFCC"
+	const val META_TEXT_COLOR = "#FFFFFF99"
+	const val UPDATED_TEXT_COLOR = "#6EBAE7"
+	const val KEYWORD_BACKGROUND_COLOR = "#FFFFFF15"
+	const val KEYWORD_TEXT_COLOR = "#FFFFFFDD"
+	const val KEYWORD_HOVER_BACKGROUND_COLOR = "#FFFFFF25"
+	const val READ_MORE_COLOR = "#6EBAE7"
+
 	init {
 		"main" style {
 			margin(0.px, auto)
@@ -174,12 +168,12 @@ object ArticleListStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val articleEntry by style {
-		backgroundColor(Color("#FFFFFF09"))
+		backgroundColor(Color(ARTICLE_BACKGROUND_COLOR))
 		borderRadius(0.8.cssRem)
-		border(3.px, LineStyle.Solid, Color("#FFFFFF40"))
+		border(3.px, LineStyle.Solid, Color(ARTICLE_BORDER_COLOR))
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		boxShadow(0.px, 4.px, 15.px, 0.px, Color("#00000040"))
+		boxShadow(0.px, 4.px, 15.px, 0.px, Color(ARTICLE_SHADOW_COLOR))
 
 		animation(AnimationsStyle.appearFromBelow) {
 			fillMode(AnimationFillMode.Forwards)
@@ -201,15 +195,15 @@ object ArticleListStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			backgroundColor(Color("#FFFFFF15"))
+			backgroundColor(Color(ARTICLE_HOVER_BACKGROUND_COLOR))
 			transform {
 				translateY((-5).px)
 			}
-			boxShadow(0.px, 8.px, 20.px, 0.px, Color("#00000060"))
+			boxShadow(0.px, 8.px, 20.px, 0.px, Color(ARTICLE_HOVER_SHADOW_COLOR))
 		}
 
 		"p" {
-			color(Color("#FFFFFFCC"))
+			color(Color(PARAGRAPH_TEXT_COLOR))
 			margin(0.px)
 		}
 
@@ -242,7 +236,7 @@ object ArticleListStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
 		gap(1.cssRem)
-		color(Color("#FFFFFF99"))
+		color(Color(META_TEXT_COLOR))
 		fontSize(0.9.cssRem)
 	}
 
@@ -257,7 +251,7 @@ object ArticleListStyle : StyleSheet() {
 	}
 
 	val updated by style {
-		color(Color("#6EBAE7"))
+		color(Color(UPDATED_TEXT_COLOR))
 	}
 
 	val articleDescription by style {
@@ -273,11 +267,11 @@ object ArticleListStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val keyword by style {
-		backgroundColor(Color("#FFFFFF15"))
+		backgroundColor(Color(KEYWORD_BACKGROUND_COLOR))
 		borderRadius(1.cssRem)
 		padding(0.3.cssRem, 0.8.cssRem)
 		fontSize(0.8.cssRem)
-		color(Color("#FFFFFFDD"))
+		color(Color(KEYWORD_TEXT_COLOR))
 
 		transitions {
 			"background-color" {
@@ -286,7 +280,7 @@ object ArticleListStyle : StyleSheet() {
 		}
 
 		hover style {
-			backgroundColor(Color("#FFFFFF25"))
+			backgroundColor(Color(KEYWORD_HOVER_BACKGROUND_COLOR))
 		}
 	}
 
@@ -296,7 +290,7 @@ object ArticleListStyle : StyleSheet() {
 		justifyContent(JustifyContent.FlexEnd)
 		marginTop(0.5.cssRem)
 
-		color(Color("#6EBAE7"))
+		color(Color(READ_MORE_COLOR))
 		fontSize(0.95.cssRem)
 		fontWeight(600)
 

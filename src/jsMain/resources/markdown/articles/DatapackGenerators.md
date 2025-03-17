@@ -9,8 +9,6 @@ root: .layouts.ArticleLayout
 routeOverride: /articles/datapack-generators/index
 ---
 
-# Datapack Generators in 2025
-
 Datapacks have become a fundamental method for customizing Minecraft gameplay, but manually writing them in raw JSON and mcfunction files can quickly become repetitive and tedious. Over the years, the Minecraft community has introduced numerous **datapack generators** – useful tools and versatile frameworks designed to streamline pack development ([Rationale - Beet documentation](https://mcbeet.dev/rationale/#:~:text=As%20creators%20become%20more%20and,blown%20programming%20languages)). Now, from simple online utilities to sophisticated programming frameworks, datapack creators have a broad range of choices available. In this article, we'll explore *the most prominent and widely used datapack generators in 2025*, analyzing their respective features and design philosophies. Our focus will mainly be on **Kore**, a Kotlin-based solution renowned for its **completeness**, **readability**, **maintenance**, and **extensibility** strengths. Additionally, we’ll review popular alternatives like Sandstone, Beet, and JMC to understand how Kore measures up. Whether you're an experienced datapack developer or new to Minecraft scripting, continue reading to find the ideal tool for your needs.
 
 *(Note: This article aims specifically at advanced code-based datapack generators. If your goal is to quickly create simple JSON-based files, resources such as [Misode’s Datapack Generators](https://misode.github.io/) or similar online tools could be more helpful. Here, however, I'm focusing on comprehensive frameworks that let you directly **program** your datapacks.)*

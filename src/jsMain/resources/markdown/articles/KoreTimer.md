@@ -9,8 +9,6 @@ root: .layouts.ArticleLayout
 routeOverride: /articles/kore-timer/index
 ---
 
-# Creating a Simple Timer Datapack with Kore
-
 Welcome to the world of Minecraft datapack creation! If you've ever wanted to create your own Minecraft datapack but felt limited by
 traditional tools, Kore, a Kotlin-based library, is here to make the process easier and more efficient. In this article, we'll guide you
 through creating a simple datapack that displays a message every 20 seconds using the "tick" function. We'll show you how to do this using

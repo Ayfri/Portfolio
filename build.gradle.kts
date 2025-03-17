@@ -155,7 +155,7 @@ kobweb {
 					|
 					|package io.github.ayfri
 					|
-					|import io.github.ayfri.components.ArticleEntry
+					|import io.github.ayfri.data.ArticleEntry
 					|
 					|val articlesEntries = listOf${if (blogEntries.isEmpty()) "<ArticleEntry>" else ""}(
 					""".trimMargin()

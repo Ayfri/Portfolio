@@ -5,8 +5,8 @@ import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.articlesEntries
-import io.github.ayfri.components.ArticleList
-import io.github.ayfri.components.ArticleListStyle
+import io.github.ayfri.components.articles.ArticleList
+import io.github.ayfri.components.articles.ArticleListStyle
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.focusWithin
 import io.github.ayfri.utils.linearGradient

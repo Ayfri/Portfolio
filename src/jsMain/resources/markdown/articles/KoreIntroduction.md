@@ -9,8 +9,6 @@ root: .layouts.ArticleLayout
 routeOverride: /articles/kore-introduction/index
 ---
 
-# Introduction to Datapack Creation with Kore in Kotlin
-
 Welcome to the world of Minecraft datapack creation! If you've ever dreamed of creating your
 own [Minecraft datapack](https://minecraft.wiki/w/Data_pack) but thought you were limited to using just the traditional tools, we
 have exciting news for you. [Kore](https://kore.ayfri.com), a Kotlin-based library, is here to revolutionize the way you develop
