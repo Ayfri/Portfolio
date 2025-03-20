@@ -68,76 +68,44 @@ fun HomeCard(repository: GitHubRepository) {
 fun AvatarImage(owner: PartialUser) = Img(owner.avatarUrl, "${owner.login} avatar")
 
 @Composable
-fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement>.(SyntheticMouseEvent) -> Unit = {}) {
-	var open by mutableStateOf(false)
-
-	Div({
+fun ProjectCard(repository: GitHubRepository) {
+	A("/projects/${repository.owner.login}/${repository.name}", {
 		classes(DataStyle.projectCard)
 		id(repository.name)
-
-		onClick {
-			onClick(it)
-		}
 	}) {
 		Div({
 			classes("top", AppStyle.monoFont)
 		}) {
-			if (open) {
+			Div({
+				classes("card-header")
+			}) {
 				AvatarImage(repository.owner)
-				H2 { Text(repository.name) }
 
 				Div({
-					classes("texts")
+					classes("repo-info")
 				}) {
-					P({
-						val creationDate = Date(repository.createdAt)
-						val day = creationDate.getDate().toString().padStart(2, '0')
-						val month = (creationDate.getMonth() + 1).toString().padStart(2, '0')
-						val year = creationDate.getFullYear()
-						val formatted = "$day/$month/$year"
+					H3 { Text(repository.name) }
 
-						markdownParagraph(
-							"""
-							Creation date: <span>$formatted</span>
-							Stars: <span>${repository.stargazersCount}</span>
-							Commits: <span>${repository.commitsCount}</span>
-							Contributors: <span>${repository.contributorsCount}</span>
-						""".trimIndent(), true
-						)
-					})
-				}
-			} else {
-				Div({
-					classes("card-header")
-				}) {
-					AvatarImage(repository.owner)
-
-					Div({
-						classes("repo-info")
-					}) {
-						H3 { Text(repository.name) }
-
-						repository.language?.let {
-							Span({
-								classes("language")
-							}) {
-								Div({
-									classes("language-dot")
-									style {
-										backgroundColor(getLanguageColor(it))
-									}
-								})
-								Text(it)
-							}
+					repository.language?.let {
+						Span({
+							classes("language")
+						}) {
+							Div({
+								classes("language-dot")
+								style {
+									backgroundColor(getLanguageColor(it))
+								}
+							})
+							Text(it)
 						}
 					}
+				}
 
-					Div({
-						classes("stats")
-					}) {
-						TextIcon(repository.stargazersCount.toString(), FontAwesomeType.SOLID, "star")
-						TextIcon(repository.forksCount.toString(), FontAwesomeType.SOLID, "code-branch")
-					}
+				Div({
+					classes("stats")
+				}) {
+					TextIcon(repository.stargazersCount.toString(), FontAwesomeType.SOLID, "star")
+					TextIcon(repository.forksCount.toString(), FontAwesomeType.SOLID, "code-branch")
 				}
 			}
 		}
@@ -145,62 +113,43 @@ fun ProjectCard(repository: GitHubRepository, onClick: AttrsScope<HTMLDivElement
 		Div({
 			classes("bottom")
 		}) {
-			if (open) {
-				val readmeContent = repository.readmeContent ?: repository.description ?: repository.name
+			P({
+				classes("description")
+			}) {
+				Text(repository.description ?: "No description provided.")
+			}
 
-				P({
-					markdownParagraph(readmeContent) { element ->
-						Prism.highlightAllUnder(element)
-					}
-				})
-			} else {
-				P({
-					classes("description")
-				}) {
-					Text(repository.description ?: "No description provided.")
-				}
-
-				Div({
-					classes("topics")
-				}) {
-					repository.topics.take(3).forEach { topic ->
-						Span({
-							classes("topic-tag")
-						}) {
-							Text(topic)
-						}
-					}
-
-					if (repository.topics.size > 3) {
-						Span({
-							classes("topic-more")
-						}) {
-							Text("+${repository.topics.size - 3}")
-						}
-					}
-				}
-
-				Div({
-					classes("footer")
-				}) {
+			Div({
+				classes("topics")
+			}) {
+				repository.topics.take(3).forEach { topic ->
 					Span({
-						classes("updated")
+						classes("topic-tag")
 					}) {
-						I({
-							classes("fas", "fa-history")
-						})
-						Text(" Updated ${formatRelativeTime(repository.updatedAt)}")
+						Text(topic)
+					}
+				}
+
+				if (repository.topics.size > 3) {
+					Span({
+						classes("topic-more")
+					}) {
+						Text("+${repository.topics.size - 3}")
 					}
 				}
 			}
-		}
 
-		if (open) {
-			A(repository.htmlUrl, {
-				classes(AppStyle.button)
-				target(ATarget.Blank)
+			Div({
+				classes("footer")
 			}) {
-				Text("View on GitHub")
+				Span({
+					classes("updated")
+				}) {
+					I({
+						classes("fas", "fa-history")
+					})
+					Text(" Updated ${formatRelativeTime(repository.updatedAt)}")
+				}
 			}
 		}
 	}
@@ -329,6 +278,7 @@ object DataStyle : StyleSheet() {
 		alignItems(AlignItems.Center)
 		backgroundColor(Color(PROJECT_CARD_CLOSED_BACKGROUND))
 		borderRadius(0.75.cssRem)
+		color(Color.white)
 		cursor(Cursor.Pointer)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)

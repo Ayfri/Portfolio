@@ -321,15 +321,7 @@ fun Projects() {
 					}
 				} else {
 					filteredRepos.forEach { repository ->
-						ProjectCard(repository) onClick@{
-							context.router.navigateTo("/projects/${repository.fullName}")
-
-							val list = document.querySelector(".${ProjectsStyle.projectsList}").unsafeCast<HTMLElement>()
-							val style = window.getComputedStyle(list)
-							val rowsCount = style.getPropertyValue("grid-template-columns").split(" ").size
-
-							list.style.setProperty("--${DataStyle.gridColumnStartVar.name}", rowsCount.toString())
-						}
+						ProjectCard(repository)
 					}
 				}
 			}
