@@ -40,6 +40,7 @@ val projectLinks = listOf(
 	ProjectLink("Pokestore", "https://pokestore.ayfri.com"),
 	ProjectLink("Cursors Draw", "https://cursors.draw.ayfri.com"),
 	ProjectLink("Realtime TodoList", "https://realtime-todolist.pages.dev"),
+	ProjectLink("GPT Images", "https://gpt-images.ayfri.com"),
 )
 
 @Composable
@@ -123,7 +124,7 @@ fun Footer() {
 							val body = """
 								${name.ifNotBlank { "Name: $name" }}
 								${subject.ifNotBlank { "Subject: $subject" }}
-								
+
 								${message.ifNotBlank { "Message: $message" }}
 							""".trimIndent().replace("\n", "%0A")
 
