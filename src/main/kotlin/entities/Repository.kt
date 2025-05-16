@@ -65,7 +65,7 @@ data class Repository(
 	val openIssues: Int,
 	val openIssuesCount: Int,
 	val owner: PartialUser,
-	val permissions: Permissions,
+	val permissions: Permissions? = null,
 	@SerialName("private")
 	val `private`: Boolean,
 	val pullsUrl: String,

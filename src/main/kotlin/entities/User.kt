@@ -9,7 +9,7 @@ data class User(
 	val blog: String,
 	val company: String?,
 	val createdAt: String,
-	val email: String,
+	val email: String? = null,
 	val eventsUrl: String,
 	val followers: Int,
 	val followersUrl: String,
