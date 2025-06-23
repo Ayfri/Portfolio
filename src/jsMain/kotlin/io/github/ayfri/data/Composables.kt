@@ -427,17 +427,18 @@ object DataStyle : StyleSheet() {
 				gap(0.5.cssRem)
 
 				className("topic-tag") style {
-					color(Color(TOPIC_TAG_COLOR))
 					padding(0.3.cssRem, 0.6.cssRem)
-					borderRadius(1.cssRem)
-					fontSize(0.8.cssRem)
+					color(Color.white)
 					border {
-						width(1.px)
+						width(2.px)
 						style(LineStyle.Solid)
 						color(Color("transparent"))
 					}
-					property("background", """
-						linear-gradient(transparent, transparent) padding-box,
+					borderRadius(1.cssRem)
+					fontSize(0.8.cssRem)
+					cursor(Cursor.Pointer)
+					background("""
+						linear-gradient(#1A1225, #1A1225) padding-box,
 						linear-gradient(45deg, #00D4FF, #FF0080) border-box
 					""")
 				}
