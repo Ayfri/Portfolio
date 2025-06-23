@@ -21,9 +21,11 @@ fun Portfolio() {
 			classes(PortfolioStyle.portfolio)
 		}) {
 			H1({
-				classes(PortfolioStyle.title)
+				classes(AppStyle.title)
 			}) {
-				Text("This Portfolio")
+				Span {
+					Text("This Portfolio")
+				}
 			}
 
 			PortfolioSection(
@@ -31,7 +33,7 @@ fun Portfolio() {
 				I created this portfolio first because my school asked me to create one to validate my first year.
 				But also to have something to show for recruiters other than just a GitHub profile.
 				I can explain what do I do, how, why, when I started etc.
-				This is why I created it using new technologies that I don’t know and designed it using the method my boss learned me during this time.
+				This is why I created it using new technologies that I don't know and designed it using the method my boss learned me during this time.
 			""".trimIndent(),
 				title = "In the first place, why?",
 				image = localImage("portfolio-1-small.png"),
@@ -56,10 +58,10 @@ fun Portfolio() {
 			PortfolioSection(
 				"""
 				The website was programmed using the language Kotlin, and the framework Kobweb built on top of Compose HTML.
-				I’m practicing with Kotlin since 2020, meaning I know well how to program in Kotlin.
+				I'm practicing with Kotlin since 2020, meaning I know well how to program in Kotlin.
 				It has pretty good documentation, and it is pretty straightforward to learn, Compose is pretty recent, so support is maybe a bit tedious to find.
 				The force of Kotlin is to be able to compile to JVM (like Java) but also to JavaScript, Native, and WebAssembler was recently started.
-				And once you join the Slack workspace for Kotlin, you’ll have response to your problems very easily and quickly.
+				And once you join the Slack workspace for Kotlin, you'll have response to your problems very easily and quickly.
 			""".trimIndent(),
 				title = "Realisation",
 				image = localImage("portfolio-3-small.png"),
@@ -111,19 +113,15 @@ fun PortfolioSection(text: String, title: String, image: String, width: Int, hei
 }
 
 object PortfolioStyle : StyleSheet() {
-	const val TITLE_GRADIENT_START = "#D375EB"
-	const val TITLE_GRADIENT_END = "#6276E0"
+	const val TITLE_GRADIENT_START = "#00D4FF"  // Cyan néon
+	const val TITLE_GRADIENT_END = "#FF0080"   // Magenta néon
 
-	const val BACKGROUND_GRADIENT_START = "#1E1D40"
-	const val BACKGROUND_GRADIENT_MIDDLE = "#1D2736"
-	const val BACKGROUND_GRADIENT_END = "#1F0C29"
+	const val BACKGROUND_GRADIENT_START = "#0A0A0F"  // Plus sombre
+	const val BACKGROUND_GRADIENT_MIDDLE = "#1A1225" // Violet foncé
+	const val BACKGROUND_GRADIENT_END = "#2A1B3D"    // Violet plus clair
 	val sectionsGap = 4.cssRem
 
-	val title by style {
-		fontSize(3.cssRem)
-		marginTop(0.px)
-		marginBottom(1.cssRem)
-	}
+
 
 	val portfolio by style {
 		display(DisplayStyle.Flex)

@@ -201,7 +201,7 @@ object DataStyle : StyleSheet() {
 	const val HOME_CARD_COLOR = "#cacaca"
 	const val PROJECT_CARD_CLOSED_BACKGROUND = "#2a2b36"
 	const val PROJECT_CARD_HOVER_BACKGROUND = "#353648"
-	const val TOPIC_TAG_BACKGROUND = "#B4BBFF20"
+	const val TOPIC_TAG_BACKGROUND = "transparent"
 	const val TOPIC_TAG_COLOR = AppStyle.SPECIAL_TEXT_COLOR
 	const val TEXT_SECONDARY = "#ffffffaa"
 
@@ -225,6 +225,17 @@ object DataStyle : StyleSheet() {
 		flexDirection(FlexDirection.Column)
 		justifyContent(JustifyContent.SpaceBetween)
 
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${HOME_CARD_BACKGROUND}, ${HOME_CARD_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.08)")
+
 		className("title") style {
 			color(Color.white)
 
@@ -235,6 +246,15 @@ object DataStyle : StyleSheet() {
 
 			backgroundColor(Color(HOME_CARD_TITLE_BACKGROUND))
 			padding(1.cssRem)
+			border {
+				width(1.px)
+				style(LineStyle.Solid)
+				color(Color("transparent"))
+			}
+			background("""
+				linear-gradient(${HOME_CARD_TITLE_BACKGROUND}, ${HOME_CARD_TITLE_BACKGROUND}) padding-box,
+				linear-gradient(45deg, #00D4FF, #FF0080) border-box
+			""")
 
 			"h3" {
 				display(DisplayStyle.Flex)
@@ -264,6 +284,15 @@ object DataStyle : StyleSheet() {
 
 			height(100.percent)
 			padding(1.cssRem)
+			border {
+				width(1.px)
+				style(LineStyle.Solid)
+				color(Color("transparent"))
+			}
+			background("""
+				linear-gradient(${HOME_CARD_BACKGROUND}, ${HOME_CARD_BACKGROUND}) padding-box,
+				linear-gradient(45deg, #00D4FF, #FF0080) border-box
+			""")
 		}
 
 		combine(self, className("active")) style {
@@ -276,7 +305,6 @@ object DataStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val projectCard by style {
 		alignItems(AlignItems.Center)
-		backgroundColor(Color(PROJECT_CARD_CLOSED_BACKGROUND))
 		borderRadius(0.75.cssRem)
 		color(Color.white)
 		cursor(Cursor.Pointer)
@@ -286,6 +314,17 @@ object DataStyle : StyleSheet() {
 		imageSize(2.5.cssRem)
 		padding(1.65.cssRem)
 
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${PROJECT_CARD_CLOSED_BACKGROUND}, ${PROJECT_CARD_CLOSED_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.08)")
+
 		transitions {
 			properties("all") {
 				duration(0.3.s)
@@ -293,9 +332,12 @@ object DataStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			boxShadow(0.px, 5.px, 15.px, 0.px, Color("#00000030"))
-			backgroundColor(Color(PROJECT_CARD_HOVER_BACKGROUND))
+			background("""
+				linear-gradient(${PROJECT_CARD_HOVER_BACKGROUND}, ${PROJECT_CARD_HOVER_BACKGROUND}) padding-box,
+				linear-gradient(45deg, #00D4FF, #FF0080) border-box
+			""")
 			transform { translateY((-5).px) }
+			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.2)")
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
@@ -385,19 +427,35 @@ object DataStyle : StyleSheet() {
 				gap(0.5.cssRem)
 
 				className("topic-tag") style {
-					backgroundColor(Color(TOPIC_TAG_BACKGROUND))
 					color(Color(TOPIC_TAG_COLOR))
 					padding(0.3.cssRem, 0.6.cssRem)
 					borderRadius(1.cssRem)
 					fontSize(0.8.cssRem)
+					border {
+						width(1.px)
+						style(LineStyle.Solid)
+						color(Color("transparent"))
+					}
+					property("background", """
+						linear-gradient(transparent, transparent) padding-box,
+						linear-gradient(45deg, #00D4FF, #FF0080) border-box
+					""")
 				}
 
 				className("topic-more") style {
-					backgroundColor(Color("#ffffff15"))
 					color(Color.white)
 					padding(0.3.cssRem, 0.6.cssRem)
 					borderRadius(1.cssRem)
 					fontSize(0.8.cssRem)
+					border {
+						width(1.px)
+						style(LineStyle.Solid)
+						color(Color("transparent"))
+					}
+					background("""
+						linear-gradient(#ffffff15, #ffffff15) padding-box,
+						linear-gradient(45deg, #00D4FF, #FF0080) border-box
+					""")
 				}
 			}
 

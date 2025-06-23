@@ -32,17 +32,17 @@ I'm making all sorts of projects and programming by myself for years. This is my
 """
 
 const val PORTFOLIO_SUMMARY = """
-This portfolio showcases my journey as a developer, my skills, and the projects I've worked on. 
+This portfolio showcases my journey as a developer, my skills, and the projects I've worked on.
 Built with Kotlin and Compose for Web, it represents both my technical abilities and my passion for clean, functional design.
 """
 
 const val EXPERIENCE_SUMMARY = """
-From internships at [BlueFrog](https://www.bluefrog.fr/) where I developed WordPress sites, to working on AI projects like ScriptGraf at [Ynov](https://www.ynov.com/), 
+From internships at [BlueFrog](https://www.bluefrog.fr/) where I developed WordPress sites, to working on AI projects like ScriptGraf at [Ynov](https://www.ynov.com/),
 I've gained valuable experience in various technologies and collaborative environments.
 """
 
 const val ARTICLES_SUMMARY = """
-Explore my blog where I share insights, tutorials, and experiences in programming, particularly focusing on Kotlin, Minecraft modding, 
+Explore my blog where I share insights, tutorials, and experiences in programming, particularly focusing on Kotlin, Minecraft modding,
 and technical deep dives. Learn about my journey and discoveries in software development.
 """
 
@@ -389,10 +389,10 @@ object HomeStyle : StyleSheet() {
 			flexDirection(FlexDirection.Column)
 			alignItems(AlignItems.Center)
 			background(linearGradient(180.deg) {
-				stop(Color("#1D1D1E"), (-3).percent)
-				stop(Color("#111629"), 14.percent)
-				stop(Color("#29183F"), 65.percent)
-				stop(Color("#302F39"), 90.percent)
+				stop(Color("#0A0A0F"), (-3).percent)
+				stop(Color("#1A1225"), 14.percent)
+				stop(Color("#2A1B3D"), 65.percent)
+				stop(Color("#1E1535"), 90.percent)
 			})
 
 			padding(1.cssRem, 8.5.vw)
@@ -462,15 +462,16 @@ object HomeStyle : StyleSheet() {
 	}
 
 	val sectionTitle by style {
-		background(linearGradient(20.deg) {
-			stop(Color(PortfolioStyle.TITLE_GRADIENT_START))
-			stop(Color(PortfolioStyle.TITLE_GRADIENT_END))
+		background(linearGradient(45.deg) {
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
 		})
 
 		fontSize(2.2.cssRem)
 		marginTop(0.px)
 		marginBottom(1.5.cssRem)
 		textAlign(TextAlign.Center)
+		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 
 		property("-webkit-background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
@@ -494,8 +495,17 @@ object HomeStyle : StyleSheet() {
 		width(100.percent)
 		maxWidth(1200.px)
 		borderRadius(1.cssRem)
-		backgroundColor(Color("#ffffff10"))
-		boxShadow(Color("#00000040"), 0.px, 4.px, 12.px)
+		backgroundColor(Color("#1A1225"))
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		property("background", """
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05)")
 
 		className("skills") style {
 			flexWrap(FlexWrap.Wrap)
@@ -547,6 +557,15 @@ object HomeStyle : StyleSheet() {
 		borderRadius(.4.cssRem)
 		color(Color.white)
 		padding(.3.cssRem, .5.cssRem)
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		property("background", """
+			linear-gradient(#252525, #252525) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 		transitions {
 			defaultDuration(0.3.s)
 			properties("all")
@@ -554,7 +573,7 @@ object HomeStyle : StyleSheet() {
 
 		hover(self) style {
 			backgroundColor(Color("#1D1D1E"))
-			boxShadow(Color("#00000060"), 0.px, 4.px, 8.px)
+			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.4)")
 			scale(1.05)
 		}
 
@@ -591,7 +610,7 @@ object HomeStyle : StyleSheet() {
 
 	val portfolioImage by style {
 		borderRadius(0.8.cssRem)
-		property("box-shadow", "0px 0px 10px 2px #71A0E8")
+		property("box-shadow", "0px 0px 20px 4px rgba(0, 212, 255, 0.4)")
 		maxWidth(40.percent)
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
@@ -631,7 +650,7 @@ object HomeStyle : StyleSheet() {
 		maxWidth(30.percent)
 		borderRadius(0.8.cssRem)
 		filter {
-			dropShadow(offsetX = 2.px, offsetY = 0.px, blurRadius = 4.px, color = Color("#71A0E8"))
+			dropShadow(offsetX = 2.px, offsetY = 0.px, blurRadius = 8.px, color = Color("#FF0080"))
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
@@ -675,6 +694,15 @@ object HomeStyle : StyleSheet() {
 		backgroundColor(Color("#252525"))
 		color(Color.white)
 		textDecoration("none")
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		property("background", """
+			linear-gradient(#252525, #252525) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 
 		transitions {
 			defaultDuration(0.3.s)
@@ -684,7 +712,7 @@ object HomeStyle : StyleSheet() {
 		hover(self) style {
 			backgroundColor(Color("#1D1D1E"))
 			translateY((-5).px)
-			boxShadow(Color("#00000060"), 0.px, 4.px, 8.px)
+			property("box-shadow", "0 0 25px rgba(255, 0, 128, 0.5)")
 		}
 	}
 
@@ -721,7 +749,7 @@ object HomeStyle : StyleSheet() {
 			transform {
 				translateY((-5).px)
 			}
-			boxShadow(Color("#00000060"), 0.px, 4.px, 8.px)
+			property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.4)")
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {

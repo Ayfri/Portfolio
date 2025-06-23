@@ -201,7 +201,7 @@ object BlogPageStyle : StyleSheet() {
 		padding(0.px, 1.cssRem)
 	}
 
-	val header by style {
+		val header by style {
 		marginBottom(3.cssRem)
 		textAlign(TextAlign.Center)
 	}
@@ -210,13 +210,16 @@ object BlogPageStyle : StyleSheet() {
 		fontSize(3.cssRem)
 		margin(1.cssRem)
 		background(linearGradient(45.deg) {
-			stop(Color("#9C7CF4"))
-			stop(Color("#6EBAE7"))
+			stop(Color("#00D4FF"))  // Cyan néon
+			stop(Color("#FF0080"))  // Magenta néon
 		})
 		property("-webkit-background-clip", "text")
 		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
+		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 	}
+
+
 
 	val intro by style {
 		fontSize(1.2.cssRem)
@@ -242,22 +245,27 @@ object BlogPageStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val searchWrapper by style {
 		alignItems(AlignItems.Center)
-		backgroundColor(Color("#FFFFFF10"))
-		border(1.px, LineStyle.Solid, Color("#FFFFFF40"))
+		backgroundColor(Color("#1A1225"))
+		border(2.px, LineStyle.Solid, Color("transparent"))
 		borderRadius(2.cssRem)
 		color(Color("#FFFFFFB0"))
 		display(DisplayStyle.Flex)
 		fontSize(1.1.cssRem)
 		maxWidth(600.px)
 		padding(0.8.cssRem, 1.cssRem)
+		property("background", """
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 		transitions {
 			defaultDuration(0.3.s)
-			properties("color")
+			properties("color", "box-shadow")
 		}
 		width(100.percent)
 
 		self + focusWithin style {
 			color(Color.white)
+			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.4)")
 		}
 	}
 
@@ -302,12 +310,21 @@ object BlogPageStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val tag by style {
-		backgroundColor(Color("#FFFFFF15"))
+		backgroundColor(Color("#1A1225"))
 		borderRadius(1.cssRem)
 		padding(0.4.cssRem, 1.cssRem)
 		fontSize(0.9.cssRem)
 		color(Color("#FFFFFFDD"))
 		cursor(Cursor.Pointer)
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		property("background", """
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 
 		transitions {
 			"background-color" {
@@ -316,22 +333,32 @@ object BlogPageStyle : StyleSheet() {
 			"transform" {
 				duration(0.2.s)
 			}
+			"box-shadow" {
+				duration(0.2.s)
+			}
 		}
 
 		hover style {
-			backgroundColor(Color("#FFFFFF25"))
+			backgroundColor(Color("#1E1535"))
 			transform {
 				scale(1.05)
 			}
+			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
 		}
 	}
 
 	val tagSelected by style {
-		backgroundColor(Color("#6EBAE750"))
-		border(1.px, LineStyle.Solid, Color("#6EBAE7"))
+		backgroundColor(Color("#1A1225"))
+		border(2.px, LineStyle.Solid, Color("transparent"))
+		property("background", """
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #FF0080, #00D4FF) border-box
+		""")
+		property("box-shadow", "0 0 15px rgba(255, 0, 128, 0.3)")
 
 		hover style {
-			backgroundColor(Color("#6EBAE760"))
+			backgroundColor(Color("#1E1535"))
+			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.5)")
 		}
 	}
 

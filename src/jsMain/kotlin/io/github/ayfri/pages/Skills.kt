@@ -13,6 +13,7 @@ import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.*
+import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
@@ -427,7 +428,9 @@ fun Skills() {
 			H1({
 				classes(AppStyle.monoFont, AppStyle.title)
 			}) {
-				Text("My Skills:")
+				Span {
+					Text("My Skills:")
+				}
 			}
 
 			Section({
@@ -465,11 +468,19 @@ fun Skills() {
 }
 
 object SkillsStyle : StyleSheet() {
-	const val SKILLS_BACKGROUND_COLOR = "#363636"
+	const val SKILLS_BACKGROUND_COLOR = "#1A1225"
 	const val SKILL_BACKGROUND_COLOR = "#141414"
 
 	val skills by style {
 		backgroundColor(Color(SKILLS_BACKGROUND_COLOR))
+
+		// Main background with gradient violet
+		background(linearGradient(180.deg) {
+			stop(Color("#0A0A0F"), (-3).percent)
+			stop(Color("#1A1225"), 14.percent)
+			stop(Color("#2A1B3D"), 65.percent)
+			stop(Color("#1E1535"), 90.percent)
+		})
 	}
 
 	val skillsList by style {
@@ -485,30 +496,34 @@ object SkillsStyle : StyleSheet() {
 		}
 	}
 
+	@OptIn(ExperimentalComposeWebApi::class)
 	val skill by style {
-		val borderGradient = linearGradient(135.deg) {
-			stop(Color("#701CB3"))
-			stop(Color("#534BAB"))
-			stop(Color("#A24598"))
-			stop(Color("#033596"))
-		}
-
 		borderRadius(.8.cssRem)
 		border {
 			color(Color.transparent)
 			style(LineStyle.Solid)
-			width(.1.cssRem)
+			width(2.px)
 		}
 
-		background("""${
-			linearGradient {
-				stop(Color(SKILL_BACKGROUND_COLOR))
-				stop(Color(SKILL_BACKGROUND_COLOR))
-			}
-		} padding-box,
-			$borderGradient border-box""")
+		property("background", """
+			linear-gradient(${SKILL_BACKGROUND_COLOR}, ${SKILL_BACKGROUND_COLOR}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
 
 		color(Color.white)
+
+		transitions {
+			properties("transform") {
+				duration(0.3.s)
+			}
+		}
+
+		self + hover style {
+			transform {
+				translateY((-3).px)
+			}
+		}
 
 		"img" {
 			size(3.5.cssRem)
@@ -517,6 +532,14 @@ object SkillsStyle : StyleSheet() {
 
 		"h2" {
 			fontSize(1.cssRem)
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
+			property("-moz-text-fill-color", "transparent")
+			property("-moz-background-clip", "text")
 		}
 
 		"p" {
@@ -543,10 +566,18 @@ object SkillsStyle : StyleSheet() {
 				textAlign(TextAlign.Start)
 
 				className("left") style {
-					backgroundColor(Color("#00000070"))
 					borderRadius(.5.cssRem)
 					padding(.7.cssRem)
 					textAlign(TextAlign.Center)
+					border {
+						width(1.px)
+						style(LineStyle.Solid)
+						color(Color("transparent"))
+					}
+					property("background", """
+						transparent padding-box,
+						linear-gradient(45deg, #00D4FF, #FF0080) border-box
+					""")
 
 					"p" {
 						margin(.5.cssRem, 0.px, 0.px)
@@ -573,14 +604,27 @@ object SkillsStyle : StyleSheet() {
 			self + not(empty) style {
 				borderTop {
 					style(LineStyle.Solid)
-					width(.1.cssRem)
+					width(2.px)
+					color(Color("transparent"))
 				}
-				borderImageSource(borderGradient)
+				borderImageSource(linearGradient(45.deg) {
+					stop(Color("#00D4FF"))
+					stop(Color("#FF0080"))
+				})
 				borderImageSlice(1)
 			}
 
 			"h3" {
 				margin(0.px)
+
+				background(linearGradient(45.deg) {
+					stop(Color("#00D4FF"))
+					stop(Color("#FF0080"))
+				})
+				property("-webkit-background-clip", "text")
+				property("-webkit-text-fill-color", "transparent")
+				property("-moz-text-fill-color", "transparent")
+				property("-moz-background-clip", "text")
 
 				self + nthOfType(2.n) style {
 					marginTop(1.2.cssRem)

@@ -104,7 +104,7 @@ val sections = listOf(
 			But it was too simplistic and not enough expandable for me. So I looked for another library to make my own games with more depth and customization.
 
 			[PIXI.js](https://pixijs.com) was the library I stumbled upon, and I created a few projects with it for a long time. My first big game with it was a [2D Minecraft-like game](https://github.com/Ayfri/2d-minecraft) (again yes hehe).
-			Then a [2D Portal game](https://github.com/Ayfri/portal-2d) experiment. Also, a [Cookie-Clicker-like](https://github.com/Ayfri/atom-clicker) game about atoms, Atom Clicker. And recently I’m recreating my [2D Minecraft-Game](https://github.com/Ayfri/Minekraft-2D) in Kotlin, still using PIXI, named Minekraft-2D.
+			Then a [2D Portal game](https://github.com/Ayfri/portal-2d) experiment. Also, a [Cookie-Clicker-like](https://github.com/Ayfri/atom-clicker) game about atoms, Atom Clicker. And recently I'm recreating my [2D Minecraft-Game](https://github.com/Ayfri/Minekraft-2D) in Kotlin, still using PIXI, named Minekraft-2D.
 		""".trimIndent(), 2015, id = "processing"
 	) {
 		TextIcon("Processing", "https://upload.wikimedia.org/wikipedia/commons/c/cb/Processing_2021_logo.svg")
@@ -116,7 +116,7 @@ val sections = listOf(
 			Back in the days, it was not that common to create a bot for your own community, and Discord was not so reputed. Because of that, there were no great tutorials. I got a lot of help from a Discord Server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons, and some others helped me a lot to understand and create my bot.
 
 			About a year later, I was pretty good at creating a bot, but I realized that my project was kind of... ugly. So I recreated it, [AyBot 2](https://github.com/Ayfri/AyBot-2) was born in early 2019. It was pretty clean, and I wanted people to use my bot, so I changed a lot of the code, so it was working on multiple servers with configurations, etc.
-			
+
 			At that time, I created some other little utilities bots or test bots.
 			AyBot 2 was taken down at the end of 2019 because of [Galileo](#galileo).
 		""".trimIndent(), 2018, id = "second-intro"
@@ -129,7 +129,7 @@ val sections = listOf(
 			At my high school, for 3 years, I used arduino a lot, only creating big projects in the last year but still. It has let me learn a lot on low-level programming, [C++](https://cplusplus.com) basics and microcontrollers.
 			By doing my own research, I learned a lot about C++ compilation, assembler, reverse engineering, optimization and other low-level subjects.
 			I even tried a bit of writing assembler x86. I created some little programs using C++.
-			
+
 			Back in 2015, I followed a [tutorial to create a Minecraft-like game](https://www.youtube.com/watch?v=GACpZp8oquU) in C++ using [OpenGL](https://www.opengl.org/) and a bunch of libraries.
 			It was interesting to go after some years, back on this project and fix some issues and finally understand the code and learn more about OpenGL and low-level graphics processing.
 
@@ -154,7 +154,7 @@ val sections = listOf(
 
 	AboutMeSection(
 		"""
-			During this time, I was administrator (and I’m still) on a [big Discord server](https://discord.gg/invite/sDT7W8mNmq) at the time about sharing your server or website. And I was the friend of the other administrator, Antow, who also created his own bot, I was helping him sometimes.
+			During this time, I was administrator (and I'm still) on a [big Discord server](https://discord.gg/invite/sDT7W8mNmq) at the time about sharing your server or website. And I was the friend of the other administrator, Antow, who also created his own bot, I was helping him sometimes.
 			After some discussions, we agreed to merge our bots, as we were both passionate about astronomy, we named it [Galileo](https://github.com/Galileo-Bot/galileo).
 
 			But these times were complicated for me personally and due to a lack of time and motivations because I was making almost only discord bots since about 2 years. I stopped developing it and moved away to other interesting projects.
@@ -167,11 +167,11 @@ val sections = listOf(
 		"""
 			After getting graduated from high-school, I got accepted into a private school named [Ynov](https://ynov.com).
 			We learned so far [GoLang](https://go.dev), [Python](https://www.python.org), pretty complex [C++](https://cplusplus.com) and OOP into C++, some network basics, how to use [REST API](https://wikipedia.org/wiki/Representational_state_transfer)s, team JS/HTML/CSS, databases with [MySQL](https://www.mysql.com), and other useful technologies.
-			I greatly appreciated GoLang’s GoHTML Templates, C++, and my teacher, who I discussed a lot with, and understanding a lot more how computer network works.
-	
+			I greatly appreciated GoLang's GoHTML Templates, C++, and my teacher, who I discussed a lot with, and understanding a lot more how computer network works.
+
 			We created a bunch of projects, starting with little training projects in GoLang/<wbr>Python/<wbr>C++/<wbr>JavaScript, done some websites using only front, but also using an API, and using MySQL creating an entire forum.
-	
-			It is for me a great experience being in this school, and I’m excited for the next 3 years !
+
+			It is for me a great experience being in this school, and I'm excited for the next 3 years !
 		""".trimIndent(), 2021, id = "ynov"
 	) {
 		TextIcon("Post-Bac and Ynov", localImage("ynov-icon.png"))
@@ -181,7 +181,7 @@ val sections = listOf(
 		"""
 			My school required me to have an internship of 6 weeks in any enterprise to have a first professional experience.
 			I got in contact with [BlueFrog](https://www.bluefrog.fr/index.html), a company creating websites, and after some interviews got accepted !
-	
+
 			I learned [PHP](https://www.php.net) and [WordPress](https://wordpress.org) and created a few websites & plugins during my internship, and it was a great experience for me.
 			Learning a bunch of useful technologies, the difference between personal project and real projects and seeing a developer's an everyday job.
 		""".trimIndent(), 2022, id = "first-internship"
@@ -194,7 +194,7 @@ val sections = listOf(
 			During my second year at Ynov, I though about creating an utility library for creating Minecraft Datapacks.
 			I was on a Discord community about Minecraft Datapacks since 2 years, and I was searching for any project that I could make in Kotlin.
 			So I started creating [Datapack-DSL](https://github.com/Ayfri/Kore) in around november.
-			
+
 			This project has been a great experience for me, I learned a lot about Datapacks and Minecraft internal working, it was really a pleasure to create that.
 			The project contains functions (DSLs) for every commands in Minecraft, every JSONs Minecraft uses, Datapack creation, etc.
 			The project is not yet finished or published as of August 2023. However, it is very close to completion.
@@ -210,7 +210,7 @@ val sections = listOf(
 			Ynov added a new system of projects named YBoosts in end of 2022 where students from first & second years can create a project in a team 7 or more people.
 			We created a team of 7 people, named Defensive Realms, and though about creating a game.
 			This is how [Cat'aClysm: Claw Of The Dead](https://github.com/Ayfri/Cat-aclysm-Claw-of-the-Dead) was born.
-			
+
 			We collaborated with another team to use the same universe for the story, and we created a Tower Defense game in 2D using [Godot](https://godotengine.org) 4.0.
 			This was my first experience with Godot, this was really exciting and interesting, Godot is really a good game engine (I prefer it over Unity).
 			We created our own sprites and animations, the sounds and musics were used from diverse sources from the internet.
@@ -228,7 +228,7 @@ val sections = listOf(
 			During June, I've made a little project using [Kotlin](https://kotlinlang.org), [Compose for Desktop](https://www.jetbrains.com/fr-fr/lp/compose-multiplatform/) and the [GPT-4 API](https://platform.openai.com/docs/api-reference), name [Artificial-Infiltration](https://github.com/Ayfri/Artificial-Infiltration).
 			The concept is a chat room where you can talk with five other people, but an AI is also in the room, and you have to find who is the AI.
 			This was really interesting and amusing to use GPT API, but at that time I was not a pro in prompt engineering, so the AI was not that good until we switched to GPT-4, which is about 20 times more costly.
-			
+
 			For validating my second year at Ynov, I had to found a stage in a company for 6 weeks or more.
 			But the school also proposed a stage organized by the Data Engineering teacher, so I applied for it and got accepted.
 			We've done a lot of searches about ChatGPT, autonomous agents (like [AutoGPT](https://news.agpt.co/), [SuperAGI](https://superagi.com/)) and expanding context of GPT (like [ChatGPT-Memory](https://github.com/continuum-llms/chatgpt-memory)).
@@ -331,10 +331,10 @@ fun TextIcon(text: String, fontAwesomeType: FontAwesomeType, icon: String, color
 }
 
 object AboutMeStyle : StyleSheet() {
-	const val BACKGROUND_SECTION_ODD_COLOR = "#363636"
-	const val BACKGROUND_SECTION_EVEN_COLOR = "#2e2e2e"
-	const val TIMELINE_BG_GRADIANT_END_COLOR = "#71136D"
-	const val TIMELINE_BG_GRADIANT_START_COLOR = "#4B4F9D"
+	const val BACKGROUND_SECTION_ODD_COLOR = "#1A1225"
+	const val BACKGROUND_SECTION_EVEN_COLOR = "#1E1535"
+	const val TIMELINE_BG_GRADIANT_END_COLOR = "#FF0080"
+	const val TIMELINE_BG_GRADIANT_START_COLOR = "#00D4FF"
 
 	val timelineSize by variable<CSSSizeValue<*>>()
 	val timelineOffset by variable<CSSSizeValue<*>>()
@@ -347,6 +347,13 @@ object AboutMeStyle : StyleSheet() {
 		id("main") style {
 			timelineSize(max(8.cssRem, 10.vw))
 			timelineOffset(1.5.cssRem)
+
+			background(linearGradient(180.deg) {
+				stop(Color("#0A0A0F"), (-3).percent)
+				stop(Color("#1A1225"), 14.percent)
+				stop(Color("#2A1B3D"), 65.percent)
+				stop(Color("#1E1535"), 90.percent)
+			})
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
@@ -370,6 +377,16 @@ object AboutMeStyle : StyleSheet() {
 		"h1" style {
 			fontSize(3.cssRem)
 			margin(0.px)
+
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
+			property("-moz-text-fill-color", "transparent")
+			property("-moz-background-clip", "text")
+			property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 		}
 	}
 
@@ -440,6 +457,7 @@ object AboutMeStyle : StyleSheet() {
 				stop(Color(TIMELINE_BG_GRADIANT_END_COLOR))
 			})
 			backgroundAttachment("fixed")
+			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.4)")
 
 			marginTop((-.2).cssRem)
 		}
@@ -456,7 +474,7 @@ object AboutMeStyle : StyleSheet() {
 			}
 
 			group(hover(self), self + className("selected")) style {
-				boxShadow(Color("#00000070"), offset = 0.px, blur = .8.cssRem)
+				boxShadow(Color("#FF008080"), offset = 0.px, blur = .8.cssRem)
 				zIndex(3)
 			}
 
@@ -468,10 +486,11 @@ object AboutMeStyle : StyleSheet() {
 			self + className("selected") style {
 				transform { scale(1.2) }
 				border {
-					color(Color.white)
+					color(Color("#00D4FF"))
 					style(LineStyle.Solid)
 					width(2.px)
 				}
+				property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.6)")
 
 				self + after style {
 					property("content", "attr(data-date)")
@@ -503,9 +522,18 @@ object AboutMeStyle : StyleSheet() {
 				property("top", "unset")
 				bottom((-2.5).cssRem)
 
-				backgroundColor(Color("#00000070"))
+				backgroundColor(Color("#00000090"))
 				padding(.2.cssRem, .4.cssRem)
 				borderRadius(.5.cssRem)
+				border {
+					width(1.px)
+					style(LineStyle.Solid)
+					color(Color("transparent"))
+				}
+				property("background", """
+					linear-gradient(#00000090, #00000090) padding-box,
+					linear-gradient(45deg, #00D4FF, #FF0080) border-box
+				""")
 
 				animation(appearBottom) {
 					duration(.3.s)
@@ -562,11 +590,22 @@ object AboutMeStyle : StyleSheet() {
 			fontFamily(AppStyle.MONO_FONT_FAMILY)
 			padding(1.5.cssRem, titleHeight.value())
 			position(Position.Relative)
+			borderRadius(1.cssRem)
+			border {
+				width(2.px)
+				style(LineStyle.Solid)
+				color(Color("transparent"))
+			}
+			property("background", """
+				linear-gradient(${BACKGROUND_SECTION_ODD_COLOR}, ${BACKGROUND_SECTION_ODD_COLOR}) padding-box,
+				linear-gradient(45deg, #00D4FF, #FF0080) border-box
+			""")
+			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
 
 			transitions {
 				defaultDuration(.3.s)
 				defaultTimingFunction(AnimationTimingFunction.EaseInOut)
-				properties("transform")
+				properties("transform", "box-shadow")
 			}
 
 			self + className("selected") style {
@@ -576,7 +615,8 @@ object AboutMeStyle : StyleSheet() {
 					translateX(-offset)
 				}
 
-				borderRadius(topLeft = 5.px, bottomLeft = 5.px, topRight = 0.px, bottomRight = 0.px)
+				borderRadius(topLeft = 1.cssRem, bottomLeft = 1.cssRem, topRight = 1.cssRem, bottomRight = 1.cssRem)
+				property("box-shadow", "0 0 30px rgba(255, 0, 128, 0.3)")
 
 				overflow(Overflow.Hidden)
 				animation(sectionSelection) {
@@ -587,8 +627,8 @@ object AboutMeStyle : StyleSheet() {
 
 				property("background-size", "200% 100%")
 				backgroundImage(linearGradient(90.deg) {
-					stop(Color("#50435A"))
-					stop(Color("#28273e"))
+					stop(Color("#2A1B3D"))
+					stop(Color("#1A1225"))
 					stop(Color.transparent)
 				})
 				backgroundRepeat("no-repeat")
@@ -596,19 +636,40 @@ object AboutMeStyle : StyleSheet() {
 
 			self + nthChild(Nth.Even) style {
 				backgroundColor(Color(BACKGROUND_SECTION_EVEN_COLOR))
+				property("background", """
+					linear-gradient(${BACKGROUND_SECTION_EVEN_COLOR}, ${BACKGROUND_SECTION_EVEN_COLOR}) padding-box,
+					linear-gradient(45deg, #00D4FF, #FF0080) border-box
+				""")
 			}
 
 			"h2" {
+				background(linearGradient(45.deg) {
+					stop(Color("#00D4FF"))
+					stop(Color("#FF0080"))
+				})
+				property("-webkit-background-clip", "text")
+				property("-webkit-text-fill-color", "transparent")
+				property("-moz-text-fill-color", "transparent")
+				property("-moz-background-clip", "text")
+
 				group(desc(self, type("img")), desc(self, type("i"))) style {
 					val iconPadding = .4.cssRem
 					val iconHeight = titleHeight.value() + (iconPadding * 2)
 
-					backgroundColor(Color("#00000015"))
 					borderRadius(.75.cssRem)
 					height(iconHeight)
 					lineHeight(iconHeight)
 					padding(iconPadding)
 					width(auto)
+					border {
+						width(1.px)
+						style(LineStyle.Solid)
+						color(Color("transparent"))
+					}
+					property("background", """
+						transparent padding-box,
+						linear-gradient(45deg, #00D4FF, #FF0080) border-box
+					""")
 				}
 
 				fontSize(titleHeight.value())

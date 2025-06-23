@@ -93,7 +93,6 @@ object AppStyle : StyleSheet() {
 	}
 
 	val sections by style {
-		margin(0.px, max(2.cssRem, 4.vw))
 		padding(3.cssRem)
 
 		media(mediaMaxWidth(mobileFirstBreak)) {
@@ -116,17 +115,22 @@ object AppStyle : StyleSheet() {
 	}
 
 	val title by style {
-		backgroundColor(Color(TITLE_BACKGROUND_COLOR))
 		border {
-			color(Color(TITLE_BORDER_COLOR))
-			style(LineStyle.Solid)
 			width(2.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
 		}
+		background("""
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 		borderRadius(1.cssRem)
 		fontSize(2.1.cssRem)
 
 		margin(0.px, 0.px, 3.cssRem)
 		padding(1.cssRem, 1.5.cssRem)
+
+		color(Color.white)
 
 		media(mediaMaxWidth(mobileFirstBreak)) {
 			self {
@@ -140,6 +144,18 @@ object AppStyle : StyleSheet() {
 				fontSize(1.6.cssRem)
 				marginBottom(1.8.cssRem)
 			}
+		}
+
+		"span" {
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
+			property("-moz-text-fill-color", "transparent")
+			property("-moz-background-clip", "text")
+			property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 		}
 	}
 

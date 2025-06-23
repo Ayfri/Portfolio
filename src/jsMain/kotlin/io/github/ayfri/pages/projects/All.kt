@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.AlignItems
+import com.varabyte.kobweb.compose.css.Cursor
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
@@ -18,14 +19,12 @@ import io.github.ayfri.ensureSuffix
 import io.github.ayfri.jsonld.generateProjectJsonLD
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.utils.*
 import io.github.ayfri.utils.Overflow
-import io.github.ayfri.utils.overflow
-import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
 import web.location.location
 import kotlin.js.Date
@@ -415,14 +414,24 @@ private fun String.capitalize(): String {
 
 object ProjectStyle : StyleSheet() {
 	// Color constants
-	const val CARD_BACKGROUND = "#ffffff10"
-	const val ITEM_BACKGROUND = "#ffffff15"
-	const val ITEM_BACKGROUND_HOVER = "#ffffff25"
+	const val CARD_BACKGROUND = "#151020"
+	const val ITEM_BACKGROUND = "#151020"
+	const val ITEM_BACKGROUND_HOVER = "#ffffff15"
 	const val BORDER_COLOR = "#ffffff20"
 	const val TEXT_SECONDARY = "#ffffffaa"
 	const val ACCENT_COLOR = SPECIAL_TEXT_COLOR
 
 	init {
+		// Fond principal avec gradient violet
+		id("main") style {
+			background(linearGradient(180.deg) {
+				stop(Color("#0A0A0F"), (-3).percent)
+				stop(Color("#1A1225"), 14.percent)
+				stop(Color("#2A1B3D"), 65.percent)
+				stop(Color("#1E1535"), 90.percent)
+			})
+		}
+
 		group(type("td"), type("th")) style {
 			borderCollapse(BorderCollapse.Collapse)
 			padding(10.px)
@@ -438,7 +447,7 @@ object ProjectStyle : StyleSheet() {
 			borderCollapse(BorderCollapse.Collapse)
 		}
 
-		type("tr") + nthChild(Nth.Even) style {
+		type("tr") + nthOfType(2.n) style {
 			background(Color("#ffffff0b"))
 		}
 
@@ -449,7 +458,15 @@ object ProjectStyle : StyleSheet() {
 		"h3" style {
 			margin(0.px, 0.px, 15.px)
 			fontSize(1.4.cssRem)
-			color(Color(ACCENT_COLOR))
+			// Titres avec gradient cyan-magenta
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
+			property("-moz-text-fill-color", "transparent")
+			property("-moz-background-clip", "text")
 		}
 	}
 
@@ -471,6 +488,17 @@ object ProjectStyle : StyleSheet() {
 	val title by style {
 		margin(0.px, 0.px, 10.px)
 		fontSize(3.cssRem)
+
+		// Titre principal avec gradient cyan-magenta
+		background(linearGradient(45.deg) {
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
+		})
+		property("-webkit-background-clip", "text")
+		property("-webkit-text-fill-color", "transparent")
+		property("-moz-text-fill-color", "transparent")
+		property("-moz-background-clip", "text")
+		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 
 		"img" style {
 			borderRadius(50.percent)
@@ -500,7 +528,7 @@ object ProjectStyle : StyleSheet() {
 		fontSize(1.1.cssRem)
 
 		"i" style {
-			color(Color(ACCENT_COLOR))
+			color(Color("#00D4FF"))  // Cyan néon pour les icônes
 			marginRight(5.px)
 		}
 	}
@@ -523,10 +551,19 @@ object ProjectStyle : StyleSheet() {
 	}
 
 	val infoCard by style {
-		background(Color(CARD_BACKGROUND))
 		borderRadius(15.px)
 		padding(20.px)
 		marginBottom(20.px)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${CARD_BACKGROUND}, ${CARD_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
 	}
 
 	val statsGrid by style {
@@ -540,9 +577,17 @@ object ProjectStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		gap(10.px)
-		background(Color(ITEM_BACKGROUND))
 		borderRadius(10.px)
 		padding(15.px)
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 		transitions {
 			properties("all") {
 				duration(0.3.s)
@@ -550,13 +595,17 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			background(Color(ITEM_BACKGROUND_HOVER))
+			background("""
+				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
+				linear-gradient(45deg, #00D4FF, #FF0080) border-box
+			""")
 			transform { scale(1.05) }
+			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.3)")
 		}
 	}
 
 	val statIcon by style {
-		color(Color(ACCENT_COLOR))
+		color(Color("#00D4FF"))  // Cyan néon pour les icônes
 		fontSize(1.5.cssRem)
 	}
 
@@ -586,11 +635,19 @@ object ProjectStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		gap(10.px)
-		background(Color(ITEM_BACKGROUND))
 		borderRadius(10.px)
 		padding(15.px)
 		textDecoration("none")
 		color(Color.white)
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 		transitions {
 			properties("all") {
 				duration(0.3.s)
@@ -598,9 +655,13 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			background(Color(ITEM_BACKGROUND_HOVER))
+			background("""
+				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
+				linear-gradient(45deg, #00D4FF, #FF0080) border-box
+			""")
 			color(Color(LINK_HOVER_COLOR))
 			transform { translateX(5.px) }
+			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.3)")
 		}
 	}
 
@@ -614,9 +675,17 @@ object ProjectStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		gap(10.px)
-		background(Color(ITEM_BACKGROUND))
 		borderRadius(10.px)
 		padding(15.px)
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 	}
 
 	val dateLabel by style {
@@ -625,7 +694,7 @@ object ProjectStyle : StyleSheet() {
 
 	val dateValue by style {
 		marginLeft(autoLength)
-		color(Color(ACCENT_COLOR))
+		color(Color("#00D4FF"))  // Cyan néon
 	}
 
 	val topicsContainer by style {
@@ -642,22 +711,35 @@ object ProjectStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val topicTag by style {
-		background(Color("#B4BBFF20"))
-		color(Color(ACCENT_COLOR))
-		borderRadius(20.px)
 		padding(5.px, 15.px)
+		color(Color.white)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		borderRadius(20.px)
 		fontSize(0.9.cssRem)
 		cursor(Cursor.Pointer)
 		textDecoration("none")
+		background("""
+			linear-gradient(transparent, transparent) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+
 		transitions {
 			properties("all") {
 				duration(0.3.s)
 			}
 		}
 
-		self + hover style {
-			background(Color("#B4BBFF40"))
+		hover(self) style {
+			background("""
+				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
+				linear-gradient(45deg, #00D4FF, #FF0080) border-box
+			""")
 			transform { scale(1.05) }
+			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
 		}
 	}
 
@@ -671,9 +753,17 @@ object ProjectStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		gap(10.px)
-		background(Color(ITEM_BACKGROUND))
 		borderRadius(10.px)
 		padding(15.px)
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 	}
 
 	val statusLabel by style {
@@ -682,7 +772,7 @@ object ProjectStyle : StyleSheet() {
 
 	val statusValue by style {
 		marginLeft(autoLength)
-		color(Color(ACCENT_COLOR))
+		color(Color("#00D4FF"))  // Cyan néon
 	}
 
 	val sidebarSection by style {
@@ -697,10 +787,19 @@ object ProjectStyle : StyleSheet() {
 	}
 
 	val readme by style {
-		background(Color(ITEM_BACKGROUND))
 		borderRadius(20.px)
 		margin(0.px)
 		padding(30.px)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
 
 		"img" style {
 			borderRadius(5.px)
@@ -720,9 +819,17 @@ object ProjectStyle : StyleSheet() {
 		gap(8.px)
 		marginBottom(25.px)
 		padding(10.px, 15.px)
-		backgroundColor(Color(ITEM_BACKGROUND))
 		borderRadius(10.px)
 		fontSize(0.9.cssRem)
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("transparent"))
+		}
+		background("""
+			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
@@ -740,7 +847,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			color(Color(ACCENT_COLOR))
+			color(Color("#00D4FF"))  // Cyan néon au hover
 		}
 	}
 
@@ -750,7 +857,7 @@ object ProjectStyle : StyleSheet() {
 	}
 
 	val breadcrumbCurrent by style {
-		color(Color(ACCENT_COLOR))
+		color(Color("#00D4FF"))  // Cyan néon
 		fontWeight("bold")
 	}
 }
