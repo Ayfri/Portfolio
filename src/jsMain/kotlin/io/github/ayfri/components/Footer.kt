@@ -85,6 +85,11 @@ fun Footer() {
 	Footer({
 		classes(FooterStyle.footerWrapper)
 	}) {
+		// Top decorative bar
+		Div({
+			classes(FooterStyle.topBar)
+		})
+
 		// Contact Section (Above Footer)
 		Div({
 			classes(FooterStyle.contactSection)
@@ -299,7 +304,19 @@ object FooterStyle : StyleSheet() {
 
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
+		paddingTop(6.px)
 		width(100.percent)
+	}
+
+	val topBar by style {
+		height(2.px)
+		width(100.percent)
+		background(linearGradient(90.deg) {
+			stop(Color("transparent"))
+			stop(Color(FOOTER_ACCENT_START), 20.percent)
+			stop(Color(FOOTER_ACCENT_END), 80.percent)
+			stop(Color("transparent"))
+		})
 	}
 
 	val contactSection by style {
