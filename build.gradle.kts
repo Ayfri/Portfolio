@@ -203,6 +203,8 @@ kobweb {
 			globals["description"] = description
 			globals["url"] = url
 
+			faviconPath = "/logo.png"
+
 			this.description = description
 
 			head.apply {
