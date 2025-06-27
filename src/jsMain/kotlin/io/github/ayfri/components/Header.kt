@@ -63,15 +63,16 @@ fun Header() {
 }
 
 object HeaderStyle : StyleSheet() {
-	const val NAVBAR_COLOR = "#1A1225"  // Plus sombre, violet foncé
-	const val NAVBAR_COLOR_SELECTED = "#2A1B3D"  // Violet plus clair pour sélection
-	const val NAVBAR_ACCENT_START = "#00D4FF"  // Cyan néon
-	const val NAVBAR_ACCENT_END = "#FF0080"   // Magenta néon
+	const val NAVBAR_COLOR = "#0A0A0F"
+	const val NAVBAR_COLOR_SECONDARY = "#1A1225"
+	const val NAVBAR_COLOR_SELECTED = "#2A1B3D"
+	const val NAVBAR_ACCENT_START = "#00D4FF"
+	const val NAVBAR_ACCENT_END = "#FF0080"
 	val navbarHeight by variable<CSSNumeric>()
 
 	init {
 		root {
-			navbarHeight(4.5.cssRem)
+			navbarHeight(4.cssRem)
 		}
 	}
 
@@ -79,22 +80,24 @@ object HeaderStyle : StyleSheet() {
 		alignItems(AlignItems.Center)
 		background(linearGradient(135.deg) {
 			stop(Color(NAVBAR_COLOR))
-			stop(Color("#1E1535"), 50.percent)
-			stop(Color(NAVBAR_COLOR), 100.percent)
+			stop(Color(NAVBAR_COLOR_SECONDARY), 30.percent)
+			stop(Color("#2A1B3D"), 70.percent)
+			stop(Color(NAVBAR_COLOR_SECONDARY), 100.percent)
 		})
 		borderBottom {
-			width(1.px)
+			width(2.px)
 			style(LineStyle.Solid)
 			color(Color("transparent"))
 		}
 		property("border-image", "linear-gradient(90deg, $NAVBAR_ACCENT_START, $NAVBAR_ACCENT_END) 1")
+		property("box-shadow", "0 2px 10px rgba(0, 0, 0, 0.3)")
 		boxSizing(BoxSizing.BorderBox)
 		display(DisplayStyle.Flex)
 		justifyContent(JustifyContent.SpaceBetween)
 		position(Position.Fixed)
 		size(navbarHeight.value(), 100.percent)
 		top(0.px)
-		zIndex(5)
+		zIndex(100)
 
 		"i" style {
 			fontSize(navbarHeight.value() * .5)
@@ -120,11 +123,17 @@ object HeaderStyle : StyleSheet() {
 			color(Color.white)
 			display(DisplayStyle.InlineBlock)
 			fontSize(0.95.cssRem)
+			fontWeight(500)
 			height(100.percent)
 			lineHeight(navbarHeight.value())
 			padding(0.px, clamp(1.3.cssRem, 2.5.vw, 2.3.cssRem))
 			whiteSpace(WhiteSpace.NoWrap)
 			position(Position.Relative)
+
+			transitions {
+				defaultDuration(0.3.s)
+				properties("all")
+			}
 
 			before {
 				property("content", "''")
@@ -138,22 +147,54 @@ object HeaderStyle : StyleSheet() {
 					stop(Color(NAVBAR_ACCENT_END))
 				})
 				property("transform", "translateX(-50%)")
+				borderRadius(1.px)
 				transitions {
 					defaultDuration(0.3.s)
 					properties("width")
 				}
 			}
 
-			group(self + className("active"), hover(self)) style {
+			after {
+				property("content", "''")
+				position(Position.Absolute)
+				top(0.px)
+				left(0.px)
+				right(0.px)
+				bottom(0.px)
 				background(linearGradient(135.deg) {
-					stop(Color(NAVBAR_COLOR_SELECTED))
-					stop(Color("#2F2040"), 50.percent)
-					stop(Color(NAVBAR_COLOR_SELECTED), 100.percent)
+					stop(Color("rgba(0, 212, 255, 0.05)"))
+					stop(Color("rgba(255, 0, 128, 0.05)"))
 				})
-				property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
+				opacity(0)
+				borderRadius(0.3.cssRem)
+				transitions {
+					defaultDuration(0.3.s)
+					properties("opacity")
+				}
+			}
+
+						self + className("active") style {
+				backgroundColor(Color("rgba(0, 212, 255, 0.08)"))
 
 				before {
-					width(80.percent)
+					width(85.percent)
+					property("box-shadow", "0 0 4px rgba(0, 212, 255, 0.5)")
+				}
+
+				after {
+					opacity(1)
+				}
+			}
+
+			hover(self) style {
+				backgroundColor(Color("rgba(0, 212, 255, 0.05)"))
+
+				before {
+					width(70.percent)
+				}
+
+				after {
+					opacity(0.6)
 				}
 			}
 		}
@@ -168,8 +209,9 @@ object HeaderStyle : StyleSheet() {
 
 				background(linearGradient(180.deg) {
 					stop(Color(NAVBAR_COLOR))
-					stop(Color("#1E1535"))
+					stop(Color(NAVBAR_COLOR_SECONDARY))
 				})
+				property("box-shadow", "0 5px 15px rgba(0, 0, 0, 0.4)")
 
 				self + className("open") style {
 					display(DisplayStyle.Flex)
@@ -179,6 +221,11 @@ object HeaderStyle : StyleSheet() {
 					"a" {
 						width(100.percent)
 						lineHeight(navbarHeight.value() * .8)
+						borderBottom {
+							width(1.px)
+							style(LineStyle.Solid)
+							color(Color("rgba(0, 212, 255, 0.15)"))
+						}
 					}
 				}
 			}
@@ -199,16 +246,20 @@ object HeaderStyle : StyleSheet() {
 		}
 		transitions {
 			defaultDuration(0.3.s)
-			properties("box-shadow", "scale")
+			properties("all")
 		}
 		background("""
 			linear-gradient(${NAVBAR_COLOR}, ${NAVBAR_COLOR}) padding-box,
 			linear-gradient(45deg, $NAVBAR_ACCENT_START, $NAVBAR_ACCENT_END) border-box
 		""")
 
+		"p" {
+			fontWeight(600)
+		}
+
 		hover(self) style {
-			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.4)")
-			scale(1.05)
+			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
+			scale(1.02)
 		}
 
 		media(mediaMaxWidth(mobileFirstBreak)) {
@@ -222,15 +273,22 @@ object HeaderStyle : StyleSheet() {
 		}
 	}
 
+	@OptIn(ExperimentalComposeWebApi::class)
 	val mobileMenuButton by style {
 		display(DisplayStyle.None)
 		color(Color.white)
 		cursor(Cursor.Pointer)
 		fontSize(1.5.cssRem)
-		property("text-shadow", "0 0 10px rgba(0, 212, 255, 0.7)")
+		padding(0.5.cssRem)
+		borderRadius(0.3.cssRem)
+
+		transitions {
+			defaultDuration(0.3.s)
+			properties("all")
+		}
 
 		hover(self) style {
-			property("text-shadow", "0 0 15px rgba(255, 0, 128, 0.8)")
+			backgroundColor(Color("rgba(0, 212, 255, 0.1)"))
 		}
 
 		media(mediaMaxWidth(mobileSecondBreak)) {
