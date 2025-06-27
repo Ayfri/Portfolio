@@ -52,6 +52,7 @@ fun FooterContactField(
 	required: Boolean = false,
 	range: IntRange? = null,
 	textArea: Boolean = false,
+	autocomplete: String? = null,
 ) {
 	Div {
 		Label(id) {
@@ -65,6 +66,7 @@ fun FooterContactField(
 				placeholder(label)
 				minLength(range?.first ?: 0)
 				maxLength(range?.last ?: Int.MAX_VALUE)
+				if (autocomplete != null) attr("autocomplete", autocomplete)
 			}
 		} else {
 			Input(type) {
@@ -73,6 +75,7 @@ fun FooterContactField(
 				placeholder(label)
 				minLength(range?.first ?: 0)
 				maxLength(range?.last ?: Int.MAX_VALUE)
+				if (autocomplete != null) attr("autocomplete", autocomplete)
 			}
 		}
 	}
@@ -109,10 +112,10 @@ fun Footer() {
 					Div({
 						classes(FooterStyle.footerContactInputs)
 					}) {
-						FooterContactField(label = "First Name", id = "first-name", range = 1..20)
-						FooterContactField(label = "Last Name", id = "last-name", range = 1..32)
-						FooterContactField(label = "Subject", id = "subject", required = true, range = 5..96)
-						FooterContactField(label = "Message", id = "message", textArea = true, required = true, range = 16..512)
+						FooterContactField(label = "First Name", id = "first-name", range = 1..20, autocomplete = "given-name")
+						FooterContactField(label = "Last Name", id = "last-name", range = 1..32, autocomplete = "family-name")
+						FooterContactField(label = "Subject", id = "subject", required = true, range = 5..96, autocomplete = "off")
+						FooterContactField(label = "Message", id = "message", textArea = true, required = true, range = 16..512, autocomplete = "off")
 					}
 
 					Button({
