@@ -1,9 +1,8 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.autoLength
-import com.varabyte.kobweb.compose.css.scale
-import com.varabyte.kobweb.compose.css.translateY
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.radialGradient
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
 import io.github.ayfri.components.A
@@ -15,11 +14,15 @@ import io.github.ayfri.data.HomeCard
 import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.*
+import io.github.ayfri.utils.Overflow
+import io.github.ayfri.utils.TextAlign
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType
 import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType.Enum.Screen
 import org.jetbrains.compose.web.css.CSSMediaQuery.Only
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
 import kotlin.js.Date
@@ -57,37 +60,86 @@ fun Home() {
 		Style(HomeStyle)
 		Style(DataStyle)
 
+		// Decorative background elements
+		Div({
+			classes(HomeStyle.backgroundDecorations)
+		}) {
+			// Create floating elements with predefined positions
+			val positions = listOf(
+				Pair(10, 20), Pair(80, 15), Pair(15, 70), Pair(90, 60),
+				Pair(30, 10), Pair(70, 80), Pair(5, 45), Pair(85, 30),
+				Pair(40, 65), Pair(60, 25), Pair(20, 85), Pair(75, 50),
+				Pair(50, 40), Pair(35, 75), Pair(65, 10), Pair(25, 55),
+				Pair(95, 75), Pair(45, 20), Pair(55, 90), Pair(12, 35)
+			)
+
+			positions.forEachIndexed { index, (left, top) ->
+				Div({
+					classes(HomeStyle.floatingElement)
+					style {
+						property("animation-delay", "${(index * 0.5)}s")
+						left(left.percent)
+						top(top.percent)
+					}
+				})
+			}
+		}
+
 		Section({
 			classes(HomeStyle.top)
 		}) {
+			// Hero background with glowing effects
+			Div({
+				classes(HomeStyle.heroBackground)
+			}) {
+				Div({ classes(HomeStyle.glowOrb, HomeStyle.glowOrb1) })
+				Div({ classes(HomeStyle.glowOrb, HomeStyle.glowOrb2) })
+				Div({ classes(HomeStyle.glowOrb, HomeStyle.glowOrb3) })
+			}
+
 			Div({
 				classes(HomeStyle.topInfo)
 			}) {
-				Img(localImage("avatar@300x300.webp"), "avatar") {
-					classes(AppStyle.avatar)
-					height(300)
-					width(300)
+				Div({
+					classes(HomeStyle.avatarContainer)
+				}) {
+					Img(localImage("avatar@300x300.webp"), "avatar") {
+						classes(AppStyle.avatar, HomeStyle.enhancedAvatar)
+						height(300)
+						width(300)
+					}
+					Div({
+						classes(HomeStyle.avatarGlow)
+					})
 				}
 
-				H1 {
+				H1({
+					classes(HomeStyle.mainTitle)
+				}) {
 					Text("Pierre Roy")
 					Span("alias")
 					Span(" Ayfri")
 				}
 
-				H2 {
+				H2({
+					classes(HomeStyle.subtitle)
+				}) {
 					Text("IT Student")
 				}
 
-				H2 {
+				H2({
+					classes(HomeStyle.subtitle)
+				}) {
 					Text("France")
 				}
 
-				H3 {
+				H3({
+					classes(HomeStyle.ageInfo)
+				}) {
 					Text("Born ")
 
 					Span({
-						classes(AppStyle.monoFont, AppStyle.numberColor)
+						classes(AppStyle.monoFont, AppStyle.numberColor, HomeStyle.ageNumber)
 					}) {
 						Text(years.toInt().toString())
 					}
@@ -98,12 +150,7 @@ fun Home() {
 
 			P({
 				markdownParagraph(MAIN_PRESENTATION.trimIndent(), true, AppStyle.monoFont)
-				style {
-					lineHeight(1.5.cssRem)
-					fontSize(1.1.cssRem)
-					maxWidth(800.px)
-					margin(1.cssRem, auto)
-				}
+				classes(HomeStyle.introText)
 			})
 
 			// Featured Projects Section
@@ -383,6 +430,86 @@ fun Home() {
 }
 
 object HomeStyle : StyleSheet() {
+	// CSS Animations keyframes
+	@OptIn(ExperimentalComposeWebApi::class)
+	val floatUpDown by keyframes {
+		0.percent {
+			opacity(0.4)
+			transform {
+				translateY(0.px)
+				rotate(0.deg)
+			}
+		}
+		50.percent {
+			transform {
+				translateY((-20).px)
+				rotate(180.deg)
+			}
+		}
+		100.percent {
+			transform {
+				translateY(0.px)
+				rotate(360.deg)
+			}
+		}
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val orbFloat by keyframes {
+		0.percent {
+			transform {
+				translate(0.px, 0.px)
+				scale(1)
+			}
+		}
+		33.percent {
+			transform {
+				translate(30.px, (-30).px)
+				scale(1.1)
+			}
+		}
+		66.percent {
+			transform {
+				translate((-20).px, 20.px)
+				scale(0.9)
+			}
+		}
+		100.percent {
+			transform {
+				translate(0.px, 0.px)
+				scale(1)
+			}
+		}
+	}
+
+	val avatarGlowAnimation by keyframes {
+		0.percent {
+			opacity(0.3)
+		}
+		50.percent {
+			opacity(0.7)
+		}
+		100.percent {
+			opacity(0.3)
+		}
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val fadeInUp by keyframes {
+		from {
+			opacity(0)
+			transform {
+				translateY(30.px)
+			}
+		}
+		to {
+			opacity(1)
+			transform {
+				translateY(0.px)
+			}
+		}
+	}
+
 	init {
 		id("main") style {
 			display(DisplayStyle.Flex)
@@ -394,6 +521,9 @@ object HomeStyle : StyleSheet() {
 				stop(Color("#2A1B3D"), 65.percent)
 				stop(Color("#1E1535"), 90.percent)
 			})
+			position(Position.Relative)
+			minHeight(100.vh)
+			overflow(Overflow.Hidden)
 
 			padding(1.cssRem, 8.5.vw)
 		}
@@ -422,42 +552,13 @@ object HomeStyle : StyleSheet() {
 	}
 
 	val topInfo by style {
-		height(80.percent)
-
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
+		gap(0.1.cssRem)
 
-		universal style {
-			marginTop(.2.cssRem)
-			marginBottom(.2.cssRem)
-		}
-
-		"h1" style {
-			fontSize(2.cssRem)
-			display(DisplayStyle.Flex)
-			alignItems(AlignItems.Baseline)
-			gap(.5.cssRem)
-
-			universal style {
-				fontSize(1.5.cssRem)
-				fontWeight(400)
-			}
-
-			lastChild style {
-				fontSize(1.8.cssRem)
-				fontWeight(700)
-			}
-		}
-
-		"h2" style {
-			fontSize(1.6.cssRem)
-			fontWeight(400)
-		}
-
-		"h3" {
-			fontWeight(400)
-			marginBottom(1.cssRem)
+		"h2, h3" {
+			margin(0.px)
 		}
 	}
 
@@ -496,10 +597,12 @@ object HomeStyle : StyleSheet() {
 		maxWidth(1200.px)
 		borderRadius(1.cssRem)
 		backgroundColor(Color("#1A1225"))
+		property("backdrop-filter", "blur(10px)")
+
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("background", """
 			linear-gradient(#1A1225, #1A1225) padding-box,
@@ -560,7 +663,7 @@ object HomeStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("background", """
 			linear-gradient(#252525, #252525) padding-box,
@@ -697,7 +800,7 @@ object HomeStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("background", """
 			linear-gradient(#252525, #252525) padding-box,
@@ -809,5 +912,352 @@ object HomeStyle : StyleSheet() {
 		padding(0.3.cssRem, 0.8.cssRem)
 		fontSize(0.75.cssRem)
 		color(Color("#FFFFFFAA"))
+	}
+
+	val backgroundDecorations by style {
+		position(Position.Fixed)
+		top(0.px)
+		left(0.px)
+		width(100.percent)
+		height(100.percent)
+		pointerEvents(PointerEvents.None)
+		overflow(Overflow.Hidden)
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val floatingElement by style {
+		position(Position.Absolute)
+		width(6.px)
+		height(6.px)
+		borderRadius(50.percent)
+		backgroundColor(Color("#ffffff90"))
+		property("box-shadow", "0 0 12px rgba(255, 255, 255, 0.3)")
+		opacity(0.04)
+
+		animation(floatUpDown) {
+			duration(25.s)
+			iterationCount(Int.MAX_VALUE)
+			direction(AnimationDirection.Alternate)
+			timingFunction(AnimationTimingFunction.EaseInOut)
+		}
+
+		nthChild(2.n) style {
+			backgroundColor(Color("#00D4FF"))
+			property("box-shadow", "0 0 8px rgba(0, 212, 255, 1)")
+			opacity(0.05)
+		}
+
+		nthChild(3.n) style {
+			width(4.px)
+			height(4.px)
+			backgroundColor(Color("#FF0080"))
+			property("box-shadow", "0 0 6px rgba(255, 0, 128, 1)")
+			opacity(0.08)
+			property("animation-delay", "8s")
+		}
+
+		nthChild(4.n) style {
+			width(8.px)
+			height(8.px)
+			backgroundColor(Color("#8A2BE2"))
+			property("box-shadow", "0 0 7px rgba(138, 43, 226, 1)")
+			opacity(0.02)
+			property("animation-delay", "15s")
+		}
+
+		nthChild(5.n) style {
+			width(3.px)
+			height(3.px)
+			backgroundColor(Color("#ffffff"))
+			property("box-shadow", "0 0 5px rgba(255, 255, 255, 1)")
+			opacity(0.1)
+			property("animation-delay", "20s")
+		}
+	}
+
+	val heroBackground by style {
+		position(Position.Absolute)
+		top(0.px)
+		left(0.px)
+		width(100.percent)
+		height(100.percent)
+		pointerEvents(PointerEvents.None)
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val glowOrb by style {
+		position(Position.Absolute)
+		borderRadius(50.percent)
+		filter {
+			blur(60.px)
+		}
+		opacity(0.5)
+		animation(orbFloat) {
+			duration(30.s)
+			iterationCount(Int.MAX_VALUE)
+			direction(AnimationDirection.Alternate)
+			timingFunction(AnimationTimingFunction.EaseInOut)
+		}
+	}
+
+	val glowOrb1 by style {
+		width(200.px)
+		height(200.px)
+		backgroundImage(radialGradient {
+			add(Color("#00D4FF30"))
+			add(Color.transparent, 50.percent)
+		})
+		left((-100).px)
+		top((-100).px)
+		property("animation-delay", "0s")
+	}
+
+	val glowOrb2 by style {
+		width(250.px)
+		height(250.px)
+		backgroundImage(radialGradient {
+			add(Color("#FF008030"))
+			add(Color.transparent, 50.percent)
+		})
+		right((-125).px)
+		top(30.px)
+		property("animation-delay", "15s")
+	}
+
+	val glowOrb3 by style {
+		width(180.px)
+		height(180.px)
+		backgroundImage(radialGradient {
+			add(Color("#8A2BE230"))
+			add(Color.transparent, 50.percent)
+		})
+		left(50.percent)
+		bottom((-90).px)
+		property("animation-delay", "8s")
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val avatarContainer by style {
+		position(Position.Relative)
+		display(DisplayStyle.Flex)
+		alignItems(AlignItems.Center)
+		justifyContent(JustifyContent.Center)
+		marginBottom(0.5.cssRem)
+
+		animation(AnimationsStyle.appear) {
+			duration(1.5.s)
+			fillMode(AnimationFillMode.Forwards)
+			timingFunction(AnimationTimingFunction.EaseOut)
+		}
+		opacity(0)
+		translateY(30.px)
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val avatarGlow by style {
+		position(Position.Absolute)
+		top((-20).px)
+		left((-20).px)
+		width(340.px)
+		height(340.px)
+		borderRadius(50.percent)
+		backgroundImage(radialGradient {
+			add(Color("#00D4FF30"))
+			add(Color("#FF008020"), 50.percent)
+			add(Color.transparent, 70.percent)
+		})
+		filter {
+			blur(30.px)
+		}
+		zIndex(-1)
+		animation(avatarGlowAnimation) {
+			duration(4.s)
+			iterationCount(Int.MAX_VALUE)
+			direction(AnimationDirection.Alternate)
+			timingFunction(AnimationTimingFunction.EaseInOut)
+		}
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val mainTitle by style {
+		fontSize(3.cssRem)
+		fontWeight(700)
+		marginBottom(0.cssRem)
+		textAlign(TextAlign.Center)
+		display(DisplayStyle.Flex)
+		alignItems(AlignItems.Baseline)
+		justifyContent(JustifyContent.Center)
+		gap(0.4.cssRem)
+		flexWrap(FlexWrap.Wrap)
+
+		backgroundImage(linearGradient(45.deg) {
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
+			stop(Color("#8A2BE2"))
+		})
+		property("-webkit-background-clip", "text")
+		property("-webkit-text-fill-color", "transparent")
+		property("-moz-text-fill-color", "transparent")
+		property("-moz-background-clip", "text")
+		property("text-shadow", """
+			0 0 10px rgba(0, 212, 255, 0.5),
+			0 0 20px rgba(255, 0, 128, 0.3),
+			0 0 30px rgba(138, 43, 226, 0.2)
+		""")
+
+		// Style for "alias"
+		child(self, selector("span:first-of-type")) style {
+			fontSize(1.5.cssRem)
+			fontWeight(300)
+			color(Color("#FFFFFFAA"))
+			property("-webkit-text-fill-color", "#FFFFFFAA")
+			property("-moz-text-fill-color", "#FFFFFFAA")
+			property("background", "none")
+			property("text-shadow", "0 0 8px rgba(255, 255, 255, 0.3)")
+			opacity(0.7)
+		}
+
+		// Style for "Ayfri"
+		child(self, selector("span:last-of-type")) style {
+			fontSize(2.8.cssRem)
+			fontWeight(700)
+			backgroundImage(linearGradient(45.deg) {
+				stop(Color("#FF0080"))
+				stop(Color("#8A2BE2"))
+			})
+			property("-webkit-background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
+			property("-moz-text-fill-color", "transparent")
+			property("-moz-background-clip", "text")
+			property("text-shadow", """
+				0 0 15px rgba(255, 0, 128, 0.6),
+				0 0 25px rgba(138, 43, 226, 0.4)
+			""")
+		}
+
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				fontSize(2.2.cssRem)
+				flexDirection(FlexDirection.Column)
+				gap(0.2.cssRem)
+			}
+
+			child(self, selector("span:first-of-type")) style {
+				fontSize(1.2.cssRem)
+			}
+
+			child(self, selector("span:last-of-type")) style {
+				fontSize(2.cssRem)
+			}
+		}
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val subtitle by style {
+		fontSize(1.8.cssRem)
+		fontWeight(300)
+		marginBottom(0.1.cssRem)
+		color(Color("#FFFFFFCC"))
+		textAlign(TextAlign.Center)
+		animation(fadeInUp) {
+			duration(1.s)
+			fillMode(AnimationFillMode.Forwards)
+			timingFunction(AnimationTimingFunction.EaseOut)
+		}
+		opacity(0)
+		translateY(20.px)
+		property("animation-delay", "0.5s")
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val ageInfo by style {
+		fontWeight(300)
+		marginBottom(1.cssRem)
+		fontSize(1.2.cssRem)
+		textAlign(TextAlign.Center)
+		color(Color("#FFFFFF99"))
+		animation(fadeInUp) {
+			duration(1.s)
+			fillMode(AnimationFillMode.Forwards)
+			timingFunction(AnimationTimingFunction.EaseOut)
+		}
+		opacity(0)
+		translateY(20.px)
+		property("animation-delay", "0.8s")
+	}
+
+	val ageNumber by style {
+		fontWeight(700)
+		color(Color("#00D4FF"))
+		property("text-shadow", "0 0 10px rgba(0, 212, 255, 0.8)")
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val introText by style {
+		lineHeight(1.5.cssRem)
+		fontSize(1.1.cssRem)
+		maxWidth(800.px)
+		marginLeft(autoLength)
+		marginRight(autoLength)
+		marginTop(0.px)
+		marginBottom(2.cssRem)
+		textAlign(TextAlign.Center)
+		color(Color("#FFFFFFEE"))
+		padding(1.2.cssRem)
+		borderRadius(0.8.cssRem)
+		backgroundColor(Color("#ffffff08"))
+		border {
+			width(1.px)
+			style(LineStyle.Solid)
+			color(Color("#ffffff20"))
+		}
+		property("backdrop-filter", "blur(10px)")
+		animation(fadeInUp) {
+			duration(1.2.s)
+			fillMode(AnimationFillMode.Forwards)
+			timingFunction(AnimationTimingFunction.EaseOut)
+		}
+		opacity(0)
+		translateY(30.px)
+		property("animation-delay", "1.2s")
+
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				fontSize(1.cssRem)
+				padding(1.cssRem)
+				margin(0.8.cssRem, auto)
+			}
+		}
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val enhancedAvatar by style {
+		borderRadius(1.cssRem)
+		border {
+			width(3.px)
+			style(LineStyle.Solid)
+			color(Color.transparent)
+		}
+		property("background", """
+			linear-gradient(white, white) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080, #8A2BE2) border-box
+		""")
+		property("box-shadow", """
+			0 0 30px rgba(0, 212, 255, 0.6),
+			0 0 60px rgba(255, 0, 128, 0.4),
+			inset 0 1px 1px rgba(255, 255, 255, 0.2)
+		""")
+		transitions {
+			defaultDuration(0.3.s)
+			properties("all")
+		}
+
+		hover(self) style {
+			property("box-shadow", """
+				0 0 40px rgba(0, 212, 255, 0.8),
+				0 0 80px rgba(255, 0, 128, 0.6),
+				inset 0 1px 1px rgba(255, 255, 255, 0.3)
+			""")
+		}
 	}
 }
