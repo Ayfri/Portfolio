@@ -347,6 +347,7 @@ object AboutMeStyle : StyleSheet() {
 		id("main") style {
 			timelineSize(max(8.cssRem, 10.vw))
 			timelineOffset(1.5.cssRem)
+			paddingBottom(2.cssRem)
 
 			background(linearGradient(180.deg) {
 				stop(Color("#0A0A0F"), (-3).percent)

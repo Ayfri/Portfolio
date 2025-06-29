@@ -307,7 +307,6 @@ object FooterStyle : StyleSheet() {
 
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		marginTop(6.px)
 		width(100.percent)
 	}
 

@@ -525,7 +525,7 @@ object HomeStyle : StyleSheet() {
 			minHeight(100.vh)
 			overflow(Overflow.Hidden)
 
-			padding(1.cssRem, 8.5.vw)
+			padding(0.5.cssRem, 8.5.vw, 2.cssRem)
 		}
 
 		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFirstBreak))) {
