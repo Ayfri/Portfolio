@@ -2,11 +2,11 @@ package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.TextAlign
-import com.varabyte.kobweb.compose.css.boxShadow
 import com.varabyte.kobweb.compose.css.textAlign
 import com.varabyte.kobweb.navigation.Anchor
 import io.github.ayfri.*
 import io.github.ayfri.data.ArticleEntry
+import io.github.ayfri.utils.linearGradient
 import io.github.ayfri.utils.margin
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
@@ -130,12 +130,9 @@ fun ArticleEntry(entry: ArticleEntry) {
 }
 
 object ArticleListStyle : StyleSheet() {
-	// Color constants for various UI elements
-	const val ARTICLE_BACKGROUND_COLOR = "#FFFFFF09"
-	const val ARTICLE_BORDER_COLOR = "#FFFFFF40"
-	const val ARTICLE_SHADOW_COLOR = "#00000040"
-	const val ARTICLE_HOVER_BACKGROUND_COLOR = "#FFFFFF15"
-	const val ARTICLE_HOVER_SHADOW_COLOR = "#00000060"
+	// Updated color constants to match design system
+	const val ARTICLE_BACKGROUND_COLOR = "#1A1225"
+	const val ARTICLE_HOVER_BACKGROUND_COLOR = "#1E1535"
 	const val PARAGRAPH_TEXT_COLOR = "#FFFFFFCC"
 	const val META_TEXT_COLOR = "#FFFFFF99"
 	const val UPDATED_TEXT_COLOR = "#6EBAE7"
@@ -144,24 +141,24 @@ object ArticleListStyle : StyleSheet() {
 	const val KEYWORD_HOVER_BACKGROUND_COLOR = "#FFFFFF25"
 	const val READ_MORE_COLOR = "#6EBAE7"
 
-	init {
-		"main" style {
-			margin(0.px, auto)
-			maxWidth(800.px)
-			padding(1.cssRem, 1.cssRem, 3.cssRem)
-		}
-	}
-
 	val title by style {
 		fontSize(3.cssRem)
 		marginBottom(1.5.cssRem)
 		textAlign(TextAlign.Center)
+		background(linearGradient(45.deg) {
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
+		})
+		property("-webkit-background-clip", "text")
+		property("background-clip", "text")
+		property("-webkit-text-fill-color", "transparent")
+		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 	}
 
 	val articleList by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(1.5.cssRem)
+		gap(2.cssRem)
 		padding(0.px)
 		listStyleType("none")
 	}
@@ -169,11 +166,19 @@ object ArticleListStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val articleEntry by style {
 		backgroundColor(Color(ARTICLE_BACKGROUND_COLOR))
-		borderRadius(0.8.cssRem)
-		border(3.px, LineStyle.Solid, Color(ARTICLE_BORDER_COLOR))
+		borderRadius(1.cssRem)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		boxShadow(0.px, 4.px, 15.px, 0.px, Color(ARTICLE_SHADOW_COLOR))
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color.transparent)
+		}
+		property("background", """
+			linear-gradient(${ARTICLE_BACKGROUND_COLOR}, ${ARTICLE_BACKGROUND_COLOR}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
 
 		animation(AnimationsStyle.appearFromBelow) {
 			fillMode(AnimationFillMode.Forwards)
@@ -183,15 +188,9 @@ object ArticleListStyle : StyleSheet() {
 		opacity(0)
 
 		transitions {
-			"background-color" {
-				duration(0.3.s)
-			}
-			"transform" {
-				duration(0.3.s)
-			}
-			"box-shadow" {
-				duration(0.3.s)
-			}
+			defaultDuration(0.3.s)
+			defaultTimingFunction(AnimationTimingFunction.EaseInOut)
+			properties("background-color", "transform", "box-shadow")
 		}
 
 		self + hover style {
@@ -199,7 +198,7 @@ object ArticleListStyle : StyleSheet() {
 			transform {
 				translateY((-5).px)
 			}
-			boxShadow(0.px, 8.px, 20.px, 0.px, Color(ARTICLE_HOVER_SHADOW_COLOR))
+			property("box-shadow", "0 0 40px rgba(255, 0, 128, 0.3)")
 		}
 
 		"p" {
@@ -215,20 +214,27 @@ object ArticleListStyle : StyleSheet() {
 	}
 
 	val articleContent by style {
-		padding(1.5.cssRem)
+		padding(2.cssRem)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(1.cssRem)
+		gap(1.5.cssRem)
 	}
 
 	val articleHeader by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(0.5.cssRem)
+		gap(0.8.cssRem)
 
 		"h2" {
 			margin(0.px)
 			fontSize(1.8.cssRem)
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
 		}
 	}
 
@@ -269,18 +275,20 @@ object ArticleListStyle : StyleSheet() {
 	val keyword by style {
 		backgroundColor(Color(KEYWORD_BACKGROUND_COLOR))
 		borderRadius(1.cssRem)
-		padding(0.3.cssRem, 0.8.cssRem)
+		padding(0.4.cssRem, 0.8.cssRem)
 		fontSize(0.8.cssRem)
 		color(Color(KEYWORD_TEXT_COLOR))
 
 		transitions {
-			"background-color" {
-				duration(0.2.s)
-			}
+			defaultDuration(0.2.s)
+			properties("background-color", "transform")
 		}
 
 		hover style {
 			backgroundColor(Color(KEYWORD_HOVER_BACKGROUND_COLOR))
+			transform {
+				scale(1.05)
+			}
 		}
 	}
 
@@ -288,8 +296,7 @@ object ArticleListStyle : StyleSheet() {
 	val readMore by style {
 		display(DisplayStyle.Flex)
 		justifyContent(JustifyContent.FlexEnd)
-		marginTop(0.5.cssRem)
-
+		marginTop(1.cssRem)
 		color(Color(READ_MORE_COLOR))
 		fontSize(0.95.cssRem)
 		fontWeight(600)
@@ -311,7 +318,7 @@ object ArticleListStyle : StyleSheet() {
 	init {
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			articleContent style {
-				padding(1.2.cssRem)
+				padding(1.5.cssRem)
 			}
 
 			articleHeader style {
@@ -323,7 +330,7 @@ object ArticleListStyle : StyleSheet() {
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			articleContent style {
-				padding(1.cssRem)
+				padding(1.2.cssRem)
 			}
 
 			keywordsContainer style {

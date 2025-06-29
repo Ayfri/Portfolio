@@ -2,14 +2,16 @@ package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.Cursor
+import com.varabyte.kobweb.compose.css.TextAlign
+import com.varabyte.kobweb.compose.css.cursor
+import com.varabyte.kobweb.compose.css.textAlign
 import io.github.ayfri.AppStyle
+import io.github.ayfri.utils.linearGradient
 import js.uri.encodeURIComponent
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.AlignItems
-import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 import web.navigator.navigator
 
@@ -97,7 +99,7 @@ fun ShareSection(title: String, url: String) {
 }
 
 object ShareSectionStyle : StyleSheet() {
-	const val BORDER_TRANSPARENT_WHITE = "#FFFFFF20"
+	const val CONTAINER_BG_COLOR = "#1A1225"
 	const val SEMI_TRANSPARENT_WHITE = "#FFFFFFEE"
 	const val X_BLACK = "#000000"
 	const val X_BLACK_HOVER = "#333333"
@@ -110,15 +112,33 @@ object ShareSectionStyle : StyleSheet() {
 
 	val container by style {
 		marginTop(4.cssRem)
-		paddingTop(2.cssRem)
-		borderTop(1.px, LineStyle.Companion.Solid, Color(BORDER_TRANSPARENT_WHITE))
-		textAlign(TextAlign.Companion.Center)
+		paddingTop(0.px)
+		backgroundColor(Color(CONTAINER_BG_COLOR))
+		borderRadius(1.cssRem)
+		padding(2.cssRem)
+		textAlign(TextAlign.Center)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color.transparent)
+		}
+		property("background", """
+			linear-gradient(${CONTAINER_BG_COLOR}, ${CONTAINER_BG_COLOR}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 
 	val title by style {
-		fontSize(1.3.cssRem)
-		margin(0.px, 0.px, 1.5.cssRem)
-		color(Color(SEMI_TRANSPARENT_WHITE))
+		fontSize(1.5.cssRem)
+		margin(0.px, 0.px, 2.cssRem)
+		background(linearGradient(45.deg) {
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
+		})
+		property("-webkit-background-clip", "text")
+		property("background-clip", "text")
+		property("-webkit-text-fill-color", "transparent")
 
 		"i" {
 			marginRight(0.5.cssRem)
@@ -126,32 +146,28 @@ object ShareSectionStyle : StyleSheet() {
 	}
 
 	val buttons by style {
-		display(DisplayStyle.Companion.Flex)
-		flexWrap(FlexWrap.Companion.Wrap)
-		justifyContent(JustifyContent.Companion.Center)
-		gap(1.cssRem)
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		justifyContent(JustifyContent.Center)
+		gap(1.5.cssRem)
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val button by style {
-		display(DisplayStyle.Companion.Flex)
-		alignItems(AlignItems.Companion.Center)
+		display(DisplayStyle.Flex)
+		alignItems(AlignItems.Center)
 		gap(0.5.cssRem)
-		padding(0.6.cssRem, 1.2.cssRem)
+		padding(0.8.cssRem, 1.5.cssRem)
 		borderRadius(2.cssRem)
 		border(0.px)
 		fontSize(0.9.cssRem)
 		fontWeight(600)
-		cursor(Cursor.Companion.Pointer)
+		cursor(Cursor.Pointer)
 		textDecoration("none")
 
 		transitions {
-			"transform" {
-				duration(0.2.s)
-			}
-			"opacity" {
-				duration(0.2.s)
-			}
+			defaultDuration(0.2.s)
+			properties("transform", "opacity")
 		}
 
 		self + hover style {
@@ -207,13 +223,13 @@ object ShareSectionStyle : StyleSheet() {
 	init {
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			buttons style {
-				flexDirection(FlexDirection.Companion.Column)
-				alignItems(AlignItems.Companion.Stretch)
-				gap(0.8.cssRem)
+				flexDirection(FlexDirection.Column)
+				alignItems(AlignItems.Stretch)
+				gap(1.cssRem)
 			}
 
 			button style {
-				justifyContent(JustifyContent.Companion.Center)
+				justifyContent(JustifyContent.Center)
 			}
 		}
 	}

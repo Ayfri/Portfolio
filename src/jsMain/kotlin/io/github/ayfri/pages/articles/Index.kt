@@ -195,31 +195,55 @@ fun ArticleList() {
 }
 
 object BlogPageStyle : StyleSheet() {
+	init {
+		id("main") style {
+			// Add consistent background styling
+			background(linearGradient(180.deg) {
+				stop(Color("#0A0A0F"), (-3).percent)
+				stop(Color("#1A1225"), 14.percent)
+				stop(Color("#2A1B3D"), 65.percent)
+				stop(Color("#1E1535"), 90.percent)
+			})
+			minHeight(100.vh)
+		}
+	}
+
 	val container by style {
 		maxWidth(900.px)
 		margin(0.px, autoLength)
-		padding(0.px, 1.cssRem)
+		padding(2.cssRem, 1.cssRem)
 	}
 
-		val header by style {
+	val header by style {
 		marginBottom(3.cssRem)
 		textAlign(TextAlign.Center)
+		backgroundColor(Color("#1A1225"))
+		borderRadius(1.cssRem)
+		padding(2.cssRem)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color.transparent)
+		}
+		property("background", """
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 
 	val mainTitle by style {
 		fontSize(3.cssRem)
 		margin(1.cssRem)
 		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))  // Cyan néon
-			stop(Color("#FF0080"))  // Magenta néon
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
 		})
 		property("-webkit-background-clip", "text")
 		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
 		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 	}
-
-
 
 	val intro by style {
 		fontSize(1.2.cssRem)
@@ -232,8 +256,21 @@ object BlogPageStyle : StyleSheet() {
 	val filterSection by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(1.5.cssRem)
-		marginBottom(2.cssRem)
+		gap(2.cssRem)
+		marginBottom(3.cssRem)
+		backgroundColor(Color("#1A1225"))
+		borderRadius(1.cssRem)
+		padding(2.cssRem)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color.transparent)
+		}
+		property("background", """
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 
 	val searchBox by style {

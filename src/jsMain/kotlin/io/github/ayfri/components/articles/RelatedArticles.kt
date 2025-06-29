@@ -1,10 +1,9 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.borderTop
-import com.varabyte.kobweb.compose.css.boxShadow
 import io.github.ayfri.*
 import io.github.ayfri.data.ArticleEntry
+import io.github.ayfri.utils.linearGradient
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -121,25 +120,42 @@ fun RelatedArticleCard(article: ArticleEntry) {
 }
 
 object RelatedArticlesStyle : StyleSheet() {
-	const val BORDER_COLOR = "#FFFFFF20"
+	const val CONTAINER_BG_COLOR = "#1A1225"
 	const val TITLE_COLOR = "#FFFFFFEE"
 	const val ACCENT_COLOR = "#6EBAE7"
-	const val CARD_BG_COLOR = "#FFFFFF09"
-	const val CARD_HOVER_BG_COLOR = "#FFFFFF15"
-	const val CARD_SHADOW_COLOR = "#00000040"
+	const val CARD_BG_COLOR = "#1E1535"
+	const val CARD_HOVER_BG_COLOR = "#2A1B3D"
 	const val CARD_DESC_COLOR = "#FFFFFFCC"
 	const val CARD_META_COLOR = "#FFFFFF99"
 
 	val container by style {
 		marginTop(4.cssRem)
-		paddingTop(2.cssRem)
-		borderTop(1.px, LineStyle.Solid, Color(BORDER_COLOR))
+		paddingTop(0.px)
+		backgroundColor(Color(CONTAINER_BG_COLOR))
+		borderRadius(1.cssRem)
+		padding(2.cssRem)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color.transparent)
+		}
+		property("background", """
+			linear-gradient(${CONTAINER_BG_COLOR}, ${CONTAINER_BG_COLOR}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 
 	val title by style {
-		fontSize(1.5.cssRem)
-		margin(0.px, 0.px, 1.5.cssRem)
-		color(Color(TITLE_COLOR))
+		fontSize(1.8.cssRem)
+		margin(0.px, 0.px, 2.cssRem)
+		background(linearGradient(45.deg) {
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
+		})
+		property("-webkit-background-clip", "text")
+		property("background-clip", "text")
+		property("-webkit-text-fill-color", "transparent")
 
 		"i" {
 			marginRight(0.5.cssRem)
@@ -147,33 +163,26 @@ object RelatedArticlesStyle : StyleSheet() {
 	}
 
 	val grid by style {
-		display(DisplayStyle.Companion.Grid)
-		gridTemplateColumns("repeat(auto-fit, minmax(250px, 1fr))")
+		display(DisplayStyle.Grid)
+		gridTemplateColumns("repeat(auto-fit, minmax(280px, 1fr))")
 		gap(1.5.cssRem)
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val card by style {
 		backgroundColor(Color(CARD_BG_COLOR))
-		borderRadius(0.8.cssRem)
-		border(1.px, LineStyle.Companion.Solid, Color(BORDER_COLOR))
+		borderRadius(1.cssRem)
 		padding(1.5.cssRem)
-		display(DisplayStyle.Companion.Flex)
-		flexDirection(FlexDirection.Companion.Column)
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
 		height(100.percent)
 		textDecoration("none")
 		color(Color.white)
 
 		transitions {
-			"background-color" {
-				duration(0.3.s)
-			}
-			"transform" {
-				duration(0.3.s)
-			}
-			"box-shadow" {
-				duration(0.3.s)
-			}
+			defaultDuration(0.3.s)
+			defaultTimingFunction(AnimationTimingFunction.EaseInOut)
+			properties("background-color", "transform", "box-shadow")
 		}
 
 		self + hover style {
@@ -181,14 +190,20 @@ object RelatedArticlesStyle : StyleSheet() {
 			transform {
 				translateY((-5).px)
 			}
-			boxShadow(0.px, 4.px, 15.px, 0.px, Color(CARD_SHADOW_COLOR))
+			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.2)")
 		}
 	}
 
 	val cardTitle by style {
 		fontSize(1.2.cssRem)
-		margin(0.px, 0.px, 0.8.cssRem)
-		color(Color.white)
+		margin(0.px, 0.px, 1.cssRem)
+		background(linearGradient(45.deg) {
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
+		})
+		property("-webkit-background-clip", "text")
+		property("background-clip", "text")
+		property("-webkit-text-fill-color", "transparent")
 	}
 
 	val cardDescription by style {
@@ -200,8 +215,8 @@ object RelatedArticlesStyle : StyleSheet() {
 	}
 
 	val cardMeta by style {
-		display(DisplayStyle.Companion.Flex)
-		justifyContent(JustifyContent.Companion.SpaceBetween)
+		display(DisplayStyle.Flex)
+		justifyContent(JustifyContent.FlexEnd)
 		fontSize(0.8.cssRem)
 		color(Color(CARD_META_COLOR))
 		marginBottom(1.cssRem)
@@ -213,9 +228,9 @@ object RelatedArticlesStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val readMore by style {
-		display(DisplayStyle.Companion.Flex)
-		alignItems(AlignItems.Companion.Center)
-		justifyContent(JustifyContent.Companion.FlexEnd)
+		display(DisplayStyle.Flex)
+		alignItems(AlignItems.Center)
+		justifyContent(JustifyContent.FlexEnd)
 		gap(0.5.cssRem)
 		fontSize(0.9.cssRem)
 		fontWeight(600)
@@ -224,6 +239,12 @@ object RelatedArticlesStyle : StyleSheet() {
 		transitions {
 			"transform" {
 				duration(0.2.s)
+			}
+		}
+
+		self + hover style {
+			transform {
+				translateX(5.px)
 			}
 		}
 	}

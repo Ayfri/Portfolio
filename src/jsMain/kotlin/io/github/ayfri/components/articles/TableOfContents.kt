@@ -1,6 +1,7 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
+import io.github.ayfri.utils.linearGradient
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -62,8 +63,7 @@ fun TableOfContents(headings: List<Pair<Int, String>>) {
 }
 
 object TableOfContentsStyle : StyleSheet() {
-	const val CONTAINER_BACKGROUND_COLOR = "#FFFFFF08"
-	const val CONTAINER_BORDER_COLOR = "#FFFFFF20"
+	const val CONTAINER_BACKGROUND_COLOR = "#1A1225"
 	const val TITLE_TEXT_COLOR = "#FFFFFFEE"
 	const val ITEM_TEXT_COLOR = "#FFFFFFCC"
 	const val ITEM_HOVER_BACKGROUND_COLOR = "#FFFFFF15"
@@ -71,16 +71,31 @@ object TableOfContentsStyle : StyleSheet() {
 
 	val container by style {
 		backgroundColor(Color(CONTAINER_BACKGROUND_COLOR))
-		borderRadius(0.8.cssRem)
-		border(1.px, LineStyle.Companion.Solid, Color(CONTAINER_BORDER_COLOR))
-		padding(1.2.cssRem)
-		marginBottom(2.cssRem)
+		borderRadius(1.cssRem)
+		padding(2.cssRem)
+		marginBottom(3.cssRem)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color.transparent)
+		}
+		property("background", """
+			linear-gradient(${CONTAINER_BACKGROUND_COLOR}, ${CONTAINER_BACKGROUND_COLOR}) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 
 	val title by style {
-		fontSize(1.3.cssRem)
-		margin(0.px, 0.px, 1.cssRem)
-		color(Color(TITLE_TEXT_COLOR))
+		fontSize(1.5.cssRem)
+		margin(0.px, 0.px, 1.5.cssRem)
+		background(linearGradient(45.deg) {
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
+		})
+		property("-webkit-background-clip", "text")
+		property("background-clip", "text")
+		property("-webkit-text-fill-color", "transparent")
 
 		"i" {
 			marginRight(0.5.cssRem)
@@ -95,28 +110,27 @@ object TableOfContentsStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val item by style {
-		margin(0.5.cssRem, 0.px)
+		margin(0.8.cssRem, 0.px)
 
 		"a" {
 			color(Color(ITEM_TEXT_COLOR))
 			textDecoration("none")
 			fontSize(0.95.cssRem)
-			display(DisplayStyle.Companion.Block)
-			padding(0.3.cssRem, 0.5.cssRem)
-			borderRadius(0.3.cssRem)
+			display(DisplayStyle.Block)
+			padding(0.5.cssRem, 0.8.cssRem)
+			borderRadius(0.5.cssRem)
 
 			transitions {
-				"background-color" {
-					duration(0.2.s)
-				}
-				"color" {
-					duration(0.2.s)
-				}
+				defaultDuration(0.2.s)
+				properties("background-color", "color", "transform")
 			}
 
 			self + hover style {
 				backgroundColor(Color(ITEM_HOVER_BACKGROUND_COLOR))
 				color(Color(ITEM_HOVER_TEXT_COLOR))
+				transform {
+					translateX(5.px)
+				}
 			}
 		}
 	}

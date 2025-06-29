@@ -182,7 +182,20 @@ fun ArticleHeader(
 
 object ArticleHeaderStyle : StyleSheet() {
 	val container by style {
-		marginBottom(2.cssRem)
+		backgroundColor(Color("#1A1225"))
+		borderRadius(1.cssRem)
+		padding(2.cssRem)
+		marginBottom(3.cssRem)
+		border {
+			width(2.px)
+			style(LineStyle.Solid)
+			color(Color.transparent)
+		}
+		property("background", """
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 
 	val title by style {
@@ -190,12 +203,13 @@ object ArticleHeaderStyle : StyleSheet() {
 		lineHeight(1.3.em)
 		margin(top = 0.cssRem, bottom = 1.cssRem)
 		background(linearGradient(45.deg) {
-			stop(Color("#9C7CF4"))
-			stop(Color("#6EBAE7"))
+			stop(Color("#00D4FF"))
+			stop(Color("#FF0080"))
 		})
 		property("-webkit-background-clip", "text")
 		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
+		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 	}
 
 	val meta by style {
@@ -255,7 +269,7 @@ object ArticleHeaderStyle : StyleSheet() {
 			stop(Color("#FFFFFF40"))
 			stop(Color("#FFFFFF00"))
 		})
-		margin(0.5.cssRem, 0.px, 1.cssRem)
+		margin(1.5.cssRem, 0.px, 1.cssRem)
 	}
 
 	// Responsive styles
@@ -275,6 +289,19 @@ object ArticleHeaderStyle : StyleSheet() {
 }
 
 object MarkdownStyle : StyleSheet() {
+	init {
+		id("main") style {
+			// Add consistent background styling
+			background(linearGradient(180.deg) {
+				stop(Color("#0A0A0F"), (-3).percent)
+				stop(Color("#1A1225"), 14.percent)
+				stop(Color("#2A1B3D"), 65.percent)
+				stop(Color("#1E1535"), 90.percent)
+			})
+			minHeight(100.vh)
+		}
+	}
+
 	val article by style {
 		margin(0.px, auto)
 		maxWidth(1000.px)
@@ -287,18 +314,53 @@ object MarkdownStyle : StyleSheet() {
 			fontSize(2.5.cssRem)
 			lineHeight(1.3.em)
 			margin(top = 0.cssRem, bottom = 1.cssRem)
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
 		}
 
 		"h2" {
 			fontSize(1.75.cssRem)
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
+			marginTop(2.cssRem)
+			marginBottom(1.cssRem)
 		}
 
 		"h3" {
 			fontSize(1.35.cssRem)
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
 		}
 
 		"h4" {
 			fontSize(1.25.cssRem)
+			background(linearGradient(45.deg) {
+				stop(Color("#00D4FF"))
+				stop(Color("#FF0080"))
+			})
+			property("-webkit-background-clip", "text")
+			property("background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
+		}
+
+		// Create content sections for better visual separation
+		"h2, h3, h4, h5, h6" {
+			color(Color.white)
 		}
 
 		child(not(type("pre")), type("code")) style {
@@ -321,10 +383,10 @@ object MarkdownStyle : StyleSheet() {
 		}
 
 		"pre" {
-			backgroundColor(Color("#00000020"))
-			borderRadius(.5.cssRem)
+			backgroundColor(Color("#1A1225"))
+			borderRadius(.8.cssRem)
 			overflowX("auto")
-			padding(1.cssRem)
+			padding(1.5.cssRem)
 
 			self + webkitScrollbar style {
 				height(8.px)
@@ -338,6 +400,20 @@ object MarkdownStyle : StyleSheet() {
 			self + webkitScrollbarTrack style {
 				backgroundColor(Color.transparent)
 			}
+		}
+
+		// Enhanced blockquote styling
+		"blockquote" {
+			borderLeft {
+				width(4.px)
+				style(LineStyle.Solid)
+				color(Color("#00D4FF"))
+			}
+			backgroundColor(Color("#1A1225"))
+			borderRadius(0.5.cssRem)
+			padding(1.cssRem)
+			margin(1.cssRem, 0.px)
+			fontStyle("italic")
 		}
 	}
 }
