@@ -211,25 +211,13 @@ object BlogPageStyle : StyleSheet() {
 	val container by style {
 		maxWidth(900.px)
 		margin(0.px, autoLength)
-		padding(2.cssRem, 1.cssRem)
+		padding(1.cssRem, 1.cssRem)
 	}
 
 	val header by style {
-		marginBottom(3.cssRem)
+		marginBottom(0.px)
 		textAlign(TextAlign.Center)
-		backgroundColor(Color("#1A1225"))
-		borderRadius(1.cssRem)
-		padding(2.cssRem)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
-		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
+		padding(1.cssRem)
 	}
 
 	val mainTitle by style {
@@ -256,21 +244,9 @@ object BlogPageStyle : StyleSheet() {
 	val filterSection by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(2.cssRem)
-		marginBottom(3.cssRem)
-		backgroundColor(Color("#1A1225"))
-		borderRadius(1.cssRem)
-		padding(2.cssRem)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
-		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
+		gap(1.cssRem)
+		marginBottom(1.5.cssRem)
+		padding(1.cssRem)
 	}
 
 	val searchBox by style {

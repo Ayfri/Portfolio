@@ -158,7 +158,7 @@ object ArticleListStyle : StyleSheet() {
 	val articleList by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(2.cssRem)
+		gap(1.5.cssRem)
 		padding(0.px)
 		listStyleType("none")
 	}
@@ -214,10 +214,10 @@ object ArticleListStyle : StyleSheet() {
 	}
 
 	val articleContent by style {
-		padding(2.cssRem)
+		padding(1.5.cssRem)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(1.5.cssRem)
+		gap(1.cssRem)
 	}
 
 	val articleHeader by style {
