@@ -172,12 +172,12 @@ private fun formatRelativeTime(dateString: String): String {
 
 private fun getLanguageColor(language: String) =  Color(
 	when (language.lowercase()) {
-		"astro" -> "e142c9"
+		"astro" -> "#e142c9"
 		"c#" -> "#178600"
 		"c++" -> "#f34b7d"
 		"css" -> "#563d7c"
 		"dart" -> "#00B4AB"
-		"gdscript" -> "518bc1"
+		"gdscript" -> "#518bc1"
 		"go", "golang" -> "#00ADD8"
 		"html" -> "#e34c26"
 		"java" -> "#b07219"
