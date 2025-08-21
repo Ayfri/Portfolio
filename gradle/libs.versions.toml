@@ -1,9 +1,9 @@
 [versions]
-jetbrains-compose = "1.7.3"
-kobweb = "0.20.3"
-kotlin = "2.1.10"
-kotlinx-wrappers-js = "2025.2.12"
-kotlinx-serialization-json = "1.8.0"
+jetbrains-compose = "1.8.2"
+kobweb = "0.23.1"
+kotlin = "2.2.10"
+kotlinx-wrappers-js = "2025.8.15"
+kotlinx-serialization-json = "1.9.0"
 
 [libraries]
 compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "jetbrains-compose" }
