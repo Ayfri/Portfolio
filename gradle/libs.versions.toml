@@ -4,6 +4,7 @@ kobweb = "0.23.1"
 kotlin = "2.2.10"
 kotlinx-wrappers-js = "2025.8.15"
 kotlinx-serialization-json = "1.9.0"
+marked = "16.0.0"
 
 [libraries]
 compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "jetbrains-compose" }

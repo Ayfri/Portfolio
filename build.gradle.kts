@@ -4,6 +4,7 @@ import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
 import kotlinx.html.*
 import org.commonmark.node.Text
+import org.jetbrains.kotlin.gradle.plugin.extraProperties
 import java.net.HttpURLConnection
 import java.net.URI
 
@@ -38,13 +39,16 @@ operator fun <K : Any, V : Any> MapProperty<K, V>.set(key: K, value: V) {
 
 operator fun <K : Any, V : Any> MapProperty<K, V>.get(key: K) = getting(key)
 
-val blogInputDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
 
 val downloadDataTask = tasks.register("downloadData") {
-	val file = layout.buildDirectory.file("generated/ayfri/src/jsMain/kotlin/io/github/ayfri/data/Data.kt").get().asFile
-	outputs.dir(file.parentFile)
+	group = "build"
+	description = "Download the data from the API and generate the Kotlin file."
+
+	val dir = layout.buildDirectory.dir("generated/ayfri/src/jsMain/kotlin/io/github/ayfri/data")
+	outputs.dir(dir)
 
 	doLast {
+		val loadedDir = dir.get().asFile
 		val dataLink = "https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json"
 		val url = URI(dataLink).toURL()
 		val connection = url.openConnection() as HttpURLConnection
@@ -64,9 +68,9 @@ val downloadDataTask = tasks.register("downloadData") {
 			const val rawData = $tripleQuotes$data$tripleQuotes
 		""".trimIndent()
 
-		file.parentFile.mkdirs()
-		file.writeText(kotlinOutput)
-		logger.lifecycle("Generated '$file'")
+		loadedDir.mkdirs()
+		loadedDir.resolve("Data.kt").writeText(kotlinOutput)
+		logger.lifecycle("Generated '${dir.get()}'")
 	}
 }
 
@@ -84,6 +88,9 @@ fun String.escapeQuotes() = this.replace("\"", "\\\"")
 fun String.escapeVariables() = this.replace(Regex("\\$"), "\\\${\"\\$\"}")
 
 kobweb {
+	val projectGroup = group
+	val blogInputDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
+
 	markdown {
 		handlers {
 			img.set { image ->
@@ -148,7 +155,7 @@ kobweb {
 				)
 			}
 
-			generateKotlin("$group/articles.kt", buildString {
+			generateKotlin("$projectGroup/articles.kt", buildString {
 				appendLine(
 					"""
 					|// This file is generated. Modify the build script if you need to change it.
@@ -163,16 +170,24 @@ kobweb {
 
 				fun List<String>.asCode() = "listOf(${joinToString { "\"$it\"" }})"
 
-				blogEntries.sortedByDescending { it.date }.forEach { entry ->
+				blogEntries.sortedByDescending(BlogEntry::date).forEach { entry ->
+					val blogInputFile = blogInputDir.asFile.resolve(entry.file.name)
 					appendLine(
-						"""    ArticleEntry("/articles/${
+						"""
+						|	ArticleEntry("/articles/${
 							entry.file.nameWithoutExtension
 								.splitCamelCase()
 								.joinToString("-") { word -> word.lowercase() }
 								.ensureSurrounded("", "/")
-						}", "${entry.date}", "${entry.title.escapeQuotes()}", "${entry.desc.escapeQuotes()}", "${entry.navTitle.escapeQuotes()}", ${
-							entry.keywords.asCode()
-						}, "${entry.dateModified}", ${"\"\"\""}${blogInputDir.asFile.resolve(entry.file.name).readText().escapeQuotes().escapeVariables().substringAfter("\n---")}${"\"\"\""}),
+						}",
+						|		"${entry.date}",
+						|		"${entry.title.escapeQuotes()}",
+						|		"${entry.desc.escapeQuotes()}",
+						|		"${entry.navTitle.escapeQuotes()}",
+						|		${entry.keywords.asCode()},
+						|		"${entry.dateModified}",
+						|		${"\"\"\""}${blogInputFile.readText().escapeQuotes().escapeVariables().substringAfter("\n---")}${"\"\"\""}
+						|	),
 						""".trimMargin()
 					)
 				}
@@ -256,12 +271,13 @@ kobweb {
 }
 
 kotlin {
+	val isDevProperty = project.providers.gradleProperty("kobwebEnv").orNull
 	configAsKobwebApplication("portfolio")
 
 	js {
 		browser {
 			commonWebpackConfig {
-				val isDev = project.findProperty("kobwebEnv") == "DEV"
+				val isDev = isDevProperty == "DEV"
 				sourceMaps = isDev
 				devServer?.open = false
 			}
@@ -279,8 +295,9 @@ kotlin {
 
 	sourceSets {
 		jsMain {
-			kotlin.srcDir(downloadDataTask)
-
+			kotlin.srcDir("build/generated/ayfri/src/jsMain/kotlin")
+		}
+		commonMain {
 			dependencies {
 				implementation(libs.compose.html.core)
 				implementation(libs.compose.runtime)
@@ -288,7 +305,7 @@ kotlin {
 				implementation(libs.kobweb.core)
 				implementation(libs.kotlinx.wrappers.browser)
 				implementation(libs.kotlinx.serialization.json)
-				implementation(npm("marked", project.extra["npm.marked.version"].toString()))
+				implementation(npm("marked", libs.versions.marked.get()))
 			}
 		}
 	}
