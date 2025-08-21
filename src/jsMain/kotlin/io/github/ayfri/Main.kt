@@ -45,11 +45,10 @@ fun AppEntry(content: @Composable () -> Unit) {
 @InitKobweb
 fun initKobweb(context: InitKobwebContext) {
 	context.router.setErrorPage {
-		context.router.navigateTo(
+		context.router.tryRoutingTo(
 			"/",
-			openExternalLinksStrategy = OpenLinkStrategy.IN_PLACE,
-			openInternalLinksStrategy = OpenLinkStrategy.IN_PLACE,
 			updateHistoryMode = UpdateHistoryMode.REPLACE
 		)
+		OpenLinkStrategy.IN_PLACE
 	}
 }
