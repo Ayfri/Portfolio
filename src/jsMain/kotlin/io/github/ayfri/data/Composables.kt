@@ -170,29 +170,32 @@ private fun formatRelativeTime(dateString: String): String {
 	}
 }
 
-private fun getLanguageColor(language: String): CSSColorValue {
-	return Color(
-		when (language.lowercase()) {
-			"javascript" -> "#f1e05a"
-			"typescript" -> "#3178c6"
-			"html" -> "#e34c26"
-			"css" -> "#563d7c"
-			"python" -> "#3572A5"
-			"java" -> "#b07219"
-			"kotlin" -> "#A97BFF"
-			"go", "golang" -> "#00ADD8"
-			"rust" -> "#dea584"
-			"c#" -> "#178600"
-			"c++" -> "#f34b7d"
-			"php" -> "#4F5D95"
-			"ruby" -> "#701516"
-			"swift" -> "#ffac45"
-			"dart" -> "#00B4AB"
-			"shell" -> "#89e051"
-			else -> "#8257e6" // Default purple color
-		}
-	)
-}
+private fun getLanguageColor(language: String) =  Color(
+	when (language.lowercase()) {
+		"astro" -> "e142c9"
+		"c#" -> "#178600"
+		"c++" -> "#f34b7d"
+		"css" -> "#563d7c"
+		"dart" -> "#00B4AB"
+		"gdscript" -> "518bc1"
+		"go", "golang" -> "#00ADD8"
+		"html" -> "#e34c26"
+		"java" -> "#b07219"
+		"javascript" -> "#f1e05a"
+		"kotlin" -> "#A97BFF"
+		"php" -> "#4F5D95"
+		"python" -> "#3572A5"
+		"ruby" -> "#701516"
+		"rust" -> "#dea584"
+		"shell" -> "#89e051"
+		"svelte" -> "#f44108"
+		"swift" -> "#ffac45"
+		"typescript" -> "#3178c6"
+		"vue" -> "#54ba82"
+		else -> "#8257e6" // Default purple color
+	}
+)
+
 
 object DataStyle : StyleSheet() {
 	// Color constants
