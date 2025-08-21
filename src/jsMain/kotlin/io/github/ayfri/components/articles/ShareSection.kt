@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
+import web.clipboard.writeText
 import web.navigator.navigator
 
 @Composable

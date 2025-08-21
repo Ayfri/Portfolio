@@ -422,7 +422,6 @@ object ProjectStyle : StyleSheet() {
 	const val ACCENT_COLOR = SPECIAL_TEXT_COLOR
 
 	init {
-		// Fond principal avec gradient violet
 		id("main") style {
 			background(linearGradient(180.deg) {
 				stop(Color("#0A0A0F"), (-3).percent)
@@ -438,7 +437,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		child(type("thead"), type("tr")) style {
-			background(Color("#ffffff20"))
+			backgroundColor(Color("#ffffff20"))
 		}
 
 		"table" style {
@@ -448,7 +447,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		type("tr") + nthOfType(2.n) style {
-			background(Color("#ffffff0b"))
+			backgroundColor(Color("#ffffff0b"))
 		}
 
 		"pre" {
@@ -458,7 +457,6 @@ object ProjectStyle : StyleSheet() {
 		"h3" style {
 			margin(0.px, 0.px, 15.px)
 			fontSize(1.4.cssRem)
-			// Titres avec gradient cyan-magenta
 			background(linearGradient(45.deg) {
 				stop(Color("#00D4FF"))
 				stop(Color("#FF0080"))
@@ -489,7 +487,6 @@ object ProjectStyle : StyleSheet() {
 		margin(0.px, 0.px, 10.px)
 		fontSize(3.cssRem)
 
-		// Titre principal avec gradient cyan-magenta
 		background(linearGradient(45.deg) {
 			stop(Color("#00D4FF"))
 			stop(Color("#FF0080"))
@@ -498,7 +495,12 @@ object ProjectStyle : StyleSheet() {
 		property("-webkit-text-fill-color", "transparent")
 		property("-moz-text-fill-color", "transparent")
 		property("-moz-background-clip", "text")
-		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
+		textShadow(TextShadow.of(
+			color = rgba(0, 212, 255, 0.5),
+			offsetX = 0.px,
+			offsetY = 0.px,
+			blurRadius = 20.px
+		))
 
 		"img" style {
 			borderRadius(50.percent)
@@ -528,7 +530,7 @@ object ProjectStyle : StyleSheet() {
 		fontSize(1.1.cssRem)
 
 		"i" style {
-			color(Color("#00D4FF"))  // Cyan néon pour les icônes
+			color(Color("#00D4FF"))
 			marginRight(5.px)
 		}
 	}
@@ -540,7 +542,10 @@ object ProjectStyle : StyleSheet() {
 
 	val mainLayout by style {
 		display(DisplayStyle.Grid)
-		gridTemplateColumns("minmax(0, 2fr) minmax(300px, 1fr)")
+		gridTemplateColumns {
+			minmax(0.px, 2.fr)
+			minmax(300.px, 1.fr)
+		}
 		gap(30.px)
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
@@ -557,18 +562,27 @@ object ProjectStyle : StyleSheet() {
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${CARD_BACKGROUND}, ${CARD_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
-		property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
+		boxShadow(BoxShadow.of(
+			color = rgba(0, 212, 255, 0.1),
+			offsetX = 0.px,
+			offsetY = 0.px,
+			blurRadius = 20.px
+		))
 	}
 
 	val statsGrid by style {
 		display(DisplayStyle.Grid)
-		gridTemplateColumns("repeat(auto-fill, minmax(120px, 1fr))")
+		gridTemplateColumns {
+			repeat(GridEntry.Repeat.Auto.Type.AutoFill) {
+				minmax(120.px, 1.fr)
+			}
+		}
 		gap(15.px)
 	}
 
@@ -582,7 +596,7 @@ object ProjectStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
@@ -600,7 +614,12 @@ object ProjectStyle : StyleSheet() {
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
 			""")
 			transform { scale(1.05) }
-			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.3)")
+			boxShadow(BoxShadow.of(
+				color = rgba(255, 0, 128, 0.3),
+				offsetX = 0.px,
+				offsetY = 0.px,
+				blurRadius = 20.px
+			))
 		}
 	}
 
@@ -616,7 +635,7 @@ object ProjectStyle : StyleSheet() {
 
 	val statValue by style {
 		fontSize(1.2.cssRem)
-		fontWeight("bold")
+		fontWeight(FontWeight.Bold)
 	}
 
 	val statLabel by style {
@@ -642,7 +661,7 @@ object ProjectStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
@@ -661,7 +680,12 @@ object ProjectStyle : StyleSheet() {
 			""")
 			color(Color(LINK_HOVER_COLOR))
 			transform { translateX(5.px) }
-			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.3)")
+			boxShadow(BoxShadow.of(
+				color = rgba(0, 212, 255, 0.3),
+				offsetX = 0.px,
+				offsetY = 0.px,
+				blurRadius = 20.px
+			))
 		}
 	}
 
@@ -680,7 +704,7 @@ object ProjectStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
@@ -689,7 +713,7 @@ object ProjectStyle : StyleSheet() {
 	}
 
 	val dateLabel by style {
-		fontWeight("bold")
+		fontWeight(FontWeight.Bold)
 	}
 
 	val dateValue by style {
@@ -716,7 +740,7 @@ object ProjectStyle : StyleSheet() {
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		borderRadius(20.px)
 		fontSize(0.9.cssRem)
@@ -739,7 +763,12 @@ object ProjectStyle : StyleSheet() {
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
 			""")
 			transform { scale(1.05) }
-			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
+			boxShadow(BoxShadow.of(
+				color = rgba(0, 212, 255, 0.3),
+				offsetX = 0.px,
+				offsetY = 0.px,
+				blurRadius = 15.px
+			))
 		}
 	}
 
@@ -758,7 +787,7 @@ object ProjectStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
@@ -767,7 +796,7 @@ object ProjectStyle : StyleSheet() {
 	}
 
 	val statusLabel by style {
-		fontWeight("bold")
+		fontWeight(FontWeight.Bold)
 	}
 
 	val statusValue by style {
@@ -793,13 +822,18 @@ object ProjectStyle : StyleSheet() {
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
-		property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
+		boxShadow(BoxShadow.of(
+			color = rgba(0, 212, 255, 0.1),
+			offsetX = 0.px,
+			offsetY = 0.px,
+			blurRadius = 20.px
+		))
 
 		"img" style {
 			borderRadius(5.px)
@@ -808,7 +842,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		"pre" {
-			background(Color("#00000040"))
+			backgroundColor(Color("#00000040"))
 		}
 	}
 
@@ -824,7 +858,7 @@ object ProjectStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
@@ -835,7 +869,7 @@ object ProjectStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val breadcrumbLink by style {
 		color(Color(TEXT_SECONDARY))
-		textDecoration("none")
+		textDecorationLine(TextDecorationLine.None)
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		gap(5.px)
@@ -847,7 +881,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			color(Color("#00D4FF"))  // Cyan néon au hover
+			color(Color("#00D4FF"))
 		}
 	}
 
@@ -857,7 +891,7 @@ object ProjectStyle : StyleSheet() {
 	}
 
 	val breadcrumbCurrent by style {
-		color(Color("#00D4FF"))  // Cyan néon
-		fontWeight("bold")
+		color(Color("#00D4FF"))
+		fontWeight(FontWeight.Bold)
 	}
 }

@@ -227,10 +227,10 @@ object BlogPageStyle : StyleSheet() {
 			stop(Color("#00D4FF"))
 			stop(Color("#FF0080"))
 		})
-		property("-webkit-background-clip", "text")
-		property("background-clip", "text")
-		property("-webkit-text-fill-color", "transparent")
-		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
+		backgroundClip(BackgroundClip.Text)
+		textShadow(TextShadow.of(color = rgba(0, 212, 255, 0.5), offsetX = 0.px, offsetY = 0.px, blurRadius = 10.px))
+		property("-webkit-background-clip", BackgroundClip.Text)
+		property("-webkit-text-fill-color", Color.transparent)
 	}
 
 	val intro by style {
@@ -259,7 +259,7 @@ object BlogPageStyle : StyleSheet() {
 	val searchWrapper by style {
 		alignItems(AlignItems.Center)
 		backgroundColor(Color("#1A1225"))
-		border(2.px, LineStyle.Solid, Color("transparent"))
+		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(2.cssRem)
 		color(Color("#FFFFFFB0"))
 		display(DisplayStyle.Flex)
@@ -284,16 +284,16 @@ object BlogPageStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val searchInput by style {
-		backgroundColor(Color("transparent"))
+		backgroundColor(Color.transparent)
 		borderStyle(LineStyle.None)
-		color("inherit")
+		color(CSSColor.Inherit)
 		padding(0.px)
-		outline("none")
+		outlineStyle(LineStyle.None)
 		paddingLeft(0.75.cssRem)
 		width(100.percent)
 
 		focus style {
-			outline("none")
+			outlineStyle(LineStyle.None)
 			borderColor(Color("#FFFFFF80"))
 			backgroundColor(Color("#FFFFFF15"))
 			boxShadow(0.px, 0.px, 10.px, 0.px, Color("#FFFFFF20"))
@@ -332,7 +332,7 @@ object BlogPageStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("background", """
 			linear-gradient(#1A1225, #1A1225) padding-box,
@@ -362,7 +362,7 @@ object BlogPageStyle : StyleSheet() {
 
 	val tagSelected by style {
 		backgroundColor(Color("#1A1225"))
-		border(2.px, LineStyle.Solid, Color("transparent"))
+		border(2.px, LineStyle.Solid, Color.transparent)
 		property("background", """
 			linear-gradient(#1A1225, #1A1225) padding-box,
 			linear-gradient(45deg, #FF0080, #00D4FF) border-box
@@ -395,7 +395,7 @@ object BlogPageStyle : StyleSheet() {
 		cursor(Cursor.Pointer)
 
 		focus style {
-			outline("none")
+			outlineStyle(LineStyle.None)
 			borderColor(Color("#FFFFFF80"))
 		}
 
@@ -409,7 +409,7 @@ object BlogPageStyle : StyleSheet() {
 		color(Color("#FFFFFF80"))
 		fontSize(0.9.cssRem)
 		marginBottom(1.cssRem)
-		fontStyle("italic")
+		fontStyle(FontStyle.Italic)
 	}
 
 	val noResults by style {

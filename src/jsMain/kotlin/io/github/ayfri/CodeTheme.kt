@@ -1,6 +1,7 @@
 package io.github.ayfri
 
 import com.varabyte.kobweb.compose.css.FontStyle
+import com.varabyte.kobweb.compose.css.TextShadow
 import com.varabyte.kobweb.compose.css.fontStyle
 import com.varabyte.kobweb.compose.css.textShadow
 import io.github.ayfri.utils.Cursor
@@ -52,7 +53,7 @@ object CodeTheme : StyleSheet() {
 
 		child(type("pre") + attrContains("class", "language-"), type("code") + attrContains("class", "language-")) style {
 			color(textColor)
-			textShadow(color = transparent, offsetX = 0.px, offsetY = 0.px, blurRadius = 0.px)
+			textShadow(TextShadow.of(color = transparent, offsetX = 0.px, offsetY = 0.px, blurRadius = 0.px))
 		}
 
 		scope("comment") style {
