@@ -313,9 +313,9 @@ object DataStyle : StyleSheet() {
 		cursor(Cursor.Pointer)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(0.65.cssRem)
+		gap(0.6.cssRem)
 		imageSize(2.5.cssRem)
-		padding(1.65.cssRem)
+		padding(1.5.cssRem)
 
 		border {
 			width(1.px)

@@ -594,7 +594,7 @@ object ProjectsStyle : StyleSheet() {
 	val projectsList by style {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns(repeat("auto-fill", minmax(25.cssRem, 1.fr)))
-		gap(2.cssRem)
+		gap(1.75.cssRem)
 		padding(0.px)
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
