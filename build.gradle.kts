@@ -295,7 +295,7 @@ kotlin {
 
 	sourceSets {
 		jsMain {
-			kotlin.srcDir("build/generated/ayfri/src/jsMain/kotlin")
+			kotlin.srcDir(downloadDataTask)
 		}
 		commonMain {
 			dependencies {
