@@ -42,6 +42,7 @@ val projectLinks = listOf(
 	ProjectLink("Cursors Draw", "https://cursors.draw.ayfri.com"),
 	ProjectLink("Realtime TodoList", "https://realtime-todolist.pages.dev"),
 	ProjectLink("GPT Images", "https://gpt-images.ayfri.com"),
+	ProjectLink("A* Follow", "https://afollow.ayfri.com"),
 )
 
 @Composable
