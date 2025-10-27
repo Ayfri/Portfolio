@@ -14,7 +14,6 @@ plugins {
 
 	alias(libs.plugins.kobweb.application)
 	alias(libs.plugins.kobwebx.markdown)
-	alias(libs.plugins.kotlinx.serialization)
 }
 
 group = "io.github.ayfri"
@@ -304,7 +303,6 @@ kotlin {
 				implementation(libs.kobwebx.markdown)
 				implementation(libs.kobweb.core)
 				implementation(libs.kotlinx.wrappers.browser)
-				implementation(libs.kotlinx.serialization.json)
 				implementation(npm("marked", libs.versions.marked.get()))
 			}
 		}

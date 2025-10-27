@@ -3,7 +3,6 @@ jetbrains-compose = "1.9.1"
 kobweb = "0.23.3"
 kotlin = "2.2.20"
 kotlinx-wrappers = "2025.10.12"
-kotlinx-serialization-json = "1.9.0"
 marked = "16.0.0"
 
 [libraries]
@@ -12,7 +11,6 @@ compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.re
 kobweb-core = { module = "com.varabyte.kobweb:kobweb-core ", version.ref = "kobweb" }
 kobwebx-markdown = { module = "com.varabyte.kobwebx:kobwebx-markdown", version.ref = "kobweb" }
 kotlinx-wrappers-browser = { module = "org.jetbrains.kotlin-wrappers:kotlin-browser", version.ref = "kotlinx-wrappers" }
-kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
 [plugins]
 kobweb-application = { id = "com.varabyte.kobweb.application", version.ref = "kobweb" }
@@ -20,4 +18,3 @@ kobwebx-markdown = { id = "com.varabyte.kobwebx.markdown", version.ref = "kobweb
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-js-plain-objects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
