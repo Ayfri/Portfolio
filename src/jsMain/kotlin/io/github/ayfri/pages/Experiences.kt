@@ -103,10 +103,10 @@ fun Experiences() {
 
 				Experience(
 					"""
-					## [Eliophot](https://www.eliophot.com/en/) – Full-Stack Developer (2023 - Present)
+					## [Eliophot](https://www.eliophot.com/en/) – Full-Stack Developer (2023 - 2025)
 
-					I've been working at [Eliophot](https://www.eliophot.com/en/), a 360° marketing and communications agency, as a Full-Stack Developer since September 2023.
-					My role is set to continue until at least September 2026, giving me the chance to fully integrate into the team and contribute to long-term strategic projects.
+					I've been working at [Eliophot](https://www.eliophot.com/en/), a 360° marketing and communications agency, as a Full-Stack Developer from September 2023 to September 2025.
+					During my 2-year internship, I had the chance to fully integrate into the team and contribute to long-term strategic projects.
 
 					My responsibilities are quite diverse. Day-to-day, I build and maintain web applications using modern front-end tools like [Svelte](https://svelte.dev/), [Astro](https://astro.build/), and [Tailwind CSS](https://tailwindcss.com/).
 					I've created several websites from scratch, including [e-commerce](https://en.wikipedia.org/wiki/E-commerce) platforms and interactive portfolio sites, which required finding creative UI solutions.
@@ -128,6 +128,23 @@ fun Experiences() {
 					Facing new challenges daily keeps me motivated, continuously learning, and makes Eliophot a great place for my professional growth.
 				""".trimIndent(),
 					0.5.s
+				)
+
+				Experience(
+					"""
+					## Internship – Full-Stack & AI Developer (Since September 2025)
+
+					Since September 2025, I've been working on a cutting-edge product still in development. This role combines multiple areas of expertise, keeping me engaged and continuously learning.
+
+					My primary focus is [Python](https://www.python.org/) development, particularly in [AI](https://en.wikipedia.org/wiki/Artificial_intelligence) and machine learning applications. Beyond the backend, I also work on web development using modern frameworks and tools.
+					Additionally, I handle [DevOps](https://en.wikipedia.org/wiki/DevOps) tasks and infrastructure management, which complements my full-stack responsibilities.
+
+					The diverse nature of this role—spanning AI development, web technologies, and DevOps—provides me with valuable exposure to different aspects of building a complete product.
+					Working on something unreleased is exciting, as it comes with unique challenges and the opportunity to shape the product from its early stages.
+
+					I'm continuously learning and adapting to the various technologies and methodologies required, making this an enriching experience for my professional development.
+				""".trimIndent(),
+					0.7.s
 				)
 			}
 		}
