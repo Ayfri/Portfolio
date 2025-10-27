@@ -4,13 +4,13 @@ import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
 import kotlinx.html.*
 import org.commonmark.node.Text
-import org.jetbrains.kotlin.gradle.plugin.extraProperties
 import java.net.HttpURLConnection
 import java.net.URI
 
 plugins {
-	alias(libs.plugins.kotlin.multiplatform)
 	alias(libs.plugins.kotlin.compose)
+	alias(libs.plugins.kotlin.js.plain.objects)
+	alias(libs.plugins.kotlin.multiplatform)
 
 	alias(libs.plugins.kobweb.application)
 	alias(libs.plugins.kobwebx.markdown)
