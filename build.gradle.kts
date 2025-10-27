@@ -238,12 +238,21 @@ kobweb {
 					meta(property = "twitter:image", content = image)
 					meta(property = "twitter:site", content = twitterHandle)
 
-					link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;700&display=swap", rel = "stylesheet")
-					link(href = "https://dev-cats.github.io/code-snippets/JetBrainsMono.css", rel = "stylesheet")
+					link(rel="preconnect", href="https://fonts.googleapis.com")
+					link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap", rel = "stylesheet")
+					link(href = "/JetBrainsMono.css", rel = "preload", htmlAs = LinkAs.style) {
+						attributes += "fetchpriority" to "high"
+						onLoad = "this.rel='stylesheet'"
+					}
 
-					link(href = "/prism.min.css", rel = "stylesheet")
+					link(rel = "preload", href = "/prism.min.css", htmlAs = LinkAs.style) {
+						attributes += "fetchpriority" to "low"
+						onLoad = "this.rel='stylesheet'"
+					}
 					script(src = "/prism.min.js", type = "text/javascript") {
 						attributes += "data-manual" to ""
+						attributes += "fetchpriority" to "low"
+						async = true
 					}
 
 					script(src = "https://kit.fontawesome.com/74fed0e2b5.js", type = "text/javascript") {
