@@ -56,7 +56,7 @@ fun Projects() {
 
 		// Extract all unique tags, languages, and users with counts
 		val allTags = remember {
-			allRepos.flatMap { it.topics }
+			allRepos.flatMap { it.topics.toList() }
 				.groupBy { it }
 				.map { it.key to it.value.size }
 				.sortedByDescending { it.second }
