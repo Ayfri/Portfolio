@@ -9,15 +9,8 @@ import com.varabyte.kobweb.navigation.OpenLinkStrategy
 import com.varabyte.kobweb.navigation.UpdateHistoryMode
 import io.github.ayfri.externals.TextRenderer
 import io.github.ayfri.externals.use
-import kotlinx.serialization.json.Json
 
 const val MAIL_TO = "pierre.ayfri@gmail.com"
-
-val jsonEncoder = Json {
-	encodeDefaults = true
-	explicitNulls = false
-	classDiscriminator = "@type"
-}
 
 @App
 @Composable

@@ -1,10 +1,8 @@
 package io.github.ayfri.components
 
-import io.github.ayfri.jsonEncoder
 import io.github.ayfri.jsonld.generateJsonLD
 import kotlinx.browser.document
 import kotlinx.browser.window
-import kotlinx.serialization.encodeToString
 import org.jetbrains.compose.web.renderComposable
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.asList
@@ -44,7 +42,7 @@ fun setJsonLD() = renderComposable(document.head!!) {
 	Script {
 		attr("type", "application/ld+json")
 		ref {
-			it.innerHTML = jsonEncoder.encodeToString(generateJsonLD(window.location.pathname))
+			it.innerHTML = JSON.stringify(generateJsonLD(window.location.pathname))
 
 			onDispose {}
 		}

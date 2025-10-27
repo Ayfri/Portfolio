@@ -1,6 +1,5 @@
 package io.github.ayfri.pages.projects
 
-import JsonLD
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.compose.css.*
@@ -16,6 +15,7 @@ import io.github.ayfri.CodeTheme
 import io.github.ayfri.components.*
 import io.github.ayfri.data.gitHubData
 import io.github.ayfri.ensureSuffix
+import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectJsonLD
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph

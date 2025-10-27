@@ -18,112 +18,180 @@ val socialMediaLinks = listOf(
 )
 
 fun generateJsonLD(path: String) = GraphJsonLD(
-	listOfNotNull(
+	context = "https://schema.org",
+	graph = listOfNotNull(
 		getArticleJsonLD(path),
 		defaultJsonLD(),
-	)
+	).toTypedArray(),
+	type = "Graph",
 )
 
 fun generateProjectJsonLD(project: GitHubRepository, path: String) = GraphJsonLD(
-	listOf(
+	context = "https://schema.org",
+	graph = arrayOf(
 		getProjectJsonLD(project, path),
 		getProjectBreadcrumbJsonLD(project, path),
-	)
+	),
+	type = "Graph",
 )
 
 fun generateProjectsListJsonLD(projects: List<GitHubRepository>) = GraphJsonLD(
-	listOf(
+	context = "https://schema.org",
+	graph = arrayOf(
 		getProjectsListJsonLD(projects),
-	)
+	),
+	type = "Graph",
 )
 
 fun getArticleJsonLD(path: String) = articlesEntries.find { it.path == path }?.let {
 	BlogArticleJsonLD(
 		author = PersonJsonLD(
+			context = "https://schema.org",
+			image = null,
 			name = "Ayfri",
-			sameAs = socialMediaLinks,
+			sameAs = socialMediaLinks.toTypedArray(),
+			type = "Person",
 			url = AppGlobals["url"],
 		),
-		datePublished = it.date,
+		context = "https://schema.org",
 		dateModified = it.dateModified,
-		inLanguage = "en-US",
+		datePublished = it.date,
 		headline = it.title,
-		keywords = it.keywords,
+		image = null,
+		inLanguage = "en-US",
+		keywords = it.keywords.toTypedArray(),
+		mainEntityOfPage = WebPageJsonLD(
+			context = "https://schema.org",
+			headline = it.title,
+			image = null,
+			keywords = it.keywords.toTypedArray(),
+			type = "WebPage",
+			url = AppGlobals["url"] + it.path.ensureSuffix("/"),
+		),
+		type = "BlogPosting",
 		url = AppGlobals["url"] + it.path.ensureSuffix("/"),
 	)
 }
 
 fun getProjectJsonLD(project: GitHubRepository, path: String) = SoftwareSourceCodeJsonLD(
-	name = project.name,
-	description = project.description,
 	author = PersonJsonLD(
-		name = project.owner.login,
+		context = "https://schema.org",
 		image = project.owner.avatarUrl,
+		name = project.owner.login,
+		sameAs = null,
+		type = "Person",
 		url = project.owner.htmlUrl,
 	),
 	codeRepository = project.htmlUrl,
-	programmingLanguage = project.language,
+	context = "https://schema.org",
 	dateCreated = project.createdAt,
 	dateModified = project.updatedAt,
-	keywords = project.topics,
+	description = project.description,
+	keywords = project.topics.toTypedArray(),
+	license = null,
+	name = project.name,
+	programmingLanguage = project.language,
+	type = "SoftwareSourceCode",
 	url = AppGlobals["url"]!! + path.ensureSuffix("/"),
 )
 
 fun getProjectBreadcrumbJsonLD(project: GitHubRepository, path: String) = BreadcrumbListJsonLD(
-	itemListElement = listOf(
+	context = "https://schema.org",
+	itemListElement = arrayOf(
 		ListItemJsonLD(
-			position = 1,
+			context = "https://schema.org",
 			item = WebPageJsonLD(
+				context = "https://schema.org",
 				headline = "Home",
+				image = null,
+				keywords = null,
+				type = "WebPage",
 				url = AppGlobals["url"]!!,
-			)
+			),
+			position = 1,
+			type = "ListItem",
 		),
 		ListItemJsonLD(
-			position = 2,
+			context = "https://schema.org",
 			item = WebPageJsonLD(
+				context = "https://schema.org",
 				headline = "Projects",
+				image = null,
+				keywords = null,
+				type = "WebPage",
 				url = AppGlobals["url"]!! + "/projects/",
-			)
+			),
+			position = 2,
+			type = "ListItem",
 		),
 		ListItemJsonLD(
-			position = 3,
+			context = "https://schema.org",
 			item = WebPageJsonLD(
+				context = "https://schema.org",
 				headline = project.owner.login,
+				image = null,
+				keywords = null,
+				type = "WebPage",
 				url = AppGlobals["url"]!! + "/projects/?user=${project.owner.login}",
-			)
+			),
+			position = 3,
+			type = "ListItem",
 		),
 		ListItemJsonLD(
-			position = 4,
+			context = "https://schema.org",
 			item = WebPageJsonLD(
+				context = "https://schema.org",
 				headline = project.name,
+				image = null,
+				keywords = null,
+				type = "WebPage",
 				url = AppGlobals["url"]!! + path.ensureSuffix("/"),
-			)
+			),
+			position = 4,
+			type = "ListItem",
 		)
-	)
+	),
+	type = "BreadcrumbList",
 )
 
 fun getProjectsListJsonLD(projects: List<GitHubRepository>) = ItemListJsonLD(
+	context = "https://schema.org",
 	itemListElement = projects.take(10).mapIndexed { index, project ->
 		ListItemJsonLD(
-			position = index + 1,
+			context = "https://schema.org",
 			item = SoftwareSourceCodeJsonLD(
-				name = project.name,
-				description = project.description,
 				author = PersonJsonLD(
-					name = project.owner.login,
+					context = "https://schema.org",
 					image = project.owner.avatarUrl,
+					name = project.owner.login,
+					sameAs = null,
+					type = "Person",
 					url = project.owner.htmlUrl,
 				),
 				codeRepository = project.htmlUrl,
+				context = "https://schema.org",
+				dateCreated = null,
+				dateModified = null,
+				description = project.description,
+				keywords = null,
+				license = null,
+				name = project.name,
 				programmingLanguage = project.language,
+				type = "SoftwareSourceCode",
 				url = AppGlobals["url"]!! + "/projects/${project.fullName}/",
-			)
+			),
+			position = index + 1,
+			type = "ListItem",
 		)
-	}
+	}.toTypedArray(),
+	numberOfItems = projects.take(10).size,
+	type = "ItemList",
 )
 
 fun defaultJsonLD() = WebSiteJsonLD(
+	context = "https://schema.org",
 	name = AppGlobals["author"]!!,
+	sameAs = socialMediaLinks.toTypedArray(),
+	type = "WebSite",
 	url = AppGlobals["url"]!!,
-	sameAs = socialMediaLinks,
 )

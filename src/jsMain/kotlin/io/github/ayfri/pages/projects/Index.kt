@@ -1,8 +1,10 @@
 package io.github.ayfri.pages.projects
 
-import JsonLD
 import androidx.compose.runtime.*
-import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.Cursor
+import com.varabyte.kobweb.compose.css.TextAlign
+import com.varabyte.kobweb.compose.css.cursor
+import com.varabyte.kobweb.compose.css.textAlign
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
@@ -12,6 +14,7 @@ import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
 import io.github.ayfri.data.gitHubData
+import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectsListJsonLD
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.linearGradient
@@ -23,8 +26,6 @@ import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.placeholder
 import org.jetbrains.compose.web.attributes.selected
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.AlignItems
-import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.url.URLSearchParams
 
@@ -36,7 +37,7 @@ fun Projects() {
 		Style(DataStyle)
 		Style(CodeTheme)
 
-		val context = rememberPageContext()
+		rememberPageContext()
 		val searchParams = URLSearchParams(window.location.search)
 		val initialTagFilter = searchParams.get("tag") ?: ""
 		val initialUserFilter = searchParams.get("user") ?: ""
@@ -542,8 +543,8 @@ object ProjectsStyle : StyleSheet() {
 	val noResults by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		alignItems(org.jetbrains.compose.web.css.AlignItems.Center)
-		justifyContent(org.jetbrains.compose.web.css.JustifyContent.Center)
+		alignItems(AlignItems.Center)
+		justifyContent(JustifyContent.Center)
 		gap(15.px)
 		padding(50.px)
 		gridColumn("1 / -1")
