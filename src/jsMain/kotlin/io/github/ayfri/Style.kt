@@ -1,5 +1,7 @@
 package io.github.ayfri
 
+import com.varabyte.kobweb.compose.css.FontOpticalSizing
+import com.varabyte.kobweb.compose.css.fontOpticalSizing
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -48,6 +50,7 @@ object AppStyle : StyleSheet() {
 		"body" {
 			backgroundColor(Color(CONTENT_BACKGROUND_COLOR))
 			fontFamily("Open Sans", "sans-serif")
+			fontOpticalSizing(FontOpticalSizing.Auto)
 			margin(0.px)
 
 			scrollbarColor(scrollbarColor, scrollbarThumbColor)

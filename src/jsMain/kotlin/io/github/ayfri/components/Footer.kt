@@ -1,8 +1,10 @@
 package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.FontOpticalSizing
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.borderColor
+import com.varabyte.kobweb.compose.css.fontOpticalSizing
 import com.varabyte.kobweb.compose.css.gridTemplateRows
 import com.varabyte.kobweb.compose.css.scale
 import com.varabyte.kobweb.compose.css.textAlign
@@ -585,6 +587,7 @@ object FooterStyle : StyleSheet() {
 					width(1.px)
 				}
 				fontFamily("Open Sans", "sans-serif")
+				fontOpticalSizing(FontOpticalSizing.Auto)
 				padding(.5.cssRem)
 				transitions {
 					defaultDuration(0.3.s)
