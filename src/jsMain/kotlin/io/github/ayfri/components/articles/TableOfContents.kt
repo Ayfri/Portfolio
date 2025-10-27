@@ -88,7 +88,7 @@ object TableOfContentsStyle : StyleSheet() {
 
 	val title by style {
 		fontSize(1.5.cssRem)
-		margin(0.px, 0.px, 1.5.cssRem)
+		margin(0.px, 0.px, 1.cssRem)
 		background(linearGradient(45.deg) {
 			stop(Color("#00D4FF"))
 			stop(Color("#FF0080"))
@@ -110,14 +110,14 @@ object TableOfContentsStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val item by style {
-		margin(0.8.cssRem, 0.px)
+		margin(0.2.cssRem, 0.px)
 
 		"a" {
 			color(Color(ITEM_TEXT_COLOR))
 			textDecoration("none")
 			fontSize(0.95.cssRem)
 			display(DisplayStyle.Block)
-			padding(0.5.cssRem, 0.8.cssRem)
+			padding(0.35.cssRem, 0.8.cssRem)
 			borderRadius(0.5.cssRem)
 
 			transitions {
