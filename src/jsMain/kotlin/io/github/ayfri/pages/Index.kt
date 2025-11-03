@@ -14,8 +14,10 @@ import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.HomeCard
 import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.utils.*
-import io.github.ayfri.utils.Overflow
+import io.github.ayfri.utils.linearGradient
+import io.github.ayfri.utils.margin
+import io.github.ayfri.utils.n
+import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems

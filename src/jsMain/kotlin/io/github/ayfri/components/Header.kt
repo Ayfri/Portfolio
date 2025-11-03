@@ -4,21 +4,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.varabyte.kobweb.compose.css.BoxSizing
-import com.varabyte.kobweb.compose.css.WhiteSpace
-import com.varabyte.kobweb.compose.css.boxSizing
-import com.varabyte.kobweb.compose.css.content
-import com.varabyte.kobweb.compose.css.scale
-import com.varabyte.kobweb.compose.css.whiteSpace
-import com.varabyte.kobweb.compose.css.zIndex
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.clamp
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle.mobileFirstBreak
 import io.github.ayfri.AppStyle.mobileSecondBreak
 import io.github.ayfri.data.REPO_LINK
-import io.github.ayfri.utils.*
+import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.Header
 import org.jetbrains.compose.web.dom.I
@@ -80,17 +78,13 @@ object HeaderStyle : StyleSheet() {
 
 	val navbar by style {
 		alignItems(AlignItems.Center)
-		background(linearGradient(135.deg) {
-			stop(Color(NAVBAR_COLOR))
-			stop(Color(NAVBAR_COLOR_SECONDARY), 30.percent)
-			stop(Color("#2A1B3D"), 70.percent)
-			stop(Color(NAVBAR_COLOR_SECONDARY), 100.percent)
+		backgroundImage(linearGradient(135.deg) {
+			add(Color(NAVBAR_COLOR))
+			add(Color(NAVBAR_COLOR_SECONDARY), 30.percent)
+			add(Color("#2A1B3D"), 70.percent)
+			add(Color(NAVBAR_COLOR_SECONDARY), 100.percent)
 		})
-		borderBottom {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		borderBottom(2.px, LineStyle.Solid, Color.transparent)
 		property("border-image", "linear-gradient(90deg, $NAVBAR_ACCENT_START, $NAVBAR_ACCENT_END) 1")
 		property("box-shadow", "0 2px 10px rgba(0, 0, 0, 0.3)")
 		boxSizing(BoxSizing.BorderBox)
@@ -144,9 +138,9 @@ object HeaderStyle : StyleSheet() {
 				left(50.percent)
 				width(0.px)
 				height(2.px)
-				background(linearGradient(90.deg) {
-					stop(Color(NAVBAR_ACCENT_START))
-					stop(Color(NAVBAR_ACCENT_END))
+				backgroundImage(linearGradient(90.deg) {
+					add(Color(NAVBAR_ACCENT_START))
+					add(Color(NAVBAR_ACCENT_END))
 				})
 				transform {
 					translateX((-50).percent)
@@ -165,9 +159,9 @@ object HeaderStyle : StyleSheet() {
 				left(0.px)
 				right(0.px)
 				bottom(0.px)
-				background(linearGradient(135.deg) {
-					stop(Color("rgba(0, 212, 255, 0.05)"))
-					stop(Color("rgba(255, 0, 128, 0.05)"))
+				backgroundImage(linearGradient(135.deg) {
+					add(Color("rgba(0, 212, 255, 0.05)"))
+					add(Color("rgba(255, 0, 128, 0.05)"))
 				})
 				opacity(0)
 				borderRadius(0.3.cssRem)
@@ -211,9 +205,9 @@ object HeaderStyle : StyleSheet() {
 				left(0.px)
 				width(100.percent)
 
-				background(linearGradient(180.deg) {
-					stop(Color(NAVBAR_COLOR))
-					stop(Color(NAVBAR_COLOR_SECONDARY))
+				backgroundImage(linearGradient(180.deg) {
+					add(Color(NAVBAR_COLOR))
+					add(Color(NAVBAR_COLOR_SECONDARY))
 				})
 				property("box-shadow", "0 5px 15px rgba(0, 0, 0, 0.4)")
 
@@ -225,11 +219,7 @@ object HeaderStyle : StyleSheet() {
 					"a" {
 						width(100.percent)
 						lineHeight(navbarHeight.value() * .8)
-						borderBottom {
-							width(1.px)
-							style(LineStyle.Solid)
-							color(Color("rgba(0, 212, 255, 0.15)"))
-						}
+						borderBottom(1.px, LineStyle.Solid, Color("rgba(0, 212, 255, 0.15)"))
 					}
 				}
 			}
@@ -243,11 +233,7 @@ object HeaderStyle : StyleSheet() {
 		height(80.percent)
 		marginRight(1.vw)
 		padding(.5.cssRem, 1.cssRem)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		border(1.px, LineStyle.Solid, Color.transparent)
 		transitions {
 			defaultDuration(0.3.s)
 			properties("all")

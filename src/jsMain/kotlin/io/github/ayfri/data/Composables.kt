@@ -2,7 +2,7 @@ package io.github.ayfri.data
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.ObjectFit
+import com.varabyte.kobweb.compose.css.functions.clamp
 import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
@@ -10,9 +10,7 @@ import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.P
 import io.github.ayfri.pages.TextIcon
 import io.github.ayfri.pages.skills
-import io.github.ayfri.utils.*
-import io.github.ayfri.utils.Cursor
-import io.github.ayfri.utils.Overflow
+import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.alt
 import org.jetbrains.compose.web.css.*

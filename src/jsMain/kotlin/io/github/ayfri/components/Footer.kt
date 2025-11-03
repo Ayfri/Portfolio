@@ -1,25 +1,24 @@
 package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.FontOpticalSizing
-import com.varabyte.kobweb.compose.css.TextAlign
-import com.varabyte.kobweb.compose.css.borderColor
-import com.varabyte.kobweb.compose.css.fontOpticalSizing
-import com.varabyte.kobweb.compose.css.gridTemplateRows
-import com.varabyte.kobweb.compose.css.scale
-import com.varabyte.kobweb.compose.css.textAlign
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle
 import io.github.ayfri.MAIL_TO
 import io.github.ayfri.data.*
 import io.github.ayfri.ifNotBlank
-import io.github.ayfri.utils.*
+import io.github.ayfri.utils.list
+import io.github.ayfri.utils.margin
+import io.github.ayfri.utils.n
+import io.github.ayfri.utils.size
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.*
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.keywords.auto
-import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
@@ -256,13 +255,13 @@ fun Footer() {
 					Div({
 						classes(FooterStyle.socialLinks)
 					}) {
-						footerSocials.forEach {
-							A(it.url, {
+						footerSocials.forEach { footerSocial ->
+							A(footerSocial.url, {
 								classes(FooterStyle.socialIcon)
 								attr("target", "_blank")
-								title(it.iconName.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() })
+								title(footerSocial.iconName.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() })
 							}) {
-								I(FontAwesomeType.BRAND, it.iconName)
+								I(FontAwesomeType.BRAND, footerSocial.iconName)
 							}
 						}
 					}
@@ -302,10 +301,10 @@ object FooterStyle : StyleSheet() {
 	const val FOOTER_LINK_COLOR = "#aaaaaa"
 
 	val footerWrapper by style {
-		background(linearGradient(180.deg) {
-			stop(Color("#1E1535"))
-			stop(Color(FOOTER_COLOR), 30.percent)
-			stop(Color("#0F0A1A"), 100.percent)
+		backgroundImage(linearGradient(180.deg) {
+			add(Color("#1E1535"))
+			add(Color(FOOTER_COLOR), 30.percent)
+			add(Color("#0F0A1A"), 100.percent)
 		})
 
 		display(DisplayStyle.Flex)
@@ -316,27 +315,23 @@ object FooterStyle : StyleSheet() {
 	val topBar by style {
 		height(2.px)
 		width(100.percent)
-		background(linearGradient(90.deg) {
-			stop(Color.transparent)
-			stop(Color(FOOTER_ACCENT_START), 20.percent)
-			stop(Color(FOOTER_ACCENT_END), 80.percent)
-			stop(Color.transparent)
+		backgroundImage(linearGradient(90.deg) {
+			add(Color.transparent)
+			add(Color(FOOTER_ACCENT_START), 20.percent)
+			add(Color(FOOTER_ACCENT_END), 80.percent)
+			add(Color.transparent)
 		})
 	}
 
 	val contactSection by style {
 		padding(2.cssRem, 0.px)
 		color(Color.white)
-		background(linearGradient(135.deg) {
-			stop(Color("#1A1225"))
-			stop(Color("#2A1B3D"), 50.percent)
-			stop(Color("#1A1225"), 100.percent)
+		backgroundImage(linearGradient(135.deg) {
+			add(Color("#1A1225"))
+			add(Color("#2A1B3D"), 50.percent)
+			add(Color("#1A1225"), 100.percent)
 		})
-		borderBottom {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		borderBottom(2.px, LineStyle.Solid, Color.transparent)
 		property("border-image", "linear-gradient(90deg, $FOOTER_ACCENT_START, $FOOTER_ACCENT_END) 1")
 	}
 
@@ -359,9 +354,9 @@ object FooterStyle : StyleSheet() {
 		textAlign(TextAlign.Center)
 		marginTop(0.px)
 		marginBottom(1.5.cssRem)
-		background(linearGradient(45.deg) {
-			stop(Color(FOOTER_ACCENT_START))
-			stop(Color(FOOTER_ACCENT_END))
+		backgroundImage(linearGradient(45.deg) {
+			add(Color(FOOTER_ACCENT_START))
+			add(Color(FOOTER_ACCENT_END))
 		})
 		property("-webkit-background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
@@ -392,7 +387,7 @@ object FooterStyle : StyleSheet() {
 	}
 
 	val footerColumn by style {
-		flex("1 1 250px")
+		flex(1, 1, 250.px)
 		margin(0.px, 1.cssRem, 2.cssRem)
 		maxWidth(350.px)
 
@@ -405,24 +400,20 @@ object FooterStyle : StyleSheet() {
 	}
 
 	val footerHeading by style {
+		borderBottom(2.px, LineStyle.Solid, Color.transparent)
+		borderImageSlice(BorderImageSlice.of(1))
 		color(Color(FOOTER_HEADING_COLOR))
 		fontSize(1.2.cssRem)
 		fontWeight(700)
 		marginTop(0.px)
 		marginBottom(1.2.cssRem)
 		paddingBottom(0.5.cssRem)
-		borderBottom {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
 		property("border-image", "linear-gradient(90deg, $FOOTER_ACCENT_START, $FOOTER_ACCENT_END) 1")
-		property("border-image-slice", "1")
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val footerList by style {
-		listStyle("none")
+		listStyle(ListStyle.None)
 		padding(0.px)
 		margin(0.px)
 
@@ -432,7 +423,7 @@ object FooterStyle : StyleSheet() {
 
 		"a" {
 			color(Color(FOOTER_LINK_COLOR))
-			textDecoration("none")
+			textDecorationLine(TextDecorationLine.None)
 			transitions {
 				defaultDuration(0.3.s)
 				properties("color", "text-shadow")
@@ -440,7 +431,7 @@ object FooterStyle : StyleSheet() {
 
 			hover(self) style {
 				color(Color(FOOTER_LINK_HOVER))
-				textDecoration("underline")
+				textDecorationLine(TextDecorationLine.Underline)
 				property("text-shadow", "0 0 8px rgba(0, 212, 255, 0.6)")
 			}
 		}
@@ -449,7 +440,7 @@ object FooterStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val footerLink by style {
 		color(Color(FOOTER_LINK_COLOR))
-		textDecoration("none")
+		textDecorationLine(TextDecorationLine.None)
 		display(DisplayStyle.InlineBlock)
 		marginTop(0.8.cssRem)
 		transitions {
@@ -459,7 +450,7 @@ object FooterStyle : StyleSheet() {
 
 		hover(self) style {
 			color(Color(FOOTER_LINK_HOVER))
-			textDecoration("underline")
+			textDecorationLine(TextDecorationLine.Underline)
 			property("text-shadow", "0 0 8px rgba(0, 212, 255, 0.6)")
 		}
 	}
@@ -482,13 +473,16 @@ object FooterStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			background(linearGradient(45.deg) {
-				stop(Color(FOOTER_ACCENT_START))
-				stop(Color(FOOTER_ACCENT_END))
+			backgroundImage(linearGradient(45.deg) {
+				add(Color(FOOTER_ACCENT_START))
+				add(Color(FOOTER_ACCENT_END))
 			})
+			transform {
+				translateY((-3).px)
+				scale(1.1)
+			}
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
-			property("transform", "translateY(-3px) scale(1.1)")
 			property("text-shadow", "0 0 15px rgba(255, 0, 128, 0.8)")
 		}
 	}
@@ -503,8 +497,8 @@ object FooterStyle : StyleSheet() {
 		borderRadius(0.5.cssRem)
 		marginTop(1.5.cssRem)
 		fontWeight(700)
-		textDecoration("none")
-		width(fitContent)
+		textDecorationLine(TextDecorationLine.None)
+		width(Width.FitContent)
 
 		transitions {
 			defaultDuration(0.3.s)
@@ -513,16 +507,16 @@ object FooterStyle : StyleSheet() {
 
 		hover(self) style {
 			backgroundColor(Color("#FFEA7F"))
-			property("transform", "translateY(-3px)")
+			transform { translateY((-3).px) }
 			property("box-shadow", "0 4px 8px rgba(0, 0, 0, 0.2)")
 		}
 	}
 
 	val contactForm by style {
 		"button" {
-			background(linearGradient(45.deg) {
-				stop(Color(FOOTER_ACCENT_START))
-				stop(Color(FOOTER_ACCENT_END))
+			backgroundImage(linearGradient(45.deg) {
+				add(Color(FOOTER_ACCENT_START))
+				add(Color(FOOTER_ACCENT_END))
 			})
 			color(Color.white)
 			marginTop(1.cssRem)
@@ -540,27 +534,23 @@ object FooterStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val footerContactInputs by style {
 		display(DisplayStyle.Grid)
-		gridTemplateColumns(repeat(2, 1.fr))
-		gridTemplateRows {
-			repeat(4) {
-				size(auto)
-			}
-		}
 		gap(1.cssRem)
+		gridTemplateColumns(GridEntry.repeat(2, GridEntry.TrackSize(1.fr)))
+		gridTemplateRows(GridEntry.repeat(4, GridEntry.TrackSize.Auto))
 
-		child(self, nthChild(Nth.Functional(1))) style {
+		child(self, nthChild(1.n)) style {
 			gridArea("1", "1", "2", "2")
 		}
 
-		child(self, nthChild(Nth.Functional(2))) style {
+		child(self, nthChild(2.n)) style {
 			gridArea("1", "2", "2", "3")
 		}
 
-		child(self, nthChild(Nth.Functional(3))) style {
+		child(self, nthChild(3.n)) style {
 			gridArea("2", "1", "3", "3")
 		}
 
-		child(self, nthChild(Nth.Functional(4))) style {
+		child(self, nthChild(4.n)) style {
 			gridArea("3", "1", "5", "3")
 		}
 
@@ -581,11 +571,7 @@ object FooterStyle : StyleSheet() {
 				backgroundColor(Color("#252525"))
 				borderRadius(.4.cssRem)
 				color(Color("#FFFFFF"))
-				border {
-					color(Color("#444444"))
-					style(LineStyle.Solid)
-					width(1.px)
-				}
+				border(1.px, LineStyle.Solid, Color("#444444"))
 				fontFamily("Open Sans", "sans-serif")
 				fontOpticalSizing(FontOpticalSizing.Auto)
 				padding(.5.cssRem)
@@ -596,7 +582,7 @@ object FooterStyle : StyleSheet() {
 
 				self + focus style {
 					borderColor(Color.white)
-					outline("none")
+					outlineStyle(LineStyle.None)
 				}
 			}
 
@@ -621,14 +607,10 @@ object FooterStyle : StyleSheet() {
 	val footerCopyright by style {
 		backgroundColor(Color(FOOTER_DARK_COLOR))
 		padding(1.cssRem)
-		textAlign("center")
+		textAlign(TextAlign.Center)
 		fontSize(0.9.cssRem)
 		color(Color("#888888"))
-		borderTop {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		borderTop(1.px, LineStyle.Solid, Color.transparent)
 		property("border-image", "linear-gradient(90deg, transparent, $FOOTER_ACCENT_START, $FOOTER_ACCENT_END, transparent) 1")
 
 		"p" {

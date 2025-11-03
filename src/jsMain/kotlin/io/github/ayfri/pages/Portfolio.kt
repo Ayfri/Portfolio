@@ -1,17 +1,15 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.TextAlign
-import com.varabyte.kobweb.compose.css.content
-import com.varabyte.kobweb.compose.css.textAlign
+import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.utils.ObjectFit
 import io.github.ayfri.utils.linearGradient
-import io.github.ayfri.utils.objectFit
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*

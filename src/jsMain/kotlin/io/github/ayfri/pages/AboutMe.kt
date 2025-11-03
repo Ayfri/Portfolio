@@ -4,10 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.varabyte.kobweb.compose.css.TextAlign
-import com.varabyte.kobweb.compose.css.scrollPaddingTop
-import com.varabyte.kobweb.compose.css.textAlign
-import com.varabyte.kobweb.compose.css.zIndex
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
+import com.varabyte.kobweb.compose.css.functions.max
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.FontAwesomeType
@@ -16,11 +15,13 @@ import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.utils.*
+import io.github.ayfri.utils.size
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
@@ -353,11 +354,11 @@ object AboutMeStyle : StyleSheet() {
 			timelineOffset(1.5.cssRem)
 			paddingBottom(2.cssRem)
 
-			background(linearGradient(180.deg) {
-				stop(Color("#0A0A0F"), (-3).percent)
-				stop(Color("#1A1225"), 14.percent)
-				stop(Color("#2A1B3D"), 65.percent)
-				stop(Color("#1E1535"), 90.percent)
+			backgroundImage(linearGradient(180.deg) {
+				add(Color("#0A0A0F"), (-3).percent)
+				add(Color("#1A1225"), 14.percent)
+				add(Color("#2A1B3D"), 65.percent)
+				add(Color("#1E1535"), 90.percent)
 			})
 		}
 
@@ -383,9 +384,9 @@ object AboutMeStyle : StyleSheet() {
 			fontSize(3.cssRem)
 			margin(0.px)
 
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
@@ -433,11 +434,11 @@ object AboutMeStyle : StyleSheet() {
 
 	val sectionSelection by keyframes {
 		from {
-			backgroundPosition("200% 0%")
+			backgroundPosition(BackgroundPosition.of(CSSPosition(200.percent, 0.percent)))
 		}
 
 		to {
-			backgroundPosition("0% 0%")
+			backgroundPosition(BackgroundPosition.of(CSSPosition(0.percent, 0.percent)))
 		}
 	}
 
@@ -457,11 +458,11 @@ object AboutMeStyle : StyleSheet() {
 		width(timelineSize.value())
 
 		child(self, universal) style {
-			background(linearGradient {
-				stop(Color(TIMELINE_BG_GRADIANT_START_COLOR))
-				stop(Color(TIMELINE_BG_GRADIANT_END_COLOR))
+			backgroundImage(linearGradient {
+				add(Color(TIMELINE_BG_GRADIANT_START_COLOR))
+				add(Color(TIMELINE_BG_GRADIANT_END_COLOR))
 			})
-			backgroundAttachment("fixed")
+			backgroundAttachment(BackgroundAttachment.Fixed)
 			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.4)")
 
 			marginTop((-.2).cssRem)
@@ -479,7 +480,7 @@ object AboutMeStyle : StyleSheet() {
 			}
 
 			group(hover(self), self + className("selected")) style {
-				boxShadow(Color("#FF008080"), offset = 0.px, blur = .8.cssRem)
+				boxShadow(color = Color("#FF008080"), blurRadius = .8.cssRem)
 				zIndex(3)
 			}
 
@@ -498,14 +499,14 @@ object AboutMeStyle : StyleSheet() {
 				property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.6)")
 
 				self + after style {
-					property("content", "attr(data-date)")
+					content("attr(data-date)".unsafeCast<Content>())
 					fontWeight(700)
 
 					position(Position.Absolute)
 					top(0.px)
 					left((-3).cssRem)
 					height(100.percent)
-					width(minContent)
+					width(Width.MinContent)
 
 					animation(appearLeft) {
 						duration(.4.s)
@@ -524,7 +525,7 @@ object AboutMeStyle : StyleSheet() {
 			className("round") + className("selected") + after style {
 				left(50.percent)
 				transform { translateX((-50).percent) }
-				property("top", "unset")
+				top(Top.Unset)
 				bottom((-2.5).cssRem)
 
 				backgroundColor(Color("#00000090"))
@@ -630,13 +631,13 @@ object AboutMeStyle : StyleSheet() {
 					timingFunction(AnimationTimingFunction.EaseInOut)
 				}
 
-				property("background-size", "200% 100%")
 				backgroundImage(linearGradient(90.deg) {
-					stop(Color("#2A1B3D"))
-					stop(Color("#1A1225"))
-					stop(Color.transparent)
+					add(Color("#2A1B3D"))
+					add(Color("#1A1225"))
+					add(Color.transparent)
 				})
-				backgroundRepeat("no-repeat")
+				backgroundRepeat(BackgroundRepeat.NoRepeat)
+				backgroundSize(BackgroundSize.of(200.percent, 100.percent))
 			}
 
 			self + nthChild(Nth.Even) style {
@@ -648,9 +649,9 @@ object AboutMeStyle : StyleSheet() {
 			}
 
 			"h2" {
-				background(linearGradient(45.deg) {
-					stop(Color("#00D4FF"))
-					stop(Color("#FF0080"))
+				backgroundImage(linearGradient(45.deg) {
+					add(Color("#00D4FF"))
+					add(Color("#FF0080"))
 				})
 				property("-webkit-background-clip", "text")
 				property("-webkit-text-fill-color", "transparent")

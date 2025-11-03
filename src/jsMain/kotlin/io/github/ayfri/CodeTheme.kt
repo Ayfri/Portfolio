@@ -1,12 +1,8 @@
 package io.github.ayfri
 
-import com.varabyte.kobweb.compose.css.FontStyle
-import com.varabyte.kobweb.compose.css.TextShadow
-import com.varabyte.kobweb.compose.css.fontStyle
-import com.varabyte.kobweb.compose.css.textShadow
-import io.github.ayfri.utils.Cursor
-import io.github.ayfri.utils.cursor
+import com.varabyte.kobweb.compose.css.*
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.selectors.CSSSelector
 
 object CodeTheme : StyleSheet() {

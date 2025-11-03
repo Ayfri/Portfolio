@@ -2,6 +2,9 @@ package io.github.ayfri.layouts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import com.varabyte.kobweb.compose.css.FontStyle
+import com.varabyte.kobweb.compose.css.borderLeft
+import com.varabyte.kobweb.compose.css.fontStyle
 import com.varabyte.kobweb.compose.css.margin
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
@@ -404,16 +407,12 @@ object MarkdownStyle : StyleSheet() {
 
 		// Enhanced blockquote styling
 		"blockquote" {
-			borderLeft {
-				width(4.px)
-				style(LineStyle.Solid)
-				color(Color("#00D4FF"))
-			}
+			borderLeft(4.px, LineStyle.Solid, Color("#00D4FF"))
 			backgroundColor(Color("#1A1225"))
 			borderRadius(0.5.cssRem)
 			padding(1.cssRem)
 			margin(1.cssRem, 0.px)
-			fontStyle("italic")
+			fontStyle(FontStyle.Italic)
 		}
 	}
 }

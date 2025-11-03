@@ -3,8 +3,10 @@ package io.github.ayfri.pages
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import com.varabyte.kobweb.compose.css.TextAlign
-import com.varabyte.kobweb.compose.css.textAlign
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
+import com.varabyte.kobweb.compose.css.functions.max
+import com.varabyte.kobweb.compose.css.functions.toImage
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
@@ -14,9 +16,13 @@ import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.utils.*
+import io.github.ayfri.utils.marker
+import io.github.ayfri.utils.n
+import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.AlignSelf
 import org.jetbrains.compose.web.dom.*
 
 data class Language(
@@ -477,17 +483,21 @@ object SkillsStyle : StyleSheet() {
 		backgroundColor(Color(SKILLS_BACKGROUND_COLOR))
 
 		// Main background with gradient violet
-		background(linearGradient(180.deg) {
-			stop(Color("#0A0A0F"), (-3).percent)
-			stop(Color("#1A1225"), 14.percent)
-			stop(Color("#2A1B3D"), 65.percent)
-			stop(Color("#1E1535"), 90.percent)
+		backgroundImage(linearGradient(180.deg) {
+			add(Color("#0A0A0F"), (-3).percent)
+			add(Color("#1A1225"), 14.percent)
+			add(Color("#2A1B3D"), 65.percent)
+			add(Color("#1E1535"), 90.percent)
 		})
 	}
 
 	val skillsList by style {
 		display(DisplayStyle.Grid)
-		gridTemplateColumns(repeat("auto-fill", minmax(22.5.cssRem, 1.fr)))
+		gridTemplateColumns {
+			repeat(GridEntry.Repeat.Auto.Type.AutoFill) {
+				minmax(22.5.cssRem, 1.fr)
+			}
+		}
 		gap(2.cssRem)
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
@@ -534,9 +544,9 @@ object SkillsStyle : StyleSheet() {
 
 		"h2" {
 			fontSize(1.cssRem)
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
@@ -604,24 +614,20 @@ object SkillsStyle : StyleSheet() {
 
 		className("bottom") style {
 			self + not(empty) style {
-				borderTop {
-					style(LineStyle.Solid)
-					width(2.px)
-					color(Color.transparent)
-				}
+				borderTop(2.px, LineStyle.Solid, Color.transparent)
 				borderImageSource(linearGradient(45.deg) {
-					stop(Color("#00D4FF"))
-					stop(Color("#FF0080"))
-				})
-				borderImageSlice(1)
+					add(Color("#00D4FF"))
+					add(Color("#FF0080"))
+				}.toImage())
+				borderImageSlice(BorderImageSlice.of(1))
 			}
 
 			"h3" {
 				margin(0.px)
 
-				background(linearGradient(45.deg) {
-					stop(Color("#00D4FF"))
-					stop(Color("#FF0080"))
+				backgroundImage(linearGradient(45.deg) {
+					add(Color("#00D4FF"))
+					add(Color("#FF0080"))
 				})
 				property("-webkit-background-clip", "text")
 				property("-webkit-text-fill-color", "transparent")
@@ -636,18 +642,18 @@ object SkillsStyle : StyleSheet() {
 			"ul" {
 				paddingLeft(2.cssRem)
 
-				"li" + selector("::marker") style {
+				type("li") + marker style {
 					fontSize(.8.cssRem)
 				}
 			}
 
 			"a" {
 				color(Color(AppStyle.LINK_COLOR))
-				textDecoration("none")
+				textDecorationLine(TextDecorationLine.None)
 
 				hover {
 					color(Color(AppStyle.LINK_HOVER_COLOR))
-					textDecoration("underline")
+					textDecorationLine(TextDecorationLine.Underline)
 				}
 			}
 		}

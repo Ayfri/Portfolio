@@ -1,10 +1,7 @@
 package io.github.ayfri.pages.projects
 
 import androidx.compose.runtime.*
-import com.varabyte.kobweb.compose.css.Cursor
-import com.varabyte.kobweb.compose.css.TextAlign
-import com.varabyte.kobweb.compose.css.cursor
-import com.varabyte.kobweb.compose.css.textAlign
+import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
@@ -18,14 +15,14 @@ import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectsListJsonLD
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.linearGradient
-import io.github.ayfri.utils.minmax
-import io.github.ayfri.utils.repeat
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.placeholder
 import org.jetbrains.compose.web.attributes.selected
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.url.URLSearchParams
 
@@ -594,7 +591,11 @@ object ProjectsStyle : StyleSheet() {
 
 	val projectsList by style {
 		display(DisplayStyle.Grid)
-		gridTemplateColumns(repeat("auto-fill", minmax(25.cssRem, 1.fr)))
+		gridTemplateColumns {
+			repeat(GridEntry.Repeat.Auto.Type.AutoFill) {
+				minmax(25.cssRem, 1.fr)
+			}
+		}
 		gap(1.75.cssRem)
 		padding(0.px)
 

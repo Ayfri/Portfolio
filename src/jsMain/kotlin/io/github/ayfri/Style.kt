@@ -1,10 +1,9 @@
 package io.github.ayfri
 
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.max
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.utils.*
-import io.github.ayfri.utils.Cursor
-import io.github.ayfri.utils.ObjectFit
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.selectors.CSSSelector
@@ -28,8 +27,6 @@ object AppStyle : StyleSheet() {
 	const val LINK_HOVER_COLOR = "#95fbff"
 	const val MONO_FONT_FAMILY = "JetBrains Mono"
 	const val SPECIAL_TEXT_COLOR = "#B4BBFF"
-	const val TITLE_BACKGROUND_COLOR = "#252525"
-	const val TITLE_BORDER_COLOR = "#797979"
 
 	val mobileFirstBreak = 890.px
 	val mobileSecondBreak = 810.px
@@ -46,7 +43,6 @@ object AppStyle : StyleSheet() {
 		"html" {
 			scrollBehavior(ScrollBehavior.Smooth)
 			scrollPaddingTop(HeaderStyle.navbarHeight.value())
-			property("scroll-padding-top", HeaderStyle.navbarHeight.value())
 		}
 
 		"body" {
@@ -56,7 +52,7 @@ object AppStyle : StyleSheet() {
 			margin(0.px)
 
 			scrollbarColor(scrollbarColor, scrollbarThumbColor)
-			scrollbarWidth(scrollbarWidth)
+			scrollbarWidth(ScrollbarWidth.Thin)
 
 			webkitScrollbar {
 				width(scrollbarWidth)
@@ -77,13 +73,13 @@ object AppStyle : StyleSheet() {
 				properties("background-color", "color")
 			}
 
-			textDecoration("none")
+			textDecorationLine(TextDecorationLine.None)
 		}
 
 		linkStyle("p")
 
 		"button" {
-			property("border", "none")
+			borderStyle(LineStyle.None)
 
 			transitions {
 				defaultDelay(.25.s)
@@ -120,11 +116,7 @@ object AppStyle : StyleSheet() {
 	}
 
 	val title by style {
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		border(2.px, LineStyle.Solid, Color.transparent)
 		background("""
 			linear-gradient(#1A1225, #1A1225) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
@@ -176,11 +168,10 @@ object AppStyle : StyleSheet() {
 		backgroundColor(buttonColor.value(Color("#252525")))
 		borderRadius(.4.cssRem)
 		color(Color.white)
+		cursor(Cursor.Pointer)
 		fontSize(1.1.cssRem)
 		fontWeight(700)
 		padding(.7.cssRem, 1.2.cssRem)
-
-		cursor(Cursor.Pointer)
 
 		filter {
 			brightness(.8)
@@ -199,8 +190,8 @@ object AppStyle : StyleSheet() {
 	}
 
 	val avatar by style {
-		objectFit(ObjectFit.Cover)
 		borderRadius(100.vmax)
+		objectFit(ObjectFit.Cover)
 		size(15.cssRem)
 		filter {
 			dropShadow(
