@@ -2,35 +2,21 @@ package io.github.ayfri
 
 import org.jetbrains.compose.web.attributes.AttrsScope
 import org.w3c.dom.HTMLImageElement
+import web.html.ImageDecoding
+import web.html.Loading
+import web.http.FetchPriority
 
-enum class Priority {
-	HIGH,
-	LOW,
-	AUTO;
+
+fun AttrsScope<HTMLImageElement>.fetchPriority(priority: FetchPriority) {
+	attr("fetchpriority", priority.toString())
 }
 
-fun AttrsScope<HTMLImageElement>.fetchPriority(priority: Priority) {
-	attr("fetchpriority", priority.name.lowercase())
-}
-
-enum class Decoding {
-	SYNC,
-	ASYNC,
-	AUTO;
-}
-
-fun AttrsScope<HTMLImageElement>.decoding(decoding: Decoding) {
-	attr("decoding", decoding.name.lowercase())
-}
-
-enum class Loading {
-	EAGER,
-	LAZY,
-	AUTO;
+fun AttrsScope<HTMLImageElement>.decoding(decoding: ImageDecoding) {
+	attr("decoding", decoding.toString())
 }
 
 fun AttrsScope<HTMLImageElement>.loading(loading: Loading) {
-	attr("loading", loading.name.lowercase())
+	attr("loading", loading.toString())
 }
 
 fun AttrsScope<HTMLImageElement>.srcset(vararg srcset: Pair<String, String>) {
