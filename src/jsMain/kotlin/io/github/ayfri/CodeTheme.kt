@@ -7,11 +7,10 @@ import com.varabyte.kobweb.compose.css.textShadow
 import io.github.ayfri.utils.Cursor
 import io.github.ayfri.utils.cursor
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.Color.transparent
 import org.jetbrains.compose.web.css.selectors.CSSSelector
 
 object CodeTheme : StyleSheet() {
-	val backgroundColor = transparent
+	val backgroundColor = Color.transparent
 	val textColor = Color.white
 	val commentColor = Color("#757575")
 	val numberColor = Color("#f78c6c")
@@ -53,7 +52,7 @@ object CodeTheme : StyleSheet() {
 
 		child(type("pre") + attrContains("class", "language-"), type("code") + attrContains("class", "language-")) style {
 			color(textColor)
-			textShadow(TextShadow.of(color = transparent, offsetX = 0.px, offsetY = 0.px, blurRadius = 0.px))
+			textShadow(TextShadow.of(color = Color.transparent, offsetX = 0.px, offsetY = 0.px, blurRadius = 0.px))
 		}
 
 		scope("comment") style {
@@ -78,7 +77,7 @@ object CodeTheme : StyleSheet() {
 		}
 
 		scope("punctuation", "operator") style {
-			backgroundColor(transparent)
+			backgroundColor(backgroundColor)
 			color(punctuationColor)
 		}
 

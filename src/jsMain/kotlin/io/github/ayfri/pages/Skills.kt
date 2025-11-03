@@ -3,6 +3,8 @@ package io.github.ayfri.pages
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
+import com.varabyte.kobweb.compose.css.TextAlign
+import com.varabyte.kobweb.compose.css.textAlign
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
@@ -572,7 +574,7 @@ object SkillsStyle : StyleSheet() {
 					border {
 						width(1.px)
 						style(LineStyle.Solid)
-						color(Color("transparent"))
+						color(Color.transparent)
 					}
 					property("background", """
 						transparent padding-box,
@@ -605,7 +607,7 @@ object SkillsStyle : StyleSheet() {
 				borderTop {
 					style(LineStyle.Solid)
 					width(2.px)
-					color(Color("transparent"))
+					color(Color.transparent)
 				}
 				borderImageSource(linearGradient(45.deg) {
 					stop(Color("#00D4FF"))

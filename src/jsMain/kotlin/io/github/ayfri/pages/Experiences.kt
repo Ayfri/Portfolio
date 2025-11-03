@@ -168,8 +168,6 @@ object ExperiencesStyle : StyleSheet() {
 		})
 	}
 
-
-
     val experiencesDescription by style {
         fontSize(1.2.cssRem)
         lineHeight(1.5.number)
@@ -190,7 +188,7 @@ object ExperiencesStyle : StyleSheet() {
 			border {
 				width(2.px)
 				style(LineStyle.Solid)
-				color(Color("transparent"))
+				color(Color.transparent)
 			}
 			property("background", """
 				linear-gradient(${EXPERIENCE_BACKGROUND_COLOR}, ${EXPERIENCE_BACKGROUND_COLOR}) padding-box,

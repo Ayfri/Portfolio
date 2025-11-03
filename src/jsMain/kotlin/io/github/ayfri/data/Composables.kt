@@ -1,32 +1,25 @@
 package io.github.ayfri.data
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.web.events.SyntheticMouseEvent
+import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.ObjectFit
-import com.varabyte.kobweb.compose.css.boxShadow
-import com.varabyte.kobweb.compose.css.objectFit
 import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
 import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.P
-import io.github.ayfri.externals.Prism
-import io.github.ayfri.markdownParagraph
 import io.github.ayfri.pages.TextIcon
 import io.github.ayfri.pages.skills
 import io.github.ayfri.utils.*
+import io.github.ayfri.utils.Cursor
+import io.github.ayfri.utils.Overflow
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
-import org.jetbrains.compose.web.attributes.ATarget
-import org.jetbrains.compose.web.attributes.AttrsScope
 import org.jetbrains.compose.web.attributes.alt
-import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
-import org.w3c.dom.HTMLDivElement
 import kotlin.js.Date
 
 @Composable
@@ -204,11 +197,8 @@ object DataStyle : StyleSheet() {
 	const val HOME_CARD_COLOR = "#cacaca"
 	const val PROJECT_CARD_CLOSED_BACKGROUND = "#2a2b36"
 	const val PROJECT_CARD_HOVER_BACKGROUND = "#353648"
-	const val TOPIC_TAG_BACKGROUND = "transparent"
-	const val TOPIC_TAG_COLOR = AppStyle.SPECIAL_TEXT_COLOR
 	const val TEXT_SECONDARY = "#ffffffaa"
 
-	val gridColumnStartVar by variable<StylePropertyNumber>()
 	val imageSize by variable<CSSSizeValue<*>>()
 
 	@OptIn(ExperimentalComposeWebApi::class)
@@ -231,7 +221,7 @@ object DataStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${HOME_CARD_BACKGROUND}, ${HOME_CARD_BACKGROUND}) padding-box,
@@ -252,7 +242,7 @@ object DataStyle : StyleSheet() {
 			border {
 				width(1.px)
 				style(LineStyle.Solid)
-				color(Color("transparent"))
+				color(Color.transparent)
 			}
 			background("""
 				linear-gradient(${HOME_CARD_TITLE_BACKGROUND}, ${HOME_CARD_TITLE_BACKGROUND}) padding-box,
@@ -290,7 +280,7 @@ object DataStyle : StyleSheet() {
 			border {
 				width(1.px)
 				style(LineStyle.Solid)
-				color(Color("transparent"))
+				color(Color.transparent)
 			}
 			background("""
 				linear-gradient(${HOME_CARD_BACKGROUND}, ${HOME_CARD_BACKGROUND}) padding-box,
@@ -320,7 +310,7 @@ object DataStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(${PROJECT_CARD_CLOSED_BACKGROUND}, ${PROJECT_CARD_CLOSED_BACKGROUND}) padding-box,
@@ -353,7 +343,7 @@ object DataStyle : StyleSheet() {
 			self {
 				imageSize(2.cssRem)
 				height(auto)
-				maxHeight("none")
+				maxHeight(MaxHeight.None)
 			}
 		}
 
@@ -435,7 +425,7 @@ object DataStyle : StyleSheet() {
 					border {
 						width(2.px)
 						style(LineStyle.Solid)
-						color(Color("transparent"))
+						color(Color.transparent)
 					}
 					borderRadius(1.cssRem)
 					fontSize(0.8.cssRem)
@@ -454,7 +444,7 @@ object DataStyle : StyleSheet() {
 					border {
 						width(1.px)
 						style(LineStyle.Solid)
-						color(Color("transparent"))
+						color(Color.transparent)
 					}
 					background("""
 						linear-gradient(#ffffff15, #ffffff15) padding-box,

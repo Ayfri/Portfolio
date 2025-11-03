@@ -1,10 +1,15 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.TextAlign
+import com.varabyte.kobweb.compose.css.content
+import com.varabyte.kobweb.compose.css.textAlign
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.utils.*
+import io.github.ayfri.utils.ObjectFit
+import io.github.ayfri.utils.linearGradient
+import io.github.ayfri.utils.objectFit
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
@@ -121,8 +126,6 @@ object PortfolioStyle : StyleSheet() {
 	const val BACKGROUND_GRADIENT_END = "#2A1B3D"    // Violet plus clair
 	val sectionsGap = 4.cssRem
 
-
-
 	val portfolio by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
@@ -162,7 +165,7 @@ object PortfolioStyle : StyleSheet() {
 
 		self + not(lastChild) + after style {
 			val height = .5.cssRem
-			property("content", "''")
+			content("")
 
 			display(DisplayStyle.Block)
 			height(height)

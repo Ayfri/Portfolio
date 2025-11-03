@@ -5,7 +5,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.*
-import io.github.ayfri.utils.zIndex
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
@@ -53,7 +52,7 @@ object BackToTopStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val button by style {
-		position(Position.Companion.Fixed)
+		position(Position.Fixed)
 		bottom(30.px)
 		right(30.px)
 		width(50.px)
@@ -62,10 +61,10 @@ object BackToTopStyle : StyleSheet() {
 		backgroundColor(Color(BUTTON_COLOR))
 		color(Color.white)
 		border(0.px)
-		cursor(Cursor.Companion.Pointer)
+		cursor(Cursor.Pointer)
 		boxShadow(0.px, 2.px, 10.px, 0.px, Color(BUTTON_SHADOW_COLOR))
 		opacity(0)
-		pointerEvents(PointerEvents.Companion.None)
+		pointerEvents(PointerEvents.None)
 		zIndex(100)
 
 		transitions {
@@ -96,6 +95,6 @@ object BackToTopStyle : StyleSheet() {
 
 	val visible by style {
 		opacity(1)
-		pointerEvents(PointerEvents.Companion.Auto)
+		pointerEvents(PointerEvents.Auto)
 	}
 }

@@ -365,7 +365,7 @@ object ProjectsStyle : StyleSheet() {
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("background", "linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
 	}
@@ -393,7 +393,7 @@ object ProjectsStyle : StyleSheet() {
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		borderRadius(8.px)
 		outline("none")
@@ -453,7 +453,7 @@ object ProjectsStyle : StyleSheet() {
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		borderRadius(8.px)
 		cursor(Cursor.Pointer)
@@ -501,7 +501,7 @@ object ProjectsStyle : StyleSheet() {
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		borderRadius(20.px)
 		fontSize(0.9.cssRem)

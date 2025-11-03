@@ -7,8 +7,10 @@ import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.BoxSizing
 import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.css.boxSizing
+import com.varabyte.kobweb.compose.css.content
 import com.varabyte.kobweb.compose.css.scale
 import com.varabyte.kobweb.compose.css.whiteSpace
+import com.varabyte.kobweb.compose.css.zIndex
 import io.github.ayfri.AppStyle.mobileFirstBreak
 import io.github.ayfri.AppStyle.mobileSecondBreak
 import io.github.ayfri.data.REPO_LINK
@@ -68,7 +70,7 @@ object HeaderStyle : StyleSheet() {
 	const val NAVBAR_COLOR_SELECTED = "#2A1B3D"
 	const val NAVBAR_ACCENT_START = "#00D4FF"
 	const val NAVBAR_ACCENT_END = "#FF0080"
-	val navbarHeight by variable<CSSNumeric>()
+	val navbarHeight by variable<CSSLengthValue>()
 
 	init {
 		root {
@@ -87,7 +89,7 @@ object HeaderStyle : StyleSheet() {
 		borderBottom {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("border-image", "linear-gradient(90deg, $NAVBAR_ACCENT_START, $NAVBAR_ACCENT_END) 1")
 		property("box-shadow", "0 2px 10px rgba(0, 0, 0, 0.3)")
@@ -136,7 +138,7 @@ object HeaderStyle : StyleSheet() {
 			}
 
 			before {
-				property("content", "''")
+				content("")
 				position(Position.Absolute)
 				bottom(0.px)
 				left(50.percent)
@@ -146,7 +148,9 @@ object HeaderStyle : StyleSheet() {
 					stop(Color(NAVBAR_ACCENT_START))
 					stop(Color(NAVBAR_ACCENT_END))
 				})
-				property("transform", "translateX(-50%)")
+				transform {
+					translateX((-50).percent)
+				}
 				borderRadius(1.px)
 				transitions {
 					defaultDuration(0.3.s)
@@ -155,7 +159,7 @@ object HeaderStyle : StyleSheet() {
 			}
 
 			after {
-				property("content", "''")
+				content("")
 				position(Position.Absolute)
 				top(0.px)
 				left(0.px)
@@ -173,7 +177,7 @@ object HeaderStyle : StyleSheet() {
 				}
 			}
 
-						self + className("active") style {
+			self + className("active") style {
 				backgroundColor(Color("rgba(0, 212, 255, 0.08)"))
 
 				before {
@@ -242,7 +246,7 @@ object HeaderStyle : StyleSheet() {
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		transitions {
 			defaultDuration(0.3.s)

@@ -2,6 +2,7 @@ package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.blur
 import com.varabyte.kobweb.compose.css.functions.radialGradient
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
@@ -15,7 +16,6 @@ import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.*
 import io.github.ayfri.utils.Overflow
-import io.github.ayfri.utils.TextAlign
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
@@ -597,7 +597,7 @@ object HomeStyle : StyleSheet() {
 		maxWidth(1200.px)
 		borderRadius(1.cssRem)
 		backgroundColor(Color("#1A1225"))
-		property("backdrop-filter", "blur(10px)")
+		backdropFilter(BackdropFilter.list(BackdropFilter.of(blur(10.px))))
 
 		border {
 			width(2.px)
@@ -796,7 +796,7 @@ object HomeStyle : StyleSheet() {
 		borderRadius(0.5.cssRem)
 		backgroundColor(Color("#252525"))
 		color(Color.white)
-		textDecoration("none")
+		textDecorationLine(TextDecorationLine.None)
 		border {
 			width(1.px)
 			style(LineStyle.Solid)
@@ -873,7 +873,7 @@ object HomeStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		height(100.percent)
-		textDecoration("none")
+		textDecorationLine(TextDecorationLine.None)
 
 		"h3" {
 			fontSize(1.2.cssRem)
@@ -1109,10 +1109,10 @@ object HomeStyle : StyleSheet() {
 		child(self, selector("span:first-of-type")) style {
 			fontSize(1.5.cssRem)
 			fontWeight(300)
+			background(Background.None)
 			color(Color("#FFFFFFAA"))
 			property("-webkit-text-fill-color", "#FFFFFFAA")
 			property("-moz-text-fill-color", "#FFFFFFAA")
-			property("background", "none")
 			property("text-shadow", "0 0 8px rgba(255, 255, 255, 0.3)")
 			opacity(0.7)
 		}

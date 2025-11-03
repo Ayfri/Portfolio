@@ -1,16 +1,16 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.ListStyle
 import com.varabyte.kobweb.compose.css.TextAlign
+import com.varabyte.kobweb.compose.css.listStyle
 import com.varabyte.kobweb.compose.css.textAlign
 import com.varabyte.kobweb.navigation.Anchor
 import io.github.ayfri.*
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.utils.linearGradient
-import io.github.ayfri.utils.margin
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
 import kotlin.js.Date
 
@@ -160,7 +160,7 @@ object ArticleListStyle : StyleSheet() {
 		flexDirection(FlexDirection.Column)
 		gap(1.5.cssRem)
 		padding(0.px)
-		listStyleType("none")
+		listStyle(ListStyle.None)
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)

@@ -4,6 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.varabyte.kobweb.compose.css.TextAlign
+import com.varabyte.kobweb.compose.css.scrollPaddingTop
+import com.varabyte.kobweb.compose.css.textAlign
+import com.varabyte.kobweb.compose.css.zIndex
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.FontAwesomeType
@@ -341,7 +345,7 @@ object AboutMeStyle : StyleSheet() {
 
 	init {
 		"html" {
-			property("scroll-padding-top", HeaderStyle.navbarHeight.value() + TIMELINE_DEFAULT_OFFSET.px)
+			scrollPaddingTop(HeaderStyle.navbarHeight.value() + TIMELINE_DEFAULT_OFFSET.px)
 		}
 
 		id("main") style {
@@ -529,7 +533,7 @@ object AboutMeStyle : StyleSheet() {
 				border {
 					width(1.px)
 					style(LineStyle.Solid)
-					color(Color("transparent"))
+					color(Color.transparent)
 				}
 				property("background", """
 					linear-gradient(#00000090, #00000090) padding-box,
@@ -595,7 +599,7 @@ object AboutMeStyle : StyleSheet() {
 			border {
 				width(2.px)
 				style(LineStyle.Solid)
-				color(Color("transparent"))
+				color(Color.transparent)
 			}
 			property("background", """
 				linear-gradient(${BACKGROUND_SECTION_ODD_COLOR}, ${BACKGROUND_SECTION_ODD_COLOR}) padding-box,
@@ -665,7 +669,7 @@ object AboutMeStyle : StyleSheet() {
 					border {
 						width(1.px)
 						style(LineStyle.Solid)
-						color(Color("transparent"))
+						color(Color.transparent)
 					}
 					property("background", """
 						transparent padding-box,

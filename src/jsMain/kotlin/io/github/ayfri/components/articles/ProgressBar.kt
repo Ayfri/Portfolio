@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.varabyte.kobweb.compose.css.zIndex
 import io.github.ayfri.utils.linearGradient
-import io.github.ayfri.utils.zIndex
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -61,7 +61,7 @@ object ProgressBarStyle : StyleSheet() {
 	const val PROGRESS_GRADIENT_END_COLOR = "#6EBAE7"
 
 	val container by style {
-		position(Position.Companion.Fixed)
+		position(Position.Fixed)
 		top(0.px)
 		left(0.px)
 		width(100.percent)
@@ -82,7 +82,7 @@ object ProgressBarStyle : StyleSheet() {
 		transitions {
 			properties("width") {
 				duration(0.2.s)
-				timingFunction(AnimationTimingFunction.Companion.EaseOut)
+				timingFunction(AnimationTimingFunction.EaseOut)
 			}
 		}
 	}

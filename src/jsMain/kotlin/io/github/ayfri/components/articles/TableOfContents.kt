@@ -1,6 +1,10 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.ListStyle
+import com.varabyte.kobweb.compose.css.TextDecorationLine
+import com.varabyte.kobweb.compose.css.listStyle
+import com.varabyte.kobweb.compose.css.textDecorationLine
 import io.github.ayfri.utils.linearGradient
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
@@ -64,7 +68,6 @@ fun TableOfContents(headings: List<Pair<Int, String>>) {
 
 object TableOfContentsStyle : StyleSheet() {
 	const val CONTAINER_BACKGROUND_COLOR = "#1A1225"
-	const val TITLE_TEXT_COLOR = "#FFFFFFEE"
 	const val ITEM_TEXT_COLOR = "#FFFFFFCC"
 	const val ITEM_HOVER_BACKGROUND_COLOR = "#FFFFFF15"
 	const val ITEM_HOVER_TEXT_COLOR = "#6EBAE7"
@@ -103,7 +106,7 @@ object TableOfContentsStyle : StyleSheet() {
 	}
 
 	val list by style {
-		listStyleType("none")
+		listStyle(ListStyle.None)
 		margin(0.px)
 		padding(0.px)
 	}
@@ -114,7 +117,7 @@ object TableOfContentsStyle : StyleSheet() {
 
 		"a" {
 			color(Color(ITEM_TEXT_COLOR))
-			textDecoration("none")
+			textDecorationLine(TextDecorationLine.None)
 			fontSize(0.95.cssRem)
 			display(DisplayStyle.Block)
 			padding(0.35.cssRem, 0.8.cssRem)

@@ -317,10 +317,10 @@ object FooterStyle : StyleSheet() {
 		height(2.px)
 		width(100.percent)
 		background(linearGradient(90.deg) {
-			stop(Color("transparent"))
+			stop(Color.transparent)
 			stop(Color(FOOTER_ACCENT_START), 20.percent)
 			stop(Color(FOOTER_ACCENT_END), 80.percent)
-			stop(Color("transparent"))
+			stop(Color.transparent)
 		})
 	}
 
@@ -335,7 +335,7 @@ object FooterStyle : StyleSheet() {
 		borderBottom {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("border-image", "linear-gradient(90deg, $FOOTER_ACCENT_START, $FOOTER_ACCENT_END) 1")
 	}
@@ -414,7 +414,7 @@ object FooterStyle : StyleSheet() {
 		borderBottom {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("border-image", "linear-gradient(90deg, $FOOTER_ACCENT_START, $FOOTER_ACCENT_END) 1")
 		property("border-image-slice", "1")
@@ -627,7 +627,7 @@ object FooterStyle : StyleSheet() {
 		borderTop {
 			width(1.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		property("border-image", "linear-gradient(90deg, transparent, $FOOTER_ACCENT_START, $FOOTER_ACCENT_END, transparent) 1")
 

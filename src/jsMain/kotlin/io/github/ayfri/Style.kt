@@ -1,9 +1,10 @@
 package io.github.ayfri
 
-import com.varabyte.kobweb.compose.css.FontOpticalSizing
-import com.varabyte.kobweb.compose.css.fontOpticalSizing
+import com.varabyte.kobweb.compose.css.*
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.utils.*
+import io.github.ayfri.utils.Cursor
+import io.github.ayfri.utils.ObjectFit
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.selectors.CSSSelector
@@ -43,7 +44,8 @@ object AppStyle : StyleSheet() {
 
 	init {
 		"html" {
-			property("scroll-behavior", "smooth")
+			scrollBehavior(ScrollBehavior.Smooth)
+			scrollPaddingTop(HeaderStyle.navbarHeight.value())
 			property("scroll-padding-top", HeaderStyle.navbarHeight.value())
 		}
 
@@ -121,7 +123,7 @@ object AppStyle : StyleSheet() {
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
-			color(Color("transparent"))
+			color(Color.transparent)
 		}
 		background("""
 			linear-gradient(#1A1225, #1A1225) padding-box,

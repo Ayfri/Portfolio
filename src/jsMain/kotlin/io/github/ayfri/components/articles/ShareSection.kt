@@ -2,16 +2,15 @@ package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import com.varabyte.kobweb.compose.css.Cursor
-import com.varabyte.kobweb.compose.css.TextAlign
-import com.varabyte.kobweb.compose.css.cursor
-import com.varabyte.kobweb.compose.css.textAlign
+import com.varabyte.kobweb.compose.css.*
 import io.github.ayfri.AppStyle
 import io.github.ayfri.utils.linearGradient
 import js.uri.encodeURIComponent
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 import web.clipboard.writeText
 import web.navigator.navigator
@@ -101,7 +100,6 @@ fun ShareSection(title: String, url: String) {
 
 object ShareSectionStyle : StyleSheet() {
 	const val CONTAINER_BG_COLOR = "#1A1225"
-	const val SEMI_TRANSPARENT_WHITE = "#FFFFFFEE"
 	const val X_BLACK = "#000000"
 	const val X_BLACK_HOVER = "#333333"
 	const val LINKEDIN_BLUE = "#0077B5"
@@ -164,7 +162,7 @@ object ShareSectionStyle : StyleSheet() {
 		fontSize(0.9.cssRem)
 		fontWeight(600)
 		cursor(Cursor.Pointer)
-		textDecoration("none")
+		textDecorationLine(TextDecorationLine.None)
 
 		transitions {
 			defaultDuration(0.2.s)

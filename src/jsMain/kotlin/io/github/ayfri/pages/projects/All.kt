@@ -10,7 +10,6 @@ import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
 import io.github.ayfri.AppStyle.LINK_HOVER_COLOR
-import io.github.ayfri.AppStyle.SPECIAL_TEXT_COLOR
 import io.github.ayfri.CodeTheme
 import io.github.ayfri.components.*
 import io.github.ayfri.data.gitHubData
@@ -419,7 +418,6 @@ object ProjectStyle : StyleSheet() {
 	const val ITEM_BACKGROUND_HOVER = "#ffffff15"
 	const val BORDER_COLOR = "#ffffff20"
 	const val TEXT_SECONDARY = "#ffffffaa"
-	const val ACCENT_COLOR = SPECIAL_TEXT_COLOR
 
 	init {
 		id("main") style {
@@ -656,7 +654,7 @@ object ProjectStyle : StyleSheet() {
 		gap(10.px)
 		borderRadius(10.px)
 		padding(15.px)
-		textDecoration("none")
+		textDecorationLine(TextDecorationLine.None)
 		color(Color.white)
 		border {
 			width(1.px)

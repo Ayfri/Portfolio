@@ -1,6 +1,10 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.GridEntry
+import com.varabyte.kobweb.compose.css.TextDecorationLine
+import com.varabyte.kobweb.compose.css.gridTemplateColumns
+import com.varabyte.kobweb.compose.css.textDecorationLine
 import io.github.ayfri.*
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.utils.linearGradient
@@ -121,7 +125,6 @@ fun RelatedArticleCard(article: ArticleEntry) {
 
 object RelatedArticlesStyle : StyleSheet() {
 	const val CONTAINER_BG_COLOR = "#1A1225"
-	const val TITLE_COLOR = "#FFFFFFEE"
 	const val ACCENT_COLOR = "#6EBAE7"
 	const val CARD_BG_COLOR = "#1E1535"
 	const val CARD_HOVER_BG_COLOR = "#2A1B3D"
@@ -164,7 +167,11 @@ object RelatedArticlesStyle : StyleSheet() {
 
 	val grid by style {
 		display(DisplayStyle.Grid)
-		gridTemplateColumns("repeat(auto-fit, minmax(280px, 1fr))")
+		gridTemplateColumns {
+			repeat(GridEntry.Repeat.Auto.Type.AutoFit) {
+				minmax(280.px, 1.fr)
+			}
+		}
 		gap(1.5.cssRem)
 	}
 
@@ -176,7 +183,7 @@ object RelatedArticlesStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		height(100.percent)
-		textDecoration("none")
+		textDecorationLine(TextDecorationLine.None)
 		color(Color.white)
 
 		transitions {
@@ -253,7 +260,7 @@ object RelatedArticlesStyle : StyleSheet() {
 	init {
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			grid style {
-				gridTemplateColumns("1fr")
+				gridTemplateColumns(GridEntry.TrackSize(1.fr))
 			}
 		}
 	}

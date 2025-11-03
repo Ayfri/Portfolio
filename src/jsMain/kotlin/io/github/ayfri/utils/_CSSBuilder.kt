@@ -147,21 +147,6 @@ interface Overflow : StylePropertyEnum {
 fun Overflow(value: String) = value.unsafeCast<Overflow>()
 fun StyleScope.overflow(value: Overflow) = property("overflow", value)
 
-interface TextAlign : StylePropertyEnum {
-	companion object {
-		inline val Left get() = TextAlign("left")
-		inline val Right get() = TextAlign("right")
-		inline val Center get() = TextAlign("center")
-		inline val Justify get() = TextAlign("justify")
-		inline val Start get() = TextAlign("start")
-		inline val End get() = TextAlign("end")
-
-		inline val Inherit get() = TextAlign("inherit")
-		inline val Initial get() = TextAlign("initial")
-		inline val Revert get() = TextAlign("revert")
-		inline val Unset get() = TextAlign("unset")
-	}
-}
 
 interface Resize : StylePropertyEnum {
 	companion object {
@@ -179,13 +164,5 @@ interface Resize : StylePropertyEnum {
 
 fun Resize(value: String) = value.unsafeCast<Resize>()
 fun StyleScope.resize(value: Resize) = property("resize", value)
-
-fun TextAlign(value: String) = value.unsafeCast<TextAlign>()
-fun StyleScope.textAlign(value: TextAlign) = property("text-align", value)
-
-fun StyleScope.zIndex(value: Int) = property("z-index", value)
-
-val SelectorsScope.placeholder get() = slotted(selector("placeholder"))
-val CSSStyleRuleBuilder.self get() = selector(":scope")
 
 val Int.n get() = Nth.Functional(this)
