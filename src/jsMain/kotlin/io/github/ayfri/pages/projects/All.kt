@@ -17,7 +17,6 @@ import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectJsonLD
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.utils.linearGradient
 import io.github.ayfri.utils.n
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -421,11 +420,11 @@ object ProjectStyle : StyleSheet() {
 
 	init {
 		id("main") style {
-			background(linearGradient(180.deg) {
-				stop(Color("#0A0A0F"), (-3).percent)
-				stop(Color("#1A1225"), 14.percent)
-				stop(Color("#2A1B3D"), 65.percent)
-				stop(Color("#1E1535"), 90.percent)
+			backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(180.deg) {
+				add(Color("#0A0A0F"), (-3).percent)
+				add(Color("#1A1225"), 14.percent)
+				add(Color("#2A1B3D"), 65.percent)
+				add(Color("#1E1535"), 90.percent)
 			})
 		}
 
@@ -438,7 +437,7 @@ object ProjectStyle : StyleSheet() {
 			backgroundColor(Color("#ffffff20"))
 		}
 
-		"table" style {
+		type("table") style {
 			borderRadius(10.px)
 			overflow(Overflow.Hidden)
 			borderCollapse(BorderCollapse.Collapse)
@@ -448,16 +447,17 @@ object ProjectStyle : StyleSheet() {
 			backgroundColor(Color("#ffffff0b"))
 		}
 
-		"pre" {
+		type("pre") style {
 			borderRadius(10.px)
 		}
 
-		"h3" style {
+		type("h3") style {
 			margin(0.px, 0.px, 15.px)
 			fontSize(1.4.cssRem)
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
@@ -485,9 +485,10 @@ object ProjectStyle : StyleSheet() {
 		margin(0.px, 0.px, 10.px)
 		fontSize(3.cssRem)
 
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
+		backgroundClip(BackgroundClip.Text)
+		backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
 		})
 		property("-webkit-background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
@@ -500,13 +501,13 @@ object ProjectStyle : StyleSheet() {
 			blurRadius = 20.px
 		))
 
-		"img" style {
+		type("img") style {
 			borderRadius(50.percent)
 			marginRight(10.px)
 			size(2.5.cssRem)
 		}
 
-		"span" style {
+		type("span") style {
 			fontSize(2.7.cssRem)
 		}
 	}
@@ -527,7 +528,7 @@ object ProjectStyle : StyleSheet() {
 		color(Color(TEXT_SECONDARY))
 		fontSize(1.1.cssRem)
 
-		"i" style {
+		type("i") style {
 			color(Color("#00D4FF"))
 			marginRight(5.px)
 		}
@@ -548,7 +549,7 @@ object ProjectStyle : StyleSheet() {
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
-				gridTemplateColumns("1fr")
+				gridTemplateColumns(GridEntry.TrackSize(1.fr))
 			}
 		}
 	}
@@ -557,12 +558,8 @@ object ProjectStyle : StyleSheet() {
 		borderRadius(15.px)
 		padding(20.px)
 		marginBottom(20.px)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		background("""
+		border(2.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${CARD_BACKGROUND}, ${CARD_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -591,12 +588,8 @@ object ProjectStyle : StyleSheet() {
 		gap(10.px)
 		borderRadius(10.px)
 		padding(15.px)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		background("""
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -607,7 +600,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			background("""
+			backgroundImage("""
 				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
 			""")
@@ -656,12 +649,8 @@ object ProjectStyle : StyleSheet() {
 		padding(15.px)
 		textDecorationLine(TextDecorationLine.None)
 		color(Color.white)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		background("""
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -672,7 +661,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			background("""
+			backgroundImage("""
 				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
 			""")
@@ -699,12 +688,8 @@ object ProjectStyle : StyleSheet() {
 		gap(10.px)
 		borderRadius(10.px)
 		padding(15.px)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		background("""
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -735,16 +720,12 @@ object ProjectStyle : StyleSheet() {
 	val topicTag by style {
 		padding(5.px, 15.px)
 		color(Color.white)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(20.px)
 		fontSize(0.9.cssRem)
 		cursor(Cursor.Pointer)
-		textDecoration("none")
-		background("""
+		textDecorationLine(TextDecorationLine.None)
+		backgroundImage("""
 			linear-gradient(transparent, transparent) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -756,7 +737,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			background("""
+			backgroundImage("""
 				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
 			""")
@@ -782,12 +763,8 @@ object ProjectStyle : StyleSheet() {
 		gap(10.px)
 		borderRadius(10.px)
 		padding(15.px)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		background("""
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -817,12 +794,8 @@ object ProjectStyle : StyleSheet() {
 		borderRadius(20.px)
 		margin(0.px)
 		padding(30.px)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		background("""
+		border(2.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -833,13 +806,13 @@ object ProjectStyle : StyleSheet() {
 			blurRadius = 20.px
 		))
 
-		"img" style {
+		type("img") style {
 			borderRadius(5.px)
 			margin(10.px)
 			maxWidth(100.percent)
 		}
 
-		"pre" {
+		type("pre") style {
 			backgroundColor(Color("#00000040"))
 		}
 	}
@@ -853,12 +826,8 @@ object ProjectStyle : StyleSheet() {
 		padding(10.px, 15.px)
 		borderRadius(10.px)
 		fontSize(0.9.cssRem)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		background("""
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")

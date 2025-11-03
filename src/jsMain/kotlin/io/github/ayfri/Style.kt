@@ -1,6 +1,7 @@
 package io.github.ayfri
 
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.css.functions.max
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.utils.*
@@ -144,9 +145,10 @@ object AppStyle : StyleSheet() {
 		}
 
 		"span" {
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")

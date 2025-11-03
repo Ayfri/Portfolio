@@ -3,8 +3,8 @@ package io.github.ayfri.components.articles
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle
-import io.github.ayfri.utils.linearGradient
 import js.uri.encodeURIComponent
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -116,27 +116,23 @@ object ShareSectionStyle : StyleSheet() {
 		borderRadius(1.cssRem)
 		padding(2.cssRem)
 		textAlign(TextAlign.Center)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		border(2.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${CONTAINER_BG_COLOR}, ${CONTAINER_BG_COLOR}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
-		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
+		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 
 	val title by style {
 		fontSize(1.5.cssRem)
 		margin(0.px, 0.px, 2.cssRem)
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
+		backgroundClip(BackgroundClip.Text)
+		backgroundImage(linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
 		})
 		property("-webkit-background-clip", "text")
-		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
 
 		"i" {

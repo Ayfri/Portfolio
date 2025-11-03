@@ -1,11 +1,8 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.ListStyle
-import com.varabyte.kobweb.compose.css.TextDecorationLine
-import com.varabyte.kobweb.compose.css.listStyle
-import com.varabyte.kobweb.compose.css.textDecorationLine
-import io.github.ayfri.utils.linearGradient
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -73,31 +70,27 @@ object TableOfContentsStyle : StyleSheet() {
 	const val ITEM_HOVER_TEXT_COLOR = "#6EBAE7"
 
 	val container by style {
-		backgroundColor(Color(CONTAINER_BACKGROUND_COLOR))
-		borderRadius(1.cssRem)
-		padding(2.cssRem)
-		marginBottom(3.cssRem)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		backgroundImage("""
 			linear-gradient(${CONTAINER_BACKGROUND_COLOR}, ${CONTAINER_BACKGROUND_COLOR}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
-		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
+		backgroundColor(Color(CONTAINER_BACKGROUND_COLOR))
+		border(2.px, LineStyle.Solid, Color.transparent)
+		borderRadius(1.cssRem)
+		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")
+		padding(2.cssRem)
+		marginBottom(3.cssRem)
 	}
 
 	val title by style {
+		backgroundClip(BackgroundClip.Text)
+		backgroundImage(linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
+		})
 		fontSize(1.5.cssRem)
 		margin(0.px, 0.px, 1.cssRem)
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
-		})
 		property("-webkit-background-clip", "text")
-		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
 
 		"i" {

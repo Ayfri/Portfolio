@@ -1,17 +1,20 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.GridEntry
-import com.varabyte.kobweb.compose.css.TextDecorationLine
-import com.varabyte.kobweb.compose.css.gridTemplateColumns
-import com.varabyte.kobweb.compose.css.textDecorationLine
-import io.github.ayfri.*
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
+import io.github.ayfri.AppStyle
+import io.github.ayfri.articlesEntries
+import io.github.ayfri.calculateReadingTime
 import io.github.ayfri.data.ArticleEntry
-import io.github.ayfri.utils.linearGradient
+import io.github.ayfri.ensureSuffix
+import js.date.Date
+import js.intl.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
-import kotlin.js.Date
 
 // Find related articles based on keywords
 fun findRelatedArticles(currentPath: String, keywords: List<String>): List<ArticleEntry> {
@@ -86,11 +89,11 @@ fun RelatedArticleCard(article: ArticleEntry) {
 			// Format date
 			val date = try {
 				val jsDate = Date(article.date)
-				jsDate.toLocaleDateString("en-US", jso {
-					year = "numeric"
-					month = "short"
-					day = "numeric"
-				})
+				jsDate.toLocaleDateString("en-US", DateTimeFormatOptions(
+					year = YearFormat.numeric,
+					month = MonthFormat.long,
+					day = DayFormat.numeric
+				))
 			} catch (e: Exception) {
 				article.date.split("T")[0]
 			}
@@ -137,27 +140,23 @@ object RelatedArticlesStyle : StyleSheet() {
 		backgroundColor(Color(CONTAINER_BG_COLOR))
 		borderRadius(1.cssRem)
 		padding(2.cssRem)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		border(2.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(${CONTAINER_BG_COLOR}, ${CONTAINER_BG_COLOR}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
-		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
+		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 
 	val title by style {
 		fontSize(1.8.cssRem)
 		margin(0.px, 0.px, 2.cssRem)
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
+		backgroundClip(BackgroundClip.Text)
+		backgroundImage(linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
 		})
 		property("-webkit-background-clip", "text")
-		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
 
 		"i" {
@@ -194,22 +193,22 @@ object RelatedArticlesStyle : StyleSheet() {
 
 		self + hover style {
 			backgroundColor(Color(CARD_HOVER_BG_COLOR))
+			boxShadow("0 0 20px rgba(255, 0, 128, 0.2)")
 			transform {
 				translateY((-5).px)
 			}
-			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.2)")
 		}
 	}
 
 	val cardTitle by style {
 		fontSize(1.2.cssRem)
 		margin(0.px, 0.px, 1.cssRem)
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
+		backgroundClip(BackgroundClip.Text)
+		backgroundImage(linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
 		})
 		property("-webkit-background-clip", "text")
-		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
 	}
 

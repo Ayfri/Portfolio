@@ -4,8 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import com.varabyte.kobweb.compose.css.backgroundImage
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.css.zIndex
-import io.github.ayfri.utils.linearGradient
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -73,9 +74,9 @@ object ProgressBarStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val progress by style {
 		height(100.percent)
-		background(linearGradient(90.deg) {
-			stop(Color(PROGRESS_GRADIENT_START_COLOR))
-			stop(Color(PROGRESS_GRADIENT_END_COLOR))
+		backgroundImage(linearGradient(90.deg) {
+			add(Color(PROGRESS_GRADIENT_START_COLOR))
+			add(Color(PROGRESS_GRADIENT_END_COLOR))
 		})
 		width(0.percent)
 

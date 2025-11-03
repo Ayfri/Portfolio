@@ -2,10 +2,8 @@ package io.github.ayfri.layouts
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import com.varabyte.kobweb.compose.css.FontStyle
-import com.varabyte.kobweb.compose.css.borderLeft
-import com.varabyte.kobweb.compose.css.fontStyle
-import com.varabyte.kobweb.compose.css.margin
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
@@ -13,12 +11,17 @@ import io.github.ayfri.*
 import io.github.ayfri.components.*
 import io.github.ayfri.components.articles.*
 import io.github.ayfri.externals.Prism
-import io.github.ayfri.utils.*
+import io.github.ayfri.utils.margin
+import io.github.ayfri.utils.webkitScrollbar
+import io.github.ayfri.utils.webkitScrollbarThumb
+import io.github.ayfri.utils.webkitScrollbarTrack
+import js.date.Date
+import js.intl.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
-import kotlin.js.Date
 
 
 @Composable
@@ -121,11 +124,11 @@ fun ArticleHeader(
 			// Format and display date
 			val formattedDate = try {
 				val jsDate = Date(date)
-				jsDate.toLocaleDateString("en-US", jso {
-					year = "numeric"
-					month = "long"
-					day = "numeric"
-				})
+				jsDate.toLocaleDateString("en-US", DateTimeFormatOptions(
+					year = YearFormat.numeric,
+					month = MonthFormat.long,
+					day = DayFormat.numeric
+				))
 			} catch (e: Exception) {
 				date.split("T")[0]
 			}
@@ -205,12 +208,11 @@ object ArticleHeaderStyle : StyleSheet() {
 		fontSize(2.8.cssRem)
 		lineHeight(1.3.em)
 		margin(top = 0.cssRem, bottom = 1.cssRem)
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
+		backgroundClip(BackgroundClip.Text)
+		backgroundImage(linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
 		})
-		property("-webkit-background-clip", "text")
-		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
 		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 	}
@@ -267,10 +269,10 @@ object ArticleHeaderStyle : StyleSheet() {
 	val divider by style {
 		border(0.px)
 		height(1.px)
-		background(linearGradient(90.deg) {
-			stop(Color("#FFFFFF00"))
-			stop(Color("#FFFFFF40"))
-			stop(Color("#FFFFFF00"))
+		backgroundImage(linearGradient(90.deg) {
+			add(Color("#FFFFFF00"))
+			add(Color("#FFFFFF40"))
+			add(Color("#FFFFFF00"))
 		})
 		margin(1.5.cssRem, 0.px, 1.cssRem)
 	}
@@ -295,11 +297,11 @@ object MarkdownStyle : StyleSheet() {
 	init {
 		id("main") style {
 			// Add consistent background styling
-			background(linearGradient(180.deg) {
-				stop(Color("#0A0A0F"), (-3).percent)
-				stop(Color("#1A1225"), 14.percent)
-				stop(Color("#2A1B3D"), 65.percent)
-				stop(Color("#1E1535"), 90.percent)
+			backgroundImage(linearGradient(180.deg) {
+				add(Color("#0A0A0F"), (-3).percent)
+				add(Color("#1A1225"), 14.percent)
+				add(Color("#2A1B3D"), 65.percent)
+				add(Color("#1E1535"), 90.percent)
 			})
 			minHeight(100.vh)
 		}
@@ -314,47 +316,44 @@ object MarkdownStyle : StyleSheet() {
 		property("tab-size", 4)
 
 		"h1" {
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
+			})
 			fontSize(2.5.cssRem)
 			lineHeight(1.3.em)
 			margin(top = 0.cssRem, bottom = 1.cssRem)
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
-			})
-			property("-webkit-background-clip", "text")
-			property("background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
 		}
 
 		"h2" {
-			fontSize(1.75.cssRem)
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
-			property("-webkit-background-clip", "text")
-			property("background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
+			fontSize(1.75.cssRem)
 			marginTop(2.cssRem)
 			marginBottom(1.cssRem)
+			property("-webkit-text-fill-color", "transparent")
 		}
 
 		"h3" {
-			fontSize(1.35.cssRem)
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
-			property("-webkit-background-clip", "text")
-			property("background-clip", "text")
+			fontSize(1.35.cssRem)
 			property("-webkit-text-fill-color", "transparent")
 		}
 
 		"h4" {
 			fontSize(1.25.cssRem)
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
 			property("-webkit-background-clip", "text")
 			property("background-clip", "text")
@@ -388,7 +387,7 @@ object MarkdownStyle : StyleSheet() {
 		"pre" {
 			backgroundColor(Color("#1A1225"))
 			borderRadius(.8.cssRem)
-			overflowX("auto")
+			overflowX(Overflow.Auto)
 			padding(1.5.cssRem)
 
 			self + webkitScrollbar style {

@@ -1,14 +1,17 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.compose.css.BackgroundClip
 import com.varabyte.kobweb.compose.css.TransitionTimingFunction
+import com.varabyte.kobweb.compose.css.backgroundClip
+import com.varabyte.kobweb.compose.css.backgroundImage
+import com.varabyte.kobweb.compose.css.boxShadow
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.P
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.utils.linearGradient
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -154,17 +157,16 @@ fun Experiences() {
 object ExperiencesStyle : StyleSheet() {
 	const val EXPERIENCES_BACKGROUND_COLOR = "#1A1225"  // Violet sombre cohérent
 	const val EXPERIENCE_BACKGROUND_COLOR = "#1E1E1E"
-	const val EXPERIENCE_BORDER_COLOR = "#444444"
 
 	val experiences by style {
 		backgroundColor(Color(EXPERIENCES_BACKGROUND_COLOR))
 
 		// Fond principal avec gradient violet
-		background(linearGradient(180.deg) {
-			stop(Color("#0A0A0F"), (-3).percent)
-			stop(Color("#1A1225"), 14.percent)
-			stop(Color("#2A1B3D"), 65.percent)
-			stop(Color("#1E1535"), 90.percent)
+		backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(180.deg) {
+			add(Color("#0A0A0F"), (-3).percent)
+			add(Color("#1A1225"), 14.percent)
+			add(Color("#2A1B3D"), 65.percent)
+			add(Color("#1E1535"), 90.percent)
 		})
 	}
 
@@ -181,20 +183,16 @@ object ExperiencesStyle : StyleSheet() {
 		flexDirection(FlexDirection.Column)
 		gap(3.cssRem)
 
-		"section" {
+		type("section") style {
 			backgroundColor(Color(EXPERIENCE_BACKGROUND_COLOR))
 			borderRadius(1.cssRem)
 			padding(1.cssRem, 2.cssRem)
-			border {
-				width(2.px)
-				style(LineStyle.Solid)
-				color(Color.transparent)
-			}
-			property("background", """
+			border(2.px, LineStyle.Solid, Color.transparent)
+			backgroundImage("""
 				linear-gradient(${EXPERIENCE_BACKGROUND_COLOR}, ${EXPERIENCE_BACKGROUND_COLOR}) padding-box,
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
 			""")
-			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
+			boxShadow("0 0 20px rgba(0, 212, 255, 0.1)")
 
 			transitions {
 				properties("transform", "box-shadow") {
@@ -207,7 +205,7 @@ object ExperiencesStyle : StyleSheet() {
 				transform {
 					translateY((-5).px)
 				}
-				property("box-shadow", "0 0 30px rgba(255, 0, 128, 0.3)")
+				boxShadow("0 0 30px rgba(255, 0, 128, 0.3)")
 			}
 
 			media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
@@ -222,14 +220,14 @@ object ExperiencesStyle : StyleSheet() {
 	val experience by style {
 		lineHeight(1.7.cssRem)
 
-		"h2" {
+		type("h2") style {
 			marginTop(0.px)
 			fontSize(1.5.cssRem)
 
-			// Titres de section avec gradient
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
@@ -243,7 +241,7 @@ object ExperiencesStyle : StyleSheet() {
 			}
 		}
 
-		"a" {
+		type("a") style {
 			color(Color(AppStyle.LINK_COLOR))
 			transitions {
 				properties("color") {

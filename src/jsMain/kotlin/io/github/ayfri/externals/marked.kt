@@ -4,10 +4,13 @@
 
 package io.github.ayfri.externals
 
+import kotlinx.js.JsPlainObject
+
 external fun use(vararg options: MarkedOptions)
 
 external fun parse(markdown: String): String
 
+@JsPlainObject
 external interface MarkedOptions {
 	var renderer: TextRenderer?
 }

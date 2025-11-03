@@ -2,10 +2,10 @@ package io.github.ayfri.pages.projects
 
 import androidx.compose.runtime.*
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
-import io.github.ayfri.AppStyle.SPECIAL_TEXT_COLOR
 import io.github.ayfri.CodeTheme
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
@@ -14,7 +14,6 @@ import io.github.ayfri.data.gitHubData
 import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectsListJsonLD
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.utils.linearGradient
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.InputType
@@ -333,22 +332,17 @@ fun Projects() {
 object ProjectsStyle : StyleSheet() {
 	// Color constants
 	const val PROJECTS_BACKGROUND_COLOR = "#1A1225"
-	const val CARD_BACKGROUND = "#ffffff08"
-	const val ITEM_BACKGROUND = "#ffffff10"
-	const val ITEM_BACKGROUND_HOVER = "#ffffff20"
-	const val BORDER_COLOR = "#ffffff20"
 	const val TEXT_SECONDARY = "#ffffffaa"
-	const val ACCENT_COLOR = SPECIAL_TEXT_COLOR
 
 	val projects by style {
 		backgroundColor(Color(PROJECTS_BACKGROUND_COLOR))
 
 		// Main background with gradient violet
-		background(linearGradient(180.deg) {
-			stop(Color("#0A0A0F"), (-3).percent)
-			stop(Color("#1A1225"), 14.percent)
-			stop(Color("#2A1B3D"), 65.percent)
-			stop(Color("#1E1535"), 90.percent)
+		backgroundImage(linearGradient(180.deg) {
+			add(Color("#0A0A0F"), (-3).percent)
+			add(Color("#1A1225"), 14.percent)
+			add(Color("#2A1B3D"), 65.percent)
+			add(Color("#1E1535"), 90.percent)
 		})
 	}
 
@@ -364,7 +358,7 @@ object ProjectsStyle : StyleSheet() {
 			style(LineStyle.Solid)
 			color(Color.transparent)
 		}
-		property("background", "linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		backgroundImage("linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
 	}
 
 	val searchContainer by style {
@@ -383,21 +377,17 @@ object ProjectsStyle : StyleSheet() {
 	}
 
 	val searchInput by style {
-		width(100.percent)
-		padding(15.px, 15.px, 15.px, 45.px)
-		fontSize(1.1.cssRem)
-		color(Color.white)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		backgroundImage("linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(8.px)
-		outline("none")
-		property("background", "linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		color(Color.white)
+		fontSize(1.1.cssRem)
+		outlineStyle(LineStyle.None)
+		padding(15.px, 15.px, 15.px, 45.px)
+		width(100.percent)
 
 		self + focus style {
-			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.4)")
+			boxShadow("0 0 20px rgba(0, 212, 255, 0.4)")
 		}
 	}
 
@@ -418,7 +408,7 @@ object ProjectsStyle : StyleSheet() {
 		borderRadius(20.px)
 		fontSize(0.9.cssRem)
 		border(1.px, LineStyle.Solid, Color("#00D4FF"))
-		property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
+		boxShadow("0 0 15px rgba(0, 212, 255, 0.3)")
 	}
 
 	val clearFilterButton by style {
@@ -447,15 +437,11 @@ object ProjectsStyle : StyleSheet() {
 	val filterSelect by style {
 		padding(8.px, 15.px)
 		color(Color.white)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(8.px)
 		cursor(Cursor.Pointer)
 		outline("none")
-		property("background", "linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		backgroundImage("linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
 
 		transitions {
 			properties("all") {
@@ -464,7 +450,7 @@ object ProjectsStyle : StyleSheet() {
 		}
 
 		self + focus style {
-			property("box-shadow", "0 0 15px rgba(255, 0, 128, 0.4)")
+			boxShadow("0 0 15px rgba(255, 0, 128, 0.4)")
 		}
 
 		"option" {
@@ -495,15 +481,11 @@ object ProjectsStyle : StyleSheet() {
 	val tagButton by style {
 		padding(5.px, 15.px)
 		color(Color.white)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(20.px)
 		fontSize(0.9.cssRem)
 		cursor(Cursor.Pointer)
-		property("background", "linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		backgroundImage("linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
 
 		transitions {
 			properties("all") {
@@ -512,9 +494,9 @@ object ProjectsStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			property("background", "linear-gradient(#252525, #252525) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+			backgroundImage("linear-gradient(#252525, #252525) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+			boxShadow("0 0 15px rgba(0, 212, 255, 0.3)")
 			transform { scale(1.05) }
-			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
 		}
 	}
 
@@ -522,11 +504,11 @@ object ProjectsStyle : StyleSheet() {
 		backgroundColor(Color("#00D4FF20"))
 		color(Color("#00D4FF"))
 		border(1.px, LineStyle.Solid, Color("#00D4FF"))
-		property("box-shadow", "0 0 15px rgba(255, 0, 128, 0.3)")
+		boxShadow("0 0 15px rgba(255, 0, 128, 0.3)")
 
 		self + hover style {
 			backgroundColor(Color("#FF008030"))
-			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.5)")
+			boxShadow("0 0 20px rgba(255, 0, 128, 0.5)")
 		}
 	}
 
@@ -544,7 +526,7 @@ object ProjectsStyle : StyleSheet() {
 		justifyContent(JustifyContent.Center)
 		gap(15.px)
 		padding(50.px)
-		gridColumn("1 / -1")
+		gridColumn(1, -1)
 		textAlign(TextAlign.Center)
 
 		"h2" style {
@@ -584,8 +566,8 @@ object ProjectsStyle : StyleSheet() {
 
 		self + hover style {
 			backgroundColor(Color("#FF008030"))
+			boxShadow("0 0 20px rgba(255, 0, 128, 0.4)")
 			transform { scale(1.05) }
-			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.4)")
 		}
 	}
 

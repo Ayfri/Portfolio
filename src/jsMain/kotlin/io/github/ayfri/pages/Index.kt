@@ -3,6 +3,7 @@ package io.github.ayfri.pages
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.blur
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.css.functions.radialGradient
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
@@ -14,7 +15,6 @@ import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.HomeCard
 import io.github.ayfri.data.gitHubData
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.utils.linearGradient
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.n
 import io.github.ayfri.utils.size
@@ -517,11 +517,11 @@ object HomeStyle : StyleSheet() {
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Column)
 			alignItems(AlignItems.Center)
-			background(linearGradient(180.deg) {
-				stop(Color("#0A0A0F"), (-3).percent)
-				stop(Color("#1A1225"), 14.percent)
-				stop(Color("#2A1B3D"), 65.percent)
-				stop(Color("#1E1535"), 90.percent)
+			backgroundImage(linearGradient(180.deg) {
+				add(Color("#0A0A0F"), (-3).percent)
+				add(Color("#1A1225"), 14.percent)
+				add(Color("#2A1B3D"), 65.percent)
+				add(Color("#1E1535"), 90.percent)
 			})
 			position(Position.Relative)
 			minHeight(100.vh)
@@ -565,9 +565,10 @@ object HomeStyle : StyleSheet() {
 	}
 
 	val sectionTitle by style {
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
+		backgroundClip(BackgroundClip.Text)
+		backgroundImage(linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
 		})
 
 		fontSize(2.2.cssRem)
@@ -601,16 +602,12 @@ object HomeStyle : StyleSheet() {
 		backgroundColor(Color("#1A1225"))
 		backdropFilter(BackdropFilter.list(BackdropFilter.of(blur(10.px))))
 
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		border(2.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(#1A1225, #1A1225) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
-		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05)")
+		boxShadow("0 0 30px rgba(0, 212, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05)")
 
 		className("skills") style {
 			flexWrap(FlexWrap.Wrap)
@@ -662,12 +659,8 @@ object HomeStyle : StyleSheet() {
 		borderRadius(.4.cssRem)
 		color(Color.white)
 		padding(.3.cssRem, .5.cssRem)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(#252525, #252525) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -678,7 +671,7 @@ object HomeStyle : StyleSheet() {
 
 		hover(self) style {
 			backgroundColor(Color("#1D1D1E"))
-			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.4)")
+			boxShadow("0 0 20px rgba(0, 212, 255, 0.4)")
 			scale(1.05)
 		}
 
@@ -715,7 +708,7 @@ object HomeStyle : StyleSheet() {
 
 	val portfolioImage by style {
 		borderRadius(0.8.cssRem)
-		property("box-shadow", "0px 0px 20px 4px rgba(0, 212, 255, 0.4)")
+		boxShadow("0px 0px 20px 4px rgba(0, 212, 255, 0.4)")
 		maxWidth(40.percent)
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
@@ -799,12 +792,8 @@ object HomeStyle : StyleSheet() {
 		backgroundColor(Color("#252525"))
 		color(Color.white)
 		textDecorationLine(TextDecorationLine.None)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(#252525, #252525) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -816,8 +805,8 @@ object HomeStyle : StyleSheet() {
 
 		hover(self) style {
 			backgroundColor(Color("#1D1D1E"))
+			boxShadow("0 0 25px rgba(255, 0, 128, 0.5)")
 			translateY((-5).px)
-			property("box-shadow", "0 0 25px rgba(255, 0, 128, 0.5)")
 		}
 	}
 
@@ -851,10 +840,10 @@ object HomeStyle : StyleSheet() {
 
 		hover(self) style {
 			backgroundColor(Color("#2A2A2A"))
+			boxShadow("0 0 30px rgba(0, 212, 255, 0.4)")
 			transform {
 				translateY((-5).px)
 			}
-			property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.4)")
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
@@ -933,7 +922,7 @@ object HomeStyle : StyleSheet() {
 		height(6.px)
 		borderRadius(50.percent)
 		backgroundColor(Color("#ffffff90"))
-		property("box-shadow", "0 0 12px rgba(255, 255, 255, 0.3)")
+		boxShadow("0 0 12px rgba(255, 255, 255, 0.3)")
 		opacity(0.04)
 
 		animation(floatUpDown) {
@@ -945,7 +934,7 @@ object HomeStyle : StyleSheet() {
 
 		nthChild(2.n) style {
 			backgroundColor(Color("#00D4FF"))
-			property("box-shadow", "0 0 8px rgba(0, 212, 255, 1)")
+			boxShadow("0 0 8px rgba(0, 212, 255, 1)")
 			opacity(0.05)
 		}
 
@@ -953,7 +942,7 @@ object HomeStyle : StyleSheet() {
 			width(4.px)
 			height(4.px)
 			backgroundColor(Color("#FF0080"))
-			property("box-shadow", "0 0 6px rgba(255, 0, 128, 1)")
+			boxShadow("0 0 6px rgba(255, 0, 128, 1)")
 			opacity(0.08)
 			property("animation-delay", "8s")
 		}
@@ -962,7 +951,7 @@ object HomeStyle : StyleSheet() {
 			width(8.px)
 			height(8.px)
 			backgroundColor(Color("#8A2BE2"))
-			property("box-shadow", "0 0 7px rgba(138, 43, 226, 1)")
+			boxShadow("0 0 7px rgba(138, 43, 226, 1)")
 			opacity(0.02)
 			property("animation-delay", "15s")
 		}
@@ -971,7 +960,7 @@ object HomeStyle : StyleSheet() {
 			width(3.px)
 			height(3.px)
 			backgroundColor(Color("#ffffff"))
-			property("box-shadow", "0 0 5px rgba(255, 255, 255, 1)")
+			boxShadow("0 0 5px rgba(255, 255, 255, 1)")
 			opacity(0.1)
 			property("animation-delay", "20s")
 		}
@@ -1092,10 +1081,11 @@ object HomeStyle : StyleSheet() {
 		gap(0.4.cssRem)
 		flexWrap(FlexWrap.Wrap)
 
+		backgroundClip(BackgroundClip.Text)
 		backgroundImage(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
-			stop(Color("#8A2BE2"))
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
+			add(Color("#8A2BE2"))
 		})
 		property("-webkit-background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
@@ -1108,7 +1098,7 @@ object HomeStyle : StyleSheet() {
 		""")
 
 		// Style for "alias"
-		child(self, selector("span:first-of-type")) style {
+		child(self, type("span") + firstOfType) style {
 			fontSize(1.5.cssRem)
 			fontWeight(300)
 			background(Background.None)
@@ -1120,12 +1110,13 @@ object HomeStyle : StyleSheet() {
 		}
 
 		// Style for "Ayfri"
-		child(self, selector("span:last-of-type")) style {
+		child(self, type("span") + lastOfType) style {
 			fontSize(2.8.cssRem)
 			fontWeight(700)
+			backgroundClip(BackgroundClip.Text)
 			backgroundImage(linearGradient(45.deg) {
-				stop(Color("#FF0080"))
-				stop(Color("#8A2BE2"))
+				add(Color("#FF0080"))
+				add(Color("#8A2BE2"))
 			})
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
@@ -1144,11 +1135,11 @@ object HomeStyle : StyleSheet() {
 				gap(0.2.cssRem)
 			}
 
-			child(self, selector("span:first-of-type")) style {
+			child(self, type("span") + firstOfType) style {
 				fontSize(1.2.cssRem)
 			}
 
-			child(self, selector("span:last-of-type")) style {
+			child(self, type("span") + lastOfType) style {
 				fontSize(2.cssRem)
 			}
 		}
@@ -1208,12 +1199,8 @@ object HomeStyle : StyleSheet() {
 		padding(1.2.cssRem)
 		borderRadius(0.8.cssRem)
 		backgroundColor(Color("#ffffff08"))
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color("#ffffff20"))
-		}
-		property("backdrop-filter", "blur(10px)")
+		border(1.px, LineStyle.Solid, Color("#ffffff20"))
+		backdropFilter(BackdropFilter.list(BackdropFilter.of(blur(10.px))))
 		animation(fadeInUp) {
 			duration(1.2.s)
 			fillMode(AnimationFillMode.Forwards)
@@ -1235,16 +1222,12 @@ object HomeStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val enhancedAvatar by style {
 		borderRadius(1.cssRem)
-		border {
-			width(3.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		border(3.px, LineStyle.Solid, Color.transparent)
+		backgroundImage( """
 			linear-gradient(white, white) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080, #8A2BE2) border-box
 		""")
-		property("box-shadow", """
+		boxShadow( """
 			0 0 30px rgba(0, 212, 255, 0.6),
 			0 0 60px rgba(255, 0, 128, 0.4),
 			inset 0 1px 1px rgba(255, 255, 255, 0.2)
@@ -1255,7 +1238,7 @@ object HomeStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			property("box-shadow", """
+			boxShadow( """
 				0 0 40px rgba(0, 212, 255, 0.8),
 				0 0 80px rgba(255, 0, 128, 0.6),
 				inset 0 1px 1px rgba(255, 255, 255, 0.3)

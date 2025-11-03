@@ -562,7 +562,7 @@ object FooterStyle : StyleSheet() {
 			flexDirection(FlexDirection.Column)
 			gap(.4.cssRem)
 
-			"label" style {
+			type("label") style {
 				color(Color.white)
 				fontSize(0.9.cssRem)
 			}
@@ -590,7 +590,7 @@ object FooterStyle : StyleSheet() {
 				color(Color("#FFFFFF7F"))
 			}
 
-			"textarea" style {
+			type("textarea") style {
 				height(120.px)
 				resize(Resize.None)
 			}

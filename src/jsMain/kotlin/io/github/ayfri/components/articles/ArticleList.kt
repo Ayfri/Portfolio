@@ -1,18 +1,18 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.ListStyle
-import com.varabyte.kobweb.compose.css.TextAlign
-import com.varabyte.kobweb.compose.css.listStyle
-import com.varabyte.kobweb.compose.css.textAlign
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.navigation.Anchor
 import io.github.ayfri.*
 import io.github.ayfri.data.ArticleEntry
-import io.github.ayfri.utils.linearGradient
+import js.date.Date
+import js.intl.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
-import kotlin.js.Date
 
 
 @Composable
@@ -48,11 +48,11 @@ fun ArticleEntry(entry: ArticleEntry) {
 						// Format and display date
 						val date = try {
 							val jsDate = Date(entry.date)
-							jsDate.toLocaleDateString("en-US", jso {
-								year = "numeric"
-								month = "long"
-								day = "numeric"
-							})
+							jsDate.toLocaleDateString("en-US", DateTimeFormatOptions(
+								year = YearFormat.numeric,
+								month = MonthFormat.long,
+								day = DayFormat.numeric
+							))
 						} catch (e: Exception) {
 							entry.date.split("T")[0]
 						}
@@ -142,15 +142,15 @@ object ArticleListStyle : StyleSheet() {
 	const val READ_MORE_COLOR = "#6EBAE7"
 
 	val title by style {
+		backgroundClip(BackgroundClip.Text)
+		backgroundImage(linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
+		})
 		fontSize(3.cssRem)
 		marginBottom(1.5.cssRem)
 		textAlign(TextAlign.Center)
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
-		})
 		property("-webkit-background-clip", "text")
-		property("background-clip", "text")
 		property("-webkit-text-fill-color", "transparent")
 		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 	}
@@ -159,26 +159,22 @@ object ArticleListStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		gap(1.5.cssRem)
-		padding(0.px)
 		listStyle(ListStyle.None)
+		padding(0.px)
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val articleEntry by style {
 		backgroundColor(Color(ARTICLE_BACKGROUND_COLOR))
-		borderRadius(1.cssRem)
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		backgroundImage("""
 			linear-gradient(${ARTICLE_BACKGROUND_COLOR}, ${ARTICLE_BACKGROUND_COLOR}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
-		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
+		border(2.px, LineStyle.Solid, Color.transparent)
+		borderRadius(1.cssRem)
+		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
 
 		animation(AnimationsStyle.appearFromBelow) {
 			fillMode(AnimationFillMode.Forwards)
@@ -195,10 +191,10 @@ object ArticleListStyle : StyleSheet() {
 
 		self + hover style {
 			backgroundColor(Color(ARTICLE_HOVER_BACKGROUND_COLOR))
+			boxShadow("0 0 40px rgba(255, 0, 128, 0.3)")
 			transform {
 				translateY((-5).px)
 			}
-			property("box-shadow", "0 0 40px rgba(255, 0, 128, 0.3)")
 		}
 
 		"p" {
@@ -226,14 +222,14 @@ object ArticleListStyle : StyleSheet() {
 		gap(0.8.cssRem)
 
 		"h2" {
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
+			})
 			margin(0.px)
 			fontSize(1.8.cssRem)
-			background(linearGradient(45.deg) {
-				stop(Color("#00D4FF"))
-				stop(Color("#FF0080"))
-			})
 			property("-webkit-background-clip", "text")
-			property("background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
 		}
 	}

@@ -7,6 +7,7 @@ import com.varabyte.kobweb.core.init.InitKobweb
 import com.varabyte.kobweb.core.init.InitKobwebContext
 import com.varabyte.kobweb.navigation.OpenLinkStrategy
 import com.varabyte.kobweb.navigation.UpdateHistoryMode
+import io.github.ayfri.externals.MarkedOptions
 import io.github.ayfri.externals.TextRenderer
 import io.github.ayfri.externals.use
 
@@ -28,7 +29,7 @@ fun AppEntry(content: @Composable () -> Unit) {
 		}
 	}
 
-	use(jso { this.renderer = renderer })
+	use(MarkedOptions(renderer = renderer))
 
 	KobwebApp {
 		content()

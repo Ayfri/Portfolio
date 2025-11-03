@@ -2,6 +2,7 @@ package io.github.ayfri.pages.articles
 
 import androidx.compose.runtime.*
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.articlesEntries
@@ -9,7 +10,6 @@ import io.github.ayfri.components.articles.ArticleList
 import io.github.ayfri.components.articles.ArticleListStyle
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.focusWithin
-import io.github.ayfri.utils.linearGradient
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.*
@@ -198,11 +198,11 @@ object BlogPageStyle : StyleSheet() {
 	init {
 		id("main") style {
 			// Add consistent background styling
-			background(linearGradient(180.deg) {
-				stop(Color("#0A0A0F"), (-3).percent)
-				stop(Color("#1A1225"), 14.percent)
-				stop(Color("#2A1B3D"), 65.percent)
-				stop(Color("#1E1535"), 90.percent)
+			backgroundImage(linearGradient(180.deg) {
+				add(Color("#0A0A0F"), (-3).percent)
+				add(Color("#1A1225"), 14.percent)
+				add(Color("#2A1B3D"), 65.percent)
+				add(Color("#1E1535"), 90.percent)
 			})
 			minHeight(100.vh)
 		}
@@ -223,9 +223,9 @@ object BlogPageStyle : StyleSheet() {
 	val mainTitle by style {
 		fontSize(3.cssRem)
 		margin(1.cssRem)
-		background(linearGradient(45.deg) {
-			stop(Color("#00D4FF"))
-			stop(Color("#FF0080"))
+		backgroundImage(linearGradient(45.deg) {
+			add(Color("#00D4FF"))
+			add(Color("#FF0080"))
 		})
 		backgroundClip(BackgroundClip.Text)
 		textShadow(TextShadow.of(color = rgba(0, 212, 255, 0.5), offsetX = 0.px, offsetY = 0.px, blurRadius = 10.px))
@@ -266,7 +266,7 @@ object BlogPageStyle : StyleSheet() {
 		fontSize(1.1.cssRem)
 		maxWidth(600.px)
 		padding(0.8.cssRem, 1.cssRem)
-		property("background", """
+		backgroundImage("""
 			linear-gradient(#1A1225, #1A1225) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -278,7 +278,7 @@ object BlogPageStyle : StyleSheet() {
 
 		self + focusWithin style {
 			color(Color.white)
-			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.4)")
+			boxShadow("0 0 20px rgba(0, 212, 255, 0.4)")
 		}
 	}
 
@@ -329,12 +329,8 @@ object BlogPageStyle : StyleSheet() {
 		fontSize(0.9.cssRem)
 		color(Color("#FFFFFFDD"))
 		cursor(Cursor.Pointer)
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		property("background", """
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
 			linear-gradient(#1A1225, #1A1225) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -353,25 +349,25 @@ object BlogPageStyle : StyleSheet() {
 
 		hover style {
 			backgroundColor(Color("#1E1535"))
+			boxShadow("0 0 15px rgba(0, 212, 255, 0.3)")
 			transform {
 				scale(1.05)
 			}
-			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
 		}
 	}
 
 	val tagSelected by style {
 		backgroundColor(Color("#1A1225"))
 		border(2.px, LineStyle.Solid, Color.transparent)
-		property("background", """
+		backgroundImage("""
 			linear-gradient(#1A1225, #1A1225) padding-box,
 			linear-gradient(45deg, #FF0080, #00D4FF) border-box
 		""")
-		property("box-shadow", "0 0 15px rgba(255, 0, 128, 0.3)")
+		boxShadow("0 0 15px rgba(255, 0, 128, 0.3)")
 
 		hover style {
 			backgroundColor(Color("#1E1535"))
-			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.5)")
+			boxShadow("0 0 20px rgba(255, 0, 128, 0.5)")
 		}
 	}
 

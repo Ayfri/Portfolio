@@ -2,10 +2,10 @@ package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.utils.linearGradient
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
@@ -131,10 +131,10 @@ object PortfolioStyle : StyleSheet() {
 
 		padding(2.cssRem)
 
-		background(linearGradient(225.deg) {
-			stop(Color(BACKGROUND_GRADIENT_START))
-			stop(Color(BACKGROUND_GRADIENT_MIDDLE))
-			stop(Color(BACKGROUND_GRADIENT_END))
+		backgroundImage(linearGradient(225.deg) {
+			add(Color(BACKGROUND_GRADIENT_START))
+			add(Color(BACKGROUND_GRADIENT_MIDDLE))
+			add(Color(BACKGROUND_GRADIENT_END))
 		})
 
 		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
@@ -181,9 +181,10 @@ object PortfolioStyle : StyleSheet() {
 		}
 
 		"h2" {
-			background(linearGradient(20.deg) {
-				stop(Color(TITLE_GRADIENT_START))
-				stop(Color(TITLE_GRADIENT_END))
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(linearGradient(20.deg) {
+				add(Color(TITLE_GRADIENT_START))
+				add(Color(TITLE_GRADIENT_END))
 			})
 
 			fontSize(2.5.cssRem)
@@ -202,7 +203,7 @@ object PortfolioStyle : StyleSheet() {
 
 		"img" {
 			borderRadius(.8.cssRem)
-			property("box-shadow", "0 0 .75rem #71A0E8")
+			boxShadow("0 0 .75rem #71A0E8")
 
 			height(14.cssRem)
 			objectFit(ObjectFit.Cover)

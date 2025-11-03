@@ -236,12 +236,8 @@ object DataStyle : StyleSheet() {
 			justifyContent(JustifyContent.Center)
 
 			backgroundColor(Color(HOME_CARD_TITLE_BACKGROUND))
+			border(1.px, LineStyle.Solid, Color.transparent)
 			padding(1.cssRem)
-			border {
-				width(1.px)
-				style(LineStyle.Solid)
-				color(Color.transparent)
-			}
 			background("""
 				linear-gradient(${HOME_CARD_TITLE_BACKGROUND}, ${HOME_CARD_TITLE_BACKGROUND}) padding-box,
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
@@ -264,7 +260,7 @@ object DataStyle : StyleSheet() {
 			color(Color(HOME_CARD_COLOR))
 		}
 
-		child(self, selector("div")) style {
+		child(self, type("div")) style {
 			backgroundColor(Color(HOME_CARD_BACKGROUND))
 			textAlign(TextAlign.Start)
 
@@ -273,13 +269,9 @@ object DataStyle : StyleSheet() {
 			justifyContent(JustifyContent.SpaceBetween)
 			gap(3.cssRem)
 
+			border(1.px, LineStyle.Solid, Color.transparent)
 			height(100.percent)
 			padding(1.cssRem)
-			border {
-				width(1.px)
-				style(LineStyle.Solid)
-				color(Color.transparent)
-			}
 			background("""
 				linear-gradient(${HOME_CARD_BACKGROUND}, ${HOME_CARD_BACKGROUND}) padding-box,
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
@@ -295,6 +287,8 @@ object DataStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val projectCard by style {
+		imageSize(2.5.cssRem)
+
 		alignItems(AlignItems.Center)
 		borderRadius(0.75.cssRem)
 		color(Color.white)
@@ -302,14 +296,9 @@ object DataStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		gap(0.6.cssRem)
-		imageSize(2.5.cssRem)
 		padding(1.5.cssRem)
 
-		border {
-			width(1.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
+		border(1.px, LineStyle.Solid, Color.transparent)
 		background("""
 			linear-gradient(${PROJECT_CARD_CLOSED_BACKGROUND}, ${PROJECT_CARD_CLOSED_BACKGROUND}) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
@@ -435,15 +424,11 @@ object DataStyle : StyleSheet() {
 				}
 
 				className("topic-more") style {
-					color(Color.white)
-					padding(0.3.cssRem, 0.6.cssRem)
+					border(1.px, LineStyle.Solid, Color.transparent)
 					borderRadius(1.cssRem)
+					color(Color.white)
 					fontSize(0.8.cssRem)
-					border {
-						width(1.px)
-						style(LineStyle.Solid)
-						color(Color.transparent)
-					}
+					padding(0.3.cssRem, 0.6.cssRem)
 					background("""
 						linear-gradient(#ffffff15, #ffffff15) padding-box,
 						linear-gradient(45deg, #00D4FF, #FF0080) border-box
