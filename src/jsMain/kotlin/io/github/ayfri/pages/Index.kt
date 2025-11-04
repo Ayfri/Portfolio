@@ -27,6 +27,8 @@ import org.jetbrains.compose.web.css.CSSMediaQuery.Only
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
+import web.http.FetchPriority
+import web.http.high
 import kotlin.js.Date
 
 inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
@@ -107,6 +109,7 @@ fun Home() {
 				}) {
 					Img(localImage("avatar@300x300.webp"), "avatar") {
 						classes(AppStyle.avatar, HomeStyle.enhancedAvatar)
+						fetchPriority(FetchPriority.high)
 						height(300)
 						width(300)
 					}
@@ -119,8 +122,8 @@ fun Home() {
 					classes(HomeStyle.mainTitle)
 				}) {
 					Text("Pierre Roy")
-					Span("alias")
-					Span(" Ayfri")
+					Span(" alias ")
+					Span("Ayfri")
 				}
 
 				H2({
