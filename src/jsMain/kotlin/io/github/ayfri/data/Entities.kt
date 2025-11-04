@@ -6,7 +6,7 @@ import kotlinx.js.JsPlainObject
 @JsPlainObject
 external interface GitHubData {
 	val ayfri: GitHubUser
-	val repos: List<GitHubRepository>
+	val repos: Array<GitHubRepository>
 }
 
 @JsPlainObject
@@ -47,7 +47,7 @@ external interface GitHubRepository {
 	val readmeContent: String?
 	val size: Int
 	val stargazersCount: Int
-	val topics: List<String>
+	val topics: Array<String>
 	val updatedAt: String
 	val visibility: String
 	val watchersCount: Int
