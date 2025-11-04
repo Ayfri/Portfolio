@@ -51,14 +51,14 @@ root: .layouts.ArticleLayout
 routeOverride: /articles/kore-hello-world/index
 ```
 
-The `nav-title` is the slug of the page and what will be displayed for SEO.
-The `title` is the title of the article that will be displayed in the article list.
-The `description` is the description of the article that will be used everywhere.
-The `keywords` are the keywords of the article that will be used for SEO.
-The `date-created` is the date the article was created.
-The `date-modified` is the date the article was last modified.
-The `root` is the layout of the article, usually `.layouts.ArticleLayout` (which means the article will be displayed with the `src/jsMain/kotlin/layouts/DocLayout.kt` layout).
-The `routeOverride` is the route of the article, it's the URL of the article.
+- `nav-title` is the slug of the page and what will be displayed for SEO.
+- `title` is the title of the article that will be displayed in the article list.
+- `description` is the description of the article that will be used everywhere.
+- `keywords` are the keywords of the article that will be used for SEO.
+- `date-created` is the date the article was created.
+- `date-modified` is the date the article was last modified.
+- `root` is the layout of the article, usually `.layouts.ArticleLayout` (which means the article will be displayed with the `src/jsMain/kotlin/layouts/DocLayout.kt` layout).
+- `routeOverride` is the route of the article, it's the URL of the article.
 
 ## License
 
