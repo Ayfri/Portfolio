@@ -8,8 +8,6 @@ import kotlin.math.roundToInt
 
 fun localImage(path: String) = "/images/$path"
 
-inline fun <T> jso(block: T.() -> Unit = {}) = (js("{}") as T).apply(block)
-
 fun AttrsScope<HTMLParagraphElement>.markdownParagraph(
 	text: String,
 	breaks: Boolean = false,
