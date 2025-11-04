@@ -6,4 +6,5 @@ fun String.titlecase() = split(" ").joinToString(" ") { word ->
 	}
 }
 
-fun String.ensureSuffix(suffix: String) = if (endsWith(suffix)) this else this + suffix
+inline fun String.ensureSuffix(suffix: String) = if (endsWith(suffix)) this else this + suffix
+inline fun String.ifNotBlank(block: (String) -> String) = if (isNotBlank()) block(this) else ""
