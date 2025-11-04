@@ -294,6 +294,13 @@ kotlin {
 		compilerOptions {
 			target = "es2015"
 			useEsClasses = true
+
+			freeCompilerArgs.addAll(
+				"-Xes-long-as-bigint",
+				"-Xgenerate-polyfills=false",
+				"-Xir-generate-inline-anonymous-functions",
+				"-Xwarning-level=NOTHING_TO_INLINE:disabled",
+			)
 		}
 
 		useEsModules()
