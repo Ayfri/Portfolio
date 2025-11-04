@@ -1,18 +1,15 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle
 import js.uri.encodeURIComponent
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
-import web.clipboard.writeText
 import web.navigator.navigator
 
 @Composable
@@ -79,14 +76,11 @@ fun ShareSection(title: String, url: String) {
 				Span { Text("Facebook") }
 			}
 
-			val scope = rememberCoroutineScope()
 			// Copy link button
 			Button({
 				classes(ShareSectionStyle.button, ShareSectionStyle.copyLink)
 				onClick {
-					scope.launch {
-						navigator.clipboard.writeText(url)
-					}
+					navigator.clipboard.writeTextAsync(url)
 				}
 			}) {
 				I({
@@ -152,7 +146,7 @@ object ShareSectionStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		gap(0.5.cssRem)
-		padding(0.8.cssRem, 1.5.cssRem)
+		padding(0.6.cssRem, 1.2.cssRem)
 		borderRadius(2.cssRem)
 		border(0.px)
 		fontSize(0.9.cssRem)
