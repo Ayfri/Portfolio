@@ -40,7 +40,7 @@ val projectLinks = listOf(
 	ProjectLink("Kore", "https://kore.ayfri.com"),
 	ProjectLink("Atom Clicker", "https://atom-clicker.ayfri.com"),
 	ProjectLink("PokeCards-Collector", "https://pokecards-collector.ayfri.com"),
-	ProjectLink("Cursors Draw", "https://cursors.draw.ayfri.com"),
+	ProjectLink("Cursors Draw", "https://cursors-draw.ayfri.com"),
 	ProjectLink("Realtime TodoList", "https://realtime-todolist.pages.dev"),
 	ProjectLink("GPT Images", "https://gpt-images.ayfri.com"),
 	ProjectLink("A* Follow", "https://afollow.ayfri.com"),
