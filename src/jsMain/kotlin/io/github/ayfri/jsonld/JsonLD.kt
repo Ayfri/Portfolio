@@ -34,6 +34,7 @@ external interface BlogArticleJsonLD : JsonLD {
 @JsPlainObject
 external interface PersonJsonLD : JsonLD {
 	val image: String?
+	val jobTitle: String?
 	val name: String
 	val sameAs: List<String>?
 	val url: String?

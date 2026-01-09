@@ -17,6 +17,7 @@ fun generateJsonLD(path: String) = GraphJsonLD(
 	graph = listOfNotNull(
 		getArticleJsonLD(path),
 		defaultJsonLD(),
+		getMeJsonLD(),
 	),
 	type = "Graph",
 )
@@ -26,6 +27,7 @@ fun generateProjectJsonLD(project: GitHubRepository, path: String) = GraphJsonLD
 	graph = listOf(
 		getProjectJsonLD(project, path),
 		getProjectBreadcrumbJsonLD(project, path),
+		getMeJsonLD(),
 	),
 	type = "Graph",
 )
@@ -34,20 +36,14 @@ fun generateProjectsListJsonLD(projects: List<GitHubRepository>) = GraphJsonLD(
 	context = "https://schema.org",
 	graph = listOf(
 		getProjectsListJsonLD(projects),
+		getMeJsonLD(),
 	),
 	type = "Graph",
 )
 
 fun getArticleJsonLD(path: String) = articlesEntries.find { it.path == path }?.let {
 	BlogArticleJsonLD(
-		author = PersonJsonLD(
-			context = "https://schema.org",
-			image = null,
-			name = "Ayfri",
-			sameAs = socialMediaLinks,
-			type = "Person",
-			url = AppGlobals["url"],
-		),
+		author = getMeJsonLD(),
 		context = "https://schema.org",
 		dateModified = it.dateModified,
 		datePublished = it.date,
@@ -189,4 +185,14 @@ fun defaultJsonLD() = WebSiteJsonLD(
 	sameAs = socialMediaLinks,
 	type = "WebSite",
 	url = AppGlobals["url"]!!,
+)
+
+fun getMeJsonLD() = PersonJsonLD(
+	context = "https://schema.org",
+	image = AppGlobals["url"]!! + "/images/avatar@300x300.webp",
+	jobTitle = "Software Engineer",
+	name = "Ayfri",
+	sameAs = socialMediaLinks,
+	type = "Person",
+	url = AppGlobals["url"],
 )
