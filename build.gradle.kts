@@ -63,7 +63,7 @@ val downloadDataTask = tasks.register("downloadData") {
 		val tripleQuotes = "\"\"\""
 		val kotlinOutput = """
 			package io.github.ayfri.data
-			
+
 			const val rawData = $tripleQuotes$data$tripleQuotes
 		""".trimIndent()
 
@@ -84,7 +84,18 @@ data class BlogEntry(
 )
 
 fun String.escapeQuotes() = this.replace("\"", "\\\"")
-fun String.escapeVariables() = this.replace(Regex("\\$"), "\\\${\"\\$\"}")
+fun String.escapeVariables() = this.replace("$", "\${\"$\"}{36.toChar()}")
+
+tasks.matching { it.name == "kobwebxMarkdownConvert" }.configureEach {
+	doLast {
+		fileTree(layout.buildDirectory.dir("generated/kobweb/markdown/convert/src/jsMain/kotlin")).forEach { file ->
+			val text = file.readText().replace(Regex("""\$([a-zA-Z_]\w*)""")) { match ->
+				"\${\"$\"}{36.toChar()}${match.groupValues[1]}"
+			}
+			file.writeText(text)
+		}
+	}
+}
 
 kobweb {
 	val projectGroup = group
@@ -92,6 +103,16 @@ kobweb {
 
 	markdown {
 		handlers {
+			text.set { text ->
+				"org.jetbrains.compose.web.dom.Text(\"\"\"${text.literal.escapeVariables()}\"\"\")"
+			}
+
+			code.set { code ->
+				val text = "\"\"\"${code.literal.escapeVariables().replace("\"\"\"", "\${\"\\\"\\\"\\\"\"}")}\"\"\""
+
+				"""io.github.ayfri.components.CodeBlock($text, "${code.info.takeIf { it.isNotBlank() }}")"""
+			}
+
 			img.set { image ->
 				val altText = image.children()
 					.filterIsInstance<Text>()
@@ -155,40 +176,34 @@ kobweb {
 			}
 
 			generateKotlin("$projectGroup/articles.kt", buildString {
-				appendLine(
-					"""
-					|// This file is generated. Modify the build script if you need to change it.
-					|
-					|package io.github.ayfri
-					|
-					|import io.github.ayfri.data.ArticleEntry
-					|
-					|val articlesEntries = listOf${if (blogEntries.isEmpty()) "<ArticleEntry>" else ""}(
-					""".trimMargin()
-				)
-
-				fun List<String>.asCode() = "listOf(${joinToString { "\"$it\"" }})"
+				appendLine("// This file is generated. Modify the build script if you need to change it.")
+				appendLine()
+				appendLine("package io.github.ayfri")
+				appendLine()
+				appendLine("import io.github.ayfri.data.ArticleEntry")
+				appendLine()
+				appendLine("val articlesEntries = listOf${if (blogEntries.isEmpty()) "<ArticleEntry>" else ""}( ")
 
 				blogEntries.sortedByDescending(BlogEntry::date).forEach { entry ->
 					val blogInputFile = blogInputDir.asFile.resolve(entry.file.name)
-					appendLine(
-						"""
-						|	ArticleEntry("/articles/${
-							entry.file.nameWithoutExtension
-								.splitCamelCase()
-								.joinToString("-") { word -> word.lowercase() }
-								.ensureSurrounded("", "/")
-						}",
-						|		"${entry.date}",
-						|		"${entry.title.escapeQuotes()}",
-						|		"${entry.desc.escapeQuotes()}",
-						|		"${entry.navTitle.escapeQuotes()}",
-						|		${entry.keywords.asCode()},
-						|		"${entry.dateModified}",
-						|		${"\"\"\""}${blogInputFile.readText().escapeQuotes().escapeVariables().substringAfter("\n---")}${"\"\"\""}
-						|	),
-						""".trimMargin()
-					)
+					val content = blogInputFile.readText().substringAfter("\n---")
+						.escapeVariables()
+						.replace("\"\"\"", "\${\"\\\"\\\"\\\"\"}")
+
+					appendLine("	ArticleEntry(\"/articles/${
+						entry.file.nameWithoutExtension
+							.splitCamelCase()
+							.joinToString("-") { word -> word.lowercase() }
+							.ensureSurrounded("", "/")
+					}\",")
+					appendLine("		\"${entry.date}\",")
+					appendLine("		\"${entry.title.escapeQuotes().escapeVariables()}\",")
+					appendLine("		\"${entry.desc.escapeQuotes().escapeVariables()}\",")
+					appendLine("		\"${entry.navTitle.escapeQuotes().escapeVariables()}\",")
+					appendLine("		listOf(${entry.keywords.joinToString { "\"${it.escapeQuotes().escapeVariables()}\"" }}),")
+					appendLine("		\"${entry.dateModified}\",")
+					appendLine("		\"\"\"$content\"\"\"")
+					appendLine("	),")
 				}
 
 				appendLine(")")
