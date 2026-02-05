@@ -1,12 +1,12 @@
 ---
 nav-title: Svelte 5 Class State
 title: Svelte 5 State in Classes Simplifies My Code
-description: How Svelte 5 $state in class fields made Atom Clicker managers smaller and more maintainable.
+description: How Svelte 5 `$state` in class fields made [Atom Clicker](https://github.com/Ayfri/Atom-Clicker) managers smaller and more maintainable.
 keywords: svelte, svelte 5, state, classes, runes, typescript, atom clicker
 date-created: 2026-02-05
 date-modified: 2026-02-05
 root: .layouts.ArticleLayout
-routeOverride: /articles/svelte-5-class-state/index
+routeOverride: /articles/svelte5-state-in-classes/index
 ---
 
 Svelte 5 made a small change that had a big impact on my code: you can place [$state](https://svelte.dev/docs/svelte/$state) directly in class fields.
