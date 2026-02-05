@@ -84,13 +84,13 @@ data class BlogEntry(
 )
 
 fun String.escapeQuotes() = this.replace("\"", "\\\"")
-fun String.escapeVariables() = this.replace("$", "\${\"$\"}{36.toChar()}")
+fun String.escapeVariables() = this.replace("$", """${'$'}{"$"}""")
 
 tasks.matching { it.name == "kobwebxMarkdownConvert" }.configureEach {
 	doLast {
 		fileTree(layout.buildDirectory.dir("generated/kobweb/markdown/convert/src/jsMain/kotlin")).forEach { file ->
 			val text = file.readText().replace(Regex("""\$([a-zA-Z_]\w*)""")) { match ->
-				"\${\"$\"}{36.toChar()}${match.groupValues[1]}"
+				"""${'$'}{"$"}${match.groupValues[1]}"""
 			}
 			file.writeText(text)
 		}
