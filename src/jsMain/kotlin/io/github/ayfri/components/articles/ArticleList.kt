@@ -6,6 +6,7 @@ import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.navigation.Anchor
 import io.github.ayfri.*
 import io.github.ayfri.data.ArticleEntry
+import io.github.ayfri.markdownParagraph
 import js.date.Date
 import js.intl.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -93,9 +94,8 @@ fun ArticleEntry(entry: ArticleEntry) {
 
 				P({
 					classes(ArticleListStyle.articleDescription)
-				}) {
-					Text(entry.desc)
-				}
+					markdownParagraph(entry.desc)
+				})
 
 				if (entry.keywords.isNotEmpty()) {
 					Div({
