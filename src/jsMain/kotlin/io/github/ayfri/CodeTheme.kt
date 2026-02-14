@@ -9,7 +9,7 @@ object CodeTheme : StyleSheet() {
 	val backgroundColor = Color.transparent
 	val textColor = Color.white
 	val commentColor = Color("#757575")
-	val numberColor = Color("#f78c6c")
+	val valueColor = Color("#f78c6c")
 	val stringColor = Color("#c3e88d")
 	val keywordColor = Color("#c792ea")
 	val functionColor = Color("#82aaff")
@@ -55,8 +55,8 @@ object CodeTheme : StyleSheet() {
 			color(commentColor)
 		}
 
-		scope("number") style {
-			color(numberColor)
+		scope("number", "boolean") style {
+			color(valueColor)
 		}
 
 		scope("string", "char", "regex") style {
