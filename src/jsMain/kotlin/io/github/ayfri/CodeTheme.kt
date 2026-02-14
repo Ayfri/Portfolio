@@ -8,13 +8,14 @@ import org.jetbrains.compose.web.css.selectors.CSSSelector
 object CodeTheme : StyleSheet() {
 	val backgroundColor = Color.transparent
 	val textColor = Color.white
-	val commentColor = Color("#757575")
-	val valueColor = Color("#f78c6c")
-	val stringColor = Color("#c3e88d")
-	val keywordColor = Color("#c792ea")
-	val functionColor = Color("#82aaff")
 	val classColor = Color("#ffcb6b")
+	val commentColor = Color("#757575")
+	val functionColor = Color("#82aaff")
+	val keywordColor = Color("#c792ea")
 	val punctuationColor = Color("#89ddff")
+	val stringColor = Color("#c3e88d")
+	val symbolColor = Color("#467cda")
+	val valueColor = Color("#f78c6c")
 
 	fun scope(vararg names: String): CSSSelector {
 		val initial = className("token")
@@ -65,6 +66,9 @@ object CodeTheme : StyleSheet() {
 
 		scope("keyword", "annotation.builtin") style {
 			color(keywordColor)
+		}
+
+		scope("keyword", "boolean") style {
 			fontStyle(FontStyle.Italic)
 		}
 
@@ -72,9 +76,17 @@ object CodeTheme : StyleSheet() {
 			color(keywordColor)
 		}
 
+		scope("symbol") style {
+			color(symbolColor)
+		}
+
 		scope("punctuation", "operator") style {
 			backgroundColor(backgroundColor)
 			color(punctuationColor)
+		}
+
+		scope("interpolation-punctuation") style {
+			color(classColor)
 		}
 
 		scope("function") style {
