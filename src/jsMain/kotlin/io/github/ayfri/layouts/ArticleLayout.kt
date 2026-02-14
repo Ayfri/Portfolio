@@ -365,17 +365,18 @@ object MarkdownStyle : StyleSheet() {
 			color(Color.white)
 		}
 
-		child(not(type("pre")), type("code")) style {
-			backgroundColor(Color("#1d1d20"))
-			borderRadius(.5.cssRem)
-			padding(.3.cssRem, .5.cssRem)
-		}
 
 		linkStyle(desc(self, "li"))
 
 		"p" {
 			self + lastOfType style {
 				marginBottom(0.px)
+			}
+
+			self + child(not(type("pre")), type("code")) style {
+				backgroundColor(Color("#1d1d20"))
+				borderRadius(.5.cssRem)
+				padding(.3.cssRem, .5.cssRem)
 			}
 		}
 
