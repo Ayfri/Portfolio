@@ -1,7 +1,6 @@
 package io.github.ayfri.layouts
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.AppGlobals
@@ -10,7 +9,7 @@ import com.varabyte.kobwebx.markdown.markdown
 import io.github.ayfri.*
 import io.github.ayfri.components.*
 import io.github.ayfri.components.articles.*
-import io.github.ayfri.externals.Prism
+import io.github.ayfri.externals.HighlightCode
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
@@ -58,9 +57,7 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 
 	setJsonLD()
 
-	LaunchedEffect(currentStub) {
-		Prism.highlightAll()
-	}
+	HighlightCode()
 
 	// Reading progress bar
 	ReadingProgressBar()

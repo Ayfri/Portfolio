@@ -115,9 +115,7 @@ kobweb {
 
 			img.set { image ->
 				val altText = image.children()
-					.filterIsInstance<Text>()
-					.map { it.literal.escapeSingleQuotedText() }
-					.joinToString("")
+					.filterIsInstance<Text>().joinToString("") { it.literal.escapeSingleQuotedText() }
 				this.childrenOverride = emptyList()
 
 				"""org.jetbrains.compose.web.dom.Img(src="${image.destination}", alt="$altText") {

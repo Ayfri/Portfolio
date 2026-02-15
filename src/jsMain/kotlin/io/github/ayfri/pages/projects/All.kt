@@ -1,7 +1,6 @@
 package io.github.ayfri.pages.projects
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.AlignItems
 import com.varabyte.kobweb.core.AppGlobals
@@ -13,6 +12,7 @@ import io.github.ayfri.CodeTheme
 import io.github.ayfri.components.*
 import io.github.ayfri.data.gitHubData
 import io.github.ayfri.ensureSuffix
+import io.github.ayfri.externals.HighlightCode
 import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectJsonLD
 import io.github.ayfri.layouts.PageLayout
@@ -54,9 +54,7 @@ fun All() {
 	setDescription(project.description ?: AppGlobals["description"]!!)
 	setCanonical(AppGlobals["url"] + path.ensureSuffix("/"))
 
-	LaunchedEffect(project.fullName) {
-		js("window.Prism.highlightAll()").unsafeCast<Unit>()
-	}
+	HighlightCode()
 
 	PageLayout(project.name) {
 		// Add JSON-LD
