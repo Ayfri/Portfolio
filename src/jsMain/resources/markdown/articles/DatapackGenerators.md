@@ -4,7 +4,7 @@ title: Datapack Generators
 description: A modern overview of datapack generators and why Kore stands out for ambitious projects.
 keywords: minecraft, datapack, generators, kore, sandstone, beet, stewbeet
 date-created: 2025-03-02
-date-modified: 2026-02-14
+date-modified: 2026-02-15
 root: .layouts.ArticleLayout
 routeOverride: /articles/datapack-generators/index
 ---
@@ -127,34 +127,39 @@ LootTable("chests/ruby_cache", {
 
 **When to choose it?** If your team is fully JavaScript/TypeScript and wants a native Node workflow. **When to prefer Kore?** When stability, completeness, and long-term maintenance matter most.
 
-## Beet / StewBeet – Python Asset Pipeline
+## Beet / StewBeet – Python Pack Pipeline and Automation
 
-Beet is a **pack development kit**: an extensible Python pipeline that assembles datapack and resource pack. StewBeet builds on top with a “definitions to generation” approach, perfect for producing dozens of items, blocks, recipes, and language files without drowning in JSON.
+Beet is a **pack development kit**: a Python library and toolchain that unifies datapack and resource pack tooling into a single pipeline. It provides primitives to read, edit, and merge packs, and a plugin system to build custom workflows.
 
-### Example: a StewBeet block definition (YAML)
+StewBeet is a **framework built on top of Beet** focused on automation for datapacks. It ships templates and a large set of generators so you can define content and let the framework produce the boilerplate.
 
-```yaml
-blocks:
-  ruby_ore:
-    type: custom_block
-    material: stone
-    hardness: 3.0
-    textures:
-      all: "block/ruby_ore"
-    drops:
-      - item: "stewbeet:ruby"
-        min: 1
-        max: 3
-        fortune: true
-    recipe:
-      - " S "
-      - "R R"
-      - " S "
-      key:
-        S: minecraft:stone
-        R: minecraft:redstone
-    lang:
-      en_us: "Ruby Ore"
+Key StewBeet capabilities (from the project docs/README):
+
+- Automatic resource pack file generation (models, textures, sounds) with the ability to override assets.
+- Versioned load and clock functions (tick/second/minute).
+- Loot tables for definitions and a generated `_give_all` helper.
+- Automatic interactive in-game manual and language file generation.
+- Function headers and vanilla-style recipe unlocking helpers.
+- Integrations with Smithed Custom Blocks/Crafter/Furnace NBT Recipes, Bookshelf, Smart Ore Generation, ItemIO, and Common Signals.
+- Merging packs with Smithed Weld and support for external library datapacks.
+
+### Example: define a custom block (StewBeet)
+
+```python
+# setup_definitions.py
+Block(
+    id="super_stone",
+    vanilla_block=VanillaBlock(id="minecraft:cobblestone", apply_facing=False),
+    recipes=[
+        # Examples of crafting recipes (shaped and shapeless), no need to specify result -> will default to the Item id
+        CraftingShapedRecipe(category="blocks", shape=["XXX", "XXX", "XXX"], ingredients={"X": Ingr("minecraft:stone")}),
+        CraftingShapelessRecipe(category="blocks", ingredients=9 * [Ingr("minecraft:deepslate")]),
+
+        # Example of recipe with vanilla result (not custom item)
+        SmeltingRecipe(experience=0.1, cookingtime=200, category="blocks", ingredient=Ingr("super_stone"), result=Ingr("minecraft:diamond")),
+        BlastingRecipe(experience=0.1, cookingtime=100, category="blocks", ingredient=Ingr("super_stone"), result=Ingr("minecraft:diamond")),
+    ],
+)
 ```
 
 ### Example: Beet pipeline hook (Python)
@@ -169,7 +174,7 @@ def beet_default(ctx: Context):
     }
 ```
 
-**When to choose it?** Content-heavy projects, mass asset production, automation of models/loot/recipes. **Why it complements Kore:** Kore handles logic and systems, Beet/StewBeet handles assets. Together, they are extremely effective.
+**When to choose it?** Use Beet when you want a flexible Python pipeline to assemble packs and integrate generators. Choose StewBeet if you want a batteries-included automation layer for assets, loot, manuals, and integrations. **Why it complements Kore:** Kore can handle game logic in Kotlin while Beet/StewBeet can cover asset and pipeline automation.
 
 ## JMC – Compact Scripting Language
 
