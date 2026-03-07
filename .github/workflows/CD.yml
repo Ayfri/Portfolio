@@ -45,7 +45,7 @@ jobs:
 
       - name: Query Browser Cache ID
         id: browser-cache-id
-        run: echo "value=$(./gradlew -q :site:kobwebBrowserCacheId)" >> $GITHUB_OUTPUT
+        run: echo "value=$(./gradlew -q :kobwebBrowserCacheId)" >> $GITHUB_OUTPUT
 
       - name: Cache Browser Dependencies
         uses: actions/cache@v4
