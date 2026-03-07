@@ -723,7 +723,7 @@ object ProjectStyle : StyleSheet() {
 		fontSize(0.9.cssRem)
 		cursor(Cursor.Pointer)
 		textDecorationLine(TextDecorationLine.None)
-		backgroundImage("""
+		property("background", """
 			linear-gradient(transparent, transparent) padding-box,
 			linear-gradient(45deg, #00D4FF, #FF0080) border-box
 		""")
@@ -735,7 +735,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			backgroundImage("""
+			property("background", """
 				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
 				linear-gradient(45deg, #00D4FF, #FF0080) border-box
 			""")

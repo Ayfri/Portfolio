@@ -358,7 +358,24 @@ object ProjectsStyle : StyleSheet() {
 			style(LineStyle.Solid)
 			color(Color.transparent)
 		}
-		backgroundImage("linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		background(Background.list(
+			Background.of(
+				image = BackgroundImage.of(linearGradient(45.deg) {
+					add(Color("#00D4FF"))
+					add(Color("#FF0080"))
+				}),
+				origin = BackgroundOrigin.BorderBox,
+				clip = BackgroundClip.BorderBox
+			),
+			Background.of(
+				image = BackgroundImage.of(linearGradient {
+					add(Color("#1A1225"))
+					add(Color("#1A1225"))
+				}),
+				origin = BackgroundOrigin.PaddingBox,
+				clip = BackgroundClip.PaddingBox
+			)
+		))
 	}
 
 	val searchContainer by style {
@@ -377,7 +394,24 @@ object ProjectsStyle : StyleSheet() {
 	}
 
 	val searchInput by style {
-		backgroundImage("linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		background(Background.list(
+			Background.of(
+				image = BackgroundImage.of(linearGradient(45.deg) {
+					add(Color("#00D4FF"))
+					add(Color("#FF0080"))
+				}),
+				origin = BackgroundOrigin.BorderBox,
+				clip = BackgroundClip.BorderBox
+			),
+			Background.of(
+				image = BackgroundImage.of(linearGradient {
+					add(Color("#1A1225"))
+					add(Color("#1A1225"))
+				}),
+				origin = BackgroundOrigin.PaddingBox,
+				clip = BackgroundClip.PaddingBox
+			)
+		))
 		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(8.px)
 		color(Color.white)
@@ -441,7 +475,24 @@ object ProjectsStyle : StyleSheet() {
 		borderRadius(8.px)
 		cursor(Cursor.Pointer)
 		outline("none")
-		backgroundImage("linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		background(Background.list(
+			Background.of(
+				image = BackgroundImage.of(linearGradient(45.deg) {
+					add(Color("#00D4FF"))
+					add(Color("#FF0080"))
+				}),
+				origin = BackgroundOrigin.BorderBox,
+				clip = BackgroundClip.BorderBox
+			),
+			Background.of(
+				image = BackgroundImage.of(linearGradient {
+					add(Color("#1A1225"))
+					add(Color("#1A1225"))
+				}),
+				origin = BackgroundOrigin.PaddingBox,
+				clip = BackgroundClip.PaddingBox
+			)
+		))
 
 		transitions {
 			properties("all") {
@@ -485,7 +536,24 @@ object ProjectsStyle : StyleSheet() {
 		borderRadius(20.px)
 		fontSize(0.9.cssRem)
 		cursor(Cursor.Pointer)
-		backgroundImage("linear-gradient(#1A1225, #1A1225) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+		background(Background.list(
+			Background.of(
+				image = BackgroundImage.of(linearGradient(45.deg) {
+					add(Color("#00D4FF"))
+					add(Color("#FF0080"))
+				}),
+				origin = BackgroundOrigin.BorderBox,
+				clip = BackgroundClip.BorderBox
+			),
+			Background.of(
+				image = BackgroundImage.of(linearGradient {
+					add(Color("#1A1225"))
+					add(Color("#1A1225"))
+				}),
+				origin = BackgroundOrigin.PaddingBox,
+				clip = BackgroundClip.PaddingBox
+			)
+		))
 
 		transitions {
 			properties("all") {
@@ -494,7 +562,24 @@ object ProjectsStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			backgroundImage("linear-gradient(#252525, #252525) padding-box, linear-gradient(45deg, #00D4FF, #FF0080) border-box")
+			background(Background.list(
+				Background.of(
+					image = BackgroundImage.of(linearGradient(45.deg) {
+						add(Color("#00D4FF"))
+						add(Color("#FF0080"))
+					}),
+					origin = BackgroundOrigin.BorderBox,
+					clip = BackgroundClip.BorderBox
+				),
+				Background.of(
+					image = BackgroundImage.of(linearGradient {
+						add(Color("#252525"))
+						add(Color("#252525"))
+					}),
+					origin = BackgroundOrigin.PaddingBox,
+					clip = BackgroundClip.PaddingBox
+				)
+			))
 			boxShadow("0 0 15px rgba(0, 212, 255, 0.3)")
 			transform { scale(1.05) }
 		}
