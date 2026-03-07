@@ -10,7 +10,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 
-object GitHubAPI {
+data object GitHubAPI {
 	const val BASE_URL = "https://api.github.com"
 	const val USER = "Ayfri"
 
@@ -74,12 +74,11 @@ object GitHubAPI {
 
 		list.addAll(response.body())
 
-		response.headers["Links"]?.let {
+		response.headers["Link"]?.let {
 			val pages = it.substringAfterLast("page=").substringBeforeLast(">").toIntOrNull() ?: 0
 
 			for (i in 2..pages) {
-				val repos = getUserRepos(type, sort, direction, 100, i)
-				list.addAll(repos)
+				list += getUserRepos(type, sort, direction, 100, i)
 			}
 		}
 

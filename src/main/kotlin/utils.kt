@@ -1,8 +1,9 @@
+
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.coroutineScope
 
-suspend fun <T, R> List<T>.mapConcurrently(mapper: suspend (T) -> R) = runBlocking {
+suspend fun <T, R> List<T>.mapConcurrently(mapper: suspend (T) -> R) = coroutineScope {
 	map {
 		async {
 			mapper(it)

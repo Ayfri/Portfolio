@@ -2,7 +2,6 @@ import entities.Result
 import entities.ResultRepository
 import entities.ResultUser
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonNamingStrategy
 import java.io.File
