@@ -12,7 +12,7 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
 import io.github.ayfri.components.P
 import io.github.ayfri.data.GitHubRepository
-import io.github.ayfri.data.gitHubData
+import io.github.ayfri.data.rememberPortfolioData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
@@ -422,12 +422,20 @@ val skills = listOf(
 @Composable
 fun Skills() {
 	PageLayout("Skills") {
+		val portfolio = rememberPortfolioData()
+		if (portfolio == null) {
+			P {
+				Text("Loading…")
+			}
+			return@PageLayout
+		}
+
 		Style(SkillsStyle)
 
 		val repos = remember { mutableStateListOf<GitHubRepository>() }
 
 		if (repos.isEmpty()) {
-			repos += gitHubData.repos.filter { it.language != null }
+			repos += portfolio.repos.filter { it.language != null }
 		}
 
 		Div({

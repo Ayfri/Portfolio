@@ -10,7 +10,7 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.AppStyle.LINK_HOVER_COLOR
 import io.github.ayfri.CodeTheme
 import io.github.ayfri.components.*
-import io.github.ayfri.data.gitHubData
+import io.github.ayfri.data.rememberPortfolioData
 import io.github.ayfri.ensureSuffix
 import io.github.ayfri.externals.HighlightCode
 import io.github.ayfri.jsonld.JsonLD
@@ -41,7 +41,15 @@ fun All() {
 		return
 	}
 
-	val projects = gitHubData.repos
+	val portfolio = rememberPortfolioData()
+	if (portfolio == null) {
+		Div {
+			Text("Loading…")
+		}
+		return
+	}
+
+	val projects = portfolio.repos
 	val project = projects.find { it.fullName == "$userName/$projectName" }
 
 	if (project == null) {

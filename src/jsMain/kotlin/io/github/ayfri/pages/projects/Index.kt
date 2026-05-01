@@ -10,7 +10,7 @@ import io.github.ayfri.CodeTheme
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
-import io.github.ayfri.data.gitHubData
+import io.github.ayfri.data.rememberPortfolioData
 import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectsListJsonLD
 import io.github.ayfri.layouts.PageLayout
@@ -29,6 +29,14 @@ import org.w3c.dom.url.URLSearchParams
 @Composable
 fun Projects() {
 	PageLayout("Projects") {
+		val portfolio = rememberPortfolioData()
+		if (portfolio == null) {
+			P {
+				Text("Loading…")
+			}
+			return@PageLayout
+		}
+
 		Style(ProjectsStyle)
 		Style(DataStyle)
 		Style(CodeTheme)
@@ -38,8 +46,8 @@ fun Projects() {
 		val initialTagFilter = searchParams.get("tag") ?: ""
 		val initialUserFilter = searchParams.get("user") ?: ""
 
-		val allRepos = remember {
-			gitHubData.repos.sortedWith(
+		val allRepos = remember(portfolio) {
+			portfolio.repos.sortedWith(
 				compareByDescending(GitHubRepository::stargazersCount)
 					.thenBy(String.CASE_INSENSITIVE_ORDER, GitHubRepository::fullName)
 			)
