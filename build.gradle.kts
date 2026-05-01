@@ -39,15 +39,17 @@ operator fun <K : Any, V : Any> MapProperty<K, V>.set(key: K, value: V) {
 operator fun <K : Any, V : Any> MapProperty<K, V>.get(key: K) = getting(key)
 
 
+val portfolioGeneratedResourcesRoot = layout.buildDirectory.dir("generated/portfolio-resources")
+
 val downloadDataTask = tasks.register("downloadData") {
 	group = "build"
-	description = "Download the data from the API and generate the Kotlin file."
+	description = "Download the portfolio GitHub snapshot as JSON for the static site."
 
-	val dir = layout.buildDirectory.dir("generated/ayfri/src/jsMain/kotlin/io/github/ayfri/data")
-	outputs.dir(dir)
+	val jsonOutFile = portfolioGeneratedResourcesRoot.map { it.file("public/data/github-portfolio.json") }
+
+	outputs.file(jsonOutFile)
 
 	doLast {
-		val loadedDir = dir.get().asFile
 		val dataLink = "https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json"
 		val url = URI(dataLink).toURL()
 		val connection = url.openConnection() as HttpURLConnection
@@ -58,18 +60,19 @@ val downloadDataTask = tasks.register("downloadData") {
 			throw Exception("Error while downloading data, response code: $responseCode")
 		}
 
-		var data = connection.inputStream.readBytes().decodeToString()
-		data = data.replace(Regex("\\$"), "\\\${\"\\$\"}")
-		val tripleQuotes = "\"\"\""
-		val kotlinOutput = """
-			package io.github.ayfri.data
+		val raw = connection.inputStream.readBytes().decodeToString()
+		val minified = runCatching {
+			groovy.json.JsonOutput.toJson(groovy.json.JsonSlurper().parseText(raw))
+		}.getOrNull()
+		val toWrite = minified?.takeIf { it.length < raw.length } ?: raw
 
-			const val rawData = $tripleQuotes$data$tripleQuotes
-		""".trimIndent()
-
-		loadedDir.mkdirs()
-		loadedDir.resolve("Data.kt").writeText(kotlinOutput)
-		logger.lifecycle("Generated '${dir.get()}'")
+		jsonOutFile.get().asFile.apply {
+			parentFile.mkdirs()
+			writeText(toWrite)
+		}
+		logger.lifecycle(
+			"Generated '${jsonOutFile.get()}' (${toWrite.length / 1024} KiB)",
+		)
 	}
 }
 
@@ -105,12 +108,6 @@ kobweb {
 		handlers {
 			text.set { text ->
 				"org.jetbrains.compose.web.dom.Text(\"\"\"${text.literal.escapeVariables()}\"\"\")"
-			}
-
-			code.set { code ->
-				val text = "\"\"\"${code.literal.escapeVariables().replace("\"\"\"", "\${\"\\\"\\\"\\\"\"}")}\"\"\""
-
-				"""io.github.ayfri.components.CodeBlock($text, "${code.info.takeIf { it.isNotBlank() }}")"""
 			}
 
 			img.set { image ->
@@ -258,6 +255,11 @@ kobweb {
 						onLoad = "this.rel='stylesheet'"
 					}
 
+					link(href = "/data/github-portfolio.json", rel = "preload") {
+						attributes["as"] = "fetch"
+						attributes["fetchpriority"] = "high"
+					}
+
 					link(rel = "preload", href = "/prism.min.css", htmlAs = LinkAs.style) {
 						attributes += "fetchpriority" to "low"
 						onLoad = "this.rel='stylesheet'"
@@ -323,17 +325,34 @@ kotlin {
 
 	sourceSets {
 		jsMain {
-			kotlin.srcDir(downloadDataTask)
+			resources.srcDir(portfolioGeneratedResourcesRoot)
+			dependencies {
+				implementation(libs.kotlinx.coroutines.core)
+			}
 		}
 		commonMain {
 			dependencies {
 				implementation(libs.compose.html.core)
 				implementation(libs.compose.runtime)
-				implementation(libs.kobwebx.markdown)
 				implementation(libs.kobweb.core)
+				implementation(libs.kobwebx.markdown)
 				implementation(libs.kotlinx.wrappers.browser)
 				implementation(npm("marked", libs.versions.marked.get()))
 			}
 		}
 	}
 }
+
+listOf(
+	"kobwebGenSiteIndex",
+	"kobwebxMarkdownConvert",
+	"kobwebxMarkdownProcess",
+).forEach { taskName ->
+	tasks.named(taskName).configure {
+		notCompatibleWithConfigurationCache(
+			"Awaiting Kobweb/KobwebX Gradle fixes: tasks capture Gradle script objects or Project (not serialized for CC).",
+		)
+	}
+}
+
+tasks.named("jsProcessResources").configure { dependsOn(downloadDataTask) }
