@@ -314,6 +314,7 @@ kotlin {
 				"-Xes-long-as-bigint",
 				"-Xgenerate-polyfills=false",
 				"-Xir-generate-inline-anonymous-functions",
+				"-Xir-property-lazy-initialization",
 				"-Xwarning-level=NOTHING_TO_INLINE:disabled",
 			)
 		}
