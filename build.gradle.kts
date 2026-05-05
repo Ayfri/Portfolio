@@ -38,7 +38,6 @@ operator fun <K : Any, V : Any> MapProperty<K, V>.set(key: K, value: V) {
 
 operator fun <K : Any, V : Any> MapProperty<K, V>.get(key: K) = getting(key)
 
-
 val portfolioGeneratedResourcesRoot = layout.buildDirectory.dir("generated/portfolio-resources")
 
 val downloadDataTask = tasks.register("downloadData") {
@@ -344,7 +343,81 @@ kotlin {
 	}
 }
 
+val generateSitemapTask = tasks.register("generateSitemap") {
+	group = "build"
+	description = "Generate sitemap.xml listing all canonical URLs, updated on publish."
+
+	// Declare inputs/outputs at configuration time (config-cache safe)
+	val generatedMainKt = layout.buildDirectory.file("generated/kobweb/app/src/jsMain/kotlin/main.kt")
+	val sitemapOut = portfolioGeneratedResourcesRoot.map { it.file("public/sitemap.xml") }
+	val articleDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
+
+	inputs.file(generatedMainKt)
+	inputs.dir(articleDir)
+	outputs.file(sitemapOut)
+
+	dependsOn("kobwebGenSiteIndex")
+
+	doLast {
+		val baseUrl = "https://ayfri.com"
+
+		// Discover routes from Kobweb's generated main.kt
+		// Format: ctx.router.register(\n    "/path/",\n) { ... }
+		val routes = mutableListOf<String>()
+		val lines = generatedMainKt.get().asFile.readLines()
+		for (i in 0 until lines.size - 1) {
+			if ("ctx.router.register(" in lines[i]) {
+				val next = lines[i + 1].trim()
+				val path = Regex(""""([^"]+)"""").find(next)?.groupValues?.getOrNull(1)
+					?: continue
+				if (path.contains('{')) continue
+				routes.add(path)
+			}
+		}
+		routes.sort()
+
+		// Build lastmod index from markdown frontmatter
+		val lastmodMap = mutableMapOf<String, String>()
+		val routeRegex = Regex("""routeOverride:\s*(\S+)""")
+		val dateRegex = Regex("""date-modified:\s*(\S+)""")
+		val articleFiles = articleDir.asFile.listFiles() ?: emptyArray()
+		for (f in articleFiles) {
+			if (f.extension != "md") continue
+			val content = f.readText()
+			val routeOverride = routeRegex.find(content)?.groupValues?.getOrNull(1) ?: continue
+			val dateModified = dateRegex.find(content)?.groupValues?.getOrNull(1) ?: continue
+			var clean = routeOverride.removeSuffix("/index").removeSuffix("index")
+			if (!clean.endsWith('/')) clean += '/'
+			lastmodMap[clean] = dateModified
+		}
+
+		// Generate XML
+		val xml = buildString {
+			appendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+			appendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">")
+			for (path in routes) {
+				appendLine("  <url>")
+				appendLine("    <loc>$baseUrl$path</loc>")
+				lastmodMap[path]?.let { appendLine("    <lastmod>$it</lastmod>") }
+				appendLine("  </url>")
+			}
+			appendLine("</urlset>")
+		}
+
+		val out = sitemapOut.get().asFile
+		out.parentFile.mkdirs()
+		out.writeText(xml)
+		logger.lifecycle("Generated '${out}' (${xml.length} chars, ${routes.size} URLs)")
+	}
+}
+
+tasks.named("jsProcessResources") {
+	dependsOn(downloadDataTask, generateSitemapTask)
+}
+
+// Upstream Kobweb tasks capture Gradle script/Project objects - not yet serializable for CC.
 listOf(
+	"downloadData",
 	"kobwebGenSiteIndex",
 	"kobwebxMarkdownConvert",
 	"kobwebxMarkdownProcess",
@@ -355,5 +428,3 @@ listOf(
 		)
 	}
 }
-
-tasks.named("jsProcessResources").configure { dependsOn(downloadDataTask) }
