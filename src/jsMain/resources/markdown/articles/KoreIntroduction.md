@@ -4,7 +4,7 @@ title: Introduction to Datapack Creation with Kore in Kotlin
 description: Learn how to create Minecraft datapacks using Kore in Kotlin.
 keywords: minecraft, datapack, kore, kotlin, tutorial
 date-created: 2023-11-13
-date-modified: 2024-01-21
+date-modified: 2026-06-23
 root: .layouts.ArticleLayout
 routeOverride: /articles/kore-introduction/index
 ---
@@ -33,27 +33,36 @@ This process is straightforward and will allow you to harness the power of Kotli
 
 Before you begin, ensure you have the following installed:
 
-- [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/downloads/) 17 or later
+- [Java Development Kit (JDK)](https://www.oracle.com/java/technologies/downloads/) 21 or later
 - [IntelliJ IDEA](https://www.jetbrains.com/idea/) or any preferred IDE that supports Kotlin
-- [Gradle](https://gradle.org/) 7.6 or later
-- [Kotlin](https://kotlinlang.org/) 1.9.20 or later
+- [Gradle](https://gradle.org/) 9.5 or later
+- [Kotlin](https://kotlinlang.org/) 2.2 or later (required for context parameters)
 
 ### Installation
 
 1. Create a new Kotlin project in your IDE.
-2. Add Kore as a dependency to your project.
+2. Add Kore as a dependency to your project. For Minecraft 1.21.11, use a `2.0.x-1.21.11` version (or the latest one matching your game
+   version).
 
     ```kotlin
     implementation("io.github.ayfri.kore:kore:VERSION")
     ```
 
-3. Activate [Context Receivers](https://github.com/Kotlin/KEEP/issues/259) compiler option.
+3. Activate the [Context Parameters](https://kotlinlang.org/docs/context-parameters.html) compiler option.
 
     ```kotlin
     kotlin {
         compilerOptions {
-            freeCompilerArgs.add("-Xcontext-receivers")
+            freeCompilerArgs.add("-Xcontext-parameters")
         }
+    }
+    ```
+
+4. Target Java 21 or higher with the Kotlin toolchain.
+
+    ```kotlin
+    kotlin {
+        jvmToolchain(21)
     }
     ```
 
@@ -135,7 +144,7 @@ For example, you could create a function that teleports every creeper to the pla
 dataPack("my_datapack") {
 	function("teleport_creeper") {
 		execute {
-			asTarget(allEntities { type = EntityType.CREEPER })
+			asTarget(allEntities { type = Entities.CREEPER })
 			run {
 				teleport(nearestPlayer())
 			}
@@ -201,7 +210,7 @@ Using Kotlin's features, we can extend any of these commands to simplify the pro
 that adds an objective and sets the display slot and render type:
 
 ```kotlin
-import io.github.ayfri.kore.commands.Scoreboard
+import io.github.ayfri.kore.commands.scoreboard.Scoreboard
 
 fun Scoreboard.objective(
 	name: String,
@@ -237,7 +246,7 @@ While scoreboards are versatile, it's important to note that there are some limi
 
 By mastering these scoreboard management techniques with Kore, you can enhance your Minecraft datapacks with dynamic and interactive
 elements. For more detailed information and advanced usage, check out
-the [Kore documentation](https://github.com/Ayfri/Kore/wiki/Scoreboards) on Scoreboards.
+the [Kore documentation](https://kore.ayfri.com/docs/concepts/scoreboards) on Scoreboards.
 
 ## Going Further with Kore
 
@@ -255,7 +264,10 @@ dataPack("my_datapack") {
 	recipes {
 		craftingShapeless("my_recipe") {
 			ingredient(Items.DIAMOND)
-			ingredient(Items.GOLD_INGOT, 2)
+			// One ingredient() call per slot. Passing several items to a single call
+			// means "any of these" for that slot, not a quantity.
+			ingredient(Items.GOLD_INGOT)
+			ingredient(Items.GOLD_INGOT)
 			result(Items.DIAMOND_SWORD)
 		}
 	}
@@ -277,11 +289,15 @@ dataPack("my_datapack") {
 
 		parent = Advancements.Story.ROOT
 
-		criteria(
-			name = "my_criterion",
-			triggerCondition = ConsumeItem(itemStack(Items.ENCHANTED_GOLDEN_APPLE))
-		) {
-			randomChance(chance = 0.5f)
+		criteria {
+			consumeItem("my_criterion") {
+				item {
+					items = listOf(Items.ENCHANTED_GOLDEN_APPLE)
+				}
+				conditions {
+					randomChance(0.5f)
+				}
+			}
 		}
 
 		rewards {
@@ -302,17 +318,18 @@ the [loot table documentation](https://minecraft.wiki/w/Loot_table) for more inf
 
 ```kotlin
 dataPack("my_datapack") {
-	lootTables {
-		blockLootTable(Blocks.DIAMOND_ORE) {
-			pool {
-				rolls = uniform(1, 3)
-				conditions {
-					weatherCheck(true)
-				}
+	lootTable("diamond_ore") {
+		type = LootTableType.BLOCK
 
-				entries {
-					lootTable(LootTables.Gameplay.PIGLIN_BARTERING)
-				}
+		pool {
+			rolls = uniform(1f, 3f)
+
+			conditions {
+				weatherCheck(true)
+			}
+
+			entries {
+				lootTable(LootTables.Gameplay.PIGLIN_BARTERING)
 			}
 		}
 	}
@@ -364,7 +381,7 @@ to the scene, Kore provides an accessible platform to bring your creative vision
 It is also updated regularly, and compatible since Minecraft 1.20.1. Each new version of Minecraft _(including snapshots)_ is supported as
 soon as possible.
 
-For more detailed information and advanced features, be sure to check out the [Kore documentation](https://github.com/Ayfri/Kore/wiki) and
+For more detailed information and advanced features, be sure to check out the [Kore documentation](https://kore.ayfri.com/docs/home) and
 explore the [Kore repository](https://github.com/Ayfri/Kore) on GitHub.
 
 We hope this article has inspired you to start using Kore for your Minecraft projects. Happy coding!

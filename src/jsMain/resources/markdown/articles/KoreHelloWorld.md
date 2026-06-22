@@ -4,7 +4,7 @@ title: Creating an Hello World Datapack with Kore
 description: Learn how to create a simple Minecraft datapack that displays a \\"Hello World\\" message using the Kore library.
 keywords: minecraft, datapack, kore, kotlin, tutorial
 date-created: 2024-05-19
-date-modified: 2024-05-19
+date-modified: 2026-06-23
 root: .layouts.ArticleLayout
 routeOverride: /articles/kore-hello-world/index
 ---
@@ -40,17 +40,20 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
    ```json
    {
         "pack": {
-            "pack_format": 41,
+            "min_format": 94,
+            "max_format": 94,
             "description": "Hello World Datapack"
         }
    }
    ```
+   > Since 1.21.9, `pack.mcmeta` uses `min_format`/`max_format` instead of the old single `pack_format` integer. `94` is the data pack
+   > format for 1.21.11.
 
 2. Create a folder named `data` inside the `hello_world` folder.
 3. Inside the `data` folder, create another folder named `minecraft`.
 4. Inside the `minecraft` folder, create a folder named `tags`.
-5. Inside the `tags` folder, create a folder named `functions`.
-6. Inside the `functions` folder, create a file named `load.json` with the following content:
+5. Inside the `tags` folder, create a folder named `function`.
+6. Inside the `function` folder, create a file named `load.json` with the following content:
    ```json
    {
         "values": [
@@ -58,12 +61,13 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
         ]
    }
    ```
+   > In 1.21 the data pack directories were renamed to singular, so it is `tags/function` (not `tags/functions`).
 
 ### Step 3: Creating the Function File
 
 1. Inside the `data` folder, create a new folder named `hello_world`.
-2. Inside the `hello_world` folder, create a folder named `functions`.
-3. Inside the `functions` folder, create a file named `load.mcfunction` with the following content:
+2. Inside the `hello_world` folder, create a folder named `function`.
+3. Inside the `function` folder, create a file named `load.mcfunction` with the following content:
     ```llvm
     tellraw @a {"text":"Hello World","color":"green"}
     ```
@@ -81,7 +85,7 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 1. Create a new Kotlin project in your IDE.
 2. Add the Kore library to your project. You can find the setup instructions on
    the [Kore README](https://github.com/Ayfri/Kore/blob/master/README.md#getting-started). Or use
-   the [Kore Template](https://github.com/Ayfri/Kore-Template).
+   the [Kore Template](https://github.com/Kore-Minecraft/Kore-Template).
 
 ### Step 2: Creating the Datapack with Kore
 
@@ -101,7 +105,6 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 	   val datapack = dataPack("hello_world") {
 		   pack {
 			   description = textComponent("Hello World Datapack")
-			   format = 41
 		   }
 
 		   load {

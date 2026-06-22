@@ -4,7 +4,7 @@ title: Simple Timer Datapack with Kore
 description: Create a timer datapack that displays a message every 20 seconds using the Kore library for Minecraft.
 keywords: minecraft, datapack, kore, kotlin, tutorial, timer
 date-created: 2024-05-19
-date-modified: 2024-05-19
+date-modified: 2026-06-23
 root: .layouts.ArticleLayout
 routeOverride: /articles/kore-timer/index
 ---
@@ -18,9 +18,9 @@ traditional commands and then how to achieve the same result using Kore.
 
 Before we begin, ensure you have the following:
 
-- Minecraft 1.20.6 installed
+- Minecraft 1.21.11 installed
 - Basic understanding of Minecraft commands
-- Kotlin and Kore setup (refer to the [Kore Template](https://github.com/Ayfri/Kore-Template) for setup instructions)
+- Kotlin and Kore setup (refer to the [Kore Template](https://github.com/Kore-Minecraft/Kore-Template) for setup instructions)
 
 Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for more information on how to set up Kore in your Kotlin project.
 
@@ -40,21 +40,23 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
    ```json
    {
 	   "pack": {
-		   "pack_format": 41,
+		   "min_format": 94,
+		   "max_format": 94,
 		   "description": "A simple timer datapack"
 	   }
    }
    ```
+	- Since 1.21.9, `pack.mcmeta` uses `min_format`/`max_format` instead of the old `pack_format`; `94` is the data pack format for 1.21.11.
 
 ### Step 2: Adding the Timer Functionality
 
 1. **Create the Functions Folder:**
 	- Inside the `timer_datapack` folder, create a folder named `data`.
 	- Inside the `data` folder, create another folder named `timer`.
-	- Inside the `timer` folder, create a folder named `functions`.
+	- Inside the `timer` folder, create a folder named `function`. _(Since 1.21 these directories are singular: `function`, not `functions`.)_
 
 2. **Create the `tick.mcfunction` File:**
-	- Inside the `functions` folder, create a file named `tick.mcfunction`.
+	- Inside the `function` folder, create a file named `tick.mcfunction`.
 	- Add the following commands to the file:
    ```llvm
    scoreboard players add @a timer 1
@@ -63,7 +65,7 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
    ```
 
 3. **Create the `load.mcfunction` File:**
-	- Inside the `functions` folder, create a file named `load.mcfunction`.
+	- Inside the `function` folder, create a file named `load.mcfunction`.
 	- Add the following commands to the file:
    ```llvm
    scoreboard objectives add timer dummy
@@ -72,8 +74,8 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 4. **Create the `tick.json` File:**
 	- Inside the `data` folder, create a folder named `minecraft`.
 	- Inside the `minecraft` folder, create a folder named `tags`.
-	- Inside the `tags` folder, create a folder named `functions`.
-	- Inside the `functions` folder, create a file named `tick.json`.
+	- Inside the `tags` folder, create a folder named `function`.
+	- Inside the `function` folder, create a file named `tick.json`.
 	- Add the following JSON content to the file:
    ```json
    {
@@ -84,7 +86,7 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
    ```
 
 5. **Create the `load.json` File:**
-	- Inside the `functions` folder, create a file named `load.json`.
+	- Inside the `function` folder, create a file named `load.json`.
 	- Add the following JSON content to the file:
    ```json
    {
@@ -109,7 +111,7 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 ### Step 1: Setting Up the Project
 
 1. **Clone the Kore Template:**
-	- Clone the [Kore Template](https://github.com/Ayfri/Kore-Template) repository to your local machine.
+	- Clone the [Kore Template](https://github.com/Kore-Minecraft/Kore-Template) repository to your local machine.
 
 2. **Open the Project:**
 	- Open the project in your preferred Kotlin IDE (e.g., IntelliJ IDEA).
@@ -175,5 +177,50 @@ Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for mor
 3. **Test the Timer:**
 	- Wait for 20 seconds and you should see the message "20 seconds have passed!" in the chat.
 
-Congratulations! You've successfully created a simple timer datapack that displays a message every 20 seconds using both traditional
-commands and the Kore library. Happy coding!
+## A Simpler Approach: the Scheduler
+
+The version above counts ticks by hand with a scoreboard, which is great for learning how timers work under the hood. But Kore ships a
+`helpers` module with a **Scheduler** that wraps Minecraft's `/schedule` command, so you do not have to manage objectives, the `tick`
+function, or `execute` checks at all.
+
+First, add the `helpers` module to your dependencies (alongside the core `kore` one):
+
+```kotlin
+implementation("io.github.ayfri.kore:helpers:VERSION")
+```
+
+Then the whole timer becomes a few lines:
+
+```kotlin
+import io.github.ayfri.kore.arguments.numbers.seconds
+import io.github.ayfri.kore.commands.say
+import io.github.ayfri.kore.dataPack
+import io.github.ayfri.kore.helpers.schedulerManager
+import kotlin.io.path.Path
+
+fun main() {
+	val datapack = dataPack("timer") {
+		schedulerManager {
+			// Runs 20 seconds after load, then repeats every 20 seconds.
+			addScheduler(20.seconds, 20.seconds) {
+				say("20 seconds have passed!")
+			}
+		}
+
+		path = Path("path/to/your/minecraft/saves/[Your World Name]/datapacks")
+	}
+
+	datapack.generateZip()
+}
+```
+
+`addScheduler(delay, period)` takes a first delay and a repeat period, both as readable `TimeNumber` values like `20.seconds` or
+`5.ticks`. Drop the `period` argument and it runs only once. No scoreboard, no `tick` function, no manual reset. For delayed tasks,
+cancellation, and scheduling by function reference, see the [Scheduler docs](https://kore.ayfri.com/docs/helpers/scheduler).
+
+> Need a per-entity countdown instead of a global loop (a respawn delay, an ability cooldown)? The `oop` module has a `registerTimer(...)`
+> helper with `start(entity)` and `onComplete(entity) { ... }` methods, plus a boss-bar variant. Check the
+> [OOP module docs](https://kore.ayfri.com/docs/oop/oop-utilities).
+
+Congratulations! You've successfully created a simple timer datapack that displays a message every 20 seconds, first with traditional
+commands, then with Kore's scoreboard DSL, and finally with the one-liner Scheduler from the `helpers` module. Happy coding!

@@ -4,7 +4,7 @@ title: Detect an entity in a zone with Kore
 description: Detect when a player enters a specific area in Minecraft using a Kore Kotlin library. Learn how to create a datapack that triggers an event when a player enters a defined zone.
 keywords: minecraft, datapack, kore, kotlin, tutorial, zone detection, predicate, location check
 date-created: 2024-05-19
-date-modified: 2024-05-19
+date-modified: 2026-06-23
 root: .layouts.ArticleLayout
 routeOverride: /articles/kore-zone-detection/index
 ---
@@ -16,9 +16,9 @@ Follow these steps to get started:
 
 Before we begin, ensure you have the following:
 
-- Minecraft 1.20.6 installed
+- Minecraft 1.21.11 installed
 - Basic understanding of Minecraft commands
-- Kotlin and Kore setup (refer to the [Kore Template](https://github.com/Ayfri/Kore-Template) for setup instructions)
+- Kotlin and Kore setup (refer to the [Kore Template](https://github.com/Kore-Minecraft/Kore-Template) for setup instructions)
 
 Check [Kore Introduction](https://ayfri.com/articles/kore-introduction/) for more information on how to set up Kore in your Kotlin project.
 

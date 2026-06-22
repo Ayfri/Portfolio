@@ -169,7 +169,7 @@ from beet import Context
 
 def beet_default(ctx: Context):
     ctx.require("beet.contrib.render")
-    ctx.data["minecraft:tags/functions/tick.json"] = {
+    ctx.data["minecraft:tags/function/tick.json"] = {
         "values": ["my_pack:tick"]
     }
 ```
