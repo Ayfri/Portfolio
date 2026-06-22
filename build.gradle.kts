@@ -352,7 +352,7 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 	val sitemapOut = portfolioGeneratedResourcesRoot.map { it.file("public/sitemap.xml") }
 	val articleDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
 
-	inputs.file(generatedMainKt).withPropertyName("generatedMainKt").optional(true)
+	inputs.files(generatedMainKt).withPropertyName("generatedMainKt")
 	inputs.dir(articleDir)
 	outputs.file(sitemapOut)
 
