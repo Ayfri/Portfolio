@@ -345,43 +345,46 @@ kotlin {
 
 val generateSitemapTask = tasks.register("generateSitemap") {
 	group = "build"
-	description = "Generate sitemap.xml listing all canonical URLs, updated on publish."
+	description = "Generate sitemap.xml listing all canonical URLs."
 
-	// Declare inputs/outputs at configuration time (config-cache safe)
-	val generatedMainKt = layout.buildDirectory.file("generated/kobweb/app/src/jsMain/kotlin/main.kt")
 	val sitemapOut = portfolioGeneratedResourcesRoot.map { it.file("public/sitemap.xml") }
 	val articleDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
+	val pagesDir = layout.projectDirectory.dir("src/jsMain/kotlin/io/github/ayfri/pages")
 
-	inputs.files(generatedMainKt).withPropertyName("generatedMainKt")
 	inputs.dir(articleDir)
+	inputs.dir(pagesDir)
 	outputs.file(sitemapOut)
-
-	dependsOn("kobwebGenSiteIndex")
 
 	doLast {
 		val baseUrl = "https://ayfri.com"
-
-		// Discover routes from Kobweb's generated main.kt
-		// Format: ctx.router.register(\n    "/path/",\n) { ... }
 		val routes = mutableListOf<String>()
-		val lines = generatedMainKt.get().asFile.readLines()
-		for (i in 0 until lines.size - 1) {
-			if ("ctx.router.register(" in lines[i]) {
-				val next = lines[i + 1].trim()
-				val path = Regex(""""([^"]+)"""").find(next)?.groupValues?.getOrNull(1)
-					?: continue
-				if (path.contains('{')) continue
-				routes.add(path)
-			}
-		}
-		routes.sort()
 
-		// Build lastmod index from markdown frontmatter
+		// Discover static routes by scanning @Page-annotated Kotlin files under pages/
+		pagesDir.asFile.walkTopDown()
+			.filter { it.isFile && it.extension == "kt" && it.readText().contains("@Page") }
+			.forEach { file ->
+				val parts = file.relativeTo(pagesDir.asFile).path
+					.replace('\\', '/')
+					.removeSuffix(".kt")
+					.split('/')
+				val route = buildString {
+					append('/')
+					parts.forEachIndexed { i, part ->
+						if (part != "Index") {
+							if (i > 0 && !endsWith('/')) append('/')
+							append(part.splitCamelCase().joinToString("-") { it.lowercase() })
+						}
+					}
+					if (!endsWith('/')) append('/')
+				}
+				if (!route.contains('{')) routes.add(route)
+			}
+
+		// Discover article routes + lastmod from markdown frontmatter
 		val lastmodMap = mutableMapOf<String, String>()
 		val routeRegex = Regex("""routeOverride:\s*(\S+)""")
 		val dateRegex = Regex("""date-modified:\s*(\S+)""")
-		val articleFiles = articleDir.asFile.listFiles() ?: emptyArray()
-		for (f in articleFiles) {
+		for (f in articleDir.asFile.listFiles() ?: emptyArray()) {
 			if (f.extension != "md") continue
 			val content = f.readText()
 			val routeOverride = routeRegex.find(content)?.groupValues?.getOrNull(1) ?: continue
@@ -389,9 +392,11 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 			var clean = routeOverride.removeSuffix("/index").removeSuffix("index")
 			if (!clean.endsWith('/')) clean += '/'
 			lastmodMap[clean] = dateModified
+			routes.add(clean)
 		}
 
-		// Generate XML
+		routes.sort()
+
 		val xml = buildString {
 			appendLine("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
 			appendLine("<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">")
