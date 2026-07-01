@@ -5,12 +5,11 @@ import com.varabyte.kobweb.core.App
 import com.varabyte.kobweb.core.KobwebApp
 import com.varabyte.kobweb.core.init.InitKobweb
 import com.varabyte.kobweb.core.init.InitKobwebContext
-import com.varabyte.kobweb.navigation.OpenLinkStrategy
-import com.varabyte.kobweb.navigation.UpdateHistoryMode
 import io.github.ayfri.data.prefetchPortfolioData
 import io.github.ayfri.externals.MarkedOptions
 import io.github.ayfri.externals.TextRenderer
 import io.github.ayfri.externals.use
+import io.github.ayfri.pages.NotFoundPage
 
 const val MAIL_TO = "pierre.ayfri@gmail.com"
 
@@ -42,10 +41,6 @@ fun initKobweb(context: InitKobwebContext) {
 	prefetchPortfolioData()
 
 	context.router.setErrorPage {
-		context.router.tryRoutingTo(
-			"/",
-			updateHistoryMode = UpdateHistoryMode.REPLACE
-		)
-		OpenLinkStrategy.IN_PLACE
+		NotFoundPage()
 	}
 }
