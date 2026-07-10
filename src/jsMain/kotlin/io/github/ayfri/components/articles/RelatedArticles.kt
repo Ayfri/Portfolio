@@ -16,10 +16,8 @@ import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 
-// Find related articles based on keywords
+// Find related articles based on keywords, falling back to the most recent other articles
 fun findRelatedArticles(currentPath: String, keywords: List<String>): List<ArticleEntry> {
-	if (keywords.isEmpty()) return emptyList()
-
 	// Get all articles except the current one
 	val otherArticles = articlesEntries.filter { it.path != currentPath }
 
@@ -29,12 +27,17 @@ fun findRelatedArticles(currentPath: String, keywords: List<String>): List<Artic
 		article to matchingKeywords
 	}
 
-	// Filter articles with at least one matching keyword and sort by relevance
-	return scoredArticles
+	val matched = scoredArticles
 		.filter { (_, score) -> score > 0 }
 		.sortedByDescending { (_, score) -> score }
 		.map { (article, _) -> article }
-		.take(3) // Limit to 3 related articles
+
+	// No keyword overlap: fall back to the most recent other articles so every article gets a section
+	if (matched.isEmpty()) {
+		return otherArticles.sortedByDescending { it.date }.take(3)
+	}
+
+	return matched.take(3) // Limit to 3 related articles
 }
 
 @Composable
