@@ -56,7 +56,11 @@ and technical deep dives. Learn about my journey and discoveries in software dev
 @Page("/index")
 @Composable
 fun Home() {
-	PageLayout("Home") {
+	PageLayout(
+		"Home",
+		description = "Pierre Roy (Ayfri), a Kotlin and Compose Multiplatform developer building web apps, Minecraft datapacks with Kore, and AI-powered side projects.",
+		keywords = "Pierre Roy, Ayfri, Kotlin developer, Compose Multiplatform, Kotlin Multiplatform, Svelte developer, TypeScript developer, software engineer portfolio, Minecraft datapack developer",
+	) {
 		val portfolio = rememberPortfolioData()
 		if (portfolio == null) {
 			P {

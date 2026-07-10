@@ -28,7 +28,11 @@ import org.w3c.dom.url.URLSearchParams
 @Page
 @Composable
 fun Projects() {
-	PageLayout("Projects") {
+	PageLayout(
+		"Projects",
+		description = "Open-source projects by Pierre Roy (Ayfri) on GitHub: Kotlin libraries, Minecraft tools, web apps, and more, searchable by language and tag.",
+		keywords = "GitHub projects, open source Kotlin, Minecraft tools, Ayfri GitHub, developer portfolio projects",
+	) {
 		val portfolio = rememberPortfolioData()
 		if (portfolio == null) {
 			P {

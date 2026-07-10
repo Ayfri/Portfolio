@@ -2,7 +2,7 @@
 nav-title: Kore Hello World
 title: Creating an Hello World Datapack with Kore
 description: Learn how to create a simple Minecraft datapack that displays a \\"Hello World\\" message using the Kore library.
-keywords: minecraft, datapack, kore, kotlin, tutorial
+keywords: minecraft, datapack, kore, kotlin, tutorial, kotlin datapack tutorial, minecraft datapack for beginners, kore library
 date-created: 2024-05-19
 date-modified: 2026-06-23
 root: .layouts.ArticleLayout

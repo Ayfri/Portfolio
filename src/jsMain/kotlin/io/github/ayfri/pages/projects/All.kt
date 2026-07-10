@@ -60,6 +60,8 @@ fun All() {
 	val path = context.route.toString()
 	setTitle("${project.name} by ${project.owner.login} - ${AppGlobals["author"]}'s Portfolio")
 	setDescription(project.description ?: AppGlobals["description"]!!)
+	val projectKeywords = (project.topics.toList() + listOfNotNull(project.language)).distinct()
+	if (projectKeywords.isNotEmpty()) setKeywords(projectKeywords.joinToString(", "))
 	setCanonical(AppGlobals["url"] + path.ensureSuffix("/"))
 
 	HighlightCode()

@@ -2,7 +2,7 @@
 nav-title: Kore Timer
 title: Simple Timer Datapack with Kore
 description: Create a timer datapack that displays a message every 20 seconds using the Kore library for Minecraft.
-keywords: minecraft, datapack, kore, kotlin, tutorial, timer
+keywords: minecraft, datapack, kore, kotlin, tutorial, timer, minecraft scoreboard timer, kotlin datapack timer, minecraft datapack tick loop
 date-created: 2024-05-19
 date-modified: 2026-06-23
 root: .layouts.ArticleLayout

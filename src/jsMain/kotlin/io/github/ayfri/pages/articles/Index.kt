@@ -27,7 +27,11 @@ enum class SortOption(val displayName: String) {
 @Page
 @Composable
 fun ArticleList() {
-	PageLayout("Blog Posts") {
+	PageLayout(
+		"Blog Posts",
+		description = "Tutorials and deep dives by Pierre Roy (Ayfri) on Kotlin, Minecraft datapacks with Kore, Svelte, and AI side projects.",
+		keywords = "Kotlin blog, Minecraft datapack tutorial, Kore library, Svelte 5 tutorial, programming blog, kotlinx.serialization, web development articles",
+	) {
 		Style(ArticleListStyle)
 		Style(BlogPageStyle)
 

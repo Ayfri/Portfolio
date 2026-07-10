@@ -2,7 +2,7 @@
 nav-title: Datapack Generators
 title: Datapack Generators
 description: A modern overview of datapack generators and why Kore stands out for ambitious projects.
-keywords: minecraft, datapack, generators, kore, sandstone, beet, stewbeet
+keywords: minecraft, datapack, datapack generator, kore, sandstone, beet, stewbeet, kotlin datapack library, minecraft modding tools, minecraft datapack development 2026
 date-created: 2025-03-02
 date-modified: 2026-02-15
 root: .layouts.ArticleLayout

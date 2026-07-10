@@ -27,6 +27,12 @@ fun setDescription(description: String) = renderComposable(document.head!!) {
 	MetaProperty("twitter:description", description)
 }
 
+fun setKeywords(keywords: String) = renderComposable(document.head!!) {
+	document.querySelector("meta[name=keywords]")?.remove()
+
+	MetaName("keywords", keywords)
+}
+
 fun setCanonical(url: String) = renderComposable(document.head!!) {
 	selectAll("link[rel=canonical]").forEach(HTMLElement::remove)
 	Link("canonical", url)

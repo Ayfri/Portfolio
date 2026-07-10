@@ -2,7 +2,7 @@
 nav-title: Kore Boss Fight
 title: Build a Boss Fight Datapack with Kore
 description: Build a complete Minecraft boss fight in Kotlin with Kore - a legendary weapon with item components, a custom boss, an OOP boss bar, particle VFX, and a state machine driving the whole fight.
-keywords: minecraft, datapack, kore, kotlin, tutorial, boss fight, boss bar, item components, particles, state machine
+keywords: minecraft, datapack, kore, kotlin, tutorial, boss fight, boss bar, item components, particles, state machine, minecraft boss fight tutorial, custom boss minecraft, kotlin minecraft datapack
 date-created: 2026-06-23
 date-modified: 2026-06-23
 root: .layouts.ArticleLayout

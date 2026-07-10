@@ -2,7 +2,7 @@
 nav-title: GPT Images
 title: Building GPT Images (gpt-images.ayfri.com)
 description: How and why I built a SvelteKit client for OpenAI image and video generation, how storage and pricing evolved, and what the project taught me.
-keywords: svelte, sveltekit, openai, gpt-image, images api, opfs, indexeddb, cloudflare, side project, typescript
+keywords: svelte, sveltekit, openai, gpt-image, images api, opfs, indexeddb, cloudflare, side project, typescript, ai image generation, sveltekit ai app, openai api tutorial
 date-created: 2026-05-01
 date-modified: 2026-05-01
 root: .layouts.ArticleLayout

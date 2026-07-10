@@ -2,7 +2,7 @@
 nav-title: Mastering kotlinx.serialization
 title: "Mastering kotlinx.serialization: Advanced Techniques and Tricks"
 description: Explore advanced techniques and tricks for mastering kotlinx.serialization in Kotlin, including custom serializers, enum serialization strategies, polymorphic serialization, and performance optimization.
-keywords: kotlinx.serialization, kotlin serialization, custom serializers, enum serialization, polymorphic serialization, performance optimization
+keywords: kotlinx.serialization, kotlin serialization, custom serializers, enum serialization, polymorphic serialization, performance optimization, kotlin json serialization tutorial, kotlin serialization best practices 2026
 date-created: 2024-12-01
 date-modified: 2024-12-01
 root: .layouts.ArticleLayout

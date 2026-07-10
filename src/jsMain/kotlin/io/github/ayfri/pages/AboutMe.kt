@@ -251,7 +251,11 @@ const val TIMELINE_DEFAULT_OFFSET = 125.0
 @Page("/about-me/index")
 @Composable
 fun AboutMe() {
-	PageLayout("About Me") {
+	PageLayout(
+		"About Me",
+		description = "The story of Pierre Roy (Ayfri): from first steps in Python in 2014 to Kotlin, AI, and Minecraft development today.",
+		keywords = "Pierre Roy story, Ayfri biography, self-taught developer, programming journey, IT student France, Minecraft developer",
+	) {
 		Style(AboutMeStyle)
 
 		var timelineOffset by mutableStateOf(TIMELINE_DEFAULT_OFFSET)

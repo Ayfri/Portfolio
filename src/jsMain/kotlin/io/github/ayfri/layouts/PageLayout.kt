@@ -13,10 +13,17 @@ import org.jetbrains.compose.web.dom.Main
 import web.url.URL
 
 @Composable
-fun PageLayout(title: String, content: @Composable () -> Unit) {
+fun PageLayout(
+	title: String,
+	description: String = AppGlobals["description"]!!,
+	keywords: String = "",
+	content: @Composable () -> Unit,
+) {
 	Style(AnimationsStyle)
 	Style(AppStyle)
 	setTitle("$title - ${AppGlobals["author"]}'s Portfolio")
+	setDescription(description)
+	if (keywords.isNotEmpty()) setKeywords(keywords)
 
 	Header()
 

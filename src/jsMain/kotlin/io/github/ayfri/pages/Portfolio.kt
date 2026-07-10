@@ -17,7 +17,11 @@ import org.jetbrains.compose.web.dom.*
 @Page("/portfolio/index")
 @Composable
 fun Portfolio() {
-	PageLayout("Portfolio") {
+	PageLayout(
+		"Portfolio",
+		description = "How this Kotlin and Compose for Web portfolio was designed and built, from first prototype to the current site you're browsing.",
+		keywords = "Kotlin Compose for Web, Kobweb, portfolio website design, Kotlin web development, static site generation",
+	) {
 		Style(PortfolioStyle)
 
 		Div({

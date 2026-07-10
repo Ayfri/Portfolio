@@ -421,7 +421,11 @@ val skills = listOf(
 @Page("/skills/index")
 @Composable
 fun Skills() {
-	PageLayout("Skills") {
+	PageLayout(
+		"Skills",
+		description = "Technical skills of Pierre Roy (Ayfri): Kotlin, TypeScript, Python, Java, C#, Godot, and more, with real GitHub and school projects for each.",
+		keywords = "Kotlin skills, TypeScript developer, Python developer, Java developer, programming languages, tech stack, GitHub projects, Godot developer, MySQL, Redis",
+	) {
 		val portfolio = rememberPortfolioData()
 		if (portfolio == null) {
 			P {

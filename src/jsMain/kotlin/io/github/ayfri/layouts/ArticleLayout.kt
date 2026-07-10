@@ -50,6 +50,7 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 
 	setTitle("$title - ${AppGlobals["author"]}'s Blog")
 	setDescription(description)
+	if (keywords.isNotEmpty()) setKeywords(keywords)
 
 	val currentStub = context.route
 	val canonicalUrl = AppGlobals["url"] + currentStub.toString().ensureSuffix("/")

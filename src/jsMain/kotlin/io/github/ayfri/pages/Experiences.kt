@@ -42,7 +42,11 @@ fun Experience(
 @Page("/experiences/index")
 @Composable
 fun Experiences() {
-	PageLayout("Experiences") {
+	PageLayout(
+		"Experiences",
+		description = "Professional experience of Pierre Roy (Ayfri): WordPress development at BlueFrog, AI project ScriptGraf at Ynov, and more.",
+		keywords = "software engineer experience, WordPress developer, AI projects, Ynov, BlueFrog, internship, IT student",
+	) {
 		Style(ExperiencesStyle)
 
 		Div({

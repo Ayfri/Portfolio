@@ -2,7 +2,7 @@
 nav-title: Svelte 5 Class State
 title: Svelte 5 State in Classes Simplifies My Code
 description: How Svelte 5 `$state` in class fields made [Atom Clicker](https://github.com/Ayfri/Atom-Clicker) managers smaller and more maintainable.
-keywords: svelte, svelte 5, state, classes, runes, typescript, atom clicker
+keywords: svelte, svelte 5, state, classes, runes, typescript, atom clicker, svelte 5 runes tutorial, svelte state management, svelte class state pattern
 date-created: 2026-02-05
 date-modified: 2026-02-05
 root: .layouts.ArticleLayout
