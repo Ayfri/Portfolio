@@ -7,9 +7,11 @@ import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
 import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import io.github.ayfri.components.P
 import io.github.ayfri.pages.TextIcon
 import io.github.ayfri.pages.skills
+import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.alt
@@ -136,9 +138,7 @@ fun ProjectCard(repository: GitHubRepository) {
 				Span({
 					classes("updated")
 				}) {
-					I({
-						classes("fas", "fa-history")
-					})
+					I(FontAwesomeType.SOLID, "history")
 					Text(" Updated ${formatRelativeTime(repository.updatedAt)}")
 				}
 			}
@@ -221,10 +221,7 @@ object DataStyle : StyleSheet() {
 			style(LineStyle.Solid)
 			color(Color.transparent)
 		}
-		background("""
-			linear-gradient(${HOME_CARD_BACKGROUND}, ${HOME_CARD_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(HOME_CARD_BACKGROUND))
 		property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.08)")
 
 		className("title") style {
@@ -235,13 +232,9 @@ object DataStyle : StyleSheet() {
 			alignItems(AlignItems.Center)
 			justifyContent(JustifyContent.Center)
 
-			backgroundColor(Color(HOME_CARD_TITLE_BACKGROUND))
 			border(1.px, LineStyle.Solid, Color.transparent)
 			padding(1.cssRem)
-			background("""
-				linear-gradient(${HOME_CARD_TITLE_BACKGROUND}, ${HOME_CARD_TITLE_BACKGROUND}) padding-box,
-				linear-gradient(45deg, #00D4FF, #FF0080) border-box
-			""")
+			gradientBorderBackground(Color(HOME_CARD_TITLE_BACKGROUND))
 
 			"h3" {
 				display(DisplayStyle.Flex)
@@ -261,7 +254,6 @@ object DataStyle : StyleSheet() {
 		}
 
 		child(self, type("div")) style {
-			backgroundColor(Color(HOME_CARD_BACKGROUND))
 			textAlign(TextAlign.Start)
 
 			display(DisplayStyle.Flex)
@@ -272,10 +264,7 @@ object DataStyle : StyleSheet() {
 			border(1.px, LineStyle.Solid, Color.transparent)
 			height(100.percent)
 			padding(1.cssRem)
-			background("""
-				linear-gradient(${HOME_CARD_BACKGROUND}, ${HOME_CARD_BACKGROUND}) padding-box,
-				linear-gradient(45deg, #00D4FF, #FF0080) border-box
-			""")
+			gradientBorderBackground(Color(HOME_CARD_BACKGROUND))
 		}
 
 		combine(self, className("active")) style {
@@ -299,10 +288,7 @@ object DataStyle : StyleSheet() {
 		padding(1.5.cssRem)
 
 		border(1.px, LineStyle.Solid, Color.transparent)
-		background("""
-			linear-gradient(${PROJECT_CARD_CLOSED_BACKGROUND}, ${PROJECT_CARD_CLOSED_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(PROJECT_CARD_CLOSED_BACKGROUND))
 		property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.08)")
 
 		transitions {
@@ -312,10 +298,7 @@ object DataStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			background("""
-				linear-gradient(${PROJECT_CARD_HOVER_BACKGROUND}, ${PROJECT_CARD_HOVER_BACKGROUND}) padding-box,
-				linear-gradient(45deg, #00D4FF, #FF0080) border-box
-			""")
+			gradientBorderBackground(Color(PROJECT_CARD_HOVER_BACKGROUND))
 			transform { translateY((-5).px) }
 			property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.2)")
 		}
@@ -417,10 +400,7 @@ object DataStyle : StyleSheet() {
 					borderRadius(1.cssRem)
 					fontSize(0.8.cssRem)
 					cursor(Cursor.Pointer)
-					background("""
-						linear-gradient(#1A1225, #1A1225) padding-box,
-						linear-gradient(45deg, #00D4FF, #FF0080) border-box
-					""")
+					gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
 				}
 
 				className("topic-more") style {
@@ -429,10 +409,7 @@ object DataStyle : StyleSheet() {
 					color(Color.white)
 					fontSize(0.8.cssRem)
 					padding(0.3.cssRem, 0.6.cssRem)
-					background("""
-						linear-gradient(#ffffff15, #ffffff15) padding-box,
-						linear-gradient(45deg, #00D4FF, #FF0080) border-box
-					""")
+					gradientBorderBackground(Color("#ffffff15"))
 				}
 			}
 

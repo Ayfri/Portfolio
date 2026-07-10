@@ -2,11 +2,12 @@ package io.github.ayfri.pages.projects
 
 import androidx.compose.runtime.*
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
 import io.github.ayfri.CodeTheme
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
@@ -14,6 +15,8 @@ import io.github.ayfri.data.rememberPortfolioData
 import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectsListJsonLD
 import io.github.ayfri.layouts.PageLayout
+import io.github.ayfri.utils.gradientBorderBackground
+import io.github.ayfri.utils.pageBackground
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.InputType
@@ -140,9 +143,7 @@ fun Projects() {
 				Div({
 					classes(ProjectsStyle.searchContainer)
 				}) {
-					I({
-						classes("fas", "fa-search", ProjectsStyle.searchIcon)
-					})
+					I(FontAwesomeType.SOLID, "search", ProjectsStyle.searchIcon)
 					Input(InputType.Text) {
 						classes(ProjectsStyle.searchInput)
 						placeholder("Search projects...")
@@ -165,9 +166,7 @@ fun Projects() {
 								classes(ProjectsStyle.clearFilterButton)
 								onClick { tagFilter = "" }
 							}) {
-								I({
-									classes("fas", "fa-times")
-								})
+								I(FontAwesomeType.SOLID, "times")
 							}
 						}
 					}
@@ -182,9 +181,7 @@ fun Projects() {
 								classes(ProjectsStyle.clearFilterButton)
 								onClick { selectedLanguage = "" }
 							}) {
-								I({
-									classes("fas", "fa-times")
-								})
+								I(FontAwesomeType.SOLID, "times")
 							}
 						}
 					}
@@ -199,9 +196,7 @@ fun Projects() {
 								classes(ProjectsStyle.clearFilterButton)
 								onClick { selectedUser = "" }
 							}) {
-								I({
-									classes("fas", "fa-times")
-								})
+								I(FontAwesomeType.SOLID, "times")
 							}
 						}
 					}
@@ -310,9 +305,7 @@ fun Projects() {
 					Div({
 						classes(ProjectsStyle.noResults)
 					}) {
-						I({
-							classes("fas", "fa-search", ProjectsStyle.noResultsIcon)
-						})
+						I(FontAwesomeType.SOLID, "search", ProjectsStyle.noResultsIcon)
 						H2 {
 							Text("No projects found")
 						}
@@ -347,47 +340,22 @@ object ProjectsStyle : StyleSheet() {
 	const val TEXT_SECONDARY = "#ffffffaa"
 
 	val projects by style {
-		backgroundColor(Color(PROJECTS_BACKGROUND_COLOR))
-
-		// Main background with gradient violet
-		backgroundImage(linearGradient(180.deg) {
-			add(Color("#0A0A0F"), (-3).percent)
-			add(Color("#1A1225"), 14.percent)
-			add(Color("#2A1B3D"), 65.percent)
-			add(Color("#1E1535"), 90.percent)
-		})
+		pageBackground()
 	}
 
-		val filtersSection by style {
+	val filtersSection by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(20.px)
-		marginBottom(30.px)
-		padding(20.px)
-		borderRadius(10.px)
+		gap(1.25.cssRem)
+		marginBottom(1.875.cssRem)
+		padding(1.25.cssRem)
+		borderRadius(.625.cssRem)
 		border {
 			width(2.px)
 			style(LineStyle.Solid)
 			color(Color.transparent)
 		}
-		background(Background.list(
-			Background.of(
-				image = BackgroundImage.of(linearGradient(45.deg) {
-					add(Color("#00D4FF"))
-					add(Color("#FF0080"))
-				}),
-				origin = BackgroundOrigin.BorderBox,
-				clip = BackgroundClip.BorderBox
-			),
-			Background.of(
-				image = BackgroundImage.of(linearGradient {
-					add(Color("#1A1225"))
-					add(Color("#1A1225"))
-				}),
-				origin = BackgroundOrigin.PaddingBox,
-				clip = BackgroundClip.PaddingBox
-			)
-		))
+		gradientBorderBackground(Color(PROJECTS_BACKGROUND_COLOR))
 	}
 
 	val searchContainer by style {
@@ -398,7 +366,7 @@ object ProjectsStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val searchIcon by style {
 		position(Position.Absolute)
-		left(15.px)
+		left(.9375.cssRem)
 		top(50.percent)
 		transform { translateY((-50).percent) }
 		color(Color("#00D4FF"))
@@ -406,30 +374,13 @@ object ProjectsStyle : StyleSheet() {
 	}
 
 	val searchInput by style {
-		background(Background.list(
-			Background.of(
-				image = BackgroundImage.of(linearGradient(45.deg) {
-					add(Color("#00D4FF"))
-					add(Color("#FF0080"))
-				}),
-				origin = BackgroundOrigin.BorderBox,
-				clip = BackgroundClip.BorderBox
-			),
-			Background.of(
-				image = BackgroundImage.of(linearGradient {
-					add(Color("#1A1225"))
-					add(Color("#1A1225"))
-				}),
-				origin = BackgroundOrigin.PaddingBox,
-				clip = BackgroundClip.PaddingBox
-			)
-		))
 		border(2.px, LineStyle.Solid, Color.transparent)
-		borderRadius(8.px)
+		gradientBorderBackground(Color(PROJECTS_BACKGROUND_COLOR))
+		borderRadius(.5.cssRem)
 		color(Color.white)
 		fontSize(1.1.cssRem)
 		outlineStyle(LineStyle.None)
-		padding(15.px, 15.px, 15.px, 45.px)
+		padding(.9375.cssRem, .9375.cssRem, .9375.cssRem, 2.8125.cssRem)
 		width(100.percent)
 
 		self + focus style {
@@ -440,18 +391,18 @@ object ProjectsStyle : StyleSheet() {
 	val filtersContainer by style {
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
-		gap(15.px)
+		gap(.9375.cssRem)
 		alignItems(AlignItems.Center)
 	}
 
 	val activeFilter by style {
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
-		gap(10.px)
-		padding(8.px, 15.px)
+		gap(.625.cssRem)
+		padding(.5.cssRem, .9375.cssRem)
 		backgroundColor(Color("#00D4FF20"))
 		color(Color("#00D4FF"))
-		borderRadius(20.px)
+		borderRadius(1.25.cssRem)
 		fontSize(0.9.cssRem)
 		border(1.px, LineStyle.Solid, Color("#00D4FF"))
 		boxShadow("0 0 15px rgba(0, 212, 255, 0.3)")
@@ -461,8 +412,8 @@ object ProjectsStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
 		justifyContent(JustifyContent.Center)
-		width(20.px)
-		height(20.px)
+		width(1.25.cssRem)
+		height(1.25.cssRem)
 		padding(0.px)
 		backgroundColor(Color.transparent)
 		color(Color("#00D4FF"))
@@ -481,30 +432,13 @@ object ProjectsStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val filterSelect by style {
-		padding(8.px, 15.px)
+		padding(.5.cssRem, .9375.cssRem)
 		color(Color.white)
 		border(2.px, LineStyle.Solid, Color.transparent)
-		borderRadius(8.px)
+		borderRadius(.5.cssRem)
 		cursor(Cursor.Pointer)
 		outline("none")
-		background(Background.list(
-			Background.of(
-				image = BackgroundImage.of(linearGradient(45.deg) {
-					add(Color("#00D4FF"))
-					add(Color("#FF0080"))
-				}),
-				origin = BackgroundOrigin.BorderBox,
-				clip = BackgroundClip.BorderBox
-			),
-			Background.of(
-				image = BackgroundImage.of(linearGradient {
-					add(Color("#1A1225"))
-					add(Color("#1A1225"))
-				}),
-				origin = BackgroundOrigin.PaddingBox,
-				clip = BackgroundClip.PaddingBox
-			)
-		))
+		gradientBorderBackground(Color(PROJECTS_BACKGROUND_COLOR))
 
 		transitions {
 			properties("all") {
@@ -525,8 +459,8 @@ object ProjectsStyle : StyleSheet() {
 	val popularTags by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(10.px)
-		marginTop(10.px)
+		gap(.625.cssRem)
+		marginTop(.625.cssRem)
 	}
 
 	val popularTagsLabel by style {
@@ -537,35 +471,18 @@ object ProjectsStyle : StyleSheet() {
 	val tagsList by style {
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
-		gap(10.px)
+		gap(.625.cssRem)
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val tagButton by style {
-		padding(5.px, 15.px)
+		padding(.3125.cssRem, .9375.cssRem)
 		color(Color.white)
 		border(2.px, LineStyle.Solid, Color.transparent)
-		borderRadius(20.px)
+		borderRadius(1.25.cssRem)
 		fontSize(0.9.cssRem)
 		cursor(Cursor.Pointer)
-		background(Background.list(
-			Background.of(
-				image = BackgroundImage.of(linearGradient(45.deg) {
-					add(Color("#00D4FF"))
-					add(Color("#FF0080"))
-				}),
-				origin = BackgroundOrigin.BorderBox,
-				clip = BackgroundClip.BorderBox
-			),
-			Background.of(
-				image = BackgroundImage.of(linearGradient {
-					add(Color("#1A1225"))
-					add(Color("#1A1225"))
-				}),
-				origin = BackgroundOrigin.PaddingBox,
-				clip = BackgroundClip.PaddingBox
-			)
-		))
+		gradientBorderBackground(Color(PROJECTS_BACKGROUND_COLOR))
 
 		transitions {
 			properties("all") {
@@ -574,24 +491,7 @@ object ProjectsStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			background(Background.list(
-				Background.of(
-					image = BackgroundImage.of(linearGradient(45.deg) {
-						add(Color("#00D4FF"))
-						add(Color("#FF0080"))
-					}),
-					origin = BackgroundOrigin.BorderBox,
-					clip = BackgroundClip.BorderBox
-				),
-				Background.of(
-					image = BackgroundImage.of(linearGradient {
-						add(Color("#252525"))
-						add(Color("#252525"))
-					}),
-					origin = BackgroundOrigin.PaddingBox,
-					clip = BackgroundClip.PaddingBox
-				)
-			))
+			gradientBorderBackground(Color("#252525"))
 			boxShadow("0 0 15px rgba(0, 212, 255, 0.3)")
 			transform { scale(1.05) }
 		}
@@ -610,7 +510,7 @@ object ProjectsStyle : StyleSheet() {
 	}
 
 	val resultsCount by style {
-		marginBottom(20.px)
+		marginBottom(1.25.cssRem)
 		fontSize(0.9.cssRem)
 		color(Color(TEXT_SECONDARY))
 		textAlign(TextAlign.Right)
@@ -621,8 +521,8 @@ object ProjectsStyle : StyleSheet() {
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
 		justifyContent(JustifyContent.Center)
-		gap(15.px)
-		padding(50.px)
+		gap(.9375.cssRem)
+		padding(3.125.cssRem)
 		gridColumn(1, -1)
 		textAlign(TextAlign.Center)
 
@@ -641,17 +541,17 @@ object ProjectsStyle : StyleSheet() {
 	val noResultsIcon by style {
 		fontSize(3.cssRem)
 		color(Color("#00D4FF50"))
-		marginBottom(10.px)
+		marginBottom(.625.cssRem)
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val resetButton by style {
-		marginTop(10.px)
-		padding(10.px, 20.px)
+		marginTop(.625.cssRem)
+		padding(.625.cssRem, 1.25.cssRem)
 		backgroundColor(Color("#00D4FF20"))
 		color(Color("#00D4FF"))
 		border(1.px, LineStyle.Solid, Color("#00D4FF"))
-		borderRadius(8.px)
+		borderRadius(.5.cssRem)
 		fontSize(1.cssRem)
 		cursor(Cursor.Pointer)
 

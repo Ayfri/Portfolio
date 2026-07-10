@@ -15,6 +15,8 @@ import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.utils.gradientBorderBackground
+import io.github.ayfri.utils.pageBackground
 import io.github.ayfri.utils.size
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -269,7 +271,7 @@ fun AboutMe() {
 
 			window.addEventListener("scroll", {
 				val footerOffset =
-					document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as Double? ?: return@addEventListener
+					document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as? Double? ?: return@addEventListener
 
 				if (window.scrollY + window.innerHeight < footerOffset) {
 					timelineOffset = window.scrollY + TIMELINE_DEFAULT_OFFSET * .8
@@ -358,12 +360,7 @@ object AboutMeStyle : StyleSheet() {
 			timelineOffset(1.5.cssRem)
 			paddingBottom(2.cssRem)
 
-			backgroundImage(linearGradient(180.deg) {
-				add(Color("#0A0A0F"), (-3).percent)
-				add(Color("#1A1225"), 14.percent)
-				add(Color("#2A1B3D"), 65.percent)
-				add(Color("#1E1535"), 90.percent)
-			})
+			pageBackground()
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
@@ -532,7 +529,6 @@ object AboutMeStyle : StyleSheet() {
 				top(Top.Unset)
 				bottom((-2.5).cssRem)
 
-				backgroundColor(Color("#00000090"))
 				padding(.2.cssRem, .4.cssRem)
 				borderRadius(.5.cssRem)
 				border {
@@ -540,10 +536,7 @@ object AboutMeStyle : StyleSheet() {
 					style(LineStyle.Solid)
 					color(Color.transparent)
 				}
-				property("background", """
-					linear-gradient(#00000090, #00000090) padding-box,
-					linear-gradient(45deg, #00D4FF, #FF0080) border-box
-				""")
+				gradientBorderBackground(Color("#00000090"))
 
 				animation(appearBottom) {
 					duration(.3.s)
@@ -596,7 +589,6 @@ object AboutMeStyle : StyleSheet() {
 		"section" {
 			titleHeight(max(2.cssRem, 3.vw))
 
-			backgroundColor(Color(BACKGROUND_SECTION_ODD_COLOR))
 			fontFamily(AppStyle.MONO_FONT_FAMILY)
 			padding(1.5.cssRem, titleHeight.value())
 			position(Position.Relative)
@@ -606,10 +598,7 @@ object AboutMeStyle : StyleSheet() {
 				style(LineStyle.Solid)
 				color(Color.transparent)
 			}
-			property("background", """
-				linear-gradient(${BACKGROUND_SECTION_ODD_COLOR}, ${BACKGROUND_SECTION_ODD_COLOR}) padding-box,
-				linear-gradient(45deg, #00D4FF, #FF0080) border-box
-			""")
+			gradientBorderBackground(Color(BACKGROUND_SECTION_ODD_COLOR))
 			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
 
 			transitions {
@@ -645,11 +634,7 @@ object AboutMeStyle : StyleSheet() {
 			}
 
 			self + nthChild(Nth.Even) style {
-				backgroundColor(Color(BACKGROUND_SECTION_EVEN_COLOR))
-				property("background", """
-					linear-gradient(${BACKGROUND_SECTION_EVEN_COLOR}, ${BACKGROUND_SECTION_EVEN_COLOR}) padding-box,
-					linear-gradient(45deg, #00D4FF, #FF0080) border-box
-				""")
+				gradientBorderBackground(Color(BACKGROUND_SECTION_EVEN_COLOR))
 			}
 
 			"h2" {
@@ -676,10 +661,7 @@ object AboutMeStyle : StyleSheet() {
 						style(LineStyle.Solid)
 						color(Color.transparent)
 					}
-					property("background", """
-						transparent padding-box,
-						linear-gradient(45deg, #00D4FF, #FF0080) border-box
-					""")
+					gradientBorderBackground(Color.transparent)
 				}
 
 				fontSize(titleHeight.value())

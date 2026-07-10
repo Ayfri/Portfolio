@@ -4,6 +4,9 @@ import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
+import io.github.ayfri.utils.gradientBorderBackground
 import js.uri.encodeURIComponent
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
@@ -22,9 +25,7 @@ fun ShareSection(title: String, url: String) {
 		H3({
 			classes(ShareSectionStyle.title)
 		}) {
-			I({
-				classes("fas", "fa-share-alt")
-			})
+			I(FontAwesomeType.SOLID, "share-alt")
 			Text(" Share this article")
 		}
 
@@ -40,9 +41,7 @@ fun ShareSection(title: String, url: String) {
 					classes(ShareSectionStyle.button, ShareSectionStyle.twitter)
 				}
 			) {
-				I({
-					classes("fab", "fa-x-twitter")
-				})
+				I(FontAwesomeType.BRAND, "x-twitter")
 				Span { Text("X") }
 			}
 
@@ -55,9 +54,7 @@ fun ShareSection(title: String, url: String) {
 					classes(ShareSectionStyle.button, ShareSectionStyle.linkedin)
 				}
 			) {
-				I({
-					classes("fab", "fa-linkedin")
-				})
+				I(FontAwesomeType.BRAND, "linkedin")
 				Span { Text("LinkedIn") }
 			}
 
@@ -70,9 +67,7 @@ fun ShareSection(title: String, url: String) {
 					classes(ShareSectionStyle.button, ShareSectionStyle.facebook)
 				}
 			) {
-				I({
-					classes("fab", "fa-facebook")
-				})
+				I(FontAwesomeType.BRAND, "facebook")
 				Span { Text("Facebook") }
 			}
 
@@ -83,9 +78,7 @@ fun ShareSection(title: String, url: String) {
 					navigator.clipboard.writeTextAsync(url)
 				}
 			}) {
-				I({
-					classes("fas", "fa-link")
-				})
+				I(FontAwesomeType.SOLID, "link")
 				Span { Text("Copy Link") }
 			}
 		}
@@ -106,15 +99,11 @@ object ShareSectionStyle : StyleSheet() {
 	val container by style {
 		marginTop(4.cssRem)
 		paddingTop(0.px)
-		backgroundColor(Color(CONTAINER_BG_COLOR))
 		borderRadius(1.cssRem)
 		padding(2.cssRem)
 		textAlign(TextAlign.Center)
 		border(2.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${CONTAINER_BG_COLOR}, ${CONTAINER_BG_COLOR}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CONTAINER_BG_COLOR))
 		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 

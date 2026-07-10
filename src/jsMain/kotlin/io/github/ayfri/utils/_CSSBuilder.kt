@@ -93,3 +93,13 @@ fun StyleScope.gradientBorderBackground(
 		borderGradient = borderGradient
 	)
 }
+
+// Shared full-page background gradient, used by every page's `id("main")` style.
+fun StyleScope.pageBackground() {
+	backgroundImage(linearGradient(180.deg) {
+		add(Color("#0A0A0F"), (-3).percent)
+		add(Color("#1A1225"), 14.percent)
+		add(Color("#2A1B3D"), 65.percent)
+		add(Color("#1E1535"), 90.percent)
+	})
+}

@@ -6,10 +6,14 @@ import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.articlesEntries
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import io.github.ayfri.components.articles.ArticleList
 import io.github.ayfri.components.articles.ArticleListStyle
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.focusWithin
+import io.github.ayfri.utils.gradientBorderBackground
+import io.github.ayfri.utils.pageBackground
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.*
@@ -76,9 +80,7 @@ fun ArticleList() {
 					Label("search-input",{
 						classes(BlogPageStyle.searchWrapper)
 					}) {
-						I({
-							classes("fas","fa-search")
-						})
+						I(FontAwesomeType.SOLID, "search")
 
 						Input(InputType.Text) {
 							classes(BlogPageStyle.searchInput)
@@ -201,13 +203,7 @@ fun ArticleList() {
 object BlogPageStyle : StyleSheet() {
 	init {
 		id("main") style {
-			// Add consistent background styling
-			backgroundImage(linearGradient(180.deg) {
-				add(Color("#0A0A0F"), (-3).percent)
-				add(Color("#1A1225"), 14.percent)
-				add(Color("#2A1B3D"), 65.percent)
-				add(Color("#1E1535"), 90.percent)
-			})
+			pageBackground()
 			minHeight(100.vh)
 		}
 	}
@@ -262,7 +258,6 @@ object BlogPageStyle : StyleSheet() {
 	@OptIn(ExperimentalComposeWebApi::class)
 	val searchWrapper by style {
 		alignItems(AlignItems.Center)
-		backgroundColor(Color("#1A1225"))
 		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(2.cssRem)
 		color(Color("#FFFFFFB0"))
@@ -270,10 +265,7 @@ object BlogPageStyle : StyleSheet() {
 		fontSize(1.1.cssRem)
 		maxWidth(600.px)
 		padding(0.8.cssRem, 1.cssRem)
-		backgroundImage("""
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
 		transitions {
 			defaultDuration(0.3.s)
 			properties("color", "box-shadow")
@@ -327,17 +319,13 @@ object BlogPageStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val tag by style {
-		backgroundColor(Color("#1A1225"))
 		borderRadius(1.cssRem)
 		padding(0.4.cssRem, 1.cssRem)
 		fontSize(0.9.cssRem)
 		color(Color("#FFFFFFDD"))
 		cursor(Cursor.Pointer)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
 
 		transitions {
 			"background-color" {
@@ -361,12 +349,14 @@ object BlogPageStyle : StyleSheet() {
 	}
 
 	val tagSelected by style {
-		backgroundColor(Color("#1A1225"))
 		border(2.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #FF0080, #00D4FF) border-box
-		""")
+		gradientBorderBackground(
+			fillColor = Color(AppStyle.CARD_BACKGROUND),
+			borderGradient = linearGradient(45.deg) {
+				add(Color("#FF0080"))
+				add(Color("#00D4FF"))
+			}
+		)
 		boxShadow("0 0 15px rgba(255, 0, 128, 0.3)")
 
 		hover style {

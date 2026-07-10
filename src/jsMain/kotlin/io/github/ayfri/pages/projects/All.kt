@@ -17,7 +17,9 @@ import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectJsonLD
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.n
+import io.github.ayfri.utils.pageBackground
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
@@ -81,18 +83,14 @@ fun All() {
 				A("/", {
 					classes(ProjectStyle.breadcrumbLink)
 				}) {
-					I({
-						classes("fas", "fa-home")
-					})
+					I(FontAwesomeType.SOLID, "home")
 					Text(" Home")
 				}
 
 				Span({
 					classes(ProjectStyle.breadcrumbSeparator)
 				}) {
-					I({
-						classes("fas", "fa-chevron-right")
-					})
+					I(FontAwesomeType.SOLID, "chevron-right")
 				}
 
 				A("/projects/", {
@@ -104,9 +102,7 @@ fun All() {
 				Span({
 					classes(ProjectStyle.breadcrumbSeparator)
 				}) {
-					I({
-						classes("fas", "fa-chevron-right")
-					})
+					I(FontAwesomeType.SOLID, "chevron-right")
 				}
 
 				A("/projects/?user=${project.owner.login}", {
@@ -118,9 +114,7 @@ fun All() {
 				Span({
 					classes(ProjectStyle.breadcrumbSeparator)
 				}) {
-					I({
-						classes("fas", "fa-chevron-right")
-					})
+					I(FontAwesomeType.SOLID, "chevron-right")
 				}
 
 				Span({
@@ -211,9 +205,7 @@ fun All() {
 						classes(ProjectStyle.infoCard)
 					}) {
 						H3 {
-							I({
-								classes("fas", "fa-link")
-							})
+							I(FontAwesomeType.SOLID, "link")
 							Text(" Links")
 						}
 
@@ -224,9 +216,7 @@ fun All() {
 								classes(ProjectStyle.linkItem)
 								target(ATarget.Blank)
 							}) {
-								I({
-									classes("fab", "fa-github")
-								})
+								I(FontAwesomeType.BRAND, "github")
 								Span("GitHub Repository")
 							}
 
@@ -235,9 +225,7 @@ fun All() {
 									classes(ProjectStyle.linkItem)
 									target(ATarget.Blank)
 								}) {
-									I({
-										classes("fas","fa-globe")
-									})
+									I(FontAwesomeType.SOLID, "globe")
 
 									Span("Project Homepage")
 								}
@@ -248,9 +236,7 @@ fun All() {
 								classes(ProjectStyle.linkItem)
 								target(ATarget.Blank)
 							}) {
-								I({
-									classes("fas", "fa-download")
-								})
+								I(FontAwesomeType.SOLID, "download")
 								Span("Download ZIP")
 							}
 						}
@@ -261,9 +247,7 @@ fun All() {
 						classes(ProjectStyle.infoCard)
 					}) {
 						H3 {
-							I({
-								classes("fas", "fa-chart-bar")
-							})
+							I(FontAwesomeType.SOLID, "chart-bar")
 							Text(" Statistics")
 						}
 
@@ -285,9 +269,7 @@ fun All() {
 						classes(ProjectStyle.infoCard)
 					}) {
 						H3 {
-							I({
-								classes("fas", "fa-history")
-							})
+							I(FontAwesomeType.SOLID, "history")
 							Text(" Timeline")
 						}
 
@@ -305,9 +287,7 @@ fun All() {
 						classes(ProjectStyle.infoCard)
 					}) {
 						H3 {
-							I({
-								classes("fas", "fa-info-circle")
-							})
+							I(FontAwesomeType.SOLID, "info-circle")
 							Text(" Status")
 						}
 
@@ -331,9 +311,7 @@ private fun QuickStat(value: String, iconName: String) {
 	Div({
 		classes(ProjectStyle.quickStatItem)
 	}) {
-		I({
-			classes("fas", "fa-$iconName")
-		})
+		I(FontAwesomeType.SOLID, iconName)
 		Text(" $value")
 	}
 }
@@ -346,9 +324,7 @@ private fun StatCard(label: String, value: String, iconName: String) {
 		Div({
 			classes(ProjectStyle.statIcon)
 		}) {
-			I({
-				classes("fas", "fa-${iconName}")
-			})
+			I(FontAwesomeType.SOLID, iconName)
 		}
 		Div({
 			classes(ProjectStyle.statContent)
@@ -372,9 +348,7 @@ private fun DateItem(label: String, date: String) {
 	Div({
 		classes(ProjectStyle.dateItem)
 	}) {
-		I({
-			classes("fas", "fa-calendar-alt")
-		})
+		I(FontAwesomeType.SOLID, "calendar-alt")
 		Span({
 			classes(ProjectStyle.dateLabel)
 		}) {
@@ -393,9 +367,7 @@ private fun StatusItem(label: String, value: String) {
 	Div({
 		classes(ProjectStyle.statusItem)
 	}) {
-		I({
-			classes("fas", "fa-info-circle")
-		})
+		I(FontAwesomeType.SOLID, "info-circle")
 		Span({
 			classes(ProjectStyle.statusLabel)
 		}) {
@@ -421,19 +393,13 @@ private fun String.capitalize(): String {
 object ProjectStyle : StyleSheet() {
 	// Color constants
 	const val CARD_BACKGROUND = "#151020"
-	const val ITEM_BACKGROUND = "#151020"
 	const val ITEM_BACKGROUND_HOVER = "#ffffff15"
 	const val BORDER_COLOR = "#ffffff20"
 	const val TEXT_SECONDARY = "#ffffffaa"
 
 	init {
 		id("main") style {
-			backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(180.deg) {
-				add(Color("#0A0A0F"), (-3).percent)
-				add(Color("#1A1225"), 14.percent)
-				add(Color("#2A1B3D"), 65.percent)
-				add(Color("#1E1535"), 90.percent)
-			})
+			pageBackground()
 		}
 
 		group(type("td"), type("th")) style {
@@ -567,10 +533,7 @@ object ProjectStyle : StyleSheet() {
 		padding(20.px)
 		marginBottom(20.px)
 		border(2.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${CARD_BACKGROUND}, ${CARD_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CARD_BACKGROUND))
 		boxShadow(BoxShadow.of(
 			color = rgba(0, 212, 255, 0.1),
 			offsetX = 0.px,
@@ -597,10 +560,7 @@ object ProjectStyle : StyleSheet() {
 		borderRadius(10.px)
 		padding(15.px)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CARD_BACKGROUND))
 		transitions {
 			properties("all") {
 				duration(0.3.s)
@@ -608,10 +568,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			backgroundImage("""
-				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
-				linear-gradient(45deg, #00D4FF, #FF0080) border-box
-			""")
+			gradientBorderBackground(Color(ITEM_BACKGROUND_HOVER))
 			transform { scale(1.05) }
 			boxShadow(BoxShadow.of(
 				color = rgba(255, 0, 128, 0.3),
@@ -623,7 +580,7 @@ object ProjectStyle : StyleSheet() {
 	}
 
 	val statIcon by style {
-		color(Color("#00D4FF"))  // Cyan néon pour les icônes
+		color(Color("#00D4FF"))
 		fontSize(1.5.cssRem)
 	}
 
@@ -658,10 +615,7 @@ object ProjectStyle : StyleSheet() {
 		textDecorationLine(TextDecorationLine.None)
 		color(Color.white)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CARD_BACKGROUND))
 		transitions {
 			properties("all") {
 				duration(0.3.s)
@@ -669,10 +623,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		self + hover style {
-			backgroundImage("""
-				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
-				linear-gradient(45deg, #00D4FF, #FF0080) border-box
-			""")
+			gradientBorderBackground(Color(ITEM_BACKGROUND_HOVER))
 			color(Color(LINK_HOVER_COLOR))
 			transform { translateX(5.px) }
 			boxShadow(BoxShadow.of(
@@ -697,10 +648,7 @@ object ProjectStyle : StyleSheet() {
 		borderRadius(10.px)
 		padding(15.px)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CARD_BACKGROUND))
 	}
 
 	val dateLabel by style {
@@ -709,7 +657,7 @@ object ProjectStyle : StyleSheet() {
 
 	val dateValue by style {
 		marginLeft(autoLength)
-		color(Color("#00D4FF"))  // Cyan néon
+		color(Color("#00D4FF"))
 	}
 
 	val topicsContainer by style {
@@ -726,17 +674,14 @@ object ProjectStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val topicTag by style {
-		padding(5.px, 15.px)
+		padding(.3125.cssRem, .9375.cssRem)
 		color(Color.white)
 		border(2.px, LineStyle.Solid, Color.transparent)
-		borderRadius(20.px)
+		borderRadius(1.25.cssRem)
 		fontSize(0.9.cssRem)
 		cursor(Cursor.Pointer)
 		textDecorationLine(TextDecorationLine.None)
-		property("background", """
-			linear-gradient(transparent, transparent) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color.transparent)
 
 		transitions {
 			properties("all") {
@@ -745,10 +690,7 @@ object ProjectStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			property("background", """
-				linear-gradient(${ITEM_BACKGROUND_HOVER}, ${ITEM_BACKGROUND_HOVER}) padding-box,
-				linear-gradient(45deg, #00D4FF, #FF0080) border-box
-			""")
+			gradientBorderBackground(Color(ITEM_BACKGROUND_HOVER))
 			transform { scale(1.05) }
 			boxShadow(BoxShadow.of(
 				color = rgba(0, 212, 255, 0.3),
@@ -772,10 +714,7 @@ object ProjectStyle : StyleSheet() {
 		borderRadius(10.px)
 		padding(15.px)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CARD_BACKGROUND))
 	}
 
 	val statusLabel by style {
@@ -784,7 +723,7 @@ object ProjectStyle : StyleSheet() {
 
 	val statusValue by style {
 		marginLeft(autoLength)
-		color(Color("#00D4FF"))  // Cyan néon
+		color(Color("#00D4FF"))
 	}
 
 	val sidebarSection by style {
@@ -803,10 +742,7 @@ object ProjectStyle : StyleSheet() {
 		margin(0.px)
 		padding(30.px)
 		border(2.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CARD_BACKGROUND))
 		boxShadow(BoxShadow.of(
 			color = rgba(0, 212, 255, 0.1),
 			offsetX = 0.px,
@@ -835,10 +771,7 @@ object ProjectStyle : StyleSheet() {
 		borderRadius(10.px)
 		fontSize(0.9.cssRem)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${ITEM_BACKGROUND}, ${ITEM_BACKGROUND}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CARD_BACKGROUND))
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)

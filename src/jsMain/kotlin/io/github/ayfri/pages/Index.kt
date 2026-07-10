@@ -15,8 +15,10 @@ import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.HomeCard
 import io.github.ayfri.data.rememberPortfolioData
 import io.github.ayfri.layouts.PageLayout
+import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.n
+import io.github.ayfri.utils.pageBackground
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
@@ -532,12 +534,7 @@ object HomeStyle : StyleSheet() {
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Column)
 			alignItems(AlignItems.Center)
-			backgroundImage(linearGradient(180.deg) {
-				add(Color("#0A0A0F"), (-3).percent)
-				add(Color("#1A1225"), 14.percent)
-				add(Color("#2A1B3D"), 65.percent)
-				add(Color("#1E1535"), 90.percent)
-			})
+			pageBackground()
 			position(Position.Relative)
 			minHeight(100.vh)
 			overflow(Overflow.Hidden)
@@ -614,14 +611,10 @@ object HomeStyle : StyleSheet() {
 		width(100.percent)
 		maxWidth(1200.px)
 		borderRadius(1.cssRem)
-		backgroundColor(Color("#1A1225"))
 		backdropFilter(BackdropFilter.list(BackdropFilter.of(blur(10.px))))
 
 		border(2.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
 		boxShadow("0 0 30px rgba(0, 212, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05)")
 
 		className("skills") style {
@@ -670,15 +663,11 @@ object HomeStyle : StyleSheet() {
 		}
 		opacity(0)
 
-		backgroundColor(Color("#252525"))
 		borderRadius(.4.cssRem)
 		color(Color.white)
 		padding(.3.cssRem, .5.cssRem)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(#252525, #252525) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color("#252525"))
 		transitions {
 			defaultDuration(0.3.s)
 			properties("all")
@@ -804,14 +793,10 @@ object HomeStyle : StyleSheet() {
 		gap(0.5.cssRem)
 		padding(1.cssRem)
 		borderRadius(0.5.cssRem)
-		backgroundColor(Color("#252525"))
 		color(Color.white)
 		textDecorationLine(TextDecorationLine.None)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(#252525, #252525) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color("#252525"))
 
 		transitions {
 			defaultDuration(0.3.s)

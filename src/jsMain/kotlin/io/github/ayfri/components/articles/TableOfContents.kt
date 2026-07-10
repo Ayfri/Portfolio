@@ -3,6 +3,9 @@ package io.github.ayfri.components.articles
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
+import io.github.ayfri.utils.gradientBorderBackground
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -38,9 +41,7 @@ fun TableOfContents(headings: List<Pair<Int, String>>) {
 		H3({
 			classes(TableOfContentsStyle.title)
 		}) {
-			I({
-				classes("fas", "fa-list")
-			})
+			I(FontAwesomeType.SOLID, "list")
 			Text(" Table of Contents")
 		}
 
@@ -70,11 +71,7 @@ object TableOfContentsStyle : StyleSheet() {
 	const val ITEM_HOVER_TEXT_COLOR = "#6EBAE7"
 
 	val container by style {
-		backgroundImage("""
-			linear-gradient(${CONTAINER_BACKGROUND_COLOR}, ${CONTAINER_BACKGROUND_COLOR}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
-		backgroundColor(Color(CONTAINER_BACKGROUND_COLOR))
+		gradientBorderBackground(Color(CONTAINER_BACKGROUND_COLOR))
 		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(1.cssRem)
 		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")

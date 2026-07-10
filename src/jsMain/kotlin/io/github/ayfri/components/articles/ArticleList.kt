@@ -5,8 +5,11 @@ import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.navigation.Anchor
 import io.github.ayfri.*
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.utils.gradientBorderBackground
 import js.date.Date
 import js.intl.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -61,9 +64,7 @@ fun ArticleEntry(entry: ArticleEntry) {
 						Span({
 							classes(ArticleListStyle.metaItem)
 						}) {
-							I({
-								classes("fas", "fa-calendar-alt")
-							})
+							I(FontAwesomeType.SOLID, "calendar-alt")
 							Text(" $date")
 						}
 
@@ -72,9 +73,7 @@ fun ArticleEntry(entry: ArticleEntry) {
 						Span({
 							classes(ArticleListStyle.metaItem)
 						}) {
-							I({
-								classes("fas", "fa-clock")
-							})
+							I(FontAwesomeType.SOLID, "clock")
 							Text(" $readingTime min read")
 						}
 
@@ -83,9 +82,7 @@ fun ArticleEntry(entry: ArticleEntry) {
 							Span({
 								classes(ArticleListStyle.metaItem, ArticleListStyle.updated)
 							}) {
-								I({
-									classes("fas", "fa-sync-alt")
-								})
+								I(FontAwesomeType.SOLID, "sync-alt")
 								Text(" Updated")
 							}
 						}
@@ -116,12 +113,9 @@ fun ArticleEntry(entry: ArticleEntry) {
 				}) {
 					Span {
 						Text("Read more")
-						I({
-							classes("fas", "fa-arrow-right")
-							style {
-								marginLeft(0.5.cssRem)
-							}
-						})
+						I(FontAwesomeType.SOLID, "arrow-right") {
+							marginLeft(0.5.cssRem)
+						}
 					}
 				}
 			}
@@ -165,11 +159,7 @@ object ArticleListStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val articleEntry by style {
-		backgroundColor(Color(ARTICLE_BACKGROUND_COLOR))
-		backgroundImage("""
-			linear-gradient(${ARTICLE_BACKGROUND_COLOR}, ${ARTICLE_BACKGROUND_COLOR}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(ARTICLE_BACKGROUND_COLOR))
 		border(2.px, LineStyle.Solid, Color.transparent)
 		borderRadius(1.cssRem)
 		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")

@@ -6,8 +6,11 @@ import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle
 import io.github.ayfri.articlesEntries
 import io.github.ayfri.calculateReadingTime
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.ensureSuffix
+import io.github.ayfri.utils.gradientBorderBackground
 import js.date.Date
 import js.intl.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -50,9 +53,7 @@ fun RelatedArticles(articles: List<ArticleEntry>) {
 		H3({
 			classes(RelatedArticlesStyle.title)
 		}) {
-			I({
-				classes("fas", "fa-bookmark")
-			})
+			I(FontAwesomeType.SOLID, "bookmark")
 			Text(" You might also like")
 		}
 
@@ -102,18 +103,14 @@ fun RelatedArticleCard(article: ArticleEntry) {
 			}
 
 			Span {
-				I({
-					classes("fas", "fa-calendar-alt")
-				})
+				I(FontAwesomeType.SOLID, "calendar-alt")
 				Text(" $date")
 			}
 
 			// Reading time
 			val readingTime = calculateReadingTime(article.content)
 			Span {
-				I({
-					classes("fas", "fa-clock")
-				})
+				I(FontAwesomeType.SOLID, "clock")
 				Text(" $readingTime min read")
 			}
 		}
@@ -122,9 +119,7 @@ fun RelatedArticleCard(article: ArticleEntry) {
 			classes(RelatedArticlesStyle.readMore)
 		}) {
 			Text("Read article")
-			I({
-				classes("fas", "fa-arrow-right")
-			})
+			I(FontAwesomeType.SOLID, "arrow-right")
 		}
 	}
 }
@@ -140,14 +135,10 @@ object RelatedArticlesStyle : StyleSheet() {
 	val container by style {
 		marginTop(4.cssRem)
 		paddingTop(0.px)
-		backgroundColor(Color(CONTAINER_BG_COLOR))
 		borderRadius(1.cssRem)
 		padding(2.cssRem)
 		border(2.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(${CONTAINER_BG_COLOR}, ${CONTAINER_BG_COLOR}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CONTAINER_BG_COLOR))
 		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 

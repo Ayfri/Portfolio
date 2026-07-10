@@ -12,6 +12,8 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.components.P
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.utils.gradientBorderBackground
+import io.github.ayfri.utils.pageBackground
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -68,7 +70,7 @@ fun Experiences() {
 				}
 			}
 
-            P("My professional journey includes various roles in web development and AI research. Below is a timeline of my work experiences, showcasing my growth and the diverse projects I've contributed to.", ExperiencesStyle.experiencesDescription)
+			P("My professional journey includes various roles in web development and AI research. Below is a timeline of my work experiences, showcasing my growth and the diverse projects I've contributed to.", ExperiencesStyle.experiencesDescription)
 
 			Div({
 				classes(ExperiencesStyle.experiencesList)
@@ -159,27 +161,18 @@ fun Experiences() {
 }
 
 object ExperiencesStyle : StyleSheet() {
-	const val EXPERIENCES_BACKGROUND_COLOR = "#1A1225"  // Violet sombre cohérent
 	const val EXPERIENCE_BACKGROUND_COLOR = "#1E1E1E"
 
 	val experiences by style {
-		backgroundColor(Color(EXPERIENCES_BACKGROUND_COLOR))
-
-		// Fond principal avec gradient violet
-		backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(180.deg) {
-			add(Color("#0A0A0F"), (-3).percent)
-			add(Color("#1A1225"), 14.percent)
-			add(Color("#2A1B3D"), 65.percent)
-			add(Color("#1E1535"), 90.percent)
-		})
+		pageBackground()
 	}
 
-    val experiencesDescription by style {
-        fontSize(1.2.cssRem)
-        lineHeight(1.5.number)
-        color(Color("#FFFFFF"))
-        padding(0.5.cssRem, 0.cssRem)
-    }
+	val experiencesDescription by style {
+		fontSize(1.2.cssRem)
+		lineHeight(1.5.number)
+		color(Color("#FFFFFF"))
+		padding(0.5.cssRem, 0.cssRem)
+	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val experiencesList by style {
@@ -188,14 +181,10 @@ object ExperiencesStyle : StyleSheet() {
 		gap(3.cssRem)
 
 		type("section") style {
-			backgroundColor(Color(EXPERIENCE_BACKGROUND_COLOR))
 			borderRadius(1.cssRem)
 			padding(1.cssRem, 2.cssRem)
 			border(2.px, LineStyle.Solid, Color.transparent)
-			backgroundImage("""
-				linear-gradient(${EXPERIENCE_BACKGROUND_COLOR}, ${EXPERIENCE_BACKGROUND_COLOR}) padding-box,
-				linear-gradient(45deg, #00D4FF, #FF0080) border-box
-			""")
+			gradientBorderBackground(Color(EXPERIENCE_BACKGROUND_COLOR))
 			boxShadow("0 0 20px rgba(0, 212, 255, 0.1)")
 
 			transitions {

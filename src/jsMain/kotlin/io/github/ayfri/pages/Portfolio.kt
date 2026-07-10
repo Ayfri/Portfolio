@@ -10,6 +10,8 @@ import io.github.ayfri.components.I
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.utils.gradientBorderBackground
+import io.github.ayfri.utils.pageBackground
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
@@ -250,12 +252,7 @@ object PortfolioStyle : StyleSheet() {
 
 		padding(2.cssRem)
 
-		backgroundImage(linearGradient(180.deg) {
-			add(Color("#0A0A0F"), (-3).percent)
-			add(Color("#1A1225"), 14.percent)
-			add(Color("#2A1B3D"), 65.percent)
-			add(Color("#1E1535"), 90.percent)
-		})
+		pageBackground()
 
 		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
 			self {
@@ -312,7 +309,7 @@ object PortfolioStyle : StyleSheet() {
 
 		hover(self) style {
 			backgroundColor(Color("#ffffff10"))
-			borderColor(Color("#00D4FF"))
+			borderColor(Color(AppStyle.BRAND_GRADIENT_FROM))
 		}
 	}
 
@@ -330,12 +327,8 @@ object PortfolioStyle : StyleSheet() {
 
 	val statTile by style {
 		alignItems(AlignItems.Center)
-		backgroundColor(Color("#1A1225"))
 		border(2.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
 		borderRadius(.8.cssRem)
 		display(DisplayStyle.Flex)
 		gap(1.cssRem)
@@ -486,13 +479,9 @@ object PortfolioStyle : StyleSheet() {
 	}
 
 	val techBadge by style {
-		backgroundColor(Color("#252525"))
 		border(1.px, LineStyle.Solid, Color.transparent)
-		backgroundImage("""
-			linear-gradient(#252525, #252525) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
-		borderRadius(2.cssRem)
+		gradientBorderBackground(Color("#252525"))
+		borderRadius(1.cssRem)
 		color(Color.white)
 		fontSize(.9.cssRem)
 		padding(.5.cssRem, 1.1.cssRem)

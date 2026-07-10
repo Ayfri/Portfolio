@@ -16,8 +16,10 @@ import io.github.ayfri.data.rememberPortfolioData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.marker
 import io.github.ayfri.utils.n
+import io.github.ayfri.utils.pageBackground
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
@@ -488,19 +490,10 @@ fun Skills() {
 }
 
 object SkillsStyle : StyleSheet() {
-	const val SKILLS_BACKGROUND_COLOR = "#1A1225"
 	const val SKILL_BACKGROUND_COLOR = "#141414"
 
 	val skills by style {
-		backgroundColor(Color(SKILLS_BACKGROUND_COLOR))
-
-		// Main background with gradient violet
-		backgroundImage(linearGradient(180.deg) {
-			add(Color("#0A0A0F"), (-3).percent)
-			add(Color("#1A1225"), 14.percent)
-			add(Color("#2A1B3D"), 65.percent)
-			add(Color("#1E1535"), 90.percent)
-		})
+		pageBackground()
 	}
 
 	val skillsList by style {
@@ -529,10 +522,7 @@ object SkillsStyle : StyleSheet() {
 			width(2.px)
 		}
 
-		property("background", """
-			linear-gradient(${SKILL_BACKGROUND_COLOR}, ${SKILL_BACKGROUND_COLOR}) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(SKILL_BACKGROUND_COLOR))
 		property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
 
 		color(Color.white)
@@ -598,10 +588,7 @@ object SkillsStyle : StyleSheet() {
 						style(LineStyle.Solid)
 						color(Color.transparent)
 					}
-					property("background", """
-						transparent padding-box,
-						linear-gradient(45deg, #00D4FF, #FF0080) border-box
-					""")
+					gradientBorderBackground(Color.transparent)
 
 					"p" {
 						margin(.5.cssRem, 0.px, 0.px)

@@ -17,9 +17,9 @@ enum class FontAwesomeType(val value: String) {
 }
 
 @Composable
-fun I(type: FontAwesomeType = FontAwesomeType.SOLID, icon: String, style: StyleScope.() -> Unit = {}) {
+fun I(type: FontAwesomeType = FontAwesomeType.SOLID, icon: String, vararg classes: String, style: StyleScope.() -> Unit = {}) {
 	I({
-		classes(type.value, "fa-$icon")
+		classes(type.value, "fa-$icon", *classes)
 		style(style)
 	})
 }

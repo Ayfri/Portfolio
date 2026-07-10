@@ -10,6 +10,7 @@ import io.github.ayfri.*
 import io.github.ayfri.components.*
 import io.github.ayfri.components.articles.*
 import io.github.ayfri.externals.HighlightCode
+import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
@@ -134,9 +135,7 @@ fun ArticleHeader(
 			Span({
 				classes(ArticleHeaderStyle.metaItem)
 			}) {
-				I({
-					classes("fas", "fa-calendar-alt")
-				})
+				I(FontAwesomeType.SOLID, "calendar-alt")
 				Text(" $formattedDate")
 			}
 
@@ -145,9 +144,7 @@ fun ArticleHeader(
 			Span({
 				classes(ArticleHeaderStyle.metaItem)
 			}) {
-				I({
-					classes("fas", "fa-clock")
-				})
+				I(FontAwesomeType.SOLID, "clock")
 				Text(" $readingTime min read")
 			}
 
@@ -156,9 +153,7 @@ fun ArticleHeader(
 				Span({
 					classes(ArticleHeaderStyle.metaItem, ArticleHeaderStyle.updated)
 				}) {
-					I({
-						classes("fas", "fa-sync-alt")
-					})
+					I(FontAwesomeType.SOLID, "sync-alt")
 					Text(" Updated")
 				}
 			}
@@ -186,7 +181,6 @@ fun ArticleHeader(
 
 object ArticleHeaderStyle : StyleSheet() {
 	val container by style {
-		backgroundColor(Color("#1A1225"))
 		borderRadius(1.cssRem)
 		padding(2.cssRem)
 		marginBottom(3.cssRem)
@@ -195,10 +189,7 @@ object ArticleHeaderStyle : StyleSheet() {
 			style(LineStyle.Solid)
 			color(Color.transparent)
 		}
-		property("background", """
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
 		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
 	}
 

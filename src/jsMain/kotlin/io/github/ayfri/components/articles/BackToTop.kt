@@ -5,11 +5,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.*
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Button
-import org.jetbrains.compose.web.dom.I
 import org.w3c.dom.events.EventListener
 
 @Composable
@@ -39,9 +40,7 @@ fun BackToTopButton() {
 			window.scrollTo(0.0, 0.0)
 		}
 	}) {
-		I({
-			classes("fas", "fa-arrow-up")
-		})
+		I(FontAwesomeType.SOLID, "arrow-up")
 	}
 }
 

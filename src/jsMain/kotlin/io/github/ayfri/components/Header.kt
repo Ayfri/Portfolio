@@ -10,6 +10,7 @@ import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle.mobileFirstBreak
 import io.github.ayfri.AppStyle.mobileSecondBreak
 import io.github.ayfri.data.REPO_LINK
+import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
@@ -238,10 +239,7 @@ object HeaderStyle : StyleSheet() {
 			defaultDuration(0.3.s)
 			properties("all")
 		}
-		background("""
-			linear-gradient(${NAVBAR_COLOR}, ${NAVBAR_COLOR}) padding-box,
-			linear-gradient(45deg, $NAVBAR_ACCENT_START, $NAVBAR_ACCENT_END) border-box
-		""")
+		gradientBorderBackground(Color(NAVBAR_COLOR))
 
 		"p" {
 			fontWeight(600)

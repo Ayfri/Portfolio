@@ -29,6 +29,13 @@ object AppStyle : StyleSheet() {
 	const val MONO_FONT_FAMILY = "JetBrains Mono"
 	const val SPECIAL_TEXT_COLOR = "#B4BBFF"
 
+	// Shared brand gradient, used for titles, gradient borders and tags across the whole site.
+	const val BRAND_GRADIENT_FROM = "#00D4FF"
+	const val BRAND_GRADIENT_TO = "#FF0080"
+
+	// Shared card/panel background used behind the gradient-border trick.
+	const val CARD_BACKGROUND = "#1A1225"
+
 	val mobileFirstBreak = 890.px
 	val mobileSecondBreak = 810.px
 	val mobileThirdBreak = 510.px
@@ -118,10 +125,7 @@ object AppStyle : StyleSheet() {
 
 	val title by style {
 		border(2.px, LineStyle.Solid, Color.transparent)
-		background("""
-			linear-gradient(#1A1225, #1A1225) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
+		gradientBorderBackground(Color(CARD_BACKGROUND))
 		borderRadius(1.cssRem)
 		fontSize(2.1.cssRem)
 
