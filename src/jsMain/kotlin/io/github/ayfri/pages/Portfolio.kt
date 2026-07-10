@@ -4,22 +4,93 @@ import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
-import io.github.ayfri.*
+import io.github.ayfri.AppStyle
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import io.github.ayfri.layouts.PageLayout
+import io.github.ayfri.localImage
+import io.github.ayfri.markdownParagraph
+import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
+import org.jetbrains.compose.web.attributes.ATarget
+import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
-import org.jetbrains.compose.web.css.keywords.auto
-import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
+
+data class PortfolioStat(val label: String, val value: String, val icon: String)
+
+val portfolioStats = listOf(
+	PortfolioStat("Started", "June 2022", "seedling"),
+	PortfolioStat("Language", "100% Kotlin", "code"),
+	PortfolioStat("Framework", "Kobweb + Compose HTML", "layer-group"),
+	PortfolioStat("Hosting", "Cloudflare Pages", "cloud"),
+)
+
+data class PortfolioSection(
+	val title: String,
+	val text: String,
+	val image: String,
+	val imageOnRight: Boolean,
+)
+
+val portfolioSections = listOf(
+	PortfolioSection(
+		title = "Why I Built It",
+		text = """
+			My school asked for a portfolio to validate the first year, but I wanted more than a template someone could fill in a weekend.
+			Something that could explain what I do, how, and why, beyond a bare GitHub profile.
+		""".trimIndent(),
+		image = localImage("portfolio-1.png"),
+		imageOnRight = true,
+	),
+	PortfolioSection(
+		title = "Designing It",
+		text = """
+			The early visual identity started as mockups in Figma, with my internship tutor pushing me on layout and color while I focused on the code.
+			These days the design lives directly in Compose HTML: styling and layout are iterated on in Kotlin itself, no separate design tool.
+		""".trimIndent(),
+		image = localImage("portfolio-2.png"),
+		imageOnRight = false,
+	),
+	PortfolioSection(
+		title = "Building It",
+		text = """
+			Everything is Kotlin: pages, styling, and the build script itself, compiled to JavaScript through [Kobweb](https://kobweb.varabyte.com/) and Compose HTML.
+			One typed language for the whole site means the compiler catches broken links and typo'd CSS colors before they ever ship.
+		""".trimIndent(),
+		image = localImage("portfolio-3.png"),
+		imageOnRight = true,
+	),
+	PortfolioSection(
+		title = "Shipping It",
+		text = """
+			The site is statically exported with `kobwebExport`, then deployed to Cloudflare Pages straight from GitHub Actions on every push to master.
+			No manual uploads, no dynamic server to maintain, just static files served from the edge.
+		""".trimIndent(),
+		image = localImage("portfolio-4.png"),
+		imageOnRight = false,
+	),
+)
+
+data class TechBadge(val name: String)
+
+val techBadges = listOf(
+	TechBadge("Kotlin 2.4"),
+	TechBadge("Kobweb 0.25"),
+	TechBadge("Compose HTML 1.11"),
+	TechBadge("Gradle 9.6"),
+	TechBadge("GitHub Actions"),
+	TechBadge("Cloudflare Pages"),
+)
 
 @Page("/portfolio/index")
 @Composable
 fun Portfolio() {
 	PageLayout(
 		"Portfolio",
-		description = "How this Kotlin and Compose for Web portfolio was designed and built, from first prototype to the current site you're browsing.",
+		description = "How this Kotlin and Compose for Web portfolio was designed and built, from the first school-project prototype in 2022 to the site you're browsing today.",
 		keywords = "Kotlin Compose for Web, Kobweb, portfolio website design, Kotlin web development, static site generation",
 	) {
 		Style(PortfolioStyle)
@@ -35,110 +106,155 @@ fun Portfolio() {
 				}
 			}
 
-			PortfolioSection(
-				"""
-				I created this portfolio first because my school asked me to create one to validate my first year.
-				But also to have something to show for recruiters other than just a GitHub profile.
-				I can explain what do I do, how, why, when I started etc.
-				This is why I created it using new technologies that I don't know and designed it using the method my boss learned me during this time.
-			""".trimIndent(),
-				title = "In the first place, why?",
-				image = localImage("portfolio-1-small.png"),
-				width = 367,
-				height = 226
-			)
+			Section({
+				classes(PortfolioStyle.intro)
+			}) {
+				P({
+					markdownParagraph(
+						"""
+						I created this portfolio first because my school asked me to, but it turned into a long-running playground I keep coming back to.
+						No HTML files, no CSS files, no JavaScript I wrote by hand, every page and every style rule is Kotlin compiled to JavaScript through [Kobweb](https://kobweb.varabyte.com/) and Compose HTML.
+					""".trimIndent(), true
+					)
+				})
 
-			PortfolioSection(
-				"""
-				The design, conception, and general idea of the portfolio was realized on Figma.
-				A tool to create mock-ups, usually for websites.
-				All repeatable parts of the site are a composant that I can reuse and modify once to modify all, with also the ability to create variations of composants.
-				It is also working very well for teams as changes are seen in real time.<br>
-				Overall, it is a great tool to visualise and design pages alone or for a team and is almost completely free, paid parts are optional and useful only for big teams.
-			""".trimIndent(),
-				title = "Conception",
-				image = localImage("portfolio-2-small.png"),
-				width = 480,
-				height = 270
-			)
+				Div({
+					classes(PortfolioStyle.introActions)
+				}) {
+					A("/articles/building-this-portfolio/", {
+						classes(AppStyle.button)
+					}) {
+						Text("Read the full story")
+						I(FontAwesomeType.SOLID, "arrow-right") {
+							marginLeft(0.5.cssRem)
+						}
+					}
 
-			PortfolioSection(
-				"""
-				The website was programmed using the language Kotlin, and the framework Kobweb built on top of Compose HTML.
-				I'm practicing with Kotlin since 2020, meaning I know well how to program in Kotlin.
-				It has pretty good documentation, and it is pretty straightforward to learn, Compose is pretty recent, so support is maybe a bit tedious to find.
-				The force of Kotlin is to be able to compile to JVM (like Java) but also to JavaScript, Native, and WebAssembler was recently started.
-				And once you join the Slack workspace for Kotlin, you'll have response to your problems very easily and quickly.
-			""".trimIndent(),
-				title = "Realisation",
-				image = localImage("portfolio-3-small.png"),
-				width = 480,
-				height = 258
-			)
+					A("https://github.com/Ayfri/Portfolio", {
+						classes(PortfolioStyle.secondaryButton)
+						target(ATarget.Blank)
+					}) {
+						I(FontAwesomeType.BRAND, "github") {
+							marginRight(0.5.cssRem)
+						}
+						Text("View source")
+					}
+				}
+			}
 
-			PortfolioSection(
-				"""
-				This website is statically hosted on Cloudflare using the Cloudflare Pages service.
-				When we say `statically`, it means the website isn't dynamic; it's simply a collection of files.
-				Since it primarily displays information, there's no need for dynamic functionality.
+			Section({
+				classes(PortfolioStyle.stats)
+			}) {
+				portfolioStats.forEach { stat ->
+					Div({
+						classes(PortfolioStyle.statTile)
+					}) {
+						I(FontAwesomeType.SOLID, stat.icon)
+						Div {
+							P({
+								classes(PortfolioStyle.statValue)
+							}) {
+								Text(stat.value)
+							}
+							P({
+								classes(PortfolioStyle.statLabel)
+							}) {
+								Text(stat.label)
+							}
+						}
+					}
+				}
+			}
 
-				Cloudflare Pages is a free service that allows you to host your website on Cloudflare.
-				It's user-friendly and doesn't require any payment.
-				Namecheap provides the domain hosting, which is a paid service, but it's cost-effective and straightforward to use.
-			""".trimIndent(),
-				title = "Upload to the World",
-				image = localImage("portfolio-4-small.png"),
-				width = 480,
-				height = 270
-			)
+			Div({
+				classes(PortfolioStyle.features)
+			}) {
+				portfolioSections.forEach { section ->
+					Div({
+						classes(PortfolioStyle.feature)
+						if (section.imageOnRight) classes(PortfolioStyle.featureReverse)
+					}) {
+						Div({
+							classes(PortfolioStyle.featureImageFrame)
+						}) {
+							Div({
+								classes(PortfolioStyle.featureImageBar)
+							}) {
+								Span({ classes(PortfolioStyle.dot, PortfolioStyle.dotRed) })
+								Span({ classes(PortfolioStyle.dot, PortfolioStyle.dotYellow) })
+								Span({ classes(PortfolioStyle.dot, PortfolioStyle.dotGreen) })
+							}
+
+							Img(section.image, alt = "${section.title} screenshot") {
+								classes(PortfolioStyle.featureImage)
+							}
+						}
+
+						Div({
+							classes(PortfolioStyle.featureText)
+						}) {
+							H2 {
+								Text(section.title)
+							}
+
+							P({
+								markdownParagraph(section.text, true)
+							})
+						}
+					}
+				}
+			}
+
+			Section({
+				classes(PortfolioStyle.techStack)
+			}) {
+				H2 {
+					Text("Built With")
+				}
+
+				Div({
+					classes(PortfolioStyle.techStackList)
+				}) {
+					techBadges.forEach { badge ->
+						Span({
+							classes(PortfolioStyle.techBadge, AppStyle.monoFont)
+						}) {
+							Text(badge.name)
+						}
+					}
+				}
+			}
+
+			Section({
+				classes(PortfolioStyle.outro)
+			}) {
+				P({
+					markdownParagraph(
+						"""
+						Want the deep dive, the actual code samples, and why I'd still pick a boring stack for a team project? Read [how this portfolio was built](/articles/building-this-portfolio/).
+					""".trimIndent(), true
+					)
+				})
+			}
 		}
 	}
 }
 
-@Composable
-fun PortfolioSection(text: String, title: String, image: String, width: Int, height: Int) {
-	Section({
-		classes(PortfolioStyle.section, AppStyle.monoFont)
-	}) {
-		Div {
-			H2 {
-				Text(title)
-			}
-
-			P({
-				markdownParagraph(text, true)
-			})
-		}
-
-		Div {
-			Img(image, alt = "Portfolio creation") {
-				height(height)
-				width(width)
-			}
-		}
-	}
-}
-
+@OptIn(ExperimentalComposeWebApi::class)
 object PortfolioStyle : StyleSheet() {
-	const val TITLE_GRADIENT_START = "#00D4FF"  // Cyan néon
-	const val TITLE_GRADIENT_END = "#FF0080"   // Magenta néon
-
-	const val BACKGROUND_GRADIENT_START = "#0A0A0F"  // Plus sombre
-	const val BACKGROUND_GRADIENT_MIDDLE = "#1A1225" // Violet foncé
-	const val BACKGROUND_GRADIENT_END = "#2A1B3D"    // Violet plus clair
-	val sectionsGap = 4.cssRem
-
 	val portfolio by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(sectionsGap)
+		alignItems(AlignItems.Center)
+		gap(3.cssRem)
 
 		padding(2.cssRem)
 
-		backgroundImage(linearGradient(225.deg) {
-			add(Color(BACKGROUND_GRADIENT_START))
-			add(Color(BACKGROUND_GRADIENT_MIDDLE))
-			add(Color(BACKGROUND_GRADIENT_END))
+		backgroundImage(linearGradient(180.deg) {
+			add(Color("#0A0A0F"), (-3).percent)
+			add(Color("#1A1225"), 14.percent)
+			add(Color("#2A1B3D"), 65.percent)
+			add(Color("#1E1535"), 90.percent)
 		})
 
 		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
@@ -148,53 +264,185 @@ object PortfolioStyle : StyleSheet() {
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
-	val section by style {
+	// Narrower column for prose (intro/outro paragraphs, tech stack blurb).
+	val textWidth = 44.cssRem
+
+	// Wider column for visual blocks (stats grid, image/text feature rows).
+	val wideWidth = 68.cssRem
+
+	val intro by style {
 		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
+		gap(1.5.cssRem)
+		maxWidth(textWidth)
+		textAlign(TextAlign.Center)
+
+		"p" {
+			lineHeight(1.6.cssRem)
+			fontSize(1.05.cssRem)
+		}
+	}
+
+	val introActions by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Row)
+		gap(1.cssRem)
+		flexWrap(FlexWrap.Wrap)
 		justifyContent(JustifyContent.Center)
-		position(Position.Relative)
+	}
+
+	val secondaryButton by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color.transparent)
+		border(2.px, LineStyle.Solid, Color("#3A3450"))
+		borderRadius(.4.cssRem)
+		color(Color.white)
+		cursor(Cursor.Pointer)
+		display(DisplayStyle.Flex)
+		fontSize(1.1.cssRem)
+		fontWeight(700)
+		padding(.65.cssRem, 1.2.cssRem)
+		textDecorationLine(TextDecorationLine.None)
+
+		transitions {
+			defaultDelay(.25.s)
+			properties("border-color", "background-color")
+		}
+
+		hover(self) style {
+			backgroundColor(Color("#ffffff10"))
+			borderColor(Color("#00D4FF"))
+		}
+	}
+
+	val stats by style {
+		display(DisplayStyle.Grid)
+		gap(1.2.cssRem)
+		gridTemplateColumns {
+			repeat(GridEntry.Repeat.Auto.Type.AutoFit) {
+				minmax(13.cssRem, 1.fr)
+			}
+		}
+		maxWidth(wideWidth)
+		width(100.percent)
+	}
+
+	val statTile by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color("#1A1225"))
+		border(2.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
+			linear-gradient(#1A1225, #1A1225) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		borderRadius(.8.cssRem)
+		display(DisplayStyle.Flex)
+		gap(1.cssRem)
+		padding(1.2.cssRem)
+
+		"svg" {
+			color(Color("#00D4FF"))
+			fontSize(1.5.cssRem)
+		}
+
+		"p" {
+			margin(0.px)
+		}
+	}
+
+	val statValue by style {
+		fontWeight(700)
+	}
+
+	val statLabel by style {
+		color(Color("#B0AEC0"))
+		fontSize(.85.cssRem)
+	}
+
+	val features by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		gap(3.cssRem)
+		maxWidth(wideWidth)
+		width(100.percent)
+	}
+
+	val feature by style {
+		alignItems(AlignItems.Center)
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Row)
 		gap(2.5.cssRem)
 
-		textAlign(TextAlign.Right)
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				flexDirection(FlexDirection.Column)
+			}
+		}
+	}
 
+	val featureReverse by style {
 		media(mediaMinWidth(AppStyle.mobileFirstBreak + 1.px)) {
-			self + nthChild(Nth.Even) style {
-				textAlign(TextAlign.Left)
+			self {
 				flexDirection(FlexDirection.RowReverse)
 			}
 		}
+	}
 
-		self + not(lastChild) + after style {
-			val height = .5.cssRem
-			content("")
+	val featureImageFrame by style {
+		backgroundColor(Color("#0F0B17"))
+		border(1.px, LineStyle.Solid, Color("#3A3450"))
+		borderRadius(.6.cssRem)
+		flex(1)
+		overflow(Overflow.Hidden)
+		width(100.percent)
+	}
 
-			display(DisplayStyle.Block)
-			height(height)
-			width(4.vw)
+	val featureImageBar by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color("#1D1730"))
+		borderBottom(1.px, LineStyle.Solid, Color("#3A3450"))
+		display(DisplayStyle.Flex)
+		gap(.4.cssRem)
+		padding(.55.cssRem, .8.cssRem)
+	}
 
-			position(Position.Absolute)
-			bottom((sectionsGap * -.5) - height)
-			left(50.percent)
-			transform {
-				translateX((-50).percent)
-			}
+	val dot by style {
+		borderRadius(50.percent)
+		size(.6.cssRem)
+	}
 
-			backgroundColor(Color.white)
-			borderRadius(3.px)
-		}
+	val dotRed by style {
+		backgroundColor(Color("#FF5F56"))
+	}
+
+	val dotYellow by style {
+		backgroundColor(Color("#FFBD2E"))
+	}
+
+	val dotGreen by style {
+		backgroundColor(Color("#27C93F"))
+	}
+
+	val featureImage by style {
+		display(DisplayStyle.Block)
+		height(16.cssRem)
+		objectFit(ObjectFit.Cover)
+		property("object-position", "top")
+		width(100.percent)
+	}
+
+	val featureText by style {
+		flex(1)
 
 		"h2" {
 			backgroundClip(BackgroundClip.Text)
-			backgroundImage(linearGradient(20.deg) {
-				add(Color(TITLE_GRADIENT_START))
-				add(Color(TITLE_GRADIENT_END))
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
 			})
-
-			fontSize(2.5.cssRem)
-			marginTop(0.px)
-			marginBottom(1.cssRem)
-
+			fontSize(1.6.cssRem)
+			margin(0.px, 0.px, .8.cssRem)
 			property("-webkit-background-clip", "text")
 			property("-webkit-text-fill-color", "transparent")
 			property("-moz-text-fill-color", "transparent")
@@ -202,41 +450,60 @@ object PortfolioStyle : StyleSheet() {
 		}
 
 		"p" {
-			lineHeight(1.3.cssRem)
+			lineHeight(1.5.cssRem)
+			margin(0.px)
 		}
+	}
 
-		"img" {
-			borderRadius(.8.cssRem)
-			boxShadow("0 0 .75rem #71A0E8")
+	val techStack by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		alignItems(AlignItems.Center)
+		gap(1.5.cssRem)
+		maxWidth(textWidth)
+		textAlign(TextAlign.Center)
 
-			height(14.cssRem)
-			objectFit(ObjectFit.Cover)
-			width(auto)
+		"h2" {
+			backgroundClip(BackgroundClip.Text)
+			backgroundImage(linearGradient(45.deg) {
+				add(Color("#00D4FF"))
+				add(Color("#FF0080"))
+			})
+			fontSize(1.8.cssRem)
+			margin(0.px)
+			property("-webkit-background-clip", "text")
+			property("-webkit-text-fill-color", "transparent")
+			property("-moz-text-fill-color", "transparent")
+			property("-moz-background-clip", "text")
 		}
+	}
 
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				flexDirection(FlexDirection.Column)
-				alignItems(AlignItems.Stretch)
-				justifyContent(JustifyContent.Center)
-				textAlign(TextAlign.Center)
+	val techStackList by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.8.cssRem)
+		justifyContent(JustifyContent.Center)
+	}
 
-				"h2" {
-					fontSize(2.cssRem)
-				}
+	val techBadge by style {
+		backgroundColor(Color("#252525"))
+		border(1.px, LineStyle.Solid, Color.transparent)
+		backgroundImage("""
+			linear-gradient(#252525, #252525) padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
+		borderRadius(2.cssRem)
+		color(Color.white)
+		fontSize(.9.cssRem)
+		padding(.5.cssRem, 1.1.cssRem)
+	}
 
-				"img" {
-					maxWidth(100.percent)
-				}
-			}
-		}
+	val outro by style {
+		maxWidth(textWidth)
+		textAlign(TextAlign.Center)
 
-		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
-			self {
-				"img" {
-					height(auto)
-				}
-			}
+		"p" {
+			lineHeight(1.5.cssRem)
 		}
 	}
 }
