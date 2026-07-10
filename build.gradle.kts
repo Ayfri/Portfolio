@@ -25,13 +25,6 @@ repositories {
 	maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
-fun HEAD.meta(property: String, content: String) {
-	meta {
-		attributes["property"] = property
-		this.content = content
-	}
-}
-
 operator fun <K : Any, V : Any> MapProperty<K, V>.set(key: K, value: V) {
 	put(key, value)
 }
@@ -85,12 +78,13 @@ data class BlogEntry(
 	val dateModified: String,
 )
 
-fun String.escapeQuotes() = this.replace("\"", "\\\"")
-fun String.escapeVariables() = this.replace("$", """${'$'}{"$"}""")
+val markdownConvertOutputDir = layout.buildDirectory.dir("generated/kobweb/markdown/convert/src/jsMain/kotlin")
 
 tasks.matching { it.name == "kobwebxMarkdownConvert" }.configureEach {
+	val outputDir = markdownConvertOutputDir
+
 	doLast {
-		fileTree(layout.buildDirectory.dir("generated/kobweb/markdown/convert/src/jsMain/kotlin")).forEach { file ->
+		outputDir.get().asFile.walkTopDown().filter { it.isFile }.forEach { file ->
 			val text = file.readText().replace(Regex("""\$([a-zA-Z_]\w*)""")) { match ->
 				"""${'$'}{"$"}${match.groupValues[1]}"""
 			}
@@ -104,6 +98,9 @@ kobweb {
 	val blogInputDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
 
 	markdown {
+		fun String.escapeQuotes() = this.replace("\"", "\\\"")
+		fun String.escapeVariables() = this.replace("$", """${'$'}{"$"}""")
+
 		handlers {
 			text.set { text ->
 				"org.jetbrains.compose.web.dom.Text(\"\"\"${text.literal.escapeVariables()}\"\"\")"
@@ -232,6 +229,13 @@ kobweb {
 
 			head.apply {
 				add {
+					fun HEAD.meta(property: String, content: String) {
+						meta {
+							attributes["property"] = property
+							this.content = content
+						}
+					}
+
 					meta(charset = "utf-8")
 					meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
 					meta(name = "Author", content = author)
@@ -418,18 +422,4 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 
 tasks.named("jsProcessResources") {
 	dependsOn(downloadDataTask, generateSitemapTask)
-}
-
-// Upstream Kobweb tasks capture Gradle script/Project objects - not yet serializable for CC.
-listOf(
-	"downloadData",
-	"kobwebGenSiteIndex",
-	"kobwebxMarkdownConvert",
-	"kobwebxMarkdownProcess",
-).forEach { taskName ->
-	tasks.named(taskName).configure {
-		notCompatibleWithConfigurationCache(
-			"Awaiting Kobweb/KobwebX Gradle fixes: tasks capture Gradle script objects or Project (not serialized for CC).",
-		)
-	}
 }
