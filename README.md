@@ -8,7 +8,7 @@ The `api` branch generates the GitHub project snapshot consumed by [ayfri.com](h
 - Ktor HTTP client
 - Kotlinx Serialization
 - Gradle 9.6 wrapper
-- JDK 21 toolchain
+- JDK 25 toolchain
 
 ## Output
 
