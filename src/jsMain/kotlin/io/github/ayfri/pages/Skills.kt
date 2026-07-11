@@ -14,7 +14,7 @@ import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.I
 import io.github.ayfri.components.P
 import io.github.ayfri.data.GitHubRepository
-import io.github.ayfri.data.rememberPortfolioData
+import io.github.ayfri.data.portfolioData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
@@ -436,13 +436,7 @@ fun Skills() {
 		description = "Technical skills of Pierre Roy (Ayfri): Kotlin, TypeScript, Python, Java, C#, Godot, and more, with real GitHub and school projects for each.",
 		keywords = "Kotlin skills, TypeScript developer, Python developer, Java developer, programming languages, tech stack, GitHub projects, Godot developer, MySQL, Redis",
 	) {
-		val portfolio = rememberPortfolioData()
-		if (portfolio == null) {
-			P {
-				Text("Loading…")
-			}
-			return@PageLayout
-		}
+		val portfolio = portfolioData()
 
 		Style(SkillsStyle)
 

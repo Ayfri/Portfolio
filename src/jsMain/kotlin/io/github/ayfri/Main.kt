@@ -5,7 +5,6 @@ import com.varabyte.kobweb.core.App
 import com.varabyte.kobweb.core.KobwebApp
 import com.varabyte.kobweb.core.init.InitKobweb
 import com.varabyte.kobweb.core.init.InitKobwebContext
-import io.github.ayfri.data.prefetchPortfolioData
 import io.github.ayfri.externals.MarkedOptions
 import io.github.ayfri.externals.TextRenderer
 import io.github.ayfri.externals.use
@@ -38,8 +37,6 @@ fun AppEntry(content: @Composable () -> Unit) {
 
 @InitKobweb
 fun initKobweb(context: InitKobwebContext) {
-	prefetchPortfolioData()
-
 	context.router.setErrorPage {
 		NotFoundPage()
 	}

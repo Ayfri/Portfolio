@@ -127,7 +127,7 @@ I also override the Markdown handlers so images get `loading="lazy"` and `decodi
 
 ### Project data fetched at build time
 
-My GitHub projects are not fetched in the browser. A `downloadData` Gradle task pulls a [JSON snapshot](https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json) of my repos, minifies it, and drops it into the generated resources. The page preloads that JSON with `fetchpriority="high"`, so the portfolio grid renders immediately without hammering the GitHub API on every visit.
+My GitHub projects are not fetched in the browser. A `downloadData` Gradle task pulls a [JSON snapshot](https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json) of my repos and generates Kotlin source from it. The data is available during static export, so crawlers receive the final project content without hitting the GitHub API on every visit.
 
 ### A sitemap that reads my own source
 

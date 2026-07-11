@@ -13,7 +13,7 @@ import io.github.ayfri.components.I
 import io.github.ayfri.components.Span
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.HomeCard
-import io.github.ayfri.data.rememberPortfolioData
+import io.github.ayfri.data.portfolioData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.margin
@@ -63,13 +63,7 @@ fun Home() {
 		description = "Pierre Roy (Ayfri), a Kotlin and Compose Multiplatform developer building web apps, Minecraft datapacks with Kore, and AI-powered side projects.",
 		keywords = "Pierre Roy, Ayfri, Kotlin developer, Compose Multiplatform, Kotlin Multiplatform, Svelte developer, TypeScript developer, software engineer portfolio, Minecraft datapack developer",
 	) {
-		val portfolio = rememberPortfolioData()
-		if (portfolio == null) {
-			P {
-				Text("Loading…")
-			}
-			return@PageLayout
-		}
+		val portfolio = portfolioData()
 
 		val homeRepositories = portfolio.repos.sortedBy { it.stargazersCount }.reversed().take(3)
 		val featuredSkills =

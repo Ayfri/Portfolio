@@ -11,7 +11,7 @@ import io.github.ayfri.components.I
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
-import io.github.ayfri.data.rememberPortfolioData
+import io.github.ayfri.data.portfolioData
 import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectsListJsonLD
 import io.github.ayfri.layouts.PageLayout
@@ -36,13 +36,7 @@ fun Projects() {
 		description = "Open-source projects by Pierre Roy (Ayfri) on GitHub: Kotlin libraries, Minecraft tools, web apps, and more, searchable by language and tag.",
 		keywords = "GitHub projects, open source Kotlin, Minecraft tools, Ayfri GitHub, developer portfolio projects",
 	) {
-		val portfolio = rememberPortfolioData()
-		if (portfolio == null) {
-			P {
-				Text("Loading…")
-			}
-			return@PageLayout
-		}
+		val portfolio = portfolioData()
 
 		Style(ProjectsStyle)
 		Style(DataStyle)
