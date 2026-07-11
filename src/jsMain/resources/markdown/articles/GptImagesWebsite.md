@@ -15,7 +15,7 @@ routeOverride: /articles/gpt-images-website/index
 
 I wasn't trying to compete with full design suites. I wanted a **quick personal panel** for image generation: pick a model and size, write a prompt, see history, get a rough cost estimate, and iterate without leaving the browser. Shipping it at [gpt-images.ayfri.com](https://gpt-images.ayfri.com) made it easy to share and to use myself on random devices.
 
-[![GPT Images, images page (full viewport)](/images/gpt-images/screenshot-full.png)](https://gpt-images.ayfri.com)
+[![GPT Images, images page (full viewport)](/images/gpt-images/screenshot-full.avif)](https://gpt-images.ayfri.com)
 
 A few choices fall out of that:
 
@@ -33,7 +33,7 @@ I switched package managers from **pnpm** to **bun** ([`package.json`](https://g
 
 The flow is straight line stuff, close to OpenAI's [Images API](https://platform.openai.com/docs/api-reference/images) and their [image generation guide](https://platform.openai.com/docs/guides/image-generation):
 
-![API key field, browser only](/images/gpt-images/api-key-box.png)
+![API key field, browser only](/images/gpt-images/api-key-box.avif)
 
 1. You paste an API key. It persists in **localStorage** through a tiny store ([`apiKeyStore.ts`](https://github.com/Ayfri/GPT-Images/blob/main/src/lib/stores/apiKeyStore.ts)) so you don't have to retype it every visit.
 2. **`ImageGenerator`** ([component](https://github.com/Ayfri/GPT-Images/blob/main/src/lib/components/ImageGenerator.svelte)) picks **generate** vs **edit** from context: no reference image means generation; attachments (and optional **mask** for inpaint-style work) mean edit. The client calls **`images.generate`** or **`images.edit`** with `response_format` aimed at **base64** so the UI can stash results without an extra download step.
@@ -52,13 +52,13 @@ There's a [`/videos`](https://github.com/Ayfri/GPT-Images/blob/main/src/routes/v
 
 **`UsageStats`** and **`VideoUsageStats`** ([`UsageStats.svelte`](https://github.com/Ayfri/GPT-Images/blob/main/src/lib/components/UsageStats.svelte), [`VideoUsageStats.svelte`](https://github.com/Ayfri/GPT-Images/blob/main/src/lib/components/VideoUsageStats.svelte)) roll up what's already on disk. Image pricing in **`types/image.ts`** still has tables for **`gpt-image-1`**, **`gpt-image-1-mini`**, **`gpt-image-1.5`**, and separate logic for **`gpt-image-2`** around **image output tokens**, with reasonable guesses when a resolution doesn't match a published row exactly. That part was annoyingly finicky: the product feels like "pick a size," but the invoice sometimes looks like tokens.
 
-![Video usage and cost from locally stored jobs](/images/gpt-images/videos-usage.png)
+![Video usage and cost from locally stored jobs](/images/gpt-images/videos-usage.avif)
 
 ## Interface evolution
 
 Lately the UI settled on **`MediaGrid`**, **`MediaCard`**, and **`MediaLightbox`** ([`MediaGrid.svelte`](https://github.com/Ayfri/GPT-Images/blob/main/src/lib/components/MediaGrid.svelte), [`MediaCard.svelte`](https://github.com/Ayfri/GPT-Images/blob/main/src/lib/components/MediaCard.svelte), [`MediaLightbox.svelte`](https://github.com/Ayfri/GPT-Images/blob/main/src/lib/components/MediaLightbox.svelte)) so images and video share one pattern: grid, open, swipe in the lightbox, same price badges. Swipes use [`carouselSwipe.ts`](https://github.com/Ayfri/GPT-Images/blob/main/src/lib/utils/carouselSwipe.ts). Before that I had separate **`ImageGrid`** and **`VideoGrid`**; folding them together in [`aa4808b`](https://github.com/Ayfri/GPT-Images/commit/aa4808b) stopped fixes from only landing on one side.
 
-[![Lightbox with metadata (full viewport)](/images/gpt-images/image-preview-full.png)](https://gpt-images.ayfri.com)
+[![Lightbox with metadata (full viewport)](/images/gpt-images/image-preview-full.avif)](https://gpt-images.ayfri.com)
 
 The shell (**animated background**, sticky header, footer) is there so the thing feels intentional instead of "default Svelte template gray."
 

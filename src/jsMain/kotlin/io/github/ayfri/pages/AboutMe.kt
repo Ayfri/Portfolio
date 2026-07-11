@@ -156,7 +156,7 @@ val sections = listOf(
 			I know a lot about the concepts of Minecraft and how they are programmed, this is what motivated me to create a Minecraft-like game, _4 times_. Approaching more what I want and performances needed for a game like this each time.
 		""".trimIndent(), 2018, id = "minecraft"
 	) {
-		TextIcon("Minecraft", localImage("minecraft.png"))
+		TextIcon("Minecraft", localImage("minecraft.avif"))
 	},
 
 	AboutMeSection(
@@ -181,7 +181,7 @@ val sections = listOf(
 			It is for me a great experience being in this school, and I'm excited for the next 3 years !
 		""".trimIndent(), 2021, id = "ynov"
 	) {
-		TextIcon("Post-Bac and Ynov", localImage("ynov-icon.png"))
+		TextIcon("Post-Bac and Ynov", localImage("ynov-icon.avif"))
 	},
 
 	AboutMeSection(
@@ -209,7 +209,7 @@ val sections = listOf(
 			Feel free to help me !
 		""".trimIndent(), 2022, id = "datapack-dsl"
 	) {
-		TextIcon("Datapack-DSL", localImage("minecraft-new.png"))
+		TextIcon("Datapack-DSL", localImage("minecraft-new.avif"))
 	},
 
 	AboutMeSection(
@@ -245,7 +245,7 @@ val sections = listOf(
 			We are working on it since July 2023, and we are planning to finish as soon as we can.
 		""".trimIndent(), 2023, id = "scriptgraf"
 	) {
-		TextIcon("ScriptGraf", localImage("ChatGPT.png"))
+		TextIcon("ScriptGraf", localImage("ChatGPT.avif"))
 	})
 
 const val TIMELINE_DEFAULT_OFFSET = 125.0

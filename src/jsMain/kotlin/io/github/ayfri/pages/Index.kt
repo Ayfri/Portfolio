@@ -263,7 +263,7 @@ fun Home() {
 						A("/portfolio/", "Learn more about this portfolio", AppStyle.button)
 					}
 
-					Img(localImage("portfolio-3-small.png"), "Portfolio screenshot") {
+					Img(localImage("portfolio-3-small.avif"), "Portfolio screenshot") {
 						classes(HomeStyle.portfolioImage)
 					}
 				}
@@ -285,7 +285,7 @@ fun Home() {
 				Div({
 					classes(HomeStyle.experienceContent)
 				}) {
-					Img(localImage("minecraft-new.png"), "Experience illustration") {
+					Img(localImage("minecraft-new.avif"), "Experience illustration") {
 						classes(HomeStyle.experienceImage)
 					}
 

@@ -21,7 +21,7 @@ My internship tutor at the time helped me with the design side, which is not my 
 
 Here is the very first shipped version, from June 2023, still a single scrollable page with a contact form at the bottom:
 
-![The June 2023 version of the portfolio, a single page with avatar, skills icons, and a contact form](/images/building-portfolio/2023-06-screenshot.png)
+![The June 2023 version of the portfolio, a single page with avatar, skills icons, and a contact form](/images/building-portfolio/2023-06-screenshot.avif)
 
 ## Why Kotlin for a website
 
@@ -44,7 +44,7 @@ The migration to Kobweb in late 2023 is the moment this went from a hobby experi
 
 By August 2024 the home page had grown real project cards pulled from GitHub, an Articles tab, and a cleaner layout:
 
-![The August 2024 version, now with GitHub project cards for Kore, Advanced-Command-Handler and PIXI-Kotlin, plus an Articles tab](/images/building-portfolio/2024-08-screenshot.png)
+![The August 2024 version, now with GitHub project cards for Kore, Advanced-Command-Handler and PIXI-Kotlin, plus an Articles tab](/images/building-portfolio/2024-08-screenshot.avif)
 
 ## What Kobweb actually gives you
 
@@ -146,7 +146,7 @@ The Kotlin/JS compiler flags are tuned for a smaller, faster bundle: `-Xir-prope
 
 Here is the home page today, July 2026, grown well past a single scrollable page:
 
-![The July 2026 version of the portfolio, with featured projects, top skills, a portfolio teaser, professional experience, about me, articles, and contact sections all on the home page](/images/building-portfolio/2026-07-screenshot.png)
+![The July 2026 version of the portfolio, with featured projects, top skills, a portfolio teaser, professional experience, about me, articles, and contact sections all on the home page](/images/building-portfolio/2026-07-screenshot.avif)
 
 ## Was it worth it
 

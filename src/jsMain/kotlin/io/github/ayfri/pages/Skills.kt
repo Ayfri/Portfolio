@@ -347,7 +347,7 @@ val skills = listOf(
 		description = """
 			Functions are data pack files, allowing players to run lists of commands.
 		""".trimIndent(),
-		iconUrl = localImage("minecraft-new.png"),
+		iconUrl = localImage("minecraft-new.avif"),
 	),
 	Language(
 		name = "PHP",
