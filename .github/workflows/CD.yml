@@ -2,9 +2,9 @@ name: CD
 
 on:
   push:
-    branches:
-      - master
-
+    branches: [master]
+  schedule:
+    - cron: "0 6 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -19,8 +19,10 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     timeout-minutes: 60
+
+    env:
+      KOBWEB_CLI_VERSION: 0.9.21
 
     defaults:
       run:
@@ -31,10 +33,9 @@ jobs:
 
       - uses: actions/setup-java@v5
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: 25
 
-      # When projects are created on Windows, the executable bit is sometimes lost. So set it back just in case.
       - name: Ensure Gradle is executable
         run: chmod +x gradlew
 
@@ -44,26 +45,42 @@ jobs:
           dependency-graph: generate-and-upload
           cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Query Browser Cache ID
+      - name: Query browser cache ID
         id: browser-cache-id
-        run: echo "value=$(./gradlew -q :kobwebBrowserCacheId)" >> $GITHUB_OUTPUT
+        run: echo "value=$(./gradlew -q kobwebBrowserCacheId)" >> "$GITHUB_OUTPUT"
 
-      - name: Cache Browser Dependencies
+      - name: Cache browser dependencies
         uses: actions/cache@v6
-        id: playwright-cache
         with:
           path: ~/.cache/ms-playwright
-          key: "${{ runner.os }}-playwright-${{ steps.browser-cache-id.outputs.value }}"
+          key: ${{ runner.os }}-playwright-${{ steps.browser-cache-id.outputs.value }}
 
-      - name: Ensure gradle wrapper is executable
-        run: chmod +x gradlew
+      - name: Cache Kobweb CLI
+        id: kobweb-cli-cache
+        uses: actions/cache@v6
+        with:
+          path: kobweb-${{ env.KOBWEB_CLI_VERSION }}.zip
+          key: kobweb-cli-${{ runner.os }}-${{ env.KOBWEB_CLI_VERSION }}
 
-      - name: Run Kobweb export
-        run: ./gradlew kobwebExport -PkobwebExportLayout=STATIC -PkobwebBuildTarget=RELEASE -PkobwebReuseServer=false --stacktrace
+      - name: Fetch Kobweb CLI
+        if: steps.kobweb-cli-cache.outputs.cache-hit != 'true'
+        uses: robinraju/release-downloader@v1.13
+        with:
+          repository: varabyte/kobweb-cli
+          tag: v${{ env.KOBWEB_CLI_VERSION }}
+          fileName: kobweb-${{ env.KOBWEB_CLI_VERSION }}.zip
+          tarBall: false
+          zipBall: false
+
+      - name: Unzip Kobweb CLI
+        run: unzip kobweb-${KOBWEB_CLI_VERSION}.zip
+
+      - name: Export site
+        run: ./kobweb-${KOBWEB_CLI_VERSION}/bin/kobweb export --notty --layout static
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & Deploy Worker
+      - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CF_API_TOKEN }}

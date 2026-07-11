@@ -84,7 +84,7 @@ The website will be available at `http://localhost:8080` and will automatically 
 ### Additional Build Options
 
 - **Production Mode**: Add `-PkobwebEnv=PROD` for optimized production build
-- **Export Layout**: Use `-PkobwebRunLayout=FULLSTACK` when exporting HTML with the current Kobweb setup
+- **Static Mode**: `kobweb export --layout static` generates static HTML files
 - **Live Reload**: `-t` flag enables automatic page reload on code changes
 
 Example with options:
@@ -102,7 +102,7 @@ To generate optimized static HTML files:
 
 Export options:
 - **Production Mode**: `-PkobwebEnv=PROD` for optimized production build
-- **Export Layout**: `-PkobwebRunLayout=FULLSTACK` for full HTML generation
+- **Static Mode**: `kobweb export --layout static` for full HTML generation
 
 The exported website will be available in the `.kobweb/client` directory.
 
@@ -210,7 +210,7 @@ GitHub Actions deploys the site to Cloudflare Pages automatically on every push 
 
 For a manual static export:
 
-1. Run `./gradlew kobwebExport -PkobwebEnv=PROD -PkobwebRunLayout=FULLSTACK`
+1. Run `kobweb export --layout static`
 2. Upload contents of `.kobweb/site` to your hosting
 
 ## 📄 License
