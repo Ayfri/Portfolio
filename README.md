@@ -1,218 +1,111 @@
 # Portfolio
 
-Welcome to the source code of my personal portfolio website, [ayfri.com](https://ayfri.com).
+[ayfri.com](https://ayfri.com) is the personal portfolio and blog of [Pierre Roy](https://github.com/Ayfri), also known as Ayfri.
 
-## 🚀 Overview
+It is a Kotlin/Compose for Web site built with [Kobweb](https://kobweb.varabyte.com/). The static export contains the final page content, including the GitHub project catalogue, so crawlers do not receive a client-side loading shell.
 
-This is a modern, fully-featured portfolio website showcasing my skills, projects, experiences, and blog articles. Built with **Kotlin** and **Compose for Web**, it combines the power of a modern web framework with type-safe, functional programming.
+## Stack
 
-The website is built using [Kobweb](https://kobweb.varabyte.com/), a cutting-edge Kotlin web framework that provides:
-- Type-safe DSLs for HTML and CSS
-- Compose for Web components (functional UI)
-- Static site generation capabilities
-- Built-in routing and navigation
-- Live reload development server
+- Kotlin 2.4
+- Compose for Web
+- Kobweb 0.25
+- KobwebX Markdown for articles
+- Gradle 9.6 via the included wrapper
+- Cloudflare Pages for deployment
 
-## 📋 Features
+## What Is Here
 
-- **Responsive Design**: Fully responsive pages that work on all devices
-- **Blog System**: Markdown-based articles with front matter metadata
-- **Project Showcase**: Display of GitHub projects with integration via GitHub API
-- **Skills Section**: Categorized technical skills and expertise
-- **Experience Timeline**: Professional experience and internships
-- **About & Contact**: Personal information and contact details
-- **Static Export**: Generate optimized HTML files for deployment
-- **SEO Optimized**: Structured metadata and schema markup for search engines
-- **Syntax Highlighting**: Code blocks with language-specific highlighting (Prism.js)
-- **Custom Theme**: Dark-themed design with smooth animations
+- Responsive portfolio pages: home, about, skills, experience, projects, and selected work.
+- Markdown articles with front matter, syntax highlighting, SEO metadata, JSON-LD, related articles, and table of contents.
+- A generated sitemap at `/sitemap.xml`.
+- A GitHub project catalogue embedded into the build and rendered into static HTML.
 
-## 🏗️ Project Structure
+## Requirements
 
-```
-src/jsMain/
-├── kotlin/io/github/ayfri/
-│   ├── Main.kt                    # App entry point and initialization
-│   ├── Style.kt                   # Global styles and themes
-│   ├── animations.kt              # Animation utilities
-│   ├── CodeTheme.kt               # Code syntax highlighting theme
-│   ├── components/                # Reusable UI components
-│   │   ├── Header.kt              # Navigation header
-│   │   ├── Head.kt                # HTML head metadata
-│   │   └── Tabs.kt                # Tab component
-│   ├── pages/                     # Website pages
-│   │   ├── Index.kt               # Home page
-│   │   ├── AboutMe.kt             # About page
-│   │   ├── Skills.kt              # Skills showcase
-│   │   ├── Experiences.kt         # Experience timeline
-│   │   ├── Portfolio.kt           # Portfolio grid
-│   │   └── projects/              # Project pages
-│   ├── layouts/                   # Layout components (ArticleLayout, etc.)
-│   ├── jsonld/                    # JSON-LD schema markup
-│   └── utils/                     # Utility functions and helpers
-│
-└── resources/
-    ├── markdown/articles/         # Blog articles in Markdown
-    │   ├── DatapackGenerators.md
-    │   ├── KoreHelloWorld.md
-    │   ├── KoreIntroduction.md
-    │   └── ... (more articles)
-    └── public/                    # Static files
-        ├── cv.pdf                 # Resume/CV
-        ├── logo.png               # Site logo
-        ├── prism.min.js           # Code highlighting
-        └── images/                # Static images
-```
+- JDK 25, matching the deployment workflow.
+- No global Gradle installation is required.
+- Kobweb CLI only for manual static exports. The CI workflow downloads it automatically.
 
-## 🔧 Prerequisites
+## Local Development
 
-- **JDK 21+** (Java Development Kit)
-- **Gradle** (included via Gradle Wrapper)
-- A terminal/shell with access to `./gradlew` commands
-
-## 🎯 Getting Started
-
-### Development Server
-
-To run the development server with live reload:
+Start the development server:
 
 ```powershell
-./gradlew kobwebStart -t
+.\gradlew.bat kobwebStart -t
 ```
 
-The website will be available at `http://localhost:8080` and will automatically reload on file changes.
+Open [http://localhost:8080](http://localhost:8080). Gradle recompiles the site after source changes.
 
-### Additional Build Options
-
-- **Production Mode**: Add `-PkobwebEnv=PROD` for optimized production build
-- **Static Mode**: `kobweb export --layout static` generates static HTML files
-- **Live Reload**: `-t` flag enables automatic page reload on code changes
-
-Example with options:
-```powershell
-./gradlew kobwebStart -t -PkobwebEnv=PROD
-```
-
-### Exporting the Website
-
-To generate optimized static HTML files:
+Useful commands:
 
 ```powershell
-./gradlew kobwebExport
+# Compile the production Kotlin/JS bundle
+.\gradlew.bat compileProductionExecutableKotlinJs
+
+# Refresh only the project snapshot used by the site
+.\gradlew.bat downloadData
+
+# Regenerate the sitemap
+.\gradlew.bat generateSitemap
 ```
 
-Export options:
-- **Production Mode**: `-PkobwebEnv=PROD` for optimized production build
-- **Static Mode**: `kobweb export --layout static` for full HTML generation
+## Static Export
 
-The exported website will be available in the `.kobweb/client` directory.
+Kobweb CLI performs the static export. The generated site is written to `.kobweb/site/`.
 
-## 📝 Blog Articles
+```powershell
+kobweb export --layout static
+```
 
-Articles are stored in `src/jsMain/resources/markdown/articles/` as Markdown files with YAML front matter.
+The CI workflow in [`.github/workflows/CD.yml`](.github/workflows/CD.yml) uses the same command with a pinned Kobweb CLI version and deploys `.kobweb/site/` to Cloudflare Pages.
 
-### Creating New Articles
+## Project Data
 
-1. Create a new `.md` file in `src/jsMain/resources/markdown/articles/`
-2. Add front matter at the top of the file
-3. Write your article content in Markdown below the front matter
+Project data comes from the [`api`](https://github.com/Ayfri/Portfolio/tree/api) branch:
 
-### Front Matter Format
+```text
+https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json
+```
+
+During the build, `downloadData` downloads and minifies that snapshot, then generates `PortfolioSnapshot.kt` under `build/generated/portfolio-data/`. Kotlin/JS compilation depends on this task, so data is available synchronously while Kobweb snapshots each page. The browser does not fetch this data after the site has loaded.
+
+This is what ensures the home page, skills, and projects pages export with complete HTML rather than `Loading...`.
+
+## Articles
+
+Articles are Markdown files in `src/jsMain/resources/markdown/articles/`. Each article needs front matter like this:
 
 ```yaml
 ---
-nav-title: Article URL Slug
-title: Display Title of the Article
-description: Short description for SEO and previews (50-160 characters recommended)
-keywords: comma,separated,keywords,for,seo
-date-created: YYYY-MM-DD
-date-modified: YYYY-MM-DD
+nav-title: My Article
+title: My Article Title
+description: A short description for search and social previews.
+keywords: kotlin,kobweb,web
+date-created: 2026-01-01
+date-modified: 2026-01-01
 root: .layouts.ArticleLayout
-routeOverride: /articles/article-url-slug/index
+routeOverride: /articles/my-article/index
 ---
-
-# Article content starts here
 ```
 
-### Front Matter Fields
+`routeOverride` determines the public route. The sitemap task reads the article metadata to add article URLs and modification dates automatically.
 
-| Field           | Purpose                                                |
-|-----------------|--------------------------------------------------------|
-| `nav-title`     | URL slug for the article (e.g., `kore-hello-world`)    |
-| `title`         | Display title shown in article lists and headers       |
-| `description`   | SEO description and preview text                       |
-| `keywords`      | Comma-separated keywords for search engines            |
-| `date-created`  | Article creation date in YYYY-MM-DD format             |
-| `date-modified` | Last modification date in YYYY-MM-DD format            |
-| `root`          | Layout component (usually `.layouts.ArticleLayout`)    |
-| `routeOverride` | Full URL path for the article (`/articles/slug/index`) |
+## Deployment
 
-### Article Features
+GitHub Actions deploys to Cloudflare Pages when:
 
-- **Markdown Formatting**: Full Markdown support (headings, lists, tables, emphasis, etc.)
-- **Code Blocks**: Syntax highlighting via Prism.js
-- **Images**: Support for local and external images
-- **Links**: Internal and external links with proper routing
-- **SEO**: Automatic meta tags and JSON-LD schema
+- A commit is pushed to `master`.
+- The workflow is run manually.
+- The weekly schedule runs every Monday at 06:00 UTC.
 
-## 🔗 Data Integration
+The weekly deployment refreshes the GitHub project snapshot before exporting and deploying the site.
 
-The website integrates with an external GitHub API for dynamic project data:
+The workflow uses caches for Gradle, Kobweb's Playwright browser, and the pinned Kobweb CLI archive. Deployment requires these GitHub repository secrets:
 
-- GitHub projects are fetched from a hosted JSON API
-- Project data includes stars, forks, and descriptions
-- The data is embedded during the build process in `build/generated/ayfri/src/jsMain/kotlin/io/github/ayfri/data/Data.kt`
-- API endpoint: `https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json`
+- `CF_API_TOKEN`
+- `CF_ACCOUNT_ID`
+- `GRADLE_ENCRYPTION_KEY`
 
-Data download happens automatically during the build via the `downloadData` Gradle task.
+## License
 
-## 🏗️ Technologies Used
-
-- **Kotlin 2.2.21**: Type-safe language for web development
-- **Compose for Web 1.9.1**: Functional UI framework
-- **Kobweb 0.23.3**: Full-stack Kotlin web framework
-- **Markdown Processing**: KobwebX Markdown plugin for article conversion
-- **HTML/CSS**: Compose HTML and CSS DSLs for styling
-
-## 📦 Build System
-
-The project uses **Gradle** with several custom tasks:
-
-- `kobwebStart`: Start development server with live reload
-- `kobwebExport`: Export static HTML files
-- `downloadData`: Download and process GitHub project data
-
-## 🎨 Customization
-
-### Styling
-
-Global styles are defined in `Style.kt`. The site uses:
-- CSS-in-Code via Compose DSL
-- Dark theme with accent colors
-- Custom scrollbar styling
-- Responsive media queries
-
-### Components
-
-Reusable components are in `components/`:
-- `Header.kt`: Navigation and branding
-- `Head.kt`: Metadata and SEO tags
-- Custom components for portfolio sections
-
-### Layouts
-
-Page layouts are in `layouts/`:
-- `ArticleLayout`: Template for blog articles
-- `PageLayout`: General page wrapper with header/footer
-
-## 🚀 Deployment
-
-GitHub Actions deploys the site to Cloudflare Pages automatically on every push to `master` and every Monday at 06:00 UTC. The scheduled run refreshes the GitHub project snapshot before exporting the site.
-
-For a manual static export:
-
-1. Run `kobweb export --layout static`
-2. Upload contents of `.kobweb/site` to your hosting
-
-## 📄 License
-
-This project is licensed under the GNU General Public License v3.0 - see the [LICENSE](LICENSE) file for details.
+Licensed under the [GNU General Public License v3.0](LICENSE).

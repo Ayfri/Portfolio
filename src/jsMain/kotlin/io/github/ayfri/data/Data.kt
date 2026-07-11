@@ -1,7 +1,7 @@
 package io.github.ayfri.data
 
 private val portfolioSnapshot: GitHubData by lazy {
-	JSON.parse<GitHubData>(portfolioSnapshotJson, ::snakeCaseReviver)
+	JSON.parse(portfolioSnapshotJson, ::snakeCaseReviver)
 }
 
-fun portfolioData(): GitHubData = portfolioSnapshot
+fun portfolioData() = portfolioSnapshot
