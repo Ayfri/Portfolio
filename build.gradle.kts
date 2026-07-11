@@ -20,3 +20,7 @@ dependencies {
 application {
 	mainClass = "MainKt"
 }
+
+kotlin {
+	jvmToolchain(25)
+}
