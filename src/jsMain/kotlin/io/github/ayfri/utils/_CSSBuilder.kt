@@ -55,7 +55,10 @@ fun StyleScope.webkitBoxOrient(value: String) = property("-webkit-box-orient", v
 fun StyleScope.displayWebkitBox() = property("display", "-webkit-box")
 
 // Gradient border background helper
-// Uses the two-layer background trick: a solid/transparent fill on padding-box + gradient on border-box.
+// Uses the two-layer background trick: a solid fill on padding-box + gradient on border-box.
+// NOTE: only use this with an opaque fill color. A transparent fill will let the border-box
+// gradient show through the whole element instead of just the border ring - for a "border only,
+// see-through center" look, set the background manually with the literal `transparent` keyword instead.
 fun StyleScope.gradientBorderBackground(
 	fillGradient: Gradient,
 	borderGradient: Gradient = linearGradient(45.deg) {

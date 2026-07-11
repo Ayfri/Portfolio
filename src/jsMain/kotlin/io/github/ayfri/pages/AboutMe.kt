@@ -661,7 +661,10 @@ object AboutMeStyle : StyleSheet() {
 						style(LineStyle.Solid)
 						color(Color.transparent)
 					}
-					gradientBorderBackground(Color.transparent)
+					property("background", """
+						transparent padding-box,
+						linear-gradient(45deg, #00D4FF, #FF0080) border-box
+					""")
 				}
 
 				fontSize(titleHeight.value())

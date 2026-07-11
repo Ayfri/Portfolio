@@ -35,6 +35,7 @@ data class PortfolioSection(
 	val text: String,
 	val image: String,
 	val imageOnRight: Boolean,
+	val icon: String,
 )
 
 val portfolioSections = listOf(
@@ -46,6 +47,7 @@ val portfolioSections = listOf(
 		""".trimIndent(),
 		image = localImage("portfolio-1.png"),
 		imageOnRight = true,
+		icon = "lightbulb",
 	),
 	PortfolioSection(
 		title = "Designing It",
@@ -55,6 +57,7 @@ val portfolioSections = listOf(
 		""".trimIndent(),
 		image = localImage("portfolio-2.png"),
 		imageOnRight = false,
+		icon = "palette",
 	),
 	PortfolioSection(
 		title = "Building It",
@@ -64,6 +67,7 @@ val portfolioSections = listOf(
 		""".trimIndent(),
 		image = localImage("portfolio-3.png"),
 		imageOnRight = true,
+		icon = "hammer",
 	),
 	PortfolioSection(
 		title = "Shipping It",
@@ -73,6 +77,7 @@ val portfolioSections = listOf(
 		""".trimIndent(),
 		image = localImage("portfolio-4.png"),
 		imageOnRight = false,
+		icon = "rocket",
 	),
 )
 
@@ -195,7 +200,14 @@ fun Portfolio() {
 						Div({
 							classes(PortfolioStyle.featureText)
 						}) {
-							H2 {
+							H2({
+								style {
+									display(DisplayStyle.Flex)
+									alignItems(AlignItems.Center)
+									gap(.6.cssRem)
+								}
+							}) {
+								I(FontAwesomeType.SOLID, section.icon)
 								Text(section.title)
 							}
 
@@ -210,7 +222,14 @@ fun Portfolio() {
 			Section({
 				classes(PortfolioStyle.techStack)
 			}) {
-				H2 {
+				H2({
+					style {
+						display(DisplayStyle.Flex)
+						alignItems(AlignItems.Center)
+						gap(.6.cssRem)
+					}
+				}) {
+					I(FontAwesomeType.SOLID, "layer-group")
 					Text("Built With")
 				}
 

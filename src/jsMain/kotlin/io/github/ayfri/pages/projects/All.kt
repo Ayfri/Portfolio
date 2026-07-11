@@ -681,7 +681,10 @@ object ProjectStyle : StyleSheet() {
 		fontSize(0.9.cssRem)
 		cursor(Cursor.Pointer)
 		textDecorationLine(TextDecorationLine.None)
-		gradientBorderBackground(Color.transparent)
+		property("background", """
+			transparent padding-box,
+			linear-gradient(45deg, #00D4FF, #FF0080) border-box
+		""")
 
 		transitions {
 			properties("all") {

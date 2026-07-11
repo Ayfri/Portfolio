@@ -10,6 +10,8 @@ import com.varabyte.kobweb.compose.css.functions.toImage
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import io.github.ayfri.components.P
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.rememberPortfolioData
@@ -85,12 +87,18 @@ data class Skill(
 			classes("bottom")
 		}) {
 			@Composable
-			fun section(name: String, list: List<GitHubRepository>) {
+			fun section(name: String, iconType: FontAwesomeType, iconName: String, list: List<GitHubRepository>) {
 				if (list.isEmpty()) return
 
 				H3({
 					classes(AppStyle.monoFont)
+					style {
+						display(DisplayStyle.Flex)
+						alignItems(AlignItems.Center)
+						gap(.5.cssRem)
+					}
 				}) {
+					I(iconType, iconName)
 					Text(name)
 				}
 
@@ -105,9 +113,9 @@ data class Skill(
 
 			val githubNotSchoolProjects = githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
 			val (contributedProjects, ownProjects) = githubNotSchoolProjects.partition { it.fork || it.owner.login != "Ayfri" }
-			section("GitHub Projects:", ownProjects)
-			section("Contributed Projects:", contributedProjects)
-			section("School Projects:", schoolProjects)
+			section("GitHub Projects:", FontAwesomeType.BRAND, "github", ownProjects)
+			section("Contributed Projects:", FontAwesomeType.SOLID, "code-branch", contributedProjects)
+			section("School Projects:", FontAwesomeType.SOLID, "graduation-cap", schoolProjects)
 		}
 	}
 
@@ -588,7 +596,10 @@ object SkillsStyle : StyleSheet() {
 						style(LineStyle.Solid)
 						color(Color.transparent)
 					}
-					gradientBorderBackground(Color.transparent)
+					property("background", """
+						transparent padding-box,
+						linear-gradient(45deg, #00D4FF, #FF0080) border-box
+					""")
 
 					"p" {
 						margin(.5.cssRem, 0.px, 0.px)

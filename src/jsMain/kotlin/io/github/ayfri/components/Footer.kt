@@ -209,26 +209,31 @@ fun Footer() {
 					}) {
 						Li {
 							A("/", {}) {
+								I(FontAwesomeType.SOLID, "house")
 								Text("Home")
 							}
 						}
 						Li {
 							A("/about-me/", {}) {
+								I(FontAwesomeType.SOLID, "user")
 								Text("About Me")
 							}
 						}
 						Li {
 							A("/skills/", {}) {
+								I(FontAwesomeType.SOLID, "code")
 								Text("Skills")
 							}
 						}
 						Li {
 							A("/experiences/", {}) {
+								I(FontAwesomeType.SOLID, "briefcase")
 								Text("Experiences")
 							}
 						}
 						Li {
 							A("/portfolio/", {}) {
+								I(FontAwesomeType.SOLID, "folder-open")
 								Text("Portfolio")
 							}
 						}
@@ -237,6 +242,7 @@ fun Footer() {
 								target(ATarget.Blank)
 								attr("download", "CV Pierre Roy.pdf")
 							}) {
+								I(FontAwesomeType.SOLID, "file-arrow-down")
 								Text("Download CV")
 							}
 						}
@@ -423,6 +429,9 @@ object FooterStyle : StyleSheet() {
 		}
 
 		"a" {
+			display(DisplayStyle.Flex)
+			alignItems(AlignItems.Center)
+			gap(.5.cssRem)
 			color(Color(FOOTER_LINK_COLOR))
 			textDecorationLine(TextDecorationLine.None)
 			transitions {
