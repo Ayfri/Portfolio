@@ -32,14 +32,15 @@ operator fun <K : Any, V : Any> MapProperty<K, V>.set(key: K, value: V) {
 operator fun <K : Any, V : Any> MapProperty<K, V>.get(key: K) = getting(key)
 
 val portfolioGeneratedResourcesRoot = layout.buildDirectory.dir("generated/portfolio-resources")
+val portfolioGeneratedKotlinRoot = layout.buildDirectory.dir("generated/portfolio-data/src/jsMain/kotlin")
 
 val downloadDataTask = tasks.register("downloadData") {
 	group = "build"
 	description = "Download the portfolio GitHub snapshot as JSON for the static site."
 
-	val jsonOutFile = portfolioGeneratedResourcesRoot.map { it.file("public/data/github-portfolio.json") }
+	val kotlinOutFile = portfolioGeneratedKotlinRoot.map { it.file("io/github/ayfri/data/PortfolioSnapshot.kt") }
 
-	outputs.file(jsonOutFile)
+	outputs.file(kotlinOutFile)
 
 	doLast {
 		val dataLink = "https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json"
@@ -58,12 +59,20 @@ val downloadDataTask = tasks.register("downloadData") {
 		}.getOrNull()
 		val toWrite = minified?.takeIf { it.length < raw.length } ?: raw
 
-		jsonOutFile.get().asFile.apply {
+		kotlinOutFile.get().asFile.apply {
 			parentFile.mkdirs()
-			writeText(toWrite)
+			writeText(
+				listOf(
+					"package io.github.ayfri.data",
+					"",
+					"internal val portfolioSnapshotJson = ${'"'}${'"'}${'"'}",
+					toWrite.replace("${'$'}", "${'$'}{'${'$'}'}"),
+					"${'"'}${'"'}${'"'}",
+				).joinToString("\n")
+			)
 		}
 		logger.lifecycle(
-			"Generated '${jsonOutFile.get()}' (${toWrite.length / 1024} KiB)",
+			"Generated '${kotlinOutFile.get()}' (${toWrite.length / 1024} KiB)",
 		)
 	}
 }
@@ -258,11 +267,6 @@ kobweb {
 						onLoad = "this.rel='stylesheet'"
 					}
 
-					link(href = "/data/github-portfolio.json", rel = "preload") {
-						attributes["as"] = "fetch"
-						attributes["fetchpriority"] = "high"
-					}
-
 					link(rel = "preload", href = "/prism.min.css", htmlAs = LinkAs.style) {
 						attributes += "fetchpriority" to "low"
 						onLoad = "this.rel='stylesheet'"
@@ -330,9 +334,7 @@ kotlin {
 	sourceSets {
 		jsMain {
 			resources.srcDir(portfolioGeneratedResourcesRoot)
-			dependencies {
-				implementation(libs.kotlinx.coroutines.core)
-			}
+			kotlin.srcDir(portfolioGeneratedKotlinRoot)
 		}
 		commonMain {
 			dependencies {
@@ -422,4 +424,8 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 
 tasks.named("jsProcessResources") {
 	dependsOn(downloadDataTask, generateSitemapTask)
+}
+
+tasks.matching { it.name.endsWith("KotlinJs") }.configureEach {
+	dependsOn(downloadDataTask)
 }
