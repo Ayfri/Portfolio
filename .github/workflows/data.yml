@@ -15,19 +15,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
-        with:
-          ref: ${{ github.head_ref }}
-          persist-credentials: true
 
       - uses: actions/setup-java@v5
         with:
-          distribution: 'adopt'
-          java-version: 21
+          distribution: temurin
+          java-version: 25
+
+      - name: Ensure Gradle is executable
+        run: chmod +x gradlew
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          dependency-graph: generate-and-upload
+          cache-encryption-key: ${{ secrets.GRADLE_ENCRYPTION_KEY }}
 
-      - name: Run gradle
+      - name: Generate data snapshot
         run: ./gradlew run
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -35,5 +38,5 @@ jobs:
       - name: Commit result
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "feat(data): Update data."
-          file_pattern: "*result.json"
+          commit_message: "feat(data): update snapshot"
+          file_pattern: result.json
