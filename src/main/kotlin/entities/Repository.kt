@@ -1,6 +1,7 @@
 package entities
 
 import GitHubAPI
+import lastPage
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -90,28 +91,28 @@ data class Repository(
 	val watchersCount: Int,
 	val webCommitSignoffRequired: Boolean,
 ) {
-	suspend fun getREADME() = GitHubAPI.ktorClient.get {
+	suspend fun getREADME(): String? = GitHubAPI.client.get {
 		url("${this@Repository.url}/readme?ref=$defaultBranch")
 	}.let {
 		when (it.status) {
 			HttpStatusCode.NotFound -> null
 
 			else -> {
-				val encoded = it.body<ReadMe>().content
+				val encoded = it.body<ReadMe>().content ?: return@let null
 				String(Base64.getMimeDecoder().decode(encoded))
 			}
 		}
 	}
 
-	suspend fun getCount(url: String, default: Int = 0) = GitHubAPI.ktorClient.get {
+	private suspend fun getCount(url: String, default: Int = 0): Int = GitHubAPI.client.get {
 		url(url)
-	}.headers["Link"]?.substringAfterLast("page=")?.substringBeforeLast(">")?.toIntOrNull() ?: default
+	}.headers.lastPage(default)
 
-	suspend fun getCommitsCount() = getCount("${this@Repository.url}/commits?sha=${defaultBranch}&per_page=1&page=1", 1)
+	suspend fun getCommitsCount(): Int = getCount("${this@Repository.url}/commits?sha=${defaultBranch}&per_page=1&page=1", 1)
 
-	suspend fun getWatchersCount() = getCount("${this@Repository.url}/subscribers?per_page=1&page=1")
+	suspend fun getWatchersCount(): Int = getCount("${this@Repository.url}/subscribers?per_page=1&page=1")
 
-	suspend fun getContributorsCount() = getCount("${this@Repository.url}/contributors?per_page=1&page=1")
+	suspend fun getContributorsCount(): Int = getCount("${this@Repository.url}/contributors?per_page=1&page=1")
 }
 
 @Serializable

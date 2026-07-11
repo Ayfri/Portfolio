@@ -28,9 +28,7 @@ suspend fun main() {
 	val result = Result(ResultUser.fromUser(ayfri), repos.mapConcurrently { ResultRepository.fromRepository(it) })
 	println("Got result, mapped repositories, got commits/readme/watchers count.")
 
-	val resultJson = json.encodeToString(result)
-	val file = File(RESULT_JSON)
-	file.writeText(resultJson)
+	File(RESULT_JSON).writeText(json.encodeToString(result))
 
 	println("Wrote result to file '$RESULT_JSON'.")
 }

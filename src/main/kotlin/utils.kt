@@ -1,49 +1,16 @@
-
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 
-suspend fun <T, R> List<T>.mapConcurrently(mapper: suspend (T) -> R) = coroutineScope {
-	map {
+private const val MAX_CONCURRENT_REQUESTS = 10
+
+suspend fun <T, R> List<T>.mapConcurrently(mapper: suspend (T) -> R): List<R> = coroutineScope {
+	val semaphore = Semaphore(MAX_CONCURRENT_REQUESTS)
+	map { value ->
 		async {
-			mapper(it)
+			semaphore.withPermit { mapper(value) }
 		}
 	}.awaitAll()
-}
-
-fun Any.prettyPrint(): String {
-	var indentLevel = 0
-	val indentWidth = 4
-
-	fun padding() = "".padStart(indentLevel * indentWidth)
-
-	val toString = toString()
-
-	val stringBuilder = StringBuilder(toString.length)
-
-	var i = 0
-	while (i < toString.length) {
-		when (val char = toString[i]) {
-			'(', '[', '{' -> {
-				indentLevel++
-				stringBuilder.appendLine(char).append(padding())
-			}
-
-			')', ']', '}' -> {
-				indentLevel--
-				stringBuilder.appendLine().append(padding()).append(char)
-			}
-
-			',' -> {
-				stringBuilder.appendLine(char).append(padding())
-				val nextChar = toString.getOrElse(i + 1) { char }
-				if (nextChar == ' ') i++
-			}
-
-			else -> stringBuilder.append(char)
-		}
-		i++
-	}
-
-	return stringBuilder.toString()
 }
