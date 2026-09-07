@@ -12,7 +12,6 @@ import com.varabyte.kobweb.compose.css.functions.max
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.FooterStyle
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
@@ -39,6 +38,9 @@ data class AboutMeSection(
 	val date: Int,
 	val image: Boolean = false,
 	val id: String,
+	/** Shown as a badge next to the title, where the timeline only ever shows the starting year. */
+	val dateLabel: String = date.toString(),
+	val tags: List<String> = emptyList(),
 	val title: (@Composable AboutMeSection.() -> Unit),
 ) {
 	var additionalContent: (@Composable () -> Unit)? = null
@@ -56,10 +58,20 @@ data class AboutMeSection(
 		}
 	}) {
 		if (image) title()
-		else H2({
-			classes(AboutMeStyle.textIcon)
+		else Div({
+			classes(AboutMeStyle.header)
 		}) {
-			title()
+			H2({
+				classes(AboutMeStyle.textIcon)
+			}) {
+				title()
+			}
+
+			Span({
+				classes(AboutMeStyle.dateBadge, AppStyle.monoFont)
+			}) {
+				Text(dateLabel)
+			}
 		}
 
 		if (additionalContent != null) {
@@ -75,6 +87,14 @@ data class AboutMeSection(
 			P({
 				markdownParagraph(content, true)
 			})
+		}
+
+		if (tags.isNotEmpty()) Div({
+			classes(AboutMeStyle.tags)
+		}) {
+			tags.forEach { tag ->
+				Span({ classes(AboutMeStyle.tag, AppStyle.monoFont) }) { Text(tag) }
+			}
 		}
 	}
 }
@@ -101,7 +121,7 @@ val sections = listOf(
 
 			After that, I created random projects I found on YouTube, such as programming a Minecraft-like game in C++ or making some little games in Unity.
 			However, I found myself mostly copying the tutorials without attempting to create projects on my own, and therefore didn't have a deep understanding of what I was doing.
-		""".trimIndent(), 2014, id = "intro"
+		""".trimIndent(), 2014, id = "intro", tags = listOf("Python", "C++", "Unity")
 	) {
 		TextIcon("Introduction to programming", FontAwesomeType.SOLID, "computer")
 	},
@@ -112,41 +132,37 @@ val sections = listOf(
 			I heard about this program from watching videos from [The Coding Train](https://www.youtube.com/c/TheCodingTrain). I created a lot of little experiments using this library and learned some interesting things about 3D graphics, how it works, how to optimise it, etc.
 			My biggest 3D experiment was a [Minecraft-like](https://github.com/Ayfri/ProceCraft) game, and my most significant program with Processing was a tool to convert an [image into Minecraft Pixel-Art](https://github.com/Ayfri/Image2Minecraft) using only blocks from Minecraft as pixels.
 
-			After some years of making some Discord Bots in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript), I heard that a library in JavaScript existed that was exactly like Processing, [p5.js](https://p5js.org) _(which was created by the same foundation)_, and used it for some little projects, even created a [port](https://github.com/Ayfri/TypeCraft) of the Minecraft-like game in [TypeScript](https://www.typescriptlang.org).
-			But it was too simplistic and not enough expandable for me. So I looked for another library to make my own games with more depth and customization.
+			After some years of making Discord bots in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript), I heard that a library in JavaScript existed that was exactly like Processing, [p5.js](https://p5js.org) _(which was created by the same foundation)_, and used it for some little projects, even created a [port](https://github.com/Ayfri/TypeCraft) of the Minecraft-like game in [TypeScript](https://www.typescriptlang.org).
+			But it was too simplistic and not expandable enough for me, so I looked for another library to make my own games with more depth and customization.
 
-			[PIXI.js](https://pixijs.com) was the library I stumbled upon, and I created a few projects with it for a long time. My first big game with it was a [2D Minecraft-like game](https://github.com/Ayfri/2d-minecraft) (again yes hehe).
-			Then a [2D Portal game](https://github.com/Ayfri/portal-2d) experiment. Also, a [Cookie-Clicker-like](https://github.com/Ayfri/atom-clicker) game about atoms, Atom Clicker. And recently I'm recreating my [2D Minecraft-Game](https://github.com/Ayfri/Minekraft-2D) in Kotlin, still using PIXI, named Minekraft-2D.
-		""".trimIndent(), 2015, id = "processing"
+			[PIXI.js](https://pixijs.com) was the library I stumbled upon, and I created a few projects with it for a long time. My first big game with it was a [2D Minecraft-like game](https://github.com/Ayfri/2d-minecraft) (again yes hehe), then a [2D Portal game](https://github.com/Ayfri/portal-2d) experiment, and later a rewrite of that 2D Minecraft game in Kotlin, [Minekraft-2D](https://github.com/Ayfri/Minekraft-2D).
+		""".trimIndent(), 2015, id = "processing", tags = listOf("Processing", "p5.js", "PIXI.js", "TypeScript")
 	) {
 		TextIcon("Processing", "https://upload.wikimedia.org/wikipedia/commons/c/cb/Processing_2021_logo.svg")
 	},
 
 	AboutMeSection(
 		"""
-			After creating my own [Discord server](https://discord.gg/invite/BySjRNQ9Je) for my community from [YouTube](https://www.youtube.com/c/Ayfri), I wanted to create a Discord Bot. So I created a bot in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) using [Node.JS](https://nodejs.org) in early 2018 by following tutorials, I created CommunAyBot.
-			Back in the days, it was not that common to create a bot for your own community, and Discord was not so reputed. Because of that, there were no great tutorials. I got a lot of help from a Discord Server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons, and some others helped me a lot to understand and create my bot.
+			After creating my own [Discord server](https://discord.gg/invite/BySjRNQ9Je) for my community from [YouTube](https://www.youtube.com/c/Ayfri), I wanted to create a Discord bot. So I created one in [JavaScript](https://developer.mozilla.org/docs/Web/JavaScript) using [Node.JS](https://nodejs.org) in early 2018 by following tutorials, and CommunAyBot was born.
+			Back in the days, it was not that common to create a bot for your own community, and Discord was not so reputed. Because of that, there were no great tutorials. I got a lot of help from a Discord server named Obelia Dev _(which doesn't even exist today)_, my friends Ghom, Loockeeer, Felons, and some others helped me a lot to understand and create my bot.
 
 			About a year later, I was pretty good at creating a bot, but I realized that my project was kind of... ugly. So I recreated it, [AyBot 2](https://github.com/Ayfri/AyBot-2) was born in early 2019. It was pretty clean, and I wanted people to use my bot, so I changed a lot of the code, so it was working on multiple servers with configurations, etc.
 
-			At that time, I created some other little utilities bots or test bots.
-			AyBot 2 was taken down at the end of 2019 because of [Galileo](#galileo).
-		""".trimIndent(), 2018, id = "second-intro"
+			At the same time I was, and still am, an administrator on a [big Discord server](https://discord.gg/invite/sDT7W8mNmq) about sharing your server or website, together with another administrator, Antow, who had his own bot. We were both passionate about astronomy, so we merged our two bots into [Galileo](https://github.com/Galileo-Bot/galileo).
+			That was the end of this era for me: after about two years of writing almost nothing but Discord bots, I ran out of motivation for them and moved on to other things.
+		""".trimIndent(), 2018, id = "second-intro", dateLabel = "2018 - 2019", tags = listOf("JavaScript", "Node.js", "Discord API")
 	) {
-		TextIcon("Second Introduction to Programming", FontAwesomeType.BRAND, "discord", Color("#5865f2"))
+		TextIcon("Discord bots", FontAwesomeType.BRAND, "discord", Color("#5865f2"))
 	},
 
 	AboutMeSection(
 		"""
-			At my high school, for 3 years, I used arduino a lot, only creating big projects in the last year but still. It has let me learn a lot on low-level programming, [C++](https://cplusplus.com) basics and microcontrollers.
-			By doing my own research, I learned a lot about C++ compilation, assembler, reverse engineering, optimization and other low-level subjects.
-			I even tried a bit of writing assembler x86. I created some little programs using C++.
+			At my high school, for 3 years, I used Arduino a lot, only creating big projects in the last year but still. It let me learn a lot about low-level programming, [C++](https://cplusplus.com) basics and microcontrollers.
+			By doing my own research, I learned a lot about C++ compilation, assembler, reverse engineering, optimization and other low-level subjects. I even tried writing a bit of x86 assembler.
 
 			Back in 2015, I followed a [tutorial to create a Minecraft-like game](https://www.youtube.com/watch?v=GACpZp8oquU) in C++ using [OpenGL](https://www.opengl.org/) and a bunch of libraries.
-			It was interesting to go after some years, back on this project and fix some issues and finally understand the code and learn more about OpenGL and low-level graphics processing.
-
-			I still have my own arduino that I bought during high-school.
-		""".trimIndent(), 2018, id = "arduino"
+			Coming back to that project years later, fixing its issues and finally understanding the code taught me a lot about OpenGL and low-level graphics processing.
+		""".trimIndent(), 2018, id = "arduino", tags = listOf("C++", "Arduino", "OpenGL", "x86 ASM")
 	) {
 		TextIcon("Arduino", localImage("arduino.svg"))
 	},
@@ -154,103 +170,122 @@ val sections = listOf(
 	AboutMeSection(
 		"""
 			[Minecraft](https://minecraft.net) is my favorite game of all time, I started playing it back in 2010, I know it by heart.
-			Heard about it randomly on an old computer blog that my dad was subscribed to where on an article they spoke about _"this new game with an interesting concept"_.
+			I heard about it randomly on an old computer blog my dad was subscribed to, where an article spoke about _"this new game with an interesting concept"_.
 
-			Since I own the game, I played hundreds of hours in Minecraft, created numerous maps, technical maps using command blocks, datapacks, mods, even created mods since around 2018. In [Java](https://www.java.com) using [Forge](https://files.minecraftforge.net/net/minecraftforge/forge), [Fabric](https://fabricmc.net) since 2020 and in [Kotlin](https://kotlinlang.org) since 2021.
+			Since I own the game, I played hundreds of hours in Minecraft, created numerous maps, technical maps using command blocks, datapacks and mods. I have been creating mods since around 2018, in [Java](https://www.java.com) with [Forge](https://files.minecraftforge.net/net/minecraftforge/forge), with [Fabric](https://fabricmc.net) since 2020 and in [Kotlin](https://kotlinlang.org) since 2021.
 
-			I know a lot about the concepts of Minecraft and how they are programmed, this is what motivated me to create a Minecraft-like game, _4 times_. Approaching more what I want and performances needed for a game like this each time.
-		""".trimIndent(), 2018, id = "minecraft"
+			I know a lot about the concepts of Minecraft and how they are programmed, and this is what motivated me to create a Minecraft-like game _4 times_, getting closer to what I want and to the performance such a game needs each time.
+		""".trimIndent(), 2018, id = "minecraft", tags = listOf("Java", "Kotlin", "Fabric", "Forge")
 	) {
 		TextIcon("Minecraft", localImage("minecraft.avif"))
 	},
 
 	AboutMeSection(
 		"""
-			During this time, I was administrator (and I'm still) on a [big Discord server](https://discord.gg/invite/sDT7W8mNmq) at the time about sharing your server or website. And I was the friend of the other administrator, Antow, who also created his own bot, I was helping him sometimes.
-			After some discussions, we agreed to merge our bots, as we were both passionate about astronomy, we named it [Galileo](https://github.com/Galileo-Bot/galileo).
+			After graduating from high school, I got accepted into a private computer science school named [Ynov](https://ynov.com), on the [Aix-en-Provence](https://www.ynov.com/campus/aix-en-provence) campus, and I graduated from its [Data Scientist](https://www.ynov.com/metiers/data-scientist) Master's programme in summer 2026.
 
-			But these times were complicated for me personally and due to a lack of time and motivations because I was making almost only discord bots since about 2 years. I stopped developing it and moved away to other interesting projects.
-		""".trimIndent(), 2019, id = "galileo"
-	) {
-		TextIcon("Galileo", localImage("galileo.png"))
-	},
+			The first years covered [GoLang](https://go.dev), [Python](https://www.python.org), pretty complex [C++](https://cplusplus.com) and OOP, network basics, [REST APIs](https://wikipedia.org/wiki/Representational_state_transfer), front-end work and databases with [MySQL](https://www.mysql.com), through a lot of projects: little training programs, websites with and without an API, and an entire forum. I greatly appreciated GoLang's GoHTML templates, C++, and my teacher, who I discussed a lot with.
+			The last years went towards data and AI: statistics, machine learning, data engineering, and a research thesis to finish the degree.
 
-	AboutMeSection(
-		"""
-			After getting graduated from high-school, I got accepted into a private school named [Ynov](https://ynov.com).
-			We learned so far [GoLang](https://go.dev), [Python](https://www.python.org), pretty complex [C++](https://cplusplus.com) and OOP into C++, some network basics, how to use [REST API](https://wikipedia.org/wiki/Representational_state_transfer)s, team JS/HTML/CSS, databases with [MySQL](https://www.mysql.com), and other useful technologies.
-			I greatly appreciated GoLang's GoHTML Templates, C++, and my teacher, who I discussed a lot with, and understanding a lot more how computer network works.
-
-			We created a bunch of projects, starting with little training projects in GoLang/<wbr>Python/<wbr>C++/<wbr>JavaScript, done some websites using only front, but also using an API, and using MySQL creating an entire forum.
-
-			It is for me a great experience being in this school, and I'm excited for the next 3 years !
-		""".trimIndent(), 2021, id = "ynov"
+			The school also pushed me into things I would not have done alone: team projects with real deadlines, two internships, and the research project that ended up shaping my career.
+		""".trimIndent(), 2021, id = "ynov", dateLabel = "2021 - 2026", tags = listOf("Go", "Python", "C++", "MySQL", "Machine Learning")
 	) {
 		TextIcon("Post-Bac and Ynov", localImage("ynov-icon.avif"))
 	},
 
 	AboutMeSection(
 		"""
-			My school required me to have an internship of 6 weeks in any enterprise to have a first professional experience.
-			I got in contact with [BlueFrog](https://www.bluefrog.fr/index.html), a company creating websites, and after some interviews got accepted !
+			My school required a 6-week internship in any company to get a first professional experience.
+			I got in contact with [BlueFrog](https://www.bluefrog.fr/index.html), a company creating websites, and after some interviews got accepted!
 
-			I learned [PHP](https://www.php.net) and [WordPress](https://wordpress.org) and created a few websites & plugins during my internship, and it was a great experience for me.
-			Learning a bunch of useful technologies, the difference between personal project and real projects and seeing a developer's an everyday job.
-		""".trimIndent(), 2022, id = "first-internship"
+			I learned [PHP](https://www.php.net) and [WordPress](https://wordpress.org) and created a few websites and plugins during those two months. It was a great first look at the difference between a personal project and a real one, and at a developer's everyday job.
+		""".trimIndent(), 2022, id = "first-internship", dateLabel = "Summer 2022", tags = listOf("PHP", "WordPress", "CSS")
 	) {
 		TextIcon("BlueFrog", "https://www.bluefrog.fr/images/logo.png")
 	},
 
 	AboutMeSection(
 		"""
-			During my second year at Ynov, I though about creating an utility library for creating Minecraft Datapacks.
-			I was on a Discord community about Minecraft Datapacks since 2 years, and I was searching for any project that I could make in Kotlin.
-			So I started creating [Datapack-DSL](https://github.com/Ayfri/Kore) in around november.
+			In November 2022, during my second year at Ynov, I started a Kotlin library to generate Minecraft datapacks without writing a single JSON or `mcfunction` file by hand.
+			It was named Datapack-DSL back then, it is [Kore](https://kore.ayfri.com) today, and it is the project I have maintained the longest.
 
-			This project has been a great experience for me, I learned a lot about Datapacks and Minecraft internal working, it was really a pleasure to create that.
-			The project contains functions (DSLs) for every commands in Minecraft, every JSONs Minecraft uses, Datapack creation, etc.
-			The project is not yet finished or published as of August 2023. However, it is very close to completion.
-			I am currently working on the documentation and searching for the right identity for the project, including a better name and icon.
-			Feel free to help me !
-		""".trimIndent(), 2022, id = "datapack-dsl"
+			The core DSL covers every command with all its subcommands, selectors, NBT tags, chat components, and every data-driven file of the game: advancements, loot tables, recipes, world generation, plus the lists of all registries.
+			Around it, the library is split into modules published on [Maven Central](https://central.sonatype.com/artifact/io.github.ayfri.kore/kore): `oop` for gameplay abstractions like teams, boss bars, scoreboards, timers and spawners, `helpers` for raycasts, text renderers, scoreboard math and VFX, and `bindings` to import an existing datapack and generate type-safe Kotlin from it.
+
+			The project grew way past the library itself: a Gradle plugin, a KSP processor, a [project template](https://github.com/Kore-Minecraft/Kore-Template), a documentation website built with [Kobweb](https://kobweb.varabyte.com) _(the same framework as this portfolio)_, LLM-friendly documentation and a [skills pack](https://github.com/Kore-Minecraft/Kore-Skill) so AI agents write correct Kore code, and the ability to generate a datapack as a mod for Fabric or NeoForge.
+
+			It also stopped being a solo project: Kore has its own [#kore channel](https://kotlinlang.slack.com/archives/C066G9BF66A) on the Kotlin Slack, outside contributors, and people publishing their own libraries and datapacks built on top of it.
+		""".trimIndent(), 2022, id = "kore", dateLabel = "Since 2022", tags = listOf("Kotlin", "DSL", "Gradle", "KSP", "Maven Central")
 	) {
-		TextIcon("Datapack-DSL", localImage("minecraft-new.avif"))
+		TextIcon("Kore", localImage("logos/kore.webp"))
 	},
 
 	AboutMeSection(
 		"""
-			Ynov added a new system of projects named YBoosts in end of 2022 where students from first & second years can create a project in a team 7 or more people.
-			We created a team of 7 people, named Defensive Realms, and though about creating a game.
-			This is how [Cat'aClysm: Claw Of The Dead](https://github.com/Ayfri/Cat-aclysm-Claw-of-the-Dead) was born.
+			Ynov added a project system named YBoosts at the end of 2022, where students from the first and second years build a project in a team of 7 or more.
+			We created a team of 7 named Defensive Realms and made [Cat'aClysm: Claw Of The Dead](https://github.com/Cat-aclsym/Cat-aclsym_Claw_of_the_dead), a 2D tower defense where cats hold a city against a horde of zombies, using [Godot](https://godotengine.org) 4.
+			It was my first experience with Godot, and I still prefer it over Unity by a wide margin. We drew our own sprites and animations, and finished a first alpha at the end of May 2023.
 
-			We collaborated with another team to use the same universe for the story, and we created a Tower Defense game in 2D using [Godot](https://godotengine.org) 4.0.
-			This was my first experience with Godot, this was really exciting and interesting, Godot is really a good game engine (I prefer it over Unity).
-			We created our own sprites and animations, the sounds and musics were used from diverse sources from the internet.
-			The game was finished in its first Alpha in around the end of May 2023, and it is planned to create Beta the next year.
-			The beta will be recreated from scratch to be more organized and have a better codebase.
-		""".trimIndent(), 2023, id = "cat-aclysm"
+			Then we threw that codebase away. In October 2023 we restarted the game from scratch, with a bigger team _(around a dozen people over time)_ and a much larger scope. Everything is data-driven now: levels, waves, towers, traps and enemies are described in JSON files, so the game can be balanced without touching the code.
+
+			It currently has 8 levels split into two story arcs, towers and traps with their own upgrade paths, 17 optional per-level challenges, an armory progression tree unlocked with stars, a dialogue system, English and French localisation, and an in-game debug console with its own commands.
+			It is by far the biggest team project I have worked on, and the one that taught me the most about keeping a codebase readable for people who are not me.
+		""".trimIndent(), 2023, id = "cat-aclysm", dateLabel = "Since 2023", tags = listOf("Godot 4", "GDScript", "Team project")
 	) {
-		TextIcon("Cat'aClysm: Claw Of The Dead", localImage("cat-aclysm.png"))
+		TextIcon("Cat'aClysm: Claw Of The Dead", localImage("logos/cataclysm.webp"))
 	},
 
 	AboutMeSection(
 		"""
-			AI has been a crucial subject these last years, a lot more since the release of [ChatGPT](https://chat.openai.com/).
-			I have always been interested in AI, and I wanted to create my own AI or at least a project using AI.
-			During June, I've made a little project using [Kotlin](https://kotlinlang.org), [Compose for Desktop](https://www.jetbrains.com/fr-fr/lp/compose-multiplatform/) and the [GPT-4 API](https://platform.openai.com/docs/api-reference), name [Artificial-Infiltration](https://github.com/Ayfri/Artificial-Infiltration).
-			The concept is a chat room where you can talk with five other people, but an AI is also in the room, and you have to find who is the AI.
-			This was really interesting and amusing to use GPT API, but at that time I was not a pro in prompt engineering, so the AI was not that good until we switched to GPT-4, which is about 20 times more costly.
+			[PokéCards-Collector](https://pokecards-collector.ayfri.com) started in October 2023 with friends: browse the entire Pokémon Trading Card Game catalogue, English and Japanese, and keep track of the cards you own and the ones you are still hunting.
 
-			For validating my second year at Ynov, I had to found a stage in a company for 6 weeks or more.
-			But the school also proposed a stage organized by the Data Engineering teacher, so I applied for it and got accepted.
-			We've done a lot of searches about ChatGPT, autonomous agents (like [AutoGPT](https://news.agpt.co/), [SuperAGI](https://superagi.com/)) and expanding context of GPT (like [ChatGPT-Memory](https://github.com/continuum-llms/chatgpt-memory)).
-			Finally, we found other technologies to better create our project, and we started working on it.
+			It runs on [SvelteKit](https://svelte.dev/docs/kit) with [Svelte 5](https://svelte.dev/docs/svelte/what-are-runes) runes, [Tailwind CSS](https://tailwindcss.com) 4 and TypeScript, served from a [Supabase](https://supabase.com) Postgres database on [Cloudflare Workers](https://workers.cloudflare.com).
+			Cards, sets and prices come from [TCGdex](https://tcgdex.dev) and Pokédex entries from [PokéAPI](https://pokeapi.co), pulled by a scraper CLI and refreshed every week by a Cloudflare Workflow.
 
-			The project is named ScriptGraf, its purpose is to automatically create posts for your company's social media.
-			We are working on it since July 2023, and we are planning to finish as soon as we can.
-		""".trimIndent(), 2023, id = "scriptgraf"
+			On top of the card browser and the collection, there are digital binder pages you can export as an image, pages by artist, set and Pokémon, public profiles, and two daily games: guess the card of the day, or guess its market price.
+		""".trimIndent(), 2023, id = "pokecards", dateLabel = "Since 2023", tags = listOf("SvelteKit", "Svelte 5", "Supabase", "Cloudflare")
 	) {
-		TextIcon("ScriptGraf", localImage("ChatGPT.avif"))
+		TextIcon("PokéCards-Collector", localImage("logos/pokecards.webp"))
+	},
+
+	AboutMeSection(
+		"""
+			AI became impossible to ignore, and I wanted to build with it rather than read about it.
+			In June 2023 I made [Artificial-Infiltration](https://github.com/Ayfri/Artificial-Infiltration), a small game in [Kotlin](https://kotlinlang.org) with [Compose for Desktop](https://www.jetbrains.com/lp/compose-multiplatform/) and the GPT API: you chat in a room with five other people, one of them is the AI, and you have to find which one.
+
+			The same summer, I did an internship at Ynov organised by the Data Engineering teacher, researching [ChatGPT](https://chatgpt.com), autonomous agents and ways to expand a model's context. That research became ScriptGraf, a tool that writes a company's social media posts on its own.
+
+			That prototype became a company. ScriptGraf is now [Link2Brain](https://www.link2brain.com/), a Marseille startup selling the finished product, live with paying clients, and I joined it in September 2025 as lead full-stack and AI developer.
+			Most of my work is [Python](https://www.python.org) on the AI side, building agents with [RAG](https://en.wikipedia.org/wiki/Retrieval-augmented_generation) and state-of-the-art models that generate text, images and short videos, plus the API and database layers, the [Vue](https://vuejs.org) and [Nuxt](https://nuxt.com) front-end, and the [Docker](https://www.docker.com) and [Dokploy](https://docs.dokploy.com) deployments.
+			Taking a school prototype I saw at step zero all the way to real marketing teams using it every day is the part I value most.
+		""".trimIndent(), 2023, id = "link2brain", dateLabel = "Since 2023", tags = listOf("Python", "RAG", "Nuxt", "Docker", "DevOps")
+	) {
+		TextIcon("ScriptGraf to Link2Brain", localImage("logos/link2brain.webp"))
+	},
+
+	AboutMeSection(
+		"""
+			[Atom Clicker](https://atom-clicker.ayfri.com) started in October 2024 as a small Cookie-Clicker-like about splitting atoms, and became one of my biggest side projects, now played by more than a thousand people.
+
+			You click an atom, buy buildings that go from molecules up to cosmic structures, and climb a skill tree. Then come the prestige layers, each with its own currency, power-ups that stack, automation, achievements and daily quests.
+			Two extra dimensions unlock later: a Photon Realm, and a Radiation Realm where you run a nuclear reactor and manage its control rods.
+
+			It is written in [SvelteKit](https://svelte.dev/docs/kit) with Svelte 5 runes and TypeScript, drawn on a Canvas, with [Supabase](https://supabase.com) for accounts and the global leaderboard, and deployed on [Cloudflare Workers](https://workers.cloudflare.com).
+			Incremental games are a fun constraint: enormous numbers, saves you must never corrupt, and an interface that has to stay smooth while everything on screen updates at once.
+		""".trimIndent(), 2024, id = "atom-clicker", dateLabel = "Since 2024", tags = listOf("Svelte 5", "TypeScript", "Supabase", "Canvas")
+	) {
+		TextIcon("Atom Clicker", localImage("logos/atom-clicker.svg"))
+	},
+
+	AboutMeSection(
+		"""
+			[GPT Images](https://gpt-images.ayfri.com) came out of wanting OpenAI's image models without the product wrapped around them: you bring your own API key, it never leaves your browser, and you get prompts, reference images, batch generation, a gallery and usage tracking that tells you what a batch actually costs.
+
+			Same stack as most of my recent side projects, [SvelteKit](https://svelte.dev/docs/kit), TypeScript and [Tailwind CSS](https://tailwindcss.com), with everything stored client-side in IndexedDB.
+			These days a good part of my work also goes into making AI agents useful on my own projects, from the Kore skills pack to the tooling I use daily.
+		""".trimIndent(), 2025, id = "gpt-images", tags = listOf("SvelteKit", "OpenAI API", "IndexedDB")
+	) {
+		TextIcon("GPT Images", localImage("logos/gpt-images.webp"))
 	})
 
 const val TIMELINE_DEFAULT_OFFSET = 125.0
@@ -265,18 +300,12 @@ fun AboutMe() {
 	) {
 		Style(AboutMeStyle)
 
-		var timelineOffset by remember { mutableStateOf(TIMELINE_DEFAULT_OFFSET) }
 		var roundSelected by remember { mutableStateOf(0) }
 
-		// A single passive listener drives both the timeline offset and the selected round; registering these from
-		// the composition (as attrs or bare calls) leaked a new listener on every scroll-triggered recomposition.
+		// A single passive listener drives the selected round; registering it from the composition (as attrs or bare
+		// calls) leaked a new listener on every scroll-triggered recomposition.
 		DisposableEffect(Unit) {
 			val onScroll = EventListener {
-				val footerOffset = document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as? Double
-				if (footerOffset != null && window.scrollY + window.innerHeight < footerOffset) {
-					timelineOffset = window.scrollY + TIMELINE_DEFAULT_OFFSET * .8
-				}
-
 				sections.forEachIndexed { index, section ->
 					if (index == roundSelected) return@forEachIndexed
 					val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
@@ -297,37 +326,40 @@ fun AboutMe() {
 			}
 		}
 
-		Aside({
-			classes(AboutMeStyle.timeline)
-			style {
-				top(timelineOffset.px)
-			}
-		}) {
-			sections.forEachIndexed { index, section ->
-				if (index > 0) {
-					Div({
-						classes("separator")
-					})
-				}
-
-				Div({
-					attr("data-date", section.date.toString())
-					classes("round")
-					if (index == roundSelected) classes("selected")
-
-					onClick {
-						window.location.hash = "#${section.id}"
-					}
-				}) {
-					A(href = "#${section.id}")
-				}
-			}
-		}
-
 		Div({
-			classes(AboutMeStyle.content)
+			classes(AboutMeStyle.layout)
 		}) {
-			sections.forEachIndexed { index, it -> it.Display(index == roundSelected) }
+			// Sticky instead of scroll-positioned: the browser clamps the timeline to the bottom of the section list
+			// on its own, where the old JS offset kept dragging it down into the footer.
+			Aside({
+				classes(AboutMeStyle.timeline)
+			}) {
+				sections.forEachIndexed { index, section ->
+					if (index > 0) {
+						Div({
+							classes("separator")
+						})
+					}
+
+					Div({
+						attr("data-date", section.date.toString())
+						classes("round")
+						if (index == roundSelected) classes("selected")
+
+						onClick {
+							window.location.hash = "#${section.id}"
+						}
+					}) {
+						A(href = "#${section.id}")
+					}
+				}
+			}
+
+			Div({
+				classes(AboutMeStyle.content)
+			}) {
+				sections.forEachIndexed { index, it -> it.Display(index == roundSelected) }
+			}
 		}
 	}
 }
@@ -353,7 +385,6 @@ object AboutMeStyle : StyleSheet() {
 	const val TIMELINE_BG_GRADIANT_START_COLOR = "#00D4FF"
 
 	val timelineSize by variable<CSSSizeValue<*>>()
-	val timelineOffset by variable<CSSSizeValue<*>>()
 
 	init {
 		"html" {
@@ -361,8 +392,7 @@ object AboutMeStyle : StyleSheet() {
 		}
 
 		id("main") style {
-			timelineSize(max(8.cssRem, 10.vw))
-			timelineOffset(1.5.cssRem)
+			timelineSize(max(6.cssRem, 8.vw))
 			paddingBottom(2.cssRem)
 
 			pageBackground()
@@ -370,23 +400,17 @@ object AboutMeStyle : StyleSheet() {
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			id("main") style {
-				timelineSize(max(4.cssRem, 5.vw))
-				timelineOffset(0.3.cssRem)
+				timelineSize(3.5.cssRem)
 			}
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			id("main") style {
 				timelineSize(0.px)
-				timelineOffset((-5).cssRem)
 			}
 		}
 
-		id("cat-aclysm") style {
-			property("image-rendering", "pixelated")
-		}
-
-		"h1" style {
+		"h1" {
 			fontSize(3.cssRem)
 			margin(0.px)
 
@@ -448,20 +472,35 @@ object AboutMeStyle : StyleSheet() {
 		}
 	}
 
+	val layout by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Row)
+		alignItems(AlignItems.Stretch)
+		// Left padding keeps room for the year label rendered on the left side of the selected round.
+		padding(0.px, 1.5.cssRem, 0.px, 1.cssRem)
+
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
+			self {
+				padding(0.px)
+			}
+		}
+	}
+
 	@OptIn(ExperimentalComposeWebApi::class)
 	val timeline by style {
-		val thickness = 1.vh
-		val length = sections.size * 0.45.vh
-		val roundSize = 3.vh
+		val thickness = 4.px
+		val roundSize = 1.1.cssRem
 
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Center)
 
-		position(Position.Absolute)
-		left(timelineOffset.value().unsafeCast<CSSLengthValue>())
-		height(90.percent)
+		position(Position.Sticky)
+		property("align-self", "flex-start")
+		top((HeaderStyle.navbarHeight.value() + 2.cssRem).unsafeCast<CSSLengthValue>())
+		height(80.vh)
 		width(timelineSize.value())
+		flexShrink(0)
 
 		child(self, universal) style {
 			backgroundImage(linearGradient {
@@ -470,14 +509,13 @@ object AboutMeStyle : StyleSheet() {
 			})
 			backgroundAttachment(BackgroundAttachment.Fixed)
 			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.4)")
-
-			marginTop((-.2).cssRem)
 		}
 
 		className("round") style {
 			size(roundSize)
 			borderRadius(10.cssRem)
 			position(Position.Relative)
+			flexShrink(0)
 
 			transitions {
 				defaultDelay(.4.s)
@@ -491,12 +529,12 @@ object AboutMeStyle : StyleSheet() {
 			}
 
 			hover(self) style {
-				transform { scale(1.1) }
+				transform { scale(1.15) }
 				cursor(Cursor.Pointer)
 			}
 
 			self + className("selected") style {
-				transform { scale(1.2) }
+				transform { scale(1.35) }
 				border {
 					color(Color("#00D4FF"))
 					style(LineStyle.Solid)
@@ -507,10 +545,12 @@ object AboutMeStyle : StyleSheet() {
 				self + after style {
 					content("attr(data-date)".unsafeCast<Content>())
 					fontWeight(700)
+					fontSize(.75.cssRem)
 
+					// Anchored on the round's left edge instead of a fixed offset, so the year never spills out of the page.
 					position(Position.Absolute)
 					top(0.px)
-					left((-3).cssRem)
+					property("right", "calc(100% + .5rem)")
 					height(100.percent)
 					width(Width.MinContent)
 
@@ -522,13 +562,17 @@ object AboutMeStyle : StyleSheet() {
 			}
 		}
 
+		// The separators grow instead of having a fixed length, so the whole timeline always fits its sticky height,
+		// however many sections the list has.
 		className("separator") style {
-			height(length)
+			flex("1 1 0")
+			minHeight(0.px)
 			width(thickness)
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			className("round") + className("selected") + after style {
+				property("right", "auto")
 				left(50.percent)
 				transform { translateX((-50).percent) }
 				top(Top.Unset)
@@ -585,17 +629,56 @@ object AboutMeStyle : StyleSheet() {
 		gap(2.cssRem)
 	}
 
+	val header by style {
+		display(DisplayStyle.Flex)
+		alignItems(AlignItems.Center)
+		justifyContent(JustifyContent.SpaceBetween)
+		flexWrap(FlexWrap.Wrap)
+		gap(1.cssRem)
+		marginBottom(1.5.cssRem)
+	}
+
+	val dateBadge by style {
+		backgroundColor(Color("#FFFFFF10"))
+		border(1.px, LineStyle.Solid, Color("#00D4FF40"))
+		borderRadius(1.cssRem)
+		color(Color("#FFFFFFCC"))
+		fontSize(.8.cssRem)
+		fontWeight(600)
+		padding(.25.cssRem, .8.cssRem)
+		whiteSpace(WhiteSpace.NoWrap)
+	}
+
+	val tags by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.4.cssRem)
+		marginTop(1.25.cssRem)
+	}
+
+	val tag by style {
+		backgroundColor(Color("#FFFFFF12"))
+		borderRadius(1.cssRem)
+		color(Color("#FFFFFFDD"))
+		fontSize(.75.cssRem)
+		padding(.25.cssRem, .7.cssRem)
+	}
+
 	@OptIn(ExperimentalComposeWebApi::class)
 	val content by style {
 		val titleHeight by variable<CSSSizeValue<*>>()
 
-		marginLeft(timelineSize.value())
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		gap(1.5.cssRem)
+		flex(1)
+		minWidth(0.px)
 
 		"section" {
-			titleHeight(max(2.cssRem, 3.vw))
+			titleHeight(max(1.75.cssRem, 2.4.vw))
 
 			fontFamily(AppStyle.MONO_FONT_FAMILY)
-			padding(1.5.cssRem, titleHeight.value())
+			padding(2.cssRem, max(2.cssRem, 3.vw))
 			position(Position.Relative)
 			borderRadius(1.cssRem)
 			border {
@@ -673,28 +756,42 @@ object AboutMeStyle : StyleSheet() {
 				}
 
 				fontSize(titleHeight.value())
-				margin(0.cssRem, 0.px, 1.5.cssRem)
+				margin(0.px)
 			}
 
 			"p" {
+				color(Color("#FFFFFFE6"))
 				fontSize(1.05.cssRem)
-				lineHeight(1.6.cssRem)
+				lineHeight(1.8.number)
 				margin(0.px)
 			}
-		}
 
-		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
-			self {
-				marginLeft(timelineSize.value() * 1.2)
+			"a" {
+				color(Color("#7FE3FF"))
+				property("text-decoration-color", "#7FE3FF60")
+				property("text-underline-offset", "3px")
+
+				hover(self) style {
+					color(Color("#FF6FB5"))
+					property("text-decoration-color", "#FF6FB5")
+				}
+			}
+
+			"code" {
+				backgroundColor(Color("#FFFFFF12"))
+				borderRadius(.35.cssRem)
+				fontSize(.9.cssRem)
+				padding(.1.cssRem, .35.cssRem)
 			}
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
 			self {
-				titleHeight(1.5.cssRem)
-				marginLeft(0.px)
+				titleHeight(1.4.cssRem)
 
 				"section" {
+					padding(1.25.cssRem)
+
 					self + className("selected") style {
 						property("transform", "none")
 					}
@@ -708,12 +805,11 @@ object AboutMeStyle : StyleSheet() {
 		alignItems(AlignItems.Center)
 		justifyContent(JustifyContent.Start)
 		flexDirection(FlexDirection.Row)
-		gap(1.5.cssRem)
+		gap(1.25.cssRem)
 
 		media(mediaMaxWidth(686.px)) {
 			self {
-				flexDirection(FlexDirection.Column)
-				textAlign(TextAlign.Center)
+				gap(.8.cssRem)
 			}
 		}
 	}
