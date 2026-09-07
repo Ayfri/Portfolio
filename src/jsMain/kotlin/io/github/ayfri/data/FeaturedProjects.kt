@@ -49,7 +49,7 @@ val featuredProjects = listOf(
 		tagline = "An incremental game about splitting atoms: buildings, upgrade trees, prestige runs and an online leaderboard.",
 		image = "projects/atom-clicker.avif",
 		repository = "Ayfri/Atom-Clicker",
-		tags = listOf("Svelte 5", "TypeScript", "PixiJS"),
+		tags = listOf("Svelte 5", "TypeScript", "Supabase"),
 		liveUrl = "https://atom-clicker.ayfri.com",
 	),
 	FeaturedProject(
