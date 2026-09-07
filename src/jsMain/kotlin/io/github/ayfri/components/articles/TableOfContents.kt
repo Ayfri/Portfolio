@@ -10,26 +10,23 @@ import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
-// Extract headings from markdown content
-fun extractHeadings(title: String, content: String): List<Pair<Int, String>> {
-	val headingRegex = Regex("^(#{1,6})\\s+(.+)$", RegexOption.MULTILINE)
-	// Ignore code blocks because lines with comments could be included
-	val contentWithoutCodeBlocks = content.replace(Regex("```[\\s\\S]*?```"), "")
+private val headingRegex = Regex("^(#{1,6})\\s+(.+)$", RegexOption.MULTILINE)
+private val codeBlockRegex = Regex("```[\\s\\S]*?```")
+private val nonSlugRegex = Regex("[^a-z0-9\\s-]")
+private val whitespaceRegex = Regex("\\s+")
 
-	val list = mutableListOf((1 to title))
-	return list + headingRegex.findAll(contentWithoutCodeBlocks).map { matchResult ->
-		val level = matchResult.groupValues[1].length
-		val text = matchResult.groupValues[2].trim()
-		level to text
+// Extract headings from markdown content, ignoring code blocks because comment lines would be picked up as headings.
+fun extractHeadings(title: String, content: String) = buildList {
+	add(1 to title)
+	headingRegex.findAll(content.replace(codeBlockRegex, "")).forEach {
+		add(it.groupValues[1].length to it.groupValues[2].trim())
 	}
 }
 
 // Generate an ID from heading text for anchor links
-fun headingToId(text: String): String {
-	return text.lowercase()
-		.replace(Regex("[^a-z0-9\\s-]"), "")
-		.replace(Regex("\\s+"), "-")
-}
+fun headingToId(text: String) = text.lowercase()
+	.replace(nonSlugRegex, "")
+	.replace(whitespaceRegex, "-")
 
 @Composable
 fun TableOfContents(headings: List<Pair<Int, String>>) {

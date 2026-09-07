@@ -10,8 +10,6 @@ import io.github.ayfri.components.I
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.gradientBorderBackground
-import js.date.Date
-import js.intl.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
@@ -49,17 +47,7 @@ fun ArticleEntry(entry: ArticleEntry) {
 					Div({
 						classes(ArticleListStyle.articleMeta)
 					}) {
-						// Format and display date
-						val date = try {
-							val jsDate = Date(entry.date)
-							jsDate.toLocaleDateString("en-US", DateTimeFormatOptions(
-								year = YearFormat.numeric,
-								month = MonthFormat.long,
-								day = DayFormat.numeric
-							))
-						} catch (e: Exception) {
-							entry.date.split("T")[0]
-						}
+						val date = formatLongDate(entry.date)
 
 						Span({
 							classes(ArticleListStyle.metaItem)

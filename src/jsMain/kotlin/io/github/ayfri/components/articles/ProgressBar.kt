@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.backgroundImage
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.css.zIndex
+import io.github.ayfri.passiveListener
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
@@ -37,7 +38,7 @@ fun ReadingProgressBar() {
 			progress.value = calculatedProgress
 		}
 
-		window.addEventListener("scroll", scrollListener)
+		window.addEventListener("scroll", scrollListener, passiveListener)
 
 		onDispose {
 			window.removeEventListener("scroll", scrollListener)

@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.*
 import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.I
+import io.github.ayfri.passiveListener
 import kotlinx.browser.window
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
@@ -24,7 +25,7 @@ fun BackToTopButton() {
 			isVisible.value = window.scrollY > 300
 		}
 
-		window.addEventListener("scroll", scrollListener)
+		window.addEventListener("scroll", scrollListener, passiveListener)
 
 		onDispose {
 			window.removeEventListener("scroll", scrollListener)
