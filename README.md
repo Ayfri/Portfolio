@@ -6,11 +6,13 @@ It is a Kotlin/Compose for Web site built with [Kobweb](https://kobweb.varabyte.
 
 ## Stack
 
-- Kotlin 2.4
+- Kotlin 2.4.20
 - Compose for Web
-- Kobweb 0.25
+- Kobweb 0.25.1
 - KobwebX Markdown for articles
-- Gradle 9.6 via the included wrapper
+- Gradle 9.7.1 via the included wrapper
+- npm for the Kotlin/JS toolchain, locked in `kotlin-js-store/package-lock.json`
+- SWC as the production webpack minifier, configured in `webpack.config.d/00-bundle-speed.js`
 - Cloudflare Pages for deployment
 
 ## What Is Here
@@ -67,7 +69,7 @@ Project data comes from the [`api`](https://github.com/Ayfri/Portfolio/tree/api)
 https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json
 ```
 
-During the build, `downloadData` downloads and minifies that snapshot, then generates `PortfolioSnapshot.kt` under `build/generated/portfolio-data/`. Kotlin/JS compilation depends on this task, so data is available synchronously while Kobweb snapshots each page. The browser does not fetch this data after the site has loaded.
+During the build, `downloadData` downloads that snapshot, minifies it, converts its `snake_case` keys to `camelCase`, then generates `PortfolioSnapshot.kt` under `build/generated/portfolio-data/`. Converting the keys at build time lets the browser `JSON.parse` the snapshot directly, with no reviver pass on first paint. Kotlin/JS compilation depends on this task, so data is available synchronously while Kobweb snapshots each page. The browser does not fetch this data after the site has loaded.
 
 This is what ensures the home page, skills, and projects pages export with complete HTML rather than `Loading...`.
 
