@@ -21,7 +21,7 @@ fun NotFoundPage() {
 	setTitle("404 - Page Not Found")
 
 	// Tell crawlers to drop this URL instead of endlessly re-crawling it.
-	MetaName("robots", "noindex, nofollow")
+	setRobots("noindex, nofollow")
 
 	Header()
 

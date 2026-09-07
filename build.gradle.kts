@@ -381,25 +381,38 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 		val baseUrl = "https://ayfri.com"
 		val routes = mutableListOf<String>()
 
-		// Discover static routes by scanning @Page-annotated Kotlin files under pages/
+		// Discover static routes from @Page-annotated Kotlin files under pages/. The annotation's own route wins over
+		// the file path when it has one, so `@Page("/404")` is not published as `/errors/` and dynamic routes are skipped.
+		val pageRegex = Regex("""@Page(?:\("([^"]*)"\))?""")
 		pagesDir.asFile.walkTopDown()
-			.filter { it.isFile && it.extension == "kt" && it.readText().contains("@Page") }
+			.filter { it.isFile && it.extension == "kt" }
 			.forEach { file ->
-				val parts = file.relativeTo(pagesDir.asFile).path
-					.replace('\\', '/')
-					.removeSuffix(".kt")
-					.split('/')
-				val route = buildString {
-					append('/')
-					parts.forEachIndexed { i, part ->
-						if (part != "Index") {
-							if (i > 0 && !endsWith('/')) append('/')
-							append(part.splitCamelCase().joinToString("-") { it.lowercase() })
+				val override = pageRegex.find(file.readText())?.groupValues?.get(1) ?: return@forEach
+
+				val route = if (override.isNotEmpty() && override.startsWith("/")) {
+					override.removeSuffix("index").ensureSurrounded("/", "/")
+				} else if (override.isNotEmpty()) {
+					// A relative override is resolved against the file's own directory (e.g. `{user}/{project}`).
+					val dir = file.parentFile.relativeTo(pagesDir.asFile).invariantSeparatorsPath
+					("/$dir/$override").replace("//", "/").ensureSurrounded("/", "/")
+				} else {
+					val parts = file.relativeTo(pagesDir.asFile).invariantSeparatorsPath
+						.removeSuffix(".kt")
+						.split('/')
+					buildString {
+						append('/')
+						parts.forEachIndexed { i, part ->
+							if (part != "Index") {
+								if (i > 0 && !endsWith('/')) append('/')
+								append(part.splitCamelCase().joinToString("-") { it.lowercase() })
+							}
 						}
+						if (!endsWith('/')) append('/')
 					}
-					if (!endsWith('/')) append('/')
 				}
-				if (!route.contains('{')) routes.add(route)
+
+				// `{}` marks a dynamic route with no single canonical URL; /404/ is served as a noindex error page.
+				if (!route.contains('{') && route != "/404/") routes.add(route)
 			}
 
 		// Discover article routes + lastmod from markdown frontmatter

@@ -1,6 +1,7 @@
 package io.github.ayfri.layouts
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.AppGlobals
@@ -15,8 +16,6 @@ import io.github.ayfri.utils.margin
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
 import io.github.ayfri.utils.webkitScrollbarTrack
-import js.date.Date
-import js.intl.*
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
@@ -39,22 +38,24 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	val keywords = markdownData["keywords"]?.get(0) ?: ""
 	val date = markdownData["date-created"]?.get(0) ?: ""
 	val dateModified = markdownData["date-modified"]?.get(0) ?: date
-	val articleContent = articlesEntries.find { it.title == title }?.content ?: ""
+	val articleContent = remember(title) { articlesEntries.find { it.title == title }?.content ?: "" }
 
-	// Extract headings from content for table of contents
-	val headings = extractHeadings(title, articleContent)
+	// Both walk the whole article with regexes, so they are keyed on the article rather than run per recomposition.
+	val headings = remember(title, articleContent) { extractHeadings(title, articleContent) }
 
-	// Find related articles based on keywords
-	val currentPath = context.route.toString()
-	val keywordsList = keywords.split(",").map { it.trim() }
-	val relatedArticles = findRelatedArticles(currentPath, keywordsList)
+	// The path only: with the export query attached this never matched an entry, so each article listed itself.
+	val currentPath = context.route.path
+	val keywordsList = remember(keywords) { keywords.split(",").map { it.trim() } }
+	val relatedArticles = remember(currentPath, keywordsList) { findRelatedArticles(currentPath, keywordsList) }
 
+	setRobots(null)
 	setTitle("$title - ${AppGlobals["author"]}'s Blog")
 	setDescription(description)
 	if (keywords.isNotEmpty()) setKeywords(keywords)
 
-	val currentStub = context.route
-	val canonicalUrl = AppGlobals["url"] + currentStub.toString().ensureSuffix("/")
+	// `context.route.toString()` still carries the `?_kobwebIsExporting=...` query during a static export, which
+	// would ship a canonical pointing at a URL that does not exist. Only the path belongs in a canonical.
+	val canonicalUrl = AppGlobals["url"] + context.route.path.ensureSuffix("/")
 	setCanonical(canonicalUrl)
 
 	setJsonLD()
@@ -120,17 +121,7 @@ fun ArticleHeader(
 		Div({
 			classes(ArticleHeaderStyle.meta)
 		}) {
-			// Format and display date
-			val formattedDate = try {
-				val jsDate = Date(date)
-				jsDate.toLocaleDateString("en-US", DateTimeFormatOptions(
-					year = YearFormat.numeric,
-					month = MonthFormat.long,
-					day = DayFormat.numeric
-				))
-			} catch (e: Exception) {
-				date.split("T")[0]
-			}
+			val formattedDate = formatLongDate(date)
 
 			Span({
 				classes(ArticleHeaderStyle.metaItem)
@@ -140,7 +131,7 @@ fun ArticleHeader(
 			}
 
 			// Reading time estimate
-			val readingTime = calculateReadingTime(content)
+			val readingTime = remember(content) { calculateReadingTime(content) }
 			Span({
 				classes(ArticleHeaderStyle.metaItem)
 			}) {

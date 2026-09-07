@@ -1,6 +1,7 @@
 package io.github.ayfri.layouts
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AnimationsStyle
@@ -21,6 +22,7 @@ fun PageLayout(
 ) {
 	Style(AnimationsStyle)
 	Style(AppStyle)
+	setRobots(null)
 	setTitle("$title - ${AppGlobals["author"]}'s Portfolio")
 	setDescription(description)
 	if (keywords.isNotEmpty()) setKeywords(keywords)
@@ -45,5 +47,8 @@ fun PageLayout(
 
 	Footer()
 
-	window.scroll(0.0, 0.0)
+	// Keyed on the route: an unkeyed call would yank the page back to the top on every recomposition.
+	LaunchedEffect(currentStub.path) {
+		window.scroll(0.0, 0.0)
+	}
 }
