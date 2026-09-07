@@ -12,7 +12,9 @@ import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.I
 import io.github.ayfri.components.Span
 import io.github.ayfri.data.DataStyle
-import io.github.ayfri.data.HomeCard
+import io.github.ayfri.data.FeaturedProjectCard
+import io.github.ayfri.data.FeaturedProjectStyle
+import io.github.ayfri.data.featuredProjects
 import io.github.ayfri.data.portfolioData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.utils.gradientBorderBackground
@@ -35,9 +37,31 @@ import kotlin.js.Date
 
 inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
 
+/** Counted from the first Python scripts in 2014, the starting point of the About Me timeline. */
+inline val codingYears get() = ((Date.now() - Date("2014-01-01").getTime()) / 1000 / 60 / 60 / 24 / 365).toInt()
+
+@Composable
+fun HomeStat(value: String, label: String) {
+	Div({
+		classes(HomeStyle.stat)
+	}) {
+		Span({
+			classes(AppStyle.monoFont, HomeStyle.statValue)
+		}) {
+			Text(value)
+		}
+
+		Span({
+			classes(HomeStyle.statLabel)
+		}) {
+			Text(label)
+		}
+	}
+}
+
 const val MAIN_PRESENTATION = """
-Hi, I'm Pierre Roy, an IT student at [Ynov Aix school](https://www.ynov.com/campus/aix-en-provence), and I'm passionate about computer science and especially programming.
-I'm making all sorts of projects and programming by myself for years. This is my portfolio, welcome!
+Hi, I'm Pierre Roy, a full-stack and AI developer based in France, holding a Data Scientist Master's degree from [Ynov Aix](https://www.ynov.com/campus/aix-en-provence).
+I build web products with Kotlin, Svelte and TypeScript, ship AI features in Python, and maintain [Kore](https://kore.ayfri.com), the Kotlin library used to generate Minecraft datapacks.
 """
 
 const val PORTFOLIO_SUMMARY = """
@@ -46,14 +70,24 @@ Built with Kotlin and Compose for Web, it represents both my technical abilities
 """
 
 const val EXPERIENCE_SUMMARY = """
-From internships at [BlueFrog](https://www.bluefrog.fr/) where I developed WordPress sites, to working on AI projects like ScriptGraf at [Ynov](https://www.ynov.com/),
-I've gained valuable experience in various technologies and collaborative environments.
+Two years as a full-stack developer at [Eliophot](https://www.eliophot.com/en/) building Svelte and Astro platforms, then Python, AI agents and DevOps work at [Link2Brain](https://www.link2brain.com/),
+the Marseille startup grown out of the ScriptGraf research project I worked on at [Ynov](https://www.ynov.com/).
 """
 
 const val ARTICLES_SUMMARY = """
 Explore my blog where I share insights, tutorials, and experiences in programming, particularly focusing on Kotlin, Minecraft modding,
 and technical deep dives. Learn about my journey and discoveries in software development.
 """
+
+/** Condensed version of the Experiences page, newest first. */
+data class TimelineEntry(val period: String, val role: String, val company: String)
+
+val timelineEntries = listOf(
+	TimelineEntry("Since 2025", "Full-Stack & AI Developer", "Link2Brain"),
+	TimelineEntry("2023 - 2025", "Full-Stack Developer", "Eliophot"),
+	TimelineEntry("Summer 2023", "AI Research, ScriptGraf", "Ynov"),
+	TimelineEntry("Summer 2022", "Web Developer", "BlueFrog"),
+)
 
 @Page("/index")
 @Composable
@@ -65,11 +99,13 @@ fun Home() {
 	) {
 		val portfolio = portfolioData()
 
-		val homeRepositories = portfolio.repos.sortedByDescending { it.stargazersCount }.take(3)
 		val featuredSkills = skillsByLevel.take(8)
+		val starsByRepository = portfolio.repos.associate { it.fullName to it.stargazersCount }
+		val totalStars = portfolio.repos.sumOf { it.stargazersCount }
 
 		Style(HomeStyle)
 		Style(DataStyle)
+		Style(FeaturedProjectStyle)
 
 		// Decorative background elements
 		Div({
@@ -136,12 +172,15 @@ fun Home() {
 				H2({
 					classes(HomeStyle.subtitle)
 				}) {
-					Text("IT Student")
+					Text("Full-Stack & AI Developer")
 				}
 
 				H2({
-					classes(HomeStyle.subtitle)
+					classes(HomeStyle.subtitle, HomeStyle.location)
 				}) {
+					I(FontAwesomeType.SOLID, "location-dot") {
+						marginRight(0.5.cssRem)
+					}
 					Text("France")
 				}
 
@@ -165,6 +204,15 @@ fun Home() {
 				classes(HomeStyle.introText)
 			})
 
+			Div({
+				classes(HomeStyle.stats)
+			}) {
+				HomeStat(totalStars.toString(), "GitHub stars")
+				HomeStat(portfolio.repos.size.toString(), "public repositories")
+				HomeStat("$codingYears+", "years writing code")
+				HomeStat(articlesEntries.size.toString(), "articles written")
+			}
+
 			// Featured Projects Section
 			Section({
 				classes(HomeStyle.section)
@@ -179,17 +227,10 @@ fun Home() {
 				}
 
 				Div({
-					classes("list", "repos")
+					classes(FeaturedProjectStyle.grid)
 				}) {
-					homeRepositories.forEachIndexed { index, repository ->
-						Div({
-							classes(DataStyle.homeCard, "repo")
-							style {
-								property("animation-delay", (index * 0.2).s)
-							}
-						}) {
-							HomeCard(repository)
-						}
+					featuredProjects.forEachIndexed { index, project ->
+						FeaturedProjectCard(project, starsByRepository[project.repository], hero = index == 0)
 					}
 				}
 
@@ -275,26 +316,40 @@ fun Home() {
 					Text("Professional Experience")
 				}
 
-				Div({
-					classes(HomeStyle.experienceContent)
+				P({
+					markdownParagraph(EXPERIENCE_SUMMARY.trimIndent(), true, AppStyle.monoFont)
+					classes(HomeStyle.experienceText)
+				})
+
+				Ol({
+					classes(HomeStyle.timeline)
 				}) {
-					Img(localImage("minecraft-new.avif"), "Experience illustration") {
-						classes(HomeStyle.experienceImage)
-					}
-
-					Div({
-						classes(HomeStyle.experienceText)
-					}) {
-						P({
-							markdownParagraph(EXPERIENCE_SUMMARY.trimIndent(), true, AppStyle.monoFont)
-							style {
-								marginBottom(2.cssRem)
+					timelineEntries.forEach { entry ->
+						Li({
+							classes(HomeStyle.timelineEntry)
+						}) {
+							Span({
+								classes(AppStyle.monoFont, HomeStyle.timelinePeriod)
+							}) {
+								Text(entry.period)
 							}
-						})
 
-						A("/experiences/", "View my experiences", AppStyle.button)
+							Span({
+								classes(HomeStyle.timelineRole)
+							}) {
+								Text(entry.role)
+							}
+
+							Span({
+								classes(HomeStyle.timelineCompany)
+							}) {
+								Text(entry.company)
+							}
+						}
 					}
 				}
+
+				A("/experiences/", "View my experiences", AppStyle.button)
 			}
 
 			// About Me Section
@@ -615,14 +670,6 @@ object HomeStyle : StyleSheet() {
 			gap(1.cssRem)
 		}
 
-		className("repos") style {
-			display(DisplayStyle.Flex)
-			flexDirection(FlexDirection.Row)
-			justifyContent(JustifyContent.Center)
-			gap(1.5.cssRem)
-			width(100.percent)
-		}
-
 		className("list") style {
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Row)
@@ -636,14 +683,6 @@ object HomeStyle : StyleSheet() {
 				padding(1.cssRem)
 			}
 
-			className("repos") style {
-				flexDirection(FlexDirection.Column)
-				alignItems(AlignItems.Center)
-
-				className("repo") style {
-					maxWidth(95.percent)
-				}
-			}
 		}
 	}
 
@@ -719,40 +758,61 @@ object HomeStyle : StyleSheet() {
 		backgroundColor(Color("#ffffff10"))
 	}
 
-	val experienceContent by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Row)
-		alignItems(AlignItems.Center)
-		gap(2.cssRem)
-		width(100.percent)
-
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				flexDirection(FlexDirection.Column)
-			}
-		}
-	}
-
 	val experienceText by style {
-		flex(1)
-		"p" {
-			lineHeight(1.5.cssRem)
-		}
+		lineHeight(1.6.number)
+		margin(0.px)
+		maxWidth(900.px)
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
-	val experienceImage by style {
-		maxWidth(30.percent)
-		borderRadius(0.8.cssRem)
-		filter {
-			dropShadow(offsetX = 2.px, offsetY = 0.px, blurRadius = 8.px, color = Color("#FF0080"))
+	val timeline by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		gap(0.6.cssRem)
+		property("list-style", "none")
+		margin(0.px)
+		padding(0.px)
+		width(100.percent)
+		maxWidth(900.px)
+	}
+
+	val timelineEntry by style {
+		display(DisplayStyle.Grid)
+		gridTemplateColumns {
+			size(9.5.cssRem)
+			minmax(0.px, 1.fr)
+			auto
 		}
+		alignItems(AlignItems.Center)
+		gap(1.cssRem)
+		padding(0.8.cssRem, 1.cssRem)
+		borderRadius(0.6.cssRem)
+		backgroundColor(Color("#ffffff08"))
+		borderLeft(3.px, LineStyle.Solid, Color("#00D4FF"))
+		textAlign(TextAlign.Start)
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
-				maxWidth(60.percent)
+				gridTemplateColumns(GridEntry.TrackSize(1.fr))
+				gap(0.2.cssRem)
 			}
 		}
+	}
+
+	val timelinePeriod by style {
+		color(Color("#00D4FF"))
+		fontSize(0.85.cssRem)
+		fontWeight(600)
+		whiteSpace(WhiteSpace.NoWrap)
+	}
+
+	val timelineRole by style {
+		color(Color.white)
+		fontWeight(600)
+	}
+
+	val timelineCompany by style {
+		color(Color("#FFFFFF99"))
+		fontSize(0.9.cssRem)
 	}
 
 	val aboutSection by style {
@@ -1210,6 +1270,60 @@ object HomeStyle : StyleSheet() {
 				margin(0.8.cssRem, auto)
 			}
 		}
+	}
+
+	val location by style {
+		display(DisplayStyle.Flex)
+		alignItems(AlignItems.Center)
+		justifyContent(JustifyContent.Center)
+		fontSize(1.3.cssRem)
+		color(Color("#FFFFFFAA"))
+		property("animation-delay", "0.65s")
+	}
+
+	@OptIn(ExperimentalComposeWebApi::class)
+	val stats by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		justifyContent(JustifyContent.Center)
+		gap(1.cssRem)
+		width(100.percent)
+		maxWidth(800.px)
+		marginBottom(1.cssRem)
+
+		animation(fadeInUp) {
+			duration(1.2.s)
+			fillMode(AnimationFillMode.Forwards)
+			timingFunction(AnimationTimingFunction.EaseOut)
+		}
+		opacity(0)
+		translateY(30.px)
+		property("animation-delay", "1.4s")
+	}
+
+	val stat by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		alignItems(AlignItems.Center)
+		gap(0.15.cssRem)
+		flex("1 1 8rem")
+		padding(0.9.cssRem, 0.6.cssRem)
+		borderRadius(0.8.cssRem)
+		backgroundColor(Color("#ffffff08"))
+		border(1.px, LineStyle.Solid, Color("#ffffff20"))
+	}
+
+	val statValue by style {
+		fontSize(1.8.cssRem)
+		fontWeight(700)
+		color(Color("#00D4FF"))
+		property("text-shadow", "0 0 12px rgba(0, 212, 255, 0.6)")
+	}
+
+	val statLabel by style {
+		fontSize(0.8.cssRem)
+		color(Color("#FFFFFF99"))
+		textAlign(TextAlign.Center)
 	}
 
 	@OptIn(ExperimentalComposeWebApi::class)
