@@ -3,6 +3,7 @@ package io.github.ayfri.components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.clamp
@@ -27,7 +28,7 @@ import org.jetbrains.compose.web.dom.Nav
 fun Header() {
 	Style(HeaderStyle)
 
-	var open by mutableStateOf(false)
+	var open by remember { mutableStateOf(false) }
 
 	Header({
 		classes(HeaderStyle.navbar)

@@ -28,8 +28,11 @@ fun HomeCard(repository: GitHubRepository) {
 		classes("title")
 	}) {
 		H3 {
-			Img(skills.first { it.language.name == repository.language }.language.iconUrl) {
-				alt("${repository.language} language")
+			// Not every repo language has a Skill entry, and throwing here would take the whole page down.
+			skills.firstOrNull { it.language.name == repository.language }?.let { skill ->
+				Img(skill.language.iconUrl) {
+					alt("${repository.language} language")
+				}
 			}
 			Text(repository.name)
 		}

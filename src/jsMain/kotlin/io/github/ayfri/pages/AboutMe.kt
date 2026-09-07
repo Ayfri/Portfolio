@@ -1,8 +1,10 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
@@ -15,6 +17,7 @@ import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.passiveListener
 import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.pageBackground
 import io.github.ayfri.utils.size
@@ -28,6 +31,8 @@ import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.events.Event
+import org.w3c.dom.events.EventListener
 
 data class AboutMeSection(
 	val content: String,
@@ -260,23 +265,43 @@ fun AboutMe() {
 	) {
 		Style(AboutMeStyle)
 
-		var timelineOffset by mutableStateOf(TIMELINE_DEFAULT_OFFSET)
-		var roundSelected by mutableStateOf(0)
+		var timelineOffset by remember { mutableStateOf(TIMELINE_DEFAULT_OFFSET) }
+		var roundSelected by remember { mutableStateOf(0) }
+
+		// A single passive listener drives both the timeline offset and the selected round; registering these from
+		// the composition (as attrs or bare calls) leaked a new listener on every scroll-triggered recomposition.
+		DisposableEffect(Unit) {
+			val onScroll = EventListener {
+				val footerOffset = document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as? Double
+				if (footerOffset != null && window.scrollY + window.innerHeight < footerOffset) {
+					timelineOffset = window.scrollY + TIMELINE_DEFAULT_OFFSET * .8
+				}
+
+				sections.forEachIndexed { index, section ->
+					if (index == roundSelected) return@forEachIndexed
+					val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
+					val elementOffset = element.asDynamic().offsetTop as Double - TIMELINE_DEFAULT_OFFSET * 2
+					val elementHeight = element.asDynamic().offsetHeight as Double
+
+					if (window.scrollY in elementOffset..(elementOffset + elementHeight)) roundSelected = index
+				}
+			}
+
+			window.addEventListener("scroll", onScroll, passiveListener)
+			window.addEventListener("resize", onScroll, passiveListener)
+			onScroll.handleEvent(Event("scroll"))
+
+			onDispose {
+				window.removeEventListener("scroll", onScroll)
+				window.removeEventListener("resize", onScroll)
+			}
+		}
 
 		Aside({
 			classes(AboutMeStyle.timeline)
 			style {
 				top(timelineOffset.px)
 			}
-
-			window.addEventListener("scroll", {
-				val footerOffset =
-					document.querySelector(".${FooterStyle.footer}")?.asDynamic()?.offsetTop as? Double? ?: return@addEventListener
-
-				if (window.scrollY + window.innerHeight < footerOffset) {
-					timelineOffset = window.scrollY + TIMELINE_DEFAULT_OFFSET * .8
-				}
-			})
 		}) {
 			sections.forEachIndexed { index, section ->
 				if (index > 0) {
@@ -304,26 +329,6 @@ fun AboutMe() {
 		}) {
 			sections.forEachIndexed { index, it -> it.Display(index == roundSelected) }
 		}
-
-		val callback = callback@{
-			sections.forEachIndexed { index, section ->
-				if (index == roundSelected) return@forEachIndexed
-				val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
-				val elementOffset = element.asDynamic().offsetTop as Double - TIMELINE_DEFAULT_OFFSET * 2
-				val elementHeight = element.asDynamic().offsetHeight as Double
-
-				val elementRange = elementOffset..(elementOffset + elementHeight)
-
-				if (window.scrollY in elementRange) {
-					roundSelected = index
-					return@callback
-				}
-			}
-		}
-
-		window.addEventListener("resize", { callback() })
-		window.addEventListener("scroll", { callback() })
-		document.addEventListener("DOMContentLoaded", { callback() })
 	}
 }
 
