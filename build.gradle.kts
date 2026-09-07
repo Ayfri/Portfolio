@@ -54,10 +54,21 @@ val downloadDataTask = tasks.register("downloadData") {
 		}
 
 		val raw = connection.inputStream.readBytes().decodeToString()
-		val minified = runCatching {
-			groovy.json.JsonOutput.toJson(groovy.json.JsonSlurper().parseText(raw))
-		}.getOrNull()
-		val toWrite = minified?.takeIf { it.length < raw.length } ?: raw
+		// Keys are camelCased here so the browser can `JSON.parse` straight into the external interfaces,
+		// instead of walking every object of the snapshot through a reviver on first paint.
+		fun snakeToCamel(key: String) = key.split('_').mapIndexed { i, part ->
+			if (i == 0) part else part.replaceFirstChar(Char::uppercase)
+		}.joinToString("")
+
+		fun camelCaseKeys(node: Any?): Any? = when (node) {
+			is Map<*, *> -> node.entries.associate { (k, v) -> snakeToCamel(k as String) to camelCaseKeys(v) }
+			is List<*> -> node.map { camelCaseKeys(it) }
+			else -> node
+		}
+
+		val toWrite = runCatching {
+			groovy.json.JsonOutput.toJson(camelCaseKeys(groovy.json.JsonSlurper().parseText(raw)))
+		}.getOrElse { raw }
 
 		kotlinOutFile.get().asFile.apply {
 			parentFile.mkdirs()
