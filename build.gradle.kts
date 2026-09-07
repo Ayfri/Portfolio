@@ -335,6 +335,11 @@ kotlin {
 		jsMain {
 			resources.srcDir(portfolioGeneratedResourcesRoot)
 			kotlin.srcDir(portfolioGeneratedKotlinRoot)
+
+			dependencies {
+				// Minifier for the production bundle, see `webpack.config.d/00-bundle-speed.js`.
+				implementation(devNpm("@swc/core", libs.versions.swc.get()))
+			}
 		}
 		commonMain {
 			dependencies {
@@ -429,3 +434,8 @@ tasks.named("jsProcessResources") {
 tasks.matching { it.name.endsWith("KotlinJs") }.configureEach {
 	dependsOn(downloadDataTask)
 }
+
+// The export discards the source map (`includeSourceMap = false`), so building it only slows minification down.
+tasks.withType<org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack>()
+	.matching { it.name == "jsBrowserProductionWebpack" }
+	.configureEach { sourceMaps = false }
