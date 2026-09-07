@@ -1,8 +1,6 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.css.functions.max
@@ -39,13 +37,38 @@ data class Language(
 	val iconUrl: String,
 	val githubProjects: List<String> = listOf(),
 	val schoolProjects: List<String> = listOf(),
-)
-
-data class Skill(
-	val language: Language,
-	var githubProjects: MutableList<GitHubRepository> = mutableListOf(),
-	var schoolProjects: MutableList<GitHubRepository> = mutableListOf(),
+	/** Language names GitHub reports that belong to this skill, e.g. Godot claiming its GDScript repos. */
+	val aliases: List<String> = listOf(),
 ) {
+	fun matches(repoLanguage: String) = repoLanguage.equals(name, true) || aliases.any { repoLanguage.equals(it, true) }
+}
+
+/** The snapshot is a build-time constant, so every skill's project list is derived once instead of during composition. */
+private val languageRepos by lazy { portfolioData().repos.filter { it.language != null } }
+
+/**
+ * Coursework markers actually used across the repos: a `TP` in the name, or a description mentioning school,
+ * Ynov, a course, exercices, a hackathon or a Master project. The previous `description.contains("school")`
+ * only recognised 6 of them.
+ */
+private val schoolNameRegex = Regex("""(?:^|[-_])tp[-_]?\d*(?:$|[-_])""", RegexOption.IGNORE_CASE)
+private val schoolDescRegex =
+	Regex("""\b(school|ynov|course|exercices?|exercises?|tp|hackaton|hackathon|master \d)\b""", RegexOption.IGNORE_CASE)
+
+private val GitHubRepository.isSchoolProject
+	get() = schoolNameRegex.containsMatchIn(name) ||
+		schoolDescRegex.containsMatchIn(name) ||
+		description?.let(schoolDescRegex::containsMatchIn) == true
+
+data class Skill(val language: Language) {
+	private val ownRepos by lazy { languageRepos.filter { language.matches(it.language!!) } }
+
+	val githubProjects by lazy { ownRepos + languageRepos.filter { it.fullName in language.githubProjects } }
+
+	val schoolProjects by lazy {
+		ownRepos.filter { it.isSchoolProject } + languageRepos.filter { it.fullName in language.schoolProjects }
+	}
+
 	@Composable
 	fun Display() {
 		Div({
@@ -197,7 +220,7 @@ val skills = listOf(
 		),
 	),
 	Language(
-		name = "GoLang",
+		name = "Go",
 		since = 2021,
 		learnedFor = "Creating websites/APIs.",
 		nowUsing = "Creating websites/APIs.",
@@ -228,6 +251,7 @@ val skills = listOf(
 			Godot provides a comprehensive set of common tools, so you can just focus on making your game without reinventing the wheel.
 		""".trimIndent(),
 		iconUrl = devIcon("godot"),
+		aliases = listOf("GDScript"),
 		githubProjects = listOf(
 			"Cat-aclsym/Cat-aclsym_Claw_of_the_dead",
 		),
@@ -300,6 +324,23 @@ val skills = listOf(
 			"Ayfri/TP-JS",
 			"Ayfri/VersionCraft",
 		)
+	),
+	Language(
+		// Named without the "Notebook" so the skill's HTML id stays whitespace-free; the alias matches what GitHub reports.
+		name = "Jupyter",
+		since = 2024,
+		learnedFor = "Machine learning courses.",
+		nowUsing = "Prototyping data pipelines and deep learning models.",
+		level = 4,
+		description = """
+			Jupyter notebooks interleave code, its output and prose in one document, so a dataset can be explored, transformed and charted step by step without rerunning the whole script.
+			They are the usual place for the exploratory half of a machine learning project, before anything worth keeping is moved into real modules.
+		""".trimIndent(),
+		iconUrl = devIcon("jupyter"),
+		aliases = listOf("Jupyter Notebook"),
+		schoolProjects = listOf(
+			"Ayfri/UF_Project_B3",
+		),
 	),
 	Language(
 		name = "Kotlin",
@@ -397,6 +438,18 @@ val skills = listOf(
 		)
 	),
 	Language(
+		name = "Svelte",
+		since = 2024,
+		learnedFor = "Creating web apps.",
+		nowUsing = "Creating web apps with SvelteKit.",
+		level = 5,
+		description = """
+			Svelte is a compiler that turns declarative components into imperative JavaScript, so there is no virtual DOM and no framework runtime shipped to the browser.
+			Svelte 5 replaces the old reactive statements and stores with runes, an explicit signal-based reactivity model that works the same in components and plain modules.
+		""".trimIndent(),
+		iconUrl = devIcon("svelte"),
+	),
+	Language(
 		name = "TypeScript",
 		since = 2019,
 		learnedFor = "Improving JavaScript projects.",
@@ -428,6 +481,13 @@ val skills = listOf(
 	)
 ).map(::Skill)
 
+/** Display order for the skills page and the home page's featured strip; sorting once beats re-sorting per recomposition. */
+val skillsByLevel = skills.sortedWith(
+	compareByDescending<Skill> { it.language.level }
+		.thenByDescending { it.language.since }
+		.thenBy { it.language.name }
+)
+
 @Page("/skills/index")
 @Composable
 fun Skills() {
@@ -436,15 +496,7 @@ fun Skills() {
 		description = "Technical skills of Pierre Roy (Ayfri): Kotlin, TypeScript, Python, Java, C#, Godot, and more, with real GitHub and school projects for each.",
 		keywords = "Kotlin skills, TypeScript developer, Python developer, Java developer, programming languages, tech stack, GitHub projects, Godot developer, MySQL, Redis",
 	) {
-		val portfolio = portfolioData()
-
 		Style(SkillsStyle)
-
-		val repos = remember { mutableStateListOf<GitHubRepository>() }
-
-		if (repos.isEmpty()) {
-			repos += portfolio.repos.filter { it.language != null }
-		}
 
 		Div({
 			classes(AppStyle.sections, SkillsStyle.skills)
@@ -460,25 +512,7 @@ fun Skills() {
 			Section({
 				classes(SkillsStyle.skillsList)
 			}) {
-				skills.sortedWith(
-					compareByDescending<Skill> { it.language.level }
-						.thenByDescending { it.language.since }
-						.thenBy { it.language.name }
-				).forEach { skill ->
-					if (skill.githubProjects.isEmpty()) {
-						skill.githubProjects += repos.filter {
-							it.language!!.equals(skill.language.name, true)
-						} + repos.filter { it.fullName in skill.language.githubProjects }
-					}
-
-					if (skill.schoolProjects.isEmpty()) {
-						skill.schoolProjects += repos.filter {
-							it.language!!.equals(
-								skill.language.name, true
-							) && it.description?.contains("school") == true
-						} + repos.filter { it.fullName in skill.language.schoolProjects }
-					}
-
+				skillsByLevel.forEach { skill ->
 					Div({
 						id(skill.language.name)
 						classes(SkillsStyle.skill)

@@ -65,9 +65,8 @@ fun Home() {
 	) {
 		val portfolio = portfolioData()
 
-		val homeRepositories = portfolio.repos.sortedBy { it.stargazersCount }.reversed().take(3)
-		val featuredSkills =
-			skills.sortedWith(compareByDescending<Skill> { it.language.level }.thenByDescending { it.language.since }).take(8)
+		val homeRepositories = portfolio.repos.sortedByDescending { it.stargazersCount }.take(3)
+		val featuredSkills = skillsByLevel.take(8)
 
 		Style(HomeStyle)
 		Style(DataStyle)
