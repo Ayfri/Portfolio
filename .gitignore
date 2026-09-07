@@ -4,7 +4,6 @@ build/
 
 ### Kotlin ###
 .kotlin
-yarn.lock
 
 ### IntelliJ IDEA ###
 .idea

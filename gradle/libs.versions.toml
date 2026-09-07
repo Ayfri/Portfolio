@@ -1,10 +1,11 @@
 [versions]
 compose-html = "1.11.1"
 compose-runtime = "1.11.1"
-kobweb = "0.25.0"
-kotlin = "2.4.0"
+kobweb = "0.25.1"
+kotlin = "2.4.20"
 kotlinx-wrappers = "2026.7.1"
-marked = "18.0.3"
+marked = "18.0.9"
+swc = "1.16.1"
 
 [libraries]
 compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "compose-html" }
