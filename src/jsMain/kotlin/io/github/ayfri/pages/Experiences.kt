@@ -46,8 +46,8 @@ fun Experience(
 fun Experiences() {
 	PageLayout(
 		"Experiences",
-		description = "Professional experience of Pierre Roy (Ayfri): WordPress development at BlueFrog, AI project ScriptGraf at Ynov, and more.",
-		keywords = "software engineer experience, WordPress developer, AI projects, Ynov, BlueFrog, internship, IT student",
+		description = "Professional experience of Pierre Roy (Ayfri): AI and DevOps at Link2Brain, full-stack development at Eliophot, the ScriptGraf research project at Ynov and WordPress work at BlueFrog.",
+		keywords = "software engineer experience, full-stack developer, AI developer, Link2Brain, Eliophot, Ynov, BlueFrog, Svelte, Python, DevOps",
 	) {
 		Style(ExperiencesStyle)
 
@@ -77,7 +77,7 @@ fun Experiences() {
 			}) {
 				Experience(
 					"""
-					## [BlueFrog](https://www.bluefrog.fr/) Internship durin summer 2022
+					## [BlueFrog](https://www.bluefrog.fr/) Internship during summer 2022
 
 					[BlueFrog](https://www.bluefrog.fr/) is a company that develops websites mainly in [PHP](https://www.php.net) for individuals, it is only composed of one employee. From June 2022 to August 2022, I had an internship in the company.
 					Starting by learning PHP from scratch, while also learning [WordPress](https://wordpress.org) and then creating multiple websites & plugins. It was pretty interesting to learn a lot of new technologies and team working.
@@ -97,15 +97,15 @@ fun Experiences() {
 					"""
 					## [Ynov](https://www.ynov.com/) Internship during summer 2023
 
-					[Ynov](https://www.ynov.com/) is a school teaching computer science, I'm currently learning in the [Data Scientist](https://www.ynov.com/metiers/data-scientist) course and will finish my Master in summer 2026.<br>
+					[Ynov](https://www.ynov.com/) is a school teaching computer science. I followed the [Data Scientist](https://www.ynov.com/metiers/data-scientist) course there and graduated with my Master's degree in summer 2026.<br>
 					From June 2023 to August 2023, I had an internship organized by the school about AI.<br>
-					We've done a lot of searches about [ChatGPT](https://chat.openai.com/), autonomous agents, and expanding context of GPT.
+					We've done a lot of research about [ChatGPT](https://chat.openai.com/), autonomous agents, and expanding the context of GPT.
 
-					The project is named ScriptGraf, its purpose is to automatically create posts for your company's social media.<br>
+					The project was named ScriptGraf, its purpose is to automatically create posts for a company's social media.<br>
 					The internship was 2 months long with a good environment, as it was in the school, it was pretty close to my home and in a place I already knew.<br>
 					I was working with some friends and other students in their first year.
 
-					This was a really great experience, I've learned a lot about AI and how to use it.
+					That prototype is now a company: ScriptGraf grew into [Link2Brain](https://www.link2brain.com/), a Marseille startup selling the finished product, and I joined its team two years later.
 				""".trimIndent(),
 					0.3.s
 				)
@@ -114,44 +114,48 @@ fun Experiences() {
 					"""
 					## [Eliophot](https://www.eliophot.com/en/) – Full-Stack Developer (2023 - 2025)
 
-					I've been working at [Eliophot](https://www.eliophot.com/en/), a 360° marketing and communications agency, as a Full-Stack Developer from September 2023 to September 2025.
+					I worked at [Eliophot](https://www.eliophot.com/en/), a 360° marketing and communications agency, as a Full-Stack Developer from September 2023 to September 2025.
 					During my 2-year internship, I had the chance to fully integrate into the team and contribute to long-term strategic projects.
 
-					My responsibilities are quite diverse. Day-to-day, I build and maintain web applications using modern front-end tools like [Svelte](https://svelte.dev/), [Astro](https://astro.build/), and [Tailwind CSS](https://tailwindcss.com/).
-					I've created several websites from scratch, including [e-commerce](https://en.wikipedia.org/wiki/E-commerce) platforms and interactive portfolio sites, which required finding creative UI solutions.
+					My responsibilities were quite diverse. Day-to-day, I built and maintained web applications using modern front-end tools like [Svelte](https://svelte.dev/), [Astro](https://astro.build/), and [Tailwind CSS](https://tailwindcss.com/).
+					I created several websites from scratch, including [e-commerce](https://en.wikipedia.org/wiki/E-commerce) platforms and interactive portfolio sites, which required finding creative UI solutions.
 
-					A particularly valuable part of this experience has been working on long-term, large-scale projects—something new to me.
-					These projects typically span several months and involve collaboration with multiple departments, helping me significantly improve my skills in planning, architecture and teamwork.
+					A particularly valuable part of this experience was working on long-term, large-scale projects, something new to me at the time.
+					These projects spanned several months and involved collaboration with multiple departments, which significantly improved my skills in planning, architecture and teamwork.
 
-					Besides regular web development, I've also built customized [WordPress](https://wordpress.org/) plugins, integrating tools like [Advanced Custom Fields](https://www.advancedcustomfields.com/) to enhance client content management systems.
-					I've even stepped into [DevOps](https://en.wikipedia.org/wiki/DevOps), setting up deployment pipelines with tools such as [Dokploy](https://docs.dokploy.com/) and [RunDeck](https://www.rundeck.com/).
-					This has given me valuable insights into managing the entire software lifecycle.
+					Besides regular web development, I also built customized [WordPress](https://wordpress.org/) plugins, integrating tools like [Advanced Custom Fields](https://www.advancedcustomfields.com/) to enhance client content management systems.
+					I even stepped into [DevOps](https://en.wikipedia.org/wiki/DevOps), setting up deployment pipelines with tools such as [Dokploy](https://docs.dokploy.com/) and [RunDeck](https://www.rundeck.com/),
+					which gave me valuable insights into managing the entire software lifecycle.
 
-					Another interesting part of my job is technology research and evaluation. I regularly explore and test new technologies and tools, helping Eliophot stay up-to-date and make smart tech decisions.
+					Another interesting part of the job was technology research and evaluation: regularly exploring and testing new tools, so the agency could stay up-to-date and make smart tech decisions.
+					Day-to-day coordination went through [Asana](https://asana.com/), which is where I learned to plan my own workload across several parallel client projects.
 
-					Working in a larger team (around 25 people) has greatly improved my communication and teamwork skills.
-					I've learned how to independently manage my projects, prioritize tasks more effectively, and troubleshoot complex legacy code—skills extremely useful in any development role.
+					Working in a larger team (around 25 people) greatly improved my communication and teamwork skills.
+					I learned how to independently manage my projects, prioritize tasks more effectively, and troubleshoot complex legacy code, all of which are useful in any development role.
 
-					The atmosphere at Eliophot is fantastic, with supportive colleagues and a culture that encourages innovation.
-					I've formed meaningful relationships across multiple teams, gaining a deeper understanding of how my work aligns with broader business goals.
-					Facing new challenges daily keeps me motivated, continuously learning, and makes Eliophot a great place for my professional growth.
+					The atmosphere was great, with supportive colleagues and a culture that encouraged innovation.
+					I built meaningful relationships across multiple teams and gained a deeper understanding of how development work aligns with broader business goals.
 				""".trimIndent(),
 					0.5.s
 				)
 
 				Experience(
 					"""
-					## Internship – Full-Stack & AI Developer (Since September 2025)
+					## [Link2Brain](https://www.link2brain.com/) – Lead Full-Stack & AI Developer (Since September 2025)
 
-					Since September 2025, I've been working on a cutting-edge product still in development. This role combines multiple areas of expertise, keeping me engaged and continuously learning.
+					[Link2Brain](https://www.link2brain.com/) is a Marseille startup building an AI platform that turns a company's own website into ready-to-publish social media content, with no prompt to write.
+					It is what ScriptGraf became: the research project I worked on at [Ynov](https://www.ynov.com/) in 2023 shipped as a real product. The service is live with paying clients, and I joined in September 2025 as lead developer of the team building it.
 
-					My primary focus is [Python](https://www.python.org/) development, particularly in [AI](https://en.wikipedia.org/wiki/Artificial_intelligence) and machine learning applications. Beyond the backend, I also work on web development using modern frameworks and tools.
-					Additionally, I handle [DevOps](https://en.wikipedia.org/wiki/DevOps) tasks and infrastructure management, which complements my full-stack responsibilities.
+					Most of my work is [Python](https://www.python.org/) on the AI side, where I build agent systems using [RAG](https://en.wikipedia.org/wiki/Retrieval-augmented_generation) and state-of-the-art models to generate text, images and short videos.
+					I also work on the API and the database layer, and I build the integrations with the social network APIs so posts can be scheduled and published from a single editorial calendar.
 
-					The diverse nature of this role—spanning AI development, web technologies, and DevOps—provides me with valuable exposure to different aspects of building a complete product.
-					Working on something unreleased is exciting, as it comes with unique challenges and the opportunity to shape the product from its early stages.
+					On the front-end I work with [Vue](https://vuejs.org/) and [Nuxt](https://nuxt.com/), and the [DevOps](https://en.wikipedia.org/wiki/DevOps) side is mine too: [Docker](https://www.docker.com/), [Dokploy](https://docs.dokploy.com/) deployments and the CI pipeline that tests a change before it ships.
+					I set up the team's [GitHub Projects](https://github.com/features/issues) boards as well, so issues, branches and releases stay traceable.
 
-					I'm continuously learning and adapting to the various technologies and methodologies required, making this an enriching experience for my professional development.
+					We built the whole platform together, three developers alongside the founder handling product and marketing. I lead the development side, which means technical decisions, code review and splitting the work,
+					while still owning a wide slice of the codebase rather than a narrow specialty.
+
+					Taking a prototype I had seen at its very first step and watching it reach real marketing teams is the part I value most, and working across AI, web and infrastructure means I see the whole product rather than a single layer of it.
 				""".trimIndent(),
 					0.7.s
 				)
@@ -211,7 +215,7 @@ object ExperiencesStyle : StyleSheet() {
 
 	@OptIn(ExperimentalComposeWebApi::class)
 	val experience by style {
-		lineHeight(1.7.cssRem)
+		lineHeight(1.5.cssRem)
 
 		type("h2") style {
 			marginTop(0.px)
@@ -251,7 +255,7 @@ object ExperiencesStyle : StyleSheet() {
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
 				fontSize(.9.cssRem)
-				lineHeight(1.5.cssRem)
+				lineHeight(1.35.cssRem)
 			}
 		}
 	}

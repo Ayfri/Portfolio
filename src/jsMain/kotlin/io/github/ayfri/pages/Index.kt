@@ -83,7 +83,7 @@ and technical deep dives. Learn about my journey and discoveries in software dev
 data class TimelineEntry(val period: String, val role: String, val company: String)
 
 val timelineEntries = listOf(
-	TimelineEntry("Since 2025", "Full-Stack & AI Developer", "Link2Brain"),
+	TimelineEntry("Since 2025", "Lead Full-Stack & AI Developer", "Link2Brain"),
 	TimelineEntry("2023 - 2025", "Full-Stack Developer", "Eliophot"),
 	TimelineEntry("Summer 2023", "AI Research, ScriptGraf", "Ynov"),
 	TimelineEntry("Summer 2022", "Web Developer", "BlueFrog"),
