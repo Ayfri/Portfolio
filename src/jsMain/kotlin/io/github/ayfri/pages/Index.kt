@@ -2,81 +2,41 @@ package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.functions.blur
-import com.varabyte.kobweb.compose.css.functions.linearGradient
-import com.varabyte.kobweb.compose.css.functions.radialGradient
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.*
-import io.github.ayfri.components.A
 import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.I
-import io.github.ayfri.components.Span
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.FeaturedProjectCard
 import io.github.ayfri.data.FeaturedProjectStyle
+import io.github.ayfri.data.LINKEDIN_LINK
+import io.github.ayfri.data.REPO_LINK
 import io.github.ayfri.data.featuredProjects
 import io.github.ayfri.data.portfolioData
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.margin
-import io.github.ayfri.utils.n
-import io.github.ayfri.utils.pageBackground
+import io.github.ayfri.utils.revealOnScroll
 import io.github.ayfri.utils.size
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
+import org.jetbrains.compose.web.attributes.ATarget
+import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
-import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType
-import org.jetbrains.compose.web.css.CSSMediaQuery.MediaType.Enum.Screen
-import org.jetbrains.compose.web.css.CSSMediaQuery.Only
 import org.jetbrains.compose.web.css.JustifyContent
-import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
 import web.http.FetchPriority
 import web.http.high
 import kotlin.js.Date
 
-inline val years get() = (Date.now() - Date("2002-10-15").getTime()) / 1000 / 60 / 60 / 24 / 365
-
 /** Counted from the first Python scripts in 2014, the starting point of the About Me timeline. */
 inline val codingYears get() = ((Date.now() - Date("2014-01-01").getTime()) / 1000 / 60 / 60 / 24 / 365).toInt()
-
-@Composable
-fun HomeStat(value: String, label: String) {
-	Div({
-		classes(HomeStyle.stat)
-	}) {
-		Span({
-			classes(AppStyle.monoFont, HomeStyle.statValue)
-		}) {
-			Text(value)
-		}
-
-		Span({
-			classes(HomeStyle.statLabel)
-		}) {
-			Text(label)
-		}
-	}
-}
 
 const val MAIN_PRESENTATION = """
 Hi, I'm Pierre Roy, a full-stack and AI developer based in France, holding a Data Scientist Master's degree from [Ynov Aix](https://www.ynov.com/campus/aix-en-provence).
 I build web products with Kotlin, Svelte and TypeScript, ship AI features in Python, and maintain [Kore](https://kore.ayfri.com), the Kotlin library used to generate Minecraft datapacks.
 """
 
-const val PORTFOLIO_SUMMARY = """
-This portfolio showcases my journey as a developer, my skills, and the projects I've worked on.
-Built with Kotlin and Compose for Web, it represents both my technical abilities and my passion for clean, functional design.
-"""
-
 const val EXPERIENCE_SUMMARY = """
 Two years as a full-stack developer at [Eliophot](https://www.eliophot.com/en/) building Svelte and Astro platforms, then Python, AI agents and DevOps work at [Link2Brain](https://www.link2brain.com/),
 the Marseille startup grown out of the ScriptGraf research project I worked on at [Ynov](https://www.ynov.com/).
-"""
-
-const val ARTICLES_SUMMARY = """
-Explore my blog where I share insights, tutorials, and experiences in programming, particularly focusing on Kotlin, Minecraft modding,
-and technical deep dives. Learn about my journey and discoveries in software development.
 """
 
 /** Condensed version of the Experiences page, newest first. */
@@ -89,6 +49,78 @@ val timelineEntries = listOf(
 	TimelineEntry("Summer 2022", "Web Developer", "BlueFrog"),
 )
 
+/** `h2` led by a small icon in a violet-tinted square, the site's single icon + heading treatment. */
+@Composable
+fun IconHeading(icon: String, title: String, vararg classes: String, type: FontAwesomeType = FontAwesomeType.SOLID) {
+	Style(IconStyle)
+
+	H2({
+		classes(IconStyle.heading, *classes)
+	}) {
+		Span({ classes(IconStyle.badge) }) { I(type, icon) }
+		Text(title)
+	}
+}
+
+/** Shared icon treatments: [heading] + [badge] for titles, [label] for a muted icon inline before some text. */
+object IconStyle : StyleSheet() {
+	val heading by style {
+		alignItems(AlignItems.Center)
+		display(DisplayStyle.Flex)
+		gap(.7.cssRem)
+	}
+
+	val label by style {
+		alignItems(AlignItems.Center)
+		display(DisplayStyle.LegacyInlineFlex)
+		gap(.45.cssRem)
+
+		"i" {
+			color(Color(AppStyle.TEXT_MUTED_COLOR))
+			fontSize(.85.em)
+			opacity(.8)
+		}
+	}
+
+	val badge by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color(tint(AppStyle.VIOLET_COLOR, 14)))
+		border(1.px, LineStyle.Solid, Color(tint(AppStyle.VIOLET_COLOR, 30)))
+		borderRadius(.55.cssRem)
+		color(Color(AppStyle.VIOLET_COLOR))
+		display(DisplayStyle.LegacyInlineFlex)
+		flexShrink(0)
+		fontSize(.55.em)
+		justifyContent(JustifyContent.Center)
+		size(1.9.em)
+	}
+}
+
+@Composable
+fun HomeSectionHeader(icon: String, title: String, linkLabel: String, link: String) {
+	Div({
+		classes(HomeStyle.sectionHeader)
+	}) {
+		IconHeading(icon, title)
+
+		A(link, {
+			classes(HomeStyle.sectionLink)
+		}) {
+			Text(linkLabel)
+			I(FontAwesomeType.SOLID, "arrow-right")
+		}
+	}
+}
+
+@Composable
+fun HomeFact(icon: String, value: String, label: String) {
+	Li {
+		I(FontAwesomeType.SOLID, icon)
+		B { Text(value) }
+		Text(label)
+	}
+}
+
 @Page("/index")
 @Composable
 fun Home() {
@@ -98,398 +130,234 @@ fun Home() {
 		keywords = "Pierre Roy, Ayfri, Kotlin developer, Compose Multiplatform, Kotlin Multiplatform, Svelte developer, TypeScript developer, software engineer portfolio, Minecraft datapack developer",
 	) {
 		val portfolio = portfolioData()
-
-		val featuredSkills = skillsByLevel.take(8)
 		val starsByRepository = portfolio.repos.associate { it.fullName to it.stargazersCount }
-		val totalStars = portfolio.repos.sumOf { it.stargazersCount }
 
 		Style(HomeStyle)
+		Style(IconStyle)
 		Style(DataStyle)
 		Style(FeaturedProjectStyle)
 
-		// Decorative background elements
-		Div({
-			classes(HomeStyle.backgroundDecorations)
+		Section({
+			classes(HomeStyle.hero)
 		}) {
-			// Create floating elements with predefined positions
-			val positions = listOf(
-				Pair(10, 20), Pair(80, 15), Pair(15, 70), Pair(90, 60),
-				Pair(30, 10), Pair(70, 80), Pair(5, 45), Pair(85, 30),
-				Pair(40, 65), Pair(60, 25), Pair(20, 85), Pair(75, 50),
-				Pair(50, 40), Pair(35, 75), Pair(65, 10), Pair(25, 55),
-				Pair(95, 75), Pair(45, 20), Pair(55, 90), Pair(12, 35)
-			)
+			Div({
+				classes(HomeStyle.heroText)
+			}) {
+				H1({
+					classes(HomeStyle.name)
+				}) {
+					Text("Pierre Roy")
+				}
 
-			positions.forEachIndexed { index, (left, top) ->
-				Div({
-					classes(HomeStyle.floatingElement)
-					style {
-						property("animation-delay", "${(index * 0.5)}s")
-						left(left.percent)
-						top(top.percent)
-					}
+				P({
+					classes(HomeStyle.alias)
+				}) {
+					Text("aka ")
+					Span { Text("Ayfri") }
+					Text(" · Full-Stack & AI Developer")
+				}
+
+				P({
+					markdownParagraph(MAIN_PRESENTATION.trimIndent(), false)
+					classes(HomeStyle.intro)
 				})
+
+				Div({
+					classes(HomeStyle.actions)
+				}) {
+					A("/projects/", {
+						classes(AppStyle.button, AppStyle.primaryButton)
+					}) {
+						I(FontAwesomeType.SOLID, "rocket")
+						Text("See my projects")
+					}
+
+					A("/cv-en.pdf", {
+						classes(AppStyle.button)
+						target(ATarget.Blank)
+						attr("download", "CV Pierre Roy EN.pdf")
+					}) {
+						I(FontAwesomeType.SOLID, "file-arrow-down")
+						Text("Download CV")
+					}
+
+					listOf(
+						Triple(FontAwesomeType.BRAND, "github", REPO_LINK),
+						Triple(FontAwesomeType.BRAND, "linkedin", LINKEDIN_LINK),
+						Triple(FontAwesomeType.SOLID, "envelope", "mailto:pierre@ayfri.com"),
+					).forEach { (type, icon, url) ->
+						A(url, {
+							classes(HomeStyle.iconLink)
+							title(icon.replaceFirstChar { it.titlecase() })
+							attr("aria-label", icon)
+						}) {
+							I(type, icon)
+						}
+					}
+				}
+
+				Ul({
+					classes(AppStyle.monoFont, HomeStyle.facts)
+				}) {
+					HomeFact("star", portfolio.repos.sumOf { it.stargazersCount }.toString(), "GitHub stars")
+					HomeFact("code-branch", portfolio.repos.size.toString(), "public repositories")
+					HomeFact("terminal", "$codingYears+", "years of code")
+					HomeFact("pen-nib", articlesEntries.size.toString(), "articles")
+				}
+			}
+
+			Div({
+				classes(HomeStyle.orbit)
+			}) {
+				Img(localImage("avatar@300x300.webp"), "Pierre Roy") {
+					classes(HomeStyle.avatar)
+					fetchPriority(FetchPriority.high)
+					height(300)
+					width(300)
+				}
 			}
 		}
 
 		Section({
-			classes(HomeStyle.top)
+			classes(HomeStyle.section)
 		}) {
-			// Hero background with glowing effects
+			HomeSectionHeader("rocket", "Featured projects", "All projects", "/projects/")
+
 			Div({
-				classes(HomeStyle.heroBackground)
+				classes(FeaturedProjectStyle.grid)
 			}) {
-				Div({ classes(HomeStyle.glowOrb, HomeStyle.glowOrb1) })
-				Div({ classes(HomeStyle.glowOrb, HomeStyle.glowOrb2) })
-				Div({ classes(HomeStyle.glowOrb, HomeStyle.glowOrb3) })
+				featuredProjects.forEachIndexed { index, project ->
+					FeaturedProjectCard(project, starsByRepository[project.repository], hero = index == 0)
+				}
 			}
+		}
+
+		Section({
+			classes(HomeStyle.section)
+		}) {
+			HomeSectionHeader("screwdriver-wrench", "Tools I use most", "All skills", "/skills/")
 
 			Div({
-				classes(HomeStyle.topInfo)
+				classes(HomeStyle.skills)
 			}) {
-				Div({
-					classes(HomeStyle.avatarContainer)
-				}) {
-					Img(localImage("avatar@300x300.webp"), "avatar") {
-						classes(AppStyle.avatar, HomeStyle.enhancedAvatar)
-						fetchPriority(FetchPriority.high)
-						height(300)
-						width(300)
-					}
-					Div({
-						classes(HomeStyle.avatarGlow)
-					})
-				}
-
-				H1({
-					classes(HomeStyle.mainTitle)
-				}) {
-					Text("Pierre Roy")
-					Span(" alias ")
-					Span("Ayfri")
-				}
-
-				H2({
-					classes(HomeStyle.subtitle)
-				}) {
-					Text("Full-Stack & AI Developer")
-				}
-
-				H2({
-					classes(HomeStyle.subtitle, HomeStyle.location)
-				}) {
-					I(FontAwesomeType.SOLID, "location-dot") {
-						marginRight(0.5.cssRem)
-					}
-					Text("France")
-				}
-
-				H3({
-					classes(HomeStyle.ageInfo)
-				}) {
-					Text("Born ")
-
-					Span({
-						classes(AppStyle.monoFont, AppStyle.numberColor, HomeStyle.ageNumber)
+				skillsByLevel.take(8).forEach { skill ->
+					A("/skills/#${skill.language.name}", {
+						classes(HomeStyle.skill)
 					}) {
-						Text(years.toInt().toString())
+						skill.DisplaySimple()
 					}
-
-					Text(" years ago")
 				}
 			}
+		}
 
-			P({
-				markdownParagraph(MAIN_PRESENTATION.trimIndent(), true, AppStyle.monoFont)
-				classes(HomeStyle.introText)
-			})
+		Section({
+			classes(HomeStyle.section, HomeStyle.split)
+		}) {
+			Div {
+				HomeSectionHeader("briefcase", "Experience", "Details", "/experiences/")
 
-			Div({
-				classes(HomeStyle.stats)
-			}) {
-				HomeStat(totalStars.toString(), "GitHub stars")
-				HomeStat(portfolio.repos.size.toString(), "public repositories")
-				HomeStat("$codingYears+", "years writing code")
-				HomeStat(articlesEntries.size.toString(), "articles written")
+				P({
+					markdownParagraph(EXPERIENCE_SUMMARY.trimIndent(), false)
+					classes(HomeStyle.muted)
+				})
 			}
 
-			// Featured Projects Section
-			Section({
-				classes(HomeStyle.section)
+			Ol({
+				classes(HomeStyle.timeline)
 			}) {
-				H2({
-					classes(HomeStyle.sectionTitle)
-				}) {
-					I(FontAwesomeType.SOLID, "code") {
-						marginRight(0.5.cssRem)
-					}
-					Text("Featured Projects")
-				}
-
-				Div({
-					classes(FeaturedProjectStyle.grid)
-				}) {
-					featuredProjects.forEachIndexed { index, project ->
-						FeaturedProjectCard(project, starsByRepository[project.repository], hero = index == 0)
-					}
-				}
-
-				A("/projects/", "See all projects", AppStyle.button)
-			}
-
-			// Skills Section
-			Section({
-				classes(HomeStyle.section)
-			}) {
-				H2({
-					classes(HomeStyle.sectionTitle)
-				}) {
-					I(FontAwesomeType.SOLID, "laptop-code") {
-						marginRight(0.5.cssRem)
-					}
-					Text("Top Skills")
-				}
-
-				Div({
-					classes("list", "skills")
-				}) {
-					featuredSkills.forEachIndexed { index, skill ->
-						A("/skills/#${skill.language.name}", {
-							classes(HomeStyle.skill)
-							style {
-								property("animation-delay", (index * 0.25 + 0.75).s)
-							}
+				timelineEntries.forEach { entry ->
+					Li {
+						Span({
+							classes(AppStyle.monoFont, HomeStyle.timelinePeriod)
 						}) {
-							skill.DisplaySimple()
+							Text(entry.period)
+						}
+
+						Span({
+							classes(HomeStyle.timelineRole)
+						}) {
+							Text(entry.role)
+						}
+
+						Span({
+							classes(HomeStyle.muted, IconStyle.label)
+						}) {
+							I(FontAwesomeType.SOLID, "building")
+							Text(entry.company)
 						}
 					}
 				}
-
-				A("/skills/", "See all skills", AppStyle.button)
 			}
+		}
 
-			// Portfolio Section
-			Section({
-				classes(HomeStyle.section, HomeStyle.portfolioSection)
+		Section({
+			classes(HomeStyle.section)
+		}) {
+			HomeSectionHeader("newspaper", "Latest articles", "All articles", "/articles/")
+
+			Ul({
+				classes(HomeStyle.articles)
 			}) {
-				H2({
-					classes(HomeStyle.sectionTitle)
-				}) {
-					I(FontAwesomeType.SOLID, "briefcase") {
-						marginRight(0.5.cssRem)
-					}
-					Text("My Portfolio")
-				}
-
-				Div({
-					classes(HomeStyle.portfolioContent)
-				}) {
-					Div({
-						classes(HomeStyle.portfolioText)
-					}) {
-						P({
-							markdownParagraph(PORTFOLIO_SUMMARY.trimIndent(), true, AppStyle.monoFont)
-							style {
-								marginBottom(2.cssRem)
-							}
-						})
-
-						A("/portfolio/", "Learn more about this portfolio", AppStyle.button)
-					}
-
-					Img(localImage("portfolio-3-small.avif"), "Portfolio screenshot") {
-						classes(HomeStyle.portfolioImage)
-					}
-				}
-			}
-
-			// Experience Section
-			Section({
-				classes(HomeStyle.section, HomeStyle.experienceSection)
-			}) {
-				H2({
-					classes(HomeStyle.sectionTitle)
-				}) {
-					I(FontAwesomeType.SOLID, "graduation-cap") {
-						marginRight(0.5.cssRem)
-					}
-					Text("Professional Experience")
-				}
-
-				P({
-					markdownParagraph(EXPERIENCE_SUMMARY.trimIndent(), true, AppStyle.monoFont)
-					classes(HomeStyle.experienceText)
-				})
-
-				Ol({
-					classes(HomeStyle.timeline)
-				}) {
-					timelineEntries.forEach { entry ->
-						Li({
-							classes(HomeStyle.timelineEntry)
+				articlesEntries.sortedByDescending { it.date }.take(3).forEach { article ->
+					Li {
+						A(article.path, {
+							classes(HomeStyle.article)
 						}) {
 							Span({
-								classes(AppStyle.monoFont, HomeStyle.timelinePeriod)
+								classes(AppStyle.monoFont, HomeStyle.articleDate, IconStyle.label)
 							}) {
-								Text(entry.period)
+								I(FontAwesomeType.REGULAR, "calendar")
+								Text(formatLongDate(article.date))
 							}
 
-							Span({
-								classes(HomeStyle.timelineRole)
-							}) {
-								Text(entry.role)
-							}
-
-							Span({
-								classes(HomeStyle.timelineCompany)
-							}) {
-								Text(entry.company)
-							}
-						}
-					}
-				}
-
-				A("/experiences/", "View my experiences", AppStyle.button)
-			}
-
-			// About Me Section
-			Section({
-				classes(HomeStyle.section, HomeStyle.aboutSection)
-			}) {
-				H2({
-					classes(HomeStyle.sectionTitle)
-				}) {
-					I(FontAwesomeType.SOLID, "user") {
-						marginRight(0.5.cssRem)
-					}
-					Text("About Me")
-				}
-
-				P({
-					markdownParagraph(
-						"""
-                        Discover my journey in programming, from my first steps with Python in 2014 to my current projects with Kotlin and AI.
-                        Learn about my passion for Minecraft, my experience with various technologies, and my educational path.
-                    """.trimIndent(), true, AppStyle.monoFont
-					)
-				})
-
-				A("/about-me/", "Read my story", AppStyle.button)
-			}
-
-			// Articles Section
-			Section({
-				classes(HomeStyle.section, HomeStyle.articlesSection)
-			}) {
-				H2({
-					classes(HomeStyle.sectionTitle)
-				}) {
-					I(FontAwesomeType.SOLID, "newspaper") {
-						marginRight(0.5.cssRem)
-					}
-					Text("My Articles")
-				}
-
-				P({
-					markdownParagraph(ARTICLES_SUMMARY.trimIndent(), true, AppStyle.monoFont)
-					style {
-						marginBottom(2.cssRem)
-					}
-				})
-
-				Div({
-					classes("list", "articles")
-				}) {
-					val recentArticles = articlesEntries.sortedByDescending { it.date }.take(3)
-					recentArticles.forEachIndexed { index, article ->
-						Div({
-							classes(HomeStyle.articlePreview)
-							style {
-								property("animation-delay", (index * 0.2).s)
-							}
-						}) {
-							A(article.path, {
-								classes(HomeStyle.articleLink)
-							}) {
-								H3 {
-									Text(article.navTitle)
-								}
-
+							Div {
+								H3 { Text(article.navTitle) }
 								P({
-									classes(HomeStyle.articleDesc)
+									classes(HomeStyle.muted)
 								}) {
-									Text(article.desc)
-								}
-
-								Div({
-									classes(HomeStyle.articleTags)
-								}) {
-									article.keywords.take(3).forEach { keyword ->
-										Span({
-											classes(HomeStyle.articleTag)
-										}) {
-											Text(keyword)
-										}
-									}
-
-									if (article.keywords.size > 3) {
-										Span({
-											classes(HomeStyle.articleTagMore)
-										}) {
-											Text("+${article.keywords.size - 3}")
-										}
-									}
+									Text(article.desc.withoutMarkdownLinks())
 								}
 							}
 						}
 					}
 				}
+			}
+		}
 
-				A("/articles/", "Read all articles", AppStyle.button)
+		Section({
+			classes(HomeStyle.section, HomeStyle.split)
+		}) {
+			Div({
+				classes(HomeStyle.more)
+			}) {
+				IconHeading("book-open", "The long version")
+				P({
+					classes(HomeStyle.muted)
+				}) {
+					Text("From my first Python scripts in 2014 to Kotlin, Minecraft datapacks and AI work: the whole story, project by project.")
+				}
+				A("/about-me/", {
+					classes(AppStyle.button)
+				}) {
+					Text("Read my story")
+					I(FontAwesomeType.SOLID, "arrow-right")
+				}
 			}
 
-			// Contact Section
-			Section({
-				classes(HomeStyle.section, HomeStyle.contactSection)
+			Div({
+				classes(HomeStyle.more)
 			}) {
-				H2({
-					classes(HomeStyle.sectionTitle)
+				IconHeading("wand-magic-sparkles", "How this site is built")
+				P({
+					classes(HomeStyle.muted)
 				}) {
-					I(FontAwesomeType.SOLID, "envelope") {
-						marginRight(0.5.cssRem)
-					}
-					Text("Get In Touch")
+					Text("Written entirely in Kotlin with Kobweb and Compose HTML, statically exported, with GitHub data fetched at build time.")
 				}
-
-				Div({
-					classes(HomeStyle.contactLinks)
+				A("/portfolio/", {
+					classes(AppStyle.button)
 				}) {
-					A("https://github.com/Ayfri", {
-						classes(HomeStyle.contactLink)
-					}) {
-						I(FontAwesomeType.BRAND, "github") {
-							fontSize(1.75.cssRem)
-						}
-						Span("GitHub")
-					}
-
-					A("https://www.linkedin.com/in/pierre-roy-ayfri/", {
-						classes(HomeStyle.contactLink)
-					}) {
-						I(FontAwesomeType.BRAND, "linkedin") {
-							fontSize(1.75.cssRem)
-						}
-						Span("LinkedIn")
-					}
-
-					A("mailto:pierre@ayfri.com", {
-						classes(HomeStyle.contactLink)
-					}) {
-						I(FontAwesomeType.SOLID, "envelope") {
-							fontSize(1.75.cssRem)
-						}
-						Span("Email")
-					}
+					Text("About this portfolio")
+					I(FontAwesomeType.SOLID, "arrow-right")
 				}
 			}
 		}
@@ -497,311 +365,396 @@ fun Home() {
 }
 
 object HomeStyle : StyleSheet() {
-	// CSS Animations keyframes
-	@OptIn(ExperimentalComposeWebApi::class)
-	val floatUpDown by keyframes {
-		0.percent {
-			opacity(0.4)
-			transform {
-				translateY(0.px)
-				rotate(0.deg)
-			}
-		}
-		50.percent {
-			transform {
-				translateY((-20).px)
-				rotate(180.deg)
-			}
-		}
-		100.percent {
-			transform {
-				translateY(0.px)
-				rotate(360.deg)
-			}
-		}
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val orbFloat by keyframes {
-		0.percent {
-			transform {
-				translate(0.px, 0.px)
-				scale(1)
-			}
-		}
-		33.percent {
-			transform {
-				translate(30.px, (-30).px)
-				scale(1.1)
-			}
-		}
-		66.percent {
-			transform {
-				translate((-20).px, 20.px)
-				scale(0.9)
-			}
-		}
-		100.percent {
-			transform {
-				translate(0.px, 0.px)
-				scale(1)
-			}
-		}
-	}
-
-	val avatarGlowAnimation by keyframes {
-		0.percent {
-			opacity(0.3)
-		}
-		50.percent {
-			opacity(0.7)
-		}
-		100.percent {
-			opacity(0.3)
-		}
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
 	val fadeInUp by keyframes {
 		from {
 			opacity(0)
-			transform {
-				translateY(30.px)
-			}
+			property("translate", "0 .9rem")
+			property("filter", "blur(6px)")
 		}
+	}
+
+	val orbitIn by keyframes {
+		from {
+			opacity(0)
+			property("scale", ".82")
+			property("filter", "blur(10px)")
+		}
+	}
+
+	val spin by keyframes {
 		to {
-			opacity(1)
-			transform {
-				translateY(0.px)
-			}
+			transform { rotate(360.deg) }
+		}
+	}
+
+	val shimmer by keyframes {
+		to {
+			property("background-position", "200% 0")
+		}
+	}
+
+	val lineGrow by keyframes {
+		from {
+			property("scale", "0 1")
 		}
 	}
 
 	init {
 		id("main") style {
+			alignItems(AlignItems.Center)
+			boxSizing(BoxSizing.BorderBox)
 			display(DisplayStyle.Flex)
 			flexDirection(FlexDirection.Column)
+			padding(0.px, 5.vw, 2.cssRem)
+		}
+
+		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
+			id("main") style {
+				paddingLeft(4.vw)
+				paddingRight(4.vw)
+			}
+		}
+	}
+
+	val hero by style {
+		alignItems(AlignItems.Center)
+		display(DisplayStyle.Grid)
+		gap(3.cssRem)
+		gridTemplateColumns("minmax(0, 1.5fr) minmax(0, 1fr)")
+		maxWidth(1200.px)
+		padding(7.cssRem, 0.px, 2.cssRem)
+		width(100.percent)
+
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				gap(2.cssRem)
+				gridTemplateColumns("minmax(0, 1fr)")
+				padding(2.cssRem, 0.px, 0.px)
+			}
+		}
+	}
+
+	/** Each hero line blurs in after the previous one, 80ms apart. */
+	val heroText by style {
+		(1..6).forEach { index ->
+			"> :nth-child($index)" {
+				property("animation", "${fadeInUp.name} .7s cubic-bezier(.2, .8, .2, 1) ${index * 80}ms both")
+			}
+		}
+	}
+
+	val name by style {
+		property("view-transition-name", "page-title")
+		property("width", "fit-content")
+		color(Color.white)
+		fontSize(4.2.cssRem)
+		letterSpacing((-0.04).em)
+		margin(0.px)
+
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				fontSize(2.8.cssRem)
+			}
+		}
+	}
+
+	val alias by style {
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		fontFamily(AppStyle.MONO_FONT_FAMILY, "monospace")
+		fontSize(1.05.cssRem)
+		margin(.6.cssRem, 0.px, 1.8.cssRem)
+
+		/** The alias carries the logo gradient, the only gradient text of the site, slowly flowing through it. */
+		"span" {
+			property(
+				"background",
+				"linear-gradient(90deg, ${AppStyle.ACCENT_COLOR}, ${AppStyle.VIOLET_COLOR}, ${AppStyle.ACCENT_SECONDARY_COLOR}, ${AppStyle.VIOLET_COLOR}, ${AppStyle.ACCENT_COLOR}) 0 0 / 200% 100%"
+			)
+			property("background-clip", "text")
+			property("animation", "${shimmer.name} 8s linear infinite")
+			color(Color.transparent)
+			fontWeight(700)
+		}
+	}
+
+	val intro by style {
+		color(Color(AppStyle.TEXT_COLOR))
+		fontSize(1.2.cssRem)
+		lineHeight(1.65.number)
+		margin(0.px)
+		maxWidth(40.cssRem)
+	}
+
+	val actions by style {
+		alignItems(AlignItems.Center)
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.75.cssRem)
+		marginTop(2.cssRem)
+	}
+
+	val iconLink by style {
+		alignItems(AlignItems.Center)
+		borderRadius(.5.cssRem)
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		display(DisplayStyle.Flex)
+		fontSize(1.3.cssRem)
+		justifyContent(JustifyContent.Center)
+		size(2.6.cssRem)
+
+		hover(self) style {
+			backgroundColor(Color("#FFFFFF0F"))
+			color(Color.white)
+		}
+	}
+
+	val facts by style {
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		fontSize(.85.cssRem)
+		gap(.4.cssRem, 1.6.cssRem)
+		listStyle(ListStyle.None)
+		margin(2.4.cssRem, 0.px, 0.px)
+		padding(0.px)
+
+		"li" {
 			alignItems(AlignItems.Center)
-			pageBackground()
-			position(Position.Relative)
-			minHeight(100.vh)
-			overflow(Overflow.Hidden)
-
-			padding(0.5.cssRem, 8.5.vw, 2.cssRem)
+			display(DisplayStyle.Flex)
+			gap(.45.cssRem)
 		}
 
-		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFirstBreak))) {
-			id("main") style {
-				paddingLeft(5.vw)
-				paddingRight(5.vw)
+		"i" {
+			color(Color(AppStyle.VIOLET_COLOR))
+			fontSize(.8.cssRem)
+		}
+
+		"b" {
+			color(Color.white)
+		}
+	}
+
+	/**
+	 * Avatar inside two orbit rings, each carrying a satellite in a logo color, turning in opposite directions.
+	 * The whole system blurs in after the hero text, and the rotations stop for visitors asking for reduced motion.
+	 */
+	val orbit by style {
+		alignItems(AlignItems.Center)
+		property("animation", "${orbitIn.name} 1.1s cubic-bezier(.2, .8, .2, 1) .25s both")
+		property("aspect-ratio", "1")
+		display(DisplayStyle.Flex)
+		justifyContent(JustifyContent.Center)
+		property("justify-self", "center")
+		position(Position.Relative)
+		property("width", "min(100%, 22rem)")
+
+		group(self + before, self + after) style {
+			borderRadius(50.percent)
+			content("")
+			position(Position.Absolute)
+		}
+
+		self + before style {
+			border(1.px, LineStyle.Dashed, Color("#FFFFFF1A"))
+			property("inset", "9%")
+			property(
+				"background",
+				"radial-gradient(circle at 50% 100%, ${AppStyle.ACCENT_SECONDARY_COLOR} 0 2px, ${tint(AppStyle.ACCENT_SECONDARY_COLOR, 40)} 3px, transparent 7px) no-repeat"
+			)
+			property("animation", "${spin.name} 26s linear infinite reverse")
+		}
+
+		self + after style {
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
+			property("inset", "0")
+			property(
+				"background",
+				"radial-gradient(circle at 50% 0%, ${AppStyle.ACCENT_COLOR} 0 3px, ${tint(AppStyle.ACCENT_COLOR, 40)} 4px, transparent 9px) no-repeat"
+			)
+			property("animation", "${spin.name} 40s linear infinite")
+		}
+
+		media(CSSMediaQuery.MediaFeature("prefers-reduced-motion", StylePropertyValue("reduce"))) {
+			group(self + before, self + after) style {
+				property("animation", "none")
 			}
 		}
 
-		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFourthBreak))) {
-			id("main") style {
-				paddingLeft(2.vw)
-				paddingRight(2.vw)
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				property("grid-row", "1")
+				property("justify-self", "start")
+				property("width", "11rem")
 			}
 		}
 	}
 
-	val top by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		alignItems(AlignItems.Center)
-		textAlign(TextAlign.Center)
-		maxWidth(100.percent)
+	val avatar by style {
+		borderRadius(50.percent)
+		boxShadow("0 0 0 1px ${AppStyle.BORDER_STRONG_COLOR}, 0 20px 70px -15px ${tint(AppStyle.VIOLET_COLOR, 55)}")
+		height(68.percent)
+		objectFit(ObjectFit.Cover)
+		width(68.percent)
 	}
 
-	val topInfo by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		alignItems(AlignItems.Center)
-		gap(0.1.cssRem)
+	val section by style {
+		maxWidth(1200.px)
+		paddingTop(5.cssRem)
+		width(100.percent)
 
-		"h2, h3" {
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				paddingTop(3.5.cssRem)
+			}
+		}
+	}
+
+	/** The hairline under each section title draws itself in the logo gradient as the section scrolls in. */
+	val sectionHeader by style {
+		alignItems(AlignItems.Baseline)
+		borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+		display(DisplayStyle.Flex)
+		gap(1.cssRem)
+		justifyContent(JustifyContent.SpaceBetween)
+		marginBottom(1.8.cssRem)
+		paddingBottom(.9.cssRem)
+		position(Position.Relative)
+		revealOnScroll()
+
+		self + after style {
+			content("")
+			bottom((-1).px)
+			height(1.px)
+			left(0.px)
+			position(Position.Absolute)
+			property("background", "linear-gradient(90deg, ${AppStyle.ACCENT_COLOR}, ${AppStyle.VIOLET_COLOR} 35%, transparent 70%)")
+			property("transform-origin", "left")
+			property("animation", "${lineGrow.name} linear both")
+			property("animation-timeline", "view()")
+			property("animation-range", "entry 20% cover 35%")
+			width(100.percent)
+		}
+
+		"h2" {
+			color(Color.white)
+			fontSize(1.6.cssRem)
 			margin(0.px)
 		}
 	}
 
-	val sectionTitle by style {
-		backgroundClip(BackgroundClip.Text)
-		backgroundImage(linearGradient(45.deg) {
-			add(Color("#00D4FF"))
-			add(Color("#FF0080"))
-		})
-
-		fontSize(2.2.cssRem)
-		marginTop(0.px)
-		marginBottom(1.5.cssRem)
-		textAlign(TextAlign.Center)
-		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
-
-		property("-webkit-background-clip", "text")
-		property("-webkit-text-fill-color", "transparent")
-		property("-moz-text-fill-color", "transparent")
-		property("-moz-background-clip", "text")
-
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				fontSize(1.8.cssRem)
-			}
-		}
-	}
-
-	val section by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
+	val sectionLink by style {
 		alignItems(AlignItems.Center)
-		gap(1.5.cssRem)
-		marginTop(3.cssRem)
-		padding(1.5.cssRem)
-		width(100.percent)
-		maxWidth(1200.px)
-		borderRadius(1.cssRem)
-		backdropFilter(BackdropFilter.list(BackdropFilter.of(blur(10.px))))
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		display(DisplayStyle.Flex)
+		fontSize(.95.cssRem)
+		gap(.45.cssRem)
+		whiteSpace(WhiteSpace.NoWrap)
 
-		border(2.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
-		boxShadow("0 0 30px rgba(0, 212, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.05)")
-
-		className("skills") style {
-			flexWrap(FlexWrap.Wrap)
-			gap(1.cssRem)
-		}
-
-		className("list") style {
-			display(DisplayStyle.Flex)
-			flexDirection(FlexDirection.Row)
-			justifyContent(JustifyContent.Center)
-			flexWrap(FlexWrap.Wrap)
-			width(100.percent)
-		}
-
-		media(Only(MediaType(Screen), mediaMaxWidth(AppStyle.mobileFirstBreak))) {
-			self {
-				padding(1.cssRem)
+		"i" {
+			fontSize(.75.cssRem)
+			transitions {
+				properties("transform") { duration(.2.s) }
 			}
-
-		}
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val skill by style {
-		animation(AnimationsStyle.appear) {
-			duration(1.s)
-			fillMode(AnimationFillMode.Forwards)
-			timingFunction(AnimationTimingFunction.EaseInOut)
-		}
-		opacity(0)
-
-		borderRadius(.4.cssRem)
-		color(Color.white)
-		padding(.3.cssRem, .5.cssRem)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color("#252525"))
-		transitions {
-			defaultDuration(0.3.s)
-			properties("all")
 		}
 
 		hover(self) style {
-			backgroundColor(Color("#1D1D1E"))
-			boxShadow("0 0 20px rgba(0, 212, 255, 0.4)")
-			scale(1.05)
+			color(Color(AppStyle.ACCENT_COLOR))
+		}
+
+		desc(hover(self), "i") style {
+			transform { translateX(3.px) }
+		}
+	}
+
+	val muted by style {
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+	}
+
+	val skills by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.75.cssRem)
+	}
+
+	val skill by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color(AppStyle.CARD_BACKGROUND))
+		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+		borderRadius(.6.cssRem)
+		color(Color(AppStyle.TEXT_COLOR))
+		display(DisplayStyle.Flex)
+		gap(.7.cssRem)
+		padding(.55.cssRem, 1.cssRem, .55.cssRem, .6.cssRem)
+		revealOnScroll()
+
+		transitions {
+			properties("border-color", "box-shadow", "translate") { duration(.2.s) }
+		}
+
+		hover(self) style {
+			borderColor(Color(tint(AppStyle.VIOLET_COLOR, 70)))
+			boxShadow("0 8px 24px -12px ${tint(AppStyle.VIOLET_COLOR, 70)}")
+			property("translate", "0 -2px")
 		}
 
 		"img" {
-			borderRadius(.4.cssRem)
-			size(3.5.cssRem)
+			borderRadius(.35.cssRem)
+			size(2.cssRem)
 		}
-	}
 
-	val portfolioSection by style {
-		backgroundColor(Color("#ffffff10"))
-	}
-
-	val portfolioContent by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Row)
-		alignItems(AlignItems.Center)
-		gap(2.cssRem)
-		width(100.percent)
-
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				flexDirection(FlexDirection.Column)
-			}
-		}
-	}
-
-	val portfolioText by style {
-		flex(1)
 		"p" {
-			lineHeight(1.5.cssRem)
+			fontSize(.95.cssRem)
+			margin(0.px)
 		}
 	}
 
-	val portfolioImage by style {
-		borderRadius(0.8.cssRem)
-		boxShadow("0px 0px 20px 4px rgba(0, 212, 255, 0.4)")
-		maxWidth(40.percent)
+	val split by style {
+		alignItems(AlignItems.Start)
+		display(DisplayStyle.Grid)
+		gap(3.cssRem)
+		gridTemplateColumns("minmax(0, 1fr) minmax(0, 1fr)")
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
-				maxWidth(80.percent)
+				gap(2.cssRem)
+				gridTemplateColumns("minmax(0, 1fr)")
 			}
 		}
-	}
-
-	val experienceSection by style {
-		backgroundColor(Color("#ffffff10"))
-	}
-
-	val experienceText by style {
-		lineHeight(1.6.number)
-		margin(0.px)
-		maxWidth(900.px)
 	}
 
 	val timeline by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		gap(0.6.cssRem)
-		property("list-style", "none")
+		listStyle(ListStyle.None)
 		margin(0.px)
 		padding(0.px)
-		width(100.percent)
-		maxWidth(900.px)
-	}
 
-	val timelineEntry by style {
-		display(DisplayStyle.Grid)
-		gridTemplateColumns {
-			size(9.5.cssRem)
-			minmax(0.px, 1.fr)
-			auto
+		"li" {
+			alignItems(AlignItems.Baseline)
+			borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+			display(DisplayStyle.Grid)
+			gap(.2.cssRem, 1.2.cssRem)
+			gridTemplateColumns("8rem minmax(0, 1fr) auto")
+			padding(1.cssRem, 0.px)
+			revealOnScroll()
 		}
-		alignItems(AlignItems.Center)
-		gap(1.cssRem)
-		padding(0.8.cssRem, 1.cssRem)
-		borderRadius(0.6.cssRem)
-		backgroundColor(Color("#ffffff08"))
-		borderLeft(3.px, LineStyle.Solid, Color("#00D4FF"))
-		textAlign(TextAlign.Start)
 
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				gridTemplateColumns(GridEntry.TrackSize(1.fr))
-				gap(0.2.cssRem)
+		"li:first-child" {
+			paddingTop(0.px)
+		}
+
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
+			"li" {
+				gridTemplateColumns("minmax(0, 1fr) auto")
+			}
+
+			"li > :first-child" {
+				gridColumn("1 / -1")
 			}
 		}
 	}
 
 	val timelinePeriod by style {
-		color(Color("#00D4FF"))
-		fontSize(0.85.cssRem)
-		fontWeight(600)
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		fontSize(.85.cssRem)
 		whiteSpace(WhiteSpace.NoWrap)
 	}
 
@@ -810,546 +763,77 @@ object HomeStyle : StyleSheet() {
 		fontWeight(600)
 	}
 
-	val timelineCompany by style {
-		color(Color("#FFFFFF99"))
-		fontSize(0.9.cssRem)
+	val articles by style {
+		listStyle(ListStyle.None)
+		margin(0.px)
+		padding(0.px)
 	}
 
-	val aboutSection by style {
-		backgroundColor(Color("#ffffff10"))
-	}
+	val article by style {
+		borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+		display(DisplayStyle.Grid)
+		gap(.3.cssRem, 2.cssRem)
+		gridTemplateColumns("11rem minmax(0, 1fr)")
+		padding(1.3.cssRem, 0.px)
+		revealOnScroll()
 
-	val contactSection by style {
-		backgroundColor(Color("#ffffff10"))
-	}
-
-	val contactLinks by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Row)
-		justifyContent(JustifyContent.Center)
-		gap(2.cssRem)
-		marginTop(1.cssRem)
-
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				flexDirection(FlexDirection.Column)
-				gap(1.cssRem)
-			}
-		}
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val contactLink by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		alignItems(AlignItems.Center)
-		gap(0.5.cssRem)
-		padding(1.cssRem)
-		borderRadius(0.5.cssRem)
-		color(Color.white)
-		textDecorationLine(TextDecorationLine.None)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color("#252525"))
-
-		transitions {
-			defaultDuration(0.3.s)
-			properties("all")
-		}
-
-		hover(self) style {
-			backgroundColor(Color("#1D1D1E"))
-			boxShadow("0 0 25px rgba(255, 0, 128, 0.5)")
-			translateY((-5).px)
-		}
-	}
-
-	val articlesSection by style {
-		backgroundColor(Color("#ffffff10"))
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val articlePreview by style {
-		backgroundColor(Color("#252525"))
-		borderRadius(0.8.cssRem)
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		height(280.px)
-		margin(0.5.cssRem)
-		minWidth(280.px)
-		padding(1.5.cssRem)
-		width(33.percent - 1.cssRem)
-
-		animation(AnimationsStyle.appear) {
-			duration(0.5.s)
-			fillMode(AnimationFillMode.Forwards)
-			timingFunction(AnimationTimingFunction.EaseInOut)
-		}
-		opacity(0)
-
-		transitions {
-			defaultDuration(0.3.s)
-			properties("all")
-		}
-
-		hover(self) style {
-			backgroundColor(Color("#2A2A2A"))
-			boxShadow("0 0 30px rgba(0, 212, 255, 0.4)")
-			transform {
-				translateY((-5).px)
+		"h3" {
+			color(Color.white)
+			fontSize(1.15.cssRem)
+			margin(0.px, 0.px, .35.cssRem)
+			transitions {
+				properties("color") { duration(.2.s) }
 			}
 		}
 
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				width(50.percent - 1.cssRem)
-			}
+		"p" {
+			fontSize(1.cssRem)
+			margin(0.px)
+		}
+
+		desc(hover(self), "h3") style {
+			color(Color(AppStyle.ACCENT_COLOR))
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
 			self {
-				width(100.percent)
+				gridTemplateColumns("minmax(0, 1fr)")
 			}
 		}
 	}
 
-	val articleLink by style {
-		color(Color.white)
+	val articleDate by style {
+		alignSelf("start")
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		fontSize(.85.cssRem)
+		paddingTop(.2.cssRem)
+	}
+
+	val more by style {
+		backgroundColor(Color(AppStyle.CARD_BACKGROUND))
+		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+		borderRadius(.9.cssRem)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
+		alignItems(AlignItems.Start)
 		height(100.percent)
-		textDecorationLine(TextDecorationLine.None)
+		boxSizing(BoxSizing.BorderBox)
+		padding(1.8.cssRem)
+		revealOnScroll()
 
-		"h3" {
-			fontSize(1.2.cssRem)
-			marginTop(0.px)
-			marginBottom(0.8.cssRem)
-		}
-	}
-
-	val articleDesc by style {
-		fontSize(0.9.cssRem)
-		lineHeight(1.3.em)
-		opacity(0.8)
-		marginBottom(1.cssRem)
-		flex(1)
-		overflow(Overflow.Hidden)
-	}
-
-	val articleTags by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(0.5.cssRem)
-		marginTop(autoLength)
-	}
-
-	val articleTag by style {
-		backgroundColor(Color("#FFFFFF15"))
-		borderRadius(1.cssRem)
-		padding(0.3.cssRem, 0.8.cssRem)
-		fontSize(0.75.cssRem)
-		color(Color("#FFFFFFDD"))
-	}
-
-	val articleTagMore by style {
-		backgroundColor(Color("#FFFFFF10"))
-		borderRadius(1.cssRem)
-		padding(0.3.cssRem, 0.8.cssRem)
-		fontSize(0.75.cssRem)
-		color(Color("#FFFFFFAA"))
-	}
-
-	val backgroundDecorations by style {
-		position(Position.Fixed)
-		top(0.px)
-		left(0.px)
-		width(100.percent)
-		height(100.percent)
-		pointerEvents(PointerEvents.None)
-		overflow(Overflow.Hidden)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val floatingElement by style {
-		position(Position.Absolute)
-		width(6.px)
-		height(6.px)
-		borderRadius(50.percent)
-		backgroundColor(Color("#ffffff90"))
-		boxShadow("0 0 12px rgba(255, 255, 255, 0.3)")
-		opacity(0.04)
-
-		animation(floatUpDown) {
-			duration(25.s)
-			iterationCount(Int.MAX_VALUE)
-			direction(AnimationDirection.Alternate)
-			timingFunction(AnimationTimingFunction.EaseInOut)
+		"h2" {
+			color(Color.white)
+			fontSize(1.3.cssRem)
+			margin(0.px)
 		}
 
-		nthChild(2.n) style {
-			backgroundColor(Color("#00D4FF"))
-			boxShadow("0 0 8px rgba(0, 212, 255, 1)")
-			opacity(0.05)
+		"a i" {
+			fontSize(.8.em)
 		}
 
-		nthChild(3.n) style {
-			width(4.px)
-			height(4.px)
-			backgroundColor(Color("#FF0080"))
-			boxShadow("0 0 6px rgba(255, 0, 128, 1)")
-			opacity(0.08)
-			property("animation-delay", "8s")
-		}
-
-		nthChild(4.n) style {
-			width(8.px)
-			height(8.px)
-			backgroundColor(Color("#8A2BE2"))
-			boxShadow("0 0 7px rgba(138, 43, 226, 1)")
-			opacity(0.02)
-			property("animation-delay", "15s")
-		}
-
-		nthChild(5.n) style {
-			width(3.px)
-			height(3.px)
-			backgroundColor(Color("#ffffff"))
-			boxShadow("0 0 5px rgba(255, 255, 255, 1)")
-			opacity(0.1)
-			property("animation-delay", "20s")
-		}
-	}
-
-	val heroBackground by style {
-		position(Position.Absolute)
-		top(0.px)
-		left(0.px)
-		width(100.percent)
-		height(100.percent)
-		pointerEvents(PointerEvents.None)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val glowOrb by style {
-		position(Position.Absolute)
-		borderRadius(50.percent)
-		filter {
-			blur(60.px)
-		}
-		opacity(0.5)
-		animation(orbFloat) {
-			duration(30.s)
-			iterationCount(Int.MAX_VALUE)
-			direction(AnimationDirection.Alternate)
-			timingFunction(AnimationTimingFunction.EaseInOut)
-		}
-	}
-
-	val glowOrb1 by style {
-		width(200.px)
-		height(200.px)
-		backgroundImage(radialGradient {
-			add(Color("#00D4FF30"))
-			add(Color.transparent, 50.percent)
-		})
-		left((-100).px)
-		top((-100).px)
-		property("animation-delay", "0s")
-	}
-
-	val glowOrb2 by style {
-		width(250.px)
-		height(250.px)
-		backgroundImage(radialGradient {
-			add(Color("#FF008030"))
-			add(Color.transparent, 50.percent)
-		})
-		right((-125).px)
-		top(30.px)
-		property("animation-delay", "15s")
-	}
-
-	val glowOrb3 by style {
-		width(180.px)
-		height(180.px)
-		backgroundImage(radialGradient {
-			add(Color("#8A2BE230"))
-			add(Color.transparent, 50.percent)
-		})
-		left(50.percent)
-		bottom((-90).px)
-		property("animation-delay", "8s")
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val avatarContainer by style {
-		position(Position.Relative)
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		justifyContent(JustifyContent.Center)
-		marginBottom(0.5.cssRem)
-
-		animation(AnimationsStyle.appear) {
-			duration(1.5.s)
-			fillMode(AnimationFillMode.Forwards)
-			timingFunction(AnimationTimingFunction.EaseOut)
-		}
-		opacity(0)
-		translateY(30.px)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val avatarGlow by style {
-		position(Position.Absolute)
-		top((-20).px)
-		left((-20).px)
-		width(340.px)
-		height(340.px)
-		borderRadius(50.percent)
-		backgroundImage(radialGradient {
-			add(Color("#00D4FF30"))
-			add(Color("#FF008020"), 50.percent)
-			add(Color.transparent, 70.percent)
-		})
-		filter {
-			blur(30.px)
-		}
-		zIndex(-1)
-		animation(avatarGlowAnimation) {
-			duration(4.s)
-			iterationCount(Int.MAX_VALUE)
-			direction(AnimationDirection.Alternate)
-			timingFunction(AnimationTimingFunction.EaseInOut)
-		}
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val mainTitle by style {
-		fontSize(3.cssRem)
-		fontWeight(700)
-		marginBottom(0.cssRem)
-		textAlign(TextAlign.Center)
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Baseline)
-		justifyContent(JustifyContent.Center)
-		gap(0.4.cssRem)
-		flexWrap(FlexWrap.Wrap)
-
-		backgroundClip(BackgroundClip.Text)
-		backgroundImage(linearGradient(45.deg) {
-			add(Color("#00D4FF"))
-			add(Color("#FF0080"))
-			add(Color("#8A2BE2"))
-		})
-		property("-webkit-background-clip", "text")
-		property("-webkit-text-fill-color", "transparent")
-		property("-moz-text-fill-color", "transparent")
-		property("-moz-background-clip", "text")
-		property("text-shadow", """
-			0 0 10px rgba(0, 212, 255, 0.5),
-			0 0 20px rgba(255, 0, 128, 0.3),
-			0 0 30px rgba(138, 43, 226, 0.2)
-		""")
-
-		// Style for "alias"
-		child(self, type("span") + firstOfType) style {
-			fontSize(1.5.cssRem)
-			fontWeight(300)
-			background(Background.None)
-			color(Color("#FFFFFFAA"))
-			property("-webkit-text-fill-color", "#FFFFFFAA")
-			property("-moz-text-fill-color", "#FFFFFFAA")
-			property("text-shadow", "0 0 8px rgba(255, 255, 255, 0.3)")
-			opacity(0.7)
-		}
-
-		// Style for "Ayfri"
-		child(self, type("span") + lastOfType) style {
-			fontSize(2.8.cssRem)
-			fontWeight(700)
-			backgroundClip(BackgroundClip.Text)
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#FF0080"))
-				add(Color("#8A2BE2"))
-			})
-			property("-webkit-background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
-			property("-moz-text-fill-color", "transparent")
-			property("-moz-background-clip", "text")
-			property("text-shadow", """
-				0 0 15px rgba(255, 0, 128, 0.6),
-				0 0 25px rgba(138, 43, 226, 0.4)
-			""")
-		}
-
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				fontSize(2.2.cssRem)
-				flexDirection(FlexDirection.Column)
-				gap(0.2.cssRem)
-			}
-
-			child(self, type("span") + firstOfType) style {
-				fontSize(1.2.cssRem)
-			}
-
-			child(self, type("span") + lastOfType) style {
-				fontSize(2.cssRem)
-			}
-		}
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val subtitle by style {
-		fontSize(1.8.cssRem)
-		fontWeight(300)
-		marginBottom(0.1.cssRem)
-		color(Color("#FFFFFFCC"))
-		textAlign(TextAlign.Center)
-		animation(fadeInUp) {
-			duration(1.s)
-			fillMode(AnimationFillMode.Forwards)
-			timingFunction(AnimationTimingFunction.EaseOut)
-		}
-		opacity(0)
-		translateY(20.px)
-		property("animation-delay", "0.5s")
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val ageInfo by style {
-		fontWeight(300)
-		marginBottom(1.cssRem)
-		fontSize(1.2.cssRem)
-		textAlign(TextAlign.Center)
-		color(Color("#FFFFFF99"))
-		animation(fadeInUp) {
-			duration(1.s)
-			fillMode(AnimationFillMode.Forwards)
-			timingFunction(AnimationTimingFunction.EaseOut)
-		}
-		opacity(0)
-		translateY(20.px)
-		property("animation-delay", "0.8s")
-	}
-
-	val ageNumber by style {
-		fontWeight(700)
-		color(Color("#00D4FF"))
-		property("text-shadow", "0 0 10px rgba(0, 212, 255, 0.8)")
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val introText by style {
-		lineHeight(1.5.cssRem)
-		fontSize(1.1.cssRem)
-		maxWidth(800.px)
-		marginLeft(autoLength)
-		marginRight(autoLength)
-		marginTop(0.px)
-		marginBottom(2.cssRem)
-		textAlign(TextAlign.Center)
-		color(Color("#FFFFFFEE"))
-		padding(1.2.cssRem)
-		borderRadius(0.8.cssRem)
-		backgroundColor(Color("#ffffff08"))
-		border(1.px, LineStyle.Solid, Color("#ffffff20"))
-		backdropFilter(BackdropFilter.list(BackdropFilter.of(blur(10.px))))
-		animation(fadeInUp) {
-			duration(1.2.s)
-			fillMode(AnimationFillMode.Forwards)
-			timingFunction(AnimationTimingFunction.EaseOut)
-		}
-		opacity(0)
-		translateY(30.px)
-		property("animation-delay", "1.2s")
-
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			self {
-				fontSize(1.cssRem)
-				padding(1.cssRem)
-				margin(0.8.cssRem, auto)
-			}
-		}
-	}
-
-	val location by style {
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		justifyContent(JustifyContent.Center)
-		fontSize(1.3.cssRem)
-		color(Color("#FFFFFFAA"))
-		property("animation-delay", "0.65s")
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val stats by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		justifyContent(JustifyContent.Center)
-		gap(1.cssRem)
-		width(100.percent)
-		maxWidth(800.px)
-		marginBottom(1.cssRem)
-
-		animation(fadeInUp) {
-			duration(1.2.s)
-			fillMode(AnimationFillMode.Forwards)
-			timingFunction(AnimationTimingFunction.EaseOut)
-		}
-		opacity(0)
-		translateY(30.px)
-		property("animation-delay", "1.4s")
-	}
-
-	val stat by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		alignItems(AlignItems.Center)
-		gap(0.15.cssRem)
-		flex("1 1 8rem")
-		padding(0.9.cssRem, 0.6.cssRem)
-		borderRadius(0.8.cssRem)
-		backgroundColor(Color("#ffffff08"))
-		border(1.px, LineStyle.Solid, Color("#ffffff20"))
-	}
-
-	val statValue by style {
-		fontSize(1.8.cssRem)
-		fontWeight(700)
-		color(Color("#00D4FF"))
-		property("text-shadow", "0 0 12px rgba(0, 212, 255, 0.6)")
-	}
-
-	val statLabel by style {
-		fontSize(0.8.cssRem)
-		color(Color("#FFFFFF99"))
-		textAlign(TextAlign.Center)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val enhancedAvatar by style {
-		borderRadius(1.cssRem)
-		border(3.px, LineStyle.Solid, Color.transparent)
-		backgroundImage( """
-			linear-gradient(white, white) padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080, #8A2BE2) border-box
-		""")
-		boxShadow( """
-			0 0 30px rgba(0, 212, 255, 0.6),
-			0 0 60px rgba(255, 0, 128, 0.4),
-			inset 0 1px 1px rgba(255, 255, 255, 0.2)
-		""")
-		transitions {
-			defaultDuration(0.3.s)
-			properties("all")
-		}
-
-		hover(self) style {
-			boxShadow( """
-				0 0 40px rgba(0, 212, 255, 0.8),
-				0 0 80px rgba(255, 0, 128, 0.6),
-				inset 0 1px 1px rgba(255, 255, 255, 0.3)
-			""")
+		"p" {
+			flexGrow(1)
+			margin(.7.cssRem, 0.px, 1.4.cssRem)
 		}
 	}
 }

@@ -7,8 +7,10 @@ import io.github.ayfri.components.A
 import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.I
 import io.github.ayfri.localImage
+import io.github.ayfri.tint
 import io.github.ayfri.utils.gradientBorderBackground
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
+import io.github.ayfri.utils.neonEdgeGradient
+import io.github.ayfri.utils.revealOnScroll
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
@@ -120,7 +122,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 				classes(FeaturedProjectStyle.tags)
 			}) {
 				project.tags.forEach { tag ->
-					Span({ classes(FeaturedProjectStyle.tag) }) { Text(tag) }
+					Span({ classes(AppStyle.tag) }) { Text(tag) }
 				}
 			}
 
@@ -129,7 +131,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 			}) {
 				project.liveUrl?.let { url ->
 					A(url, {
-						classes(FeaturedProjectStyle.projectLink, FeaturedProjectStyle.primaryLink)
+						classes(AppStyle.button, FeaturedProjectStyle.projectLink, FeaturedProjectStyle.primaryLink)
 					}) {
 						I(FontAwesomeType.SOLID, "arrow-up-right-from-square")
 						Text("Live")
@@ -137,7 +139,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 				}
 
 				A("https://github.com/${project.repository}", {
-					classes(FeaturedProjectStyle.projectLink)
+					classes(AppStyle.button, FeaturedProjectStyle.projectLink)
 				}) {
 					I(FontAwesomeType.BRAND, "github")
 					Text("Source")
@@ -148,9 +150,6 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 }
 
 object FeaturedProjectStyle : StyleSheet() {
-	const val CARD_BACKGROUND = "#181820"
-	const val THUMBNAIL_BACKGROUND = "#0E0E12"
-
 	val grid by style {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns {
@@ -163,26 +162,27 @@ object FeaturedProjectStyle : StyleSheet() {
 		textAlign(TextAlign.Start)
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
+	/** Neutral at rest, the neon logo edge, a violet halo and a slow screenshot zoom only show up on hover. */
 	val card by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		overflow(Overflow.Hidden)
 		borderRadius(0.9.cssRem)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CARD_BACKGROUND))
-		boxShadow("0 0 15px rgba(0, 212, 255, 0.08)")
+		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
+		revealOnScroll()
 
 		transitions {
-			properties("transform", "box-shadow") {
-				duration(0.3.s)
-				timingFunction(TransitionTimingFunction.EaseInOut)
-			}
+			properties("box-shadow") { duration(0.3.s) }
 		}
 
 		hover(self) style {
-			transform { translateY((-6).px) }
-			boxShadow("0 0 30px rgba(255, 0, 128, 0.25)")
+			gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND), neonEdgeGradient)
+			boxShadow("0 12px 40px -18px ${tint(AppStyle.VIOLET_COLOR, 60)}")
+		}
+
+		desc(hover(self), "img") style {
+			property("scale", "1.04")
 		}
 	}
 
@@ -217,7 +217,8 @@ object FeaturedProjectStyle : StyleSheet() {
 	}
 
 	val thumbnail by style {
-		backgroundColor(Color(THUMBNAIL_BACKGROUND))
+		backgroundColor(Color(AppStyle.CONTENT_BACKGROUND_COLOR))
+		borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
 		property("aspect-ratio", "16 / 10")
 		overflow(Overflow.Hidden)
 
@@ -226,6 +227,7 @@ object FeaturedProjectStyle : StyleSheet() {
 			height(100.percent)
 			objectFit(ObjectFit.Cover)
 			property("object-position", "top center")
+			property("transition", "scale .6s cubic-bezier(.2, .8, .2, 1)")
 			display(DisplayStyle.Block)
 		}
 	}
@@ -252,34 +254,26 @@ object FeaturedProjectStyle : StyleSheet() {
 	}
 
 	val stars by style {
-		display(DisplayStyle.Flex)
 		alignItems(AlignItems.Center)
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		display(DisplayStyle.Flex)
+		fontFamily(AppStyle.MONO_FONT_FAMILY, "monospace")
+		fontSize(0.85.cssRem)
 		gap(0.35.cssRem)
-		color(Color("#FFE218"))
-		fontSize(0.95.cssRem)
-		fontWeight(600)
 		whiteSpace(WhiteSpace.NoWrap)
 	}
 
 	val tagline by style {
 		margin(0.px)
-		color(Color("#FFFFFFCC"))
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
 		fontSize(0.95.cssRem)
-		lineHeight(1.5.number)
+		lineHeight(1.55.number)
 	}
 
 	val tags by style {
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
 		gap(0.4.cssRem)
-	}
-
-	val tag by style {
-		backgroundColor(Color("#FFFFFF12"))
-		borderRadius(1.cssRem)
-		color(Color("#FFFFFFDD"))
-		fontSize(0.75.cssRem)
-		padding(0.25.cssRem, 0.7.cssRem)
 	}
 
 	val links by style {
@@ -290,38 +284,13 @@ object FeaturedProjectStyle : StyleSheet() {
 		paddingTop(0.4.cssRem)
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
+	/** Compact [AppStyle.button]; the live link only differs by its cyan label, a filled button per card would be too loud. */
 	val projectLink by style {
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		gap(0.4.cssRem)
-		borderRadius(0.45.cssRem)
-		color(Color.white)
 		fontSize(0.9.cssRem)
-		fontWeight(600)
-		padding(0.45.cssRem, 0.9.cssRem)
-		border(1.px, LineStyle.Solid, Color("#FFFFFF25"))
-
-		transitions {
-			properties("background-color", "border-color") {
-				duration(0.25.s)
-			}
-		}
-
-		hover(self) style {
-			backgroundColor(Color("#FFFFFF15"))
-			borderColor(Color("#FFFFFF50"))
-		}
+		padding(0.4.cssRem, 0.85.cssRem)
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val primaryLink by style {
-		backgroundColor(Color("#00D4FF20"))
-		borderColor(Color("#00D4FF60"))
-
-		hover(self) style {
-			backgroundColor(Color("#00D4FF35"))
-			borderColor(Color("#00D4FF"))
-		}
+		color(Color(AppStyle.LINK_COLOR))
 	}
 }
