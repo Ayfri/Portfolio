@@ -1,75 +1,76 @@
 package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.functions.blur
 import com.varabyte.kobweb.compose.css.functions.clamp
-import com.varabyte.kobweb.compose.css.functions.linearGradient
-import io.github.ayfri.AppStyle.mobileFirstBreak
+import com.varabyte.kobweb.navigation.Anchor
+import io.github.ayfri.AppStyle
 import io.github.ayfri.AppStyle.mobileSecondBreak
 import io.github.ayfri.data.REPO_LINK
-import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.size
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
+import io.github.ayfri.localImage
+import io.github.ayfri.tint
+import kotlinx.browser.document
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
-import org.jetbrains.compose.web.dom.A
-import org.jetbrains.compose.web.dom.Header
-import org.jetbrains.compose.web.dom.I
-import org.jetbrains.compose.web.dom.Nav
+import org.jetbrains.compose.web.dom.*
 
+private const val NAV_ID = "site-nav"
+
+/**
+ * On mobile the nav is a native popover opened by the menu button, which brings Escape and click-outside closing
+ * for free. On desktop the popover styles are reset so it renders as a plain inline nav.
+ */
 @Composable
 fun Header() {
 	Style(HeaderStyle)
 
-	var open by remember { mutableStateOf(false) }
-
 	Header({
 		classes(HeaderStyle.navbar)
 	}) {
+		Anchor("/", {
+			classes(HeaderStyle.brand)
+		}) {
+			Img(localImage("logo-64.webp"), "") {
+				attr("width", "61")
+				attr("height", "64")
+			}
+			Text("Pierre Roy")
+		}
+
 		Nav({
-			classes(HeaderStyle.navbarPart, HeaderStyle.navbarLinks)
-			if (open) classes("open")
+			classes(HeaderStyle.navbarLinks)
+			id(NAV_ID)
+			attr("popover", "auto")
 		}) {
 			tabs.forEach {
-				Tab(it) {
-					open = !open
-				}
+				Tab(it) { document.getElementById(NAV_ID).asDynamic().hidePopover() }
 			}
 		}
 
 		A(REPO_LINK, {
 			target(ATarget.Blank)
-			classes(HeaderStyle.navbarPart, HeaderStyle.navbarGithub)
+			classes(HeaderStyle.iconButton)
 			title("GitHub")
+			attr("aria-label", "GitHub")
 		}) {
-			P("Ayfri")
-
 			I(FontAwesomeType.BRAND, "github")
 		}
 
-		I({
-			classes(HeaderStyle.mobileMenuButton, FontAwesomeType.SOLID.value, "fa-bars")
-
-			onClick {
-				open = !open
-			}
-		})
+		Button({
+			classes(HeaderStyle.iconButton, HeaderStyle.mobileMenuButton)
+			attr("aria-label", "Menu")
+			attr("popovertarget", NAV_ID)
+		}) {
+			I(FontAwesomeType.SOLID, "bars")
+		}
 	}
 }
 
 object HeaderStyle : StyleSheet() {
-	const val NAVBAR_COLOR = "#0A0A0F"
-	const val NAVBAR_COLOR_SECONDARY = "#1A1225"
-	const val NAVBAR_COLOR_SELECTED = "#2A1B3D"
-	const val NAVBAR_ACCENT_START = "#00D4FF"
-	const val NAVBAR_ACCENT_END = "#FF0080"
 	val navbarHeight by variable<CSSLengthValue>()
 
 	init {
@@ -78,211 +79,135 @@ object HeaderStyle : StyleSheet() {
 		}
 	}
 
+	/** Named so page transitions leave the header in place instead of fading it with the page. */
 	val navbar by style {
+		property("view-transition-name", "site-header")
 		alignItems(AlignItems.Center)
-		backgroundImage(linearGradient(135.deg) {
-			add(Color(NAVBAR_COLOR))
-			add(Color(NAVBAR_COLOR_SECONDARY), 30.percent)
-			add(Color("#2A1B3D"), 70.percent)
-			add(Color(NAVBAR_COLOR_SECONDARY), 100.percent)
-		})
-		borderBottom(2.px, LineStyle.Solid, Color.transparent)
-		property("border-image", "linear-gradient(90deg, $NAVBAR_ACCENT_START, $NAVBAR_ACCENT_END) 1")
-		property("box-shadow", "0 2px 10px rgba(0, 0, 0, 0.3)")
+		backdropFilter(BackdropFilter.list(BackdropFilter.of(blur(12.px))))
+		backgroundColor(Color(tint(AppStyle.CONTENT_BACKGROUND_COLOR, 80)))
+		borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
 		boxSizing(BoxSizing.BorderBox)
 		display(DisplayStyle.Flex)
-		justifyContent(JustifyContent.SpaceBetween)
+		gap(.5.cssRem)
+		padding(0.px, clamp(1.cssRem, 4.vw, 3.cssRem))
 		position(Position.Fixed)
-		size(navbarHeight.value(), 100.percent)
+		height(navbarHeight.value())
+		width(100.percent)
 		top(0.px)
 		zIndex(100)
-
-		"i" style {
-			fontSize(navbarHeight.value() * .5)
-		}
-
-		media(mediaMaxWidth(mobileSecondBreak)) {
-			self {
-				padding(0.px, 1.cssRem)
-			}
-		}
 	}
 
-	val navbarPart by style {
+	val brand by style {
 		alignItems(AlignItems.Center)
 		color(Color.white)
 		display(DisplayStyle.Flex)
-		justifyContent(JustifyContent.Center)
+		fontFamily(AppStyle.MONO_FONT_FAMILY, "monospace")
+		fontWeight(700)
+		gap(.65.cssRem)
+		marginRight(autoLength)
+		whiteSpace(WhiteSpace.NoWrap)
+
+		"img" {
+			height(1.7.cssRem)
+			width(Width.FitContent)
+		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val navbarLinks by style {
+		// Resets the user agent popover box (fixed, centered, bordered), the nav only behaves as a popover on mobile.
+		backgroundColor(Color.transparent)
+		border(0.px)
+		color(CSSColor.Inherit)
+		display(DisplayStyle.Flex)
+		height(100.percent)
+		margin(0.px)
+		overflow(Overflow.Visible)
+		padding(0.px)
+		position(Position.Static)
+
 		"a" style {
-			color(Color.white)
-			display(DisplayStyle.InlineBlock)
-			fontSize(0.95.cssRem)
+			alignItems(AlignItems.Center)
+			color(Color(AppStyle.TEXT_MUTED_COLOR))
+			display(DisplayStyle.Flex)
+			fontSize(.95.cssRem)
 			fontWeight(500)
-			height(100.percent)
-			lineHeight(navbarHeight.value())
-			padding(0.px, clamp(1.3.cssRem, 2.5.vw, 2.3.cssRem))
-			whiteSpace(WhiteSpace.NoWrap)
+			padding(0.px, clamp(.6.cssRem, 1.3.vw, 1.1.cssRem))
 			position(Position.Relative)
-
-			transitions {
-				defaultDuration(0.3.s)
-				properties("all")
-			}
-
-			before {
-				content("")
-				position(Position.Absolute)
-				bottom(0.px)
-				left(50.percent)
-				width(0.px)
-				height(2.px)
-				backgroundImage(linearGradient(90.deg) {
-					add(Color(NAVBAR_ACCENT_START))
-					add(Color(NAVBAR_ACCENT_END))
-				})
-				transform {
-					translateX((-50).percent)
-				}
-				borderRadius(1.px)
-				transitions {
-					defaultDuration(0.3.s)
-					properties("width")
-				}
-			}
-
-			after {
-				content("")
-				position(Position.Absolute)
-				top(0.px)
-				left(0.px)
-				right(0.px)
-				bottom(0.px)
-				backgroundImage(linearGradient(135.deg) {
-					add(Color("rgba(0, 212, 255, 0.05)"))
-					add(Color("rgba(255, 0, 128, 0.05)"))
-				})
-				opacity(0)
-				borderRadius(0.3.cssRem)
-				transitions {
-					defaultDuration(0.3.s)
-					properties("opacity")
-				}
-			}
-
-			self + className("active") style {
-				backgroundColor(Color("rgba(0, 212, 255, 0.08)"))
-
-				before {
-					width(85.percent)
-					property("box-shadow", "0 0 4px rgba(0, 212, 255, 0.5)")
-				}
-
-				after {
-					opacity(1)
-				}
-			}
+			whiteSpace(WhiteSpace.NoWrap)
 
 			hover(self) style {
-				backgroundColor(Color("rgba(0, 212, 255, 0.05)"))
-
-				before {
-					width(70.percent)
-				}
-
-				after {
-					opacity(0.6)
-				}
+				color(Color.white)
 			}
+
+			/** The active tab and its underline slide to the new tab during page transitions. */
+			self + className("active") style {
+				color(Color.white)
+				property("view-transition-name", "nav-active")
+			}
+		}
+
+		"a.active::after" {
+			content("")
+			backgroundColor(Color(AppStyle.ACCENT_COLOR))
+			bottom((-1).px)
+			height(2.px)
+			position(Position.Absolute)
+			property("inset-inline", "clamp(.6rem, 1.3vw, 1.1rem)")
 		}
 
 		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
 				display(DisplayStyle.None)
-				position(Position.Absolute)
-				top(navbarHeight.value().unsafeCast<CSSLengthOrPercentageValue>())
-				left(0.px)
+			}
+
+			self + selector(":popover-open") style {
+				backgroundColor(Color(AppStyle.CONTENT_BACKGROUND_COLOR))
+				borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+				display(DisplayStyle.Flex)
+				flexDirection(FlexDirection.Column)
+				height(Height.FitContent)
+				padding(.5.cssRem, 0.px)
+				position(Position.Fixed)
+				property("inset", "${navbarHeight.value()} 0 auto 0")
 				width(100.percent)
+			}
 
-				backgroundImage(linearGradient(180.deg) {
-					add(Color(NAVBAR_COLOR))
-					add(Color(NAVBAR_COLOR_SECONDARY))
-				})
-				property("box-shadow", "0 5px 15px rgba(0, 0, 0, 0.4)")
+			"a" style {
+				fontSize(1.05.cssRem)
+				padding(.8.cssRem, 1.5.cssRem)
+			}
 
-				self + className("open") style {
-					display(DisplayStyle.Flex)
-					flexDirection(FlexDirection.Column)
-					alignItems(AlignItems.Start)
-
-					"a" {
-						width(100.percent)
-						lineHeight(navbarHeight.value() * .8)
-						borderBottom(1.px, LineStyle.Solid, Color("rgba(0, 212, 255, 0.15)"))
-					}
-				}
+			"a.active::after" {
+				property("inset", "0 auto 0 0")
+				width(2.px)
 			}
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
-	val navbarGithub by style {
+	val iconButton by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color.transparent)
 		borderRadius(.5.cssRem)
-		gap(1.cssRem)
-		height(80.percent)
-		marginRight(1.vw)
-		padding(.5.cssRem, 1.cssRem)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		transitions {
-			defaultDuration(0.3.s)
-			properties("all")
-		}
-		gradientBorderBackground(Color(NAVBAR_COLOR))
-
-		"p" {
-			fontWeight(600)
-		}
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		cursor(Cursor.Pointer)
+		display(DisplayStyle.Flex)
+		fontSize(1.3.cssRem)
+		height(2.4.cssRem)
+		justifyContent(JustifyContent.Center)
+		width(2.4.cssRem)
 
 		hover(self) style {
-			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.3)")
-			scale(1.02)
-		}
-
-		media(mediaMaxWidth(mobileFirstBreak)) {
-			self {
-				padding(.5.cssRem)
-			}
-
-			"p" {
-				display(DisplayStyle.None)
-			}
+			backgroundColor(Color("#FFFFFF0F"))
+			color(Color.white)
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val mobileMenuButton by style {
 		display(DisplayStyle.None)
-		color(Color.white)
-		cursor(Cursor.Pointer)
-		fontSize(1.5.cssRem)
-		padding(0.5.cssRem)
-		borderRadius(0.3.cssRem)
-
-		transitions {
-			defaultDuration(0.3.s)
-			properties("all")
-		}
-
-		hover(self) style {
-			backgroundColor(Color("rgba(0, 212, 255, 0.1)"))
-		}
 
 		media(mediaMaxWidth(mobileSecondBreak)) {
 			self {
-				display(DisplayStyle.Block)
+				display(DisplayStyle.Flex)
 			}
 		}
 	}

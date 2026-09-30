@@ -3,6 +3,7 @@ package io.github.ayfri.utils
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.Gradient
 import com.varabyte.kobweb.compose.css.functions.linearGradient
+import io.github.ayfri.AppStyle
 import io.github.ayfri.pages.HomeStyle.selector
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.CSSAutoKeyword
@@ -35,17 +36,45 @@ val Int.n get() = Nth.Functional(this)
 fun StyleScope.animationDelay(value: CSSSizeValue<out CSSUnitTime>) = property("animation-delay", value)
 fun StyleScope.animationDelay(value: String) = property("animation-delay", value)
 
-// Gradient border background helper
-// Uses the two-layer background trick: a solid fill on padding-box + gradient on border-box.
-// NOTE: only use this with an opaque fill color. A transparent fill will let the border-box
-// gradient show through the whole element instead of just the border ring - for a "border only,
-// see-through center" look, set the background manually with the literal `transparent` keyword instead.
+/**
+ * Fades and lifts the element in as it scrolls into view, a scroll-driven animation with no JS. Browsers without
+ * `animation-timeline` run it as a zero-length animation and show the element right away.
+ */
+fun StyleScope.revealOnScroll() {
+	property("animation", "${AppStyle.revealUp.name} linear both")
+	property("animation-timeline", "view()")
+	property("animation-range", "entry 0% cover 18%")
+}
+
+/**
+ * Skips layout and paint of off-screen items in long lists, [height] being the placeholder size until first render.
+ * Not for anchor targets: a jump to an unrendered item lands on estimated positions.
+ */
+fun StyleScope.renderWhenVisible(height: CSSNumeric) {
+	property("content-visibility", "auto")
+	property("contain-intrinsic-size", "auto $height")
+}
+
+/** Hairline brighter on top than at the bottom, so cards read as lit from above rather than outlined. */
+val cardEdgeGradient = linearGradient(180.deg) {
+	add(Color("#D9CCFF2E"))
+	add(Color("#D9CCFF0F"))
+}
+
+/** The logo's cyan -> violet -> orchid tube, for the few elements that should glow, never as a default. */
+val neonEdgeGradient = linearGradient(135.deg) {
+	add(Color(AppStyle.ACCENT_COLOR))
+	add(Color(AppStyle.VIOLET_COLOR), 55.percent)
+	add(Color(AppStyle.ACCENT_SECONDARY_COLOR))
+}
+
+/**
+ * Two-layer background trick: a fill on padding-box over a gradient on border-box, drawn through a transparent border.
+ * Only works with an opaque fill, a transparent one lets the border gradient show through the whole element.
+ */
 fun StyleScope.gradientBorderBackground(
 	fillGradient: Gradient,
-	borderGradient: Gradient = linearGradient(45.deg) {
-		add(Color("#00D4FF"))
-		add(Color("#FF0080"))
-	},
+	borderGradient: Gradient = cardEdgeGradient,
 ) {
 	background(Background.list(
 		Background.of(
@@ -61,13 +90,9 @@ fun StyleScope.gradientBorderBackground(
 	))
 }
 
-// Convenience overload for solid-color fill
 fun StyleScope.gradientBorderBackground(
 	fillColor: CSSColorValue,
-	borderGradient: Gradient = linearGradient(45.deg) {
-		add(Color("#00D4FF"))
-		add(Color("#FF0080"))
-	},
+	borderGradient: Gradient = cardEdgeGradient,
 ) {
 	gradientBorderBackground(
 		fillGradient = linearGradient {
@@ -76,14 +101,4 @@ fun StyleScope.gradientBorderBackground(
 		},
 		borderGradient = borderGradient
 	)
-}
-
-// Shared full-page background gradient, used by every page's `id("main")` style.
-fun StyleScope.pageBackground() {
-	backgroundImage(linearGradient(180.deg) {
-		add(Color("#0A0A0F"), (-3).percent)
-		add(Color("#1A1225"), 14.percent)
-		add(Color("#2A1B3D"), 65.percent)
-		add(Color("#1E1535"), 90.percent)
-	})
 }

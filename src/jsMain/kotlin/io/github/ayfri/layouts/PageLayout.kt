@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
-import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.*
 import io.github.ayfri.ensureSuffix
@@ -20,7 +19,6 @@ fun PageLayout(
 	keywords: String = "",
 	content: @Composable () -> Unit,
 ) {
-	Style(AnimationsStyle)
 	Style(AppStyle)
 	setRobots(null)
 	setTitle("$title - ${AppGlobals["author"]}'s Portfolio")

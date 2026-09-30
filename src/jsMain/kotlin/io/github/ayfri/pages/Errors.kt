@@ -2,7 +2,6 @@ package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.core.Page
-import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.*
 import org.jetbrains.compose.web.css.*
@@ -16,7 +15,6 @@ fun NotFound404Page() = NotFoundPage()
 
 @Composable
 fun NotFoundPage() {
-	Style(AnimationsStyle)
 	Style(AppStyle)
 	setTitle("404 - Page Not Found")
 
@@ -39,13 +37,14 @@ fun NotFoundPage() {
 				padding(2.cssRem)
 			}
 		}) {
-			H1 {
+			H1({
+				classes(AppStyle.title)
+				style { margin(0.px) }
+			}) {
 				Text("404")
 			}
-			P {
-				Text("This page doesn't exist.")
-			}
-			A("/", "Go back home")
+			P("This page doesn't exist, or it moved.")
+			A("/", "Back to the home page", AppStyle.button, AppStyle.primaryButton)
 		}
 	}
 

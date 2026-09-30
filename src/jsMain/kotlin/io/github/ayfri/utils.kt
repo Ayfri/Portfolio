@@ -12,9 +12,6 @@ import kotlin.math.roundToInt
 
 inline fun localImage(path: String) = "/images/$path"
 
-/** `addEventListener` options telling the browser the handler never calls `preventDefault`, so scrolling isn't blocked on it. */
-val passiveListener: dynamic = js("({ passive: true })")
-
 fun AttrsScope<HTMLParagraphElement>.markdownParagraph(
 	text: String,
 	breaks: Boolean = false,

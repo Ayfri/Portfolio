@@ -272,7 +272,7 @@ kobweb {
 					meta(property = "twitter:site", content = twitterHandle)
 
 					link(rel="preconnect", href="https://fonts.googleapis.com")
-					link(href = "https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap", rel = "stylesheet")
+					link(href = "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..800;1,300..800&display=swap", rel = "stylesheet")
 					link(href = "/JetBrainsMono.css", rel = "preload", htmlAs = LinkAs.style) {
 						attributes += "fetchpriority" to "high"
 						onLoad = "this.rel='stylesheet'"
@@ -343,6 +343,11 @@ kotlin {
 	}
 
 	sourceSets {
+		all {
+			// `transitions`, `transform` and friends are all marked experimental, every stylesheet uses them.
+			languageSettings.optIn("org.jetbrains.compose.web.ExperimentalComposeWebApi")
+		}
+
 		jsMain {
 			resources.srcDir(portfolioGeneratedResourcesRoot)
 			kotlin.srcDir(portfolioGeneratedKotlinRoot)
