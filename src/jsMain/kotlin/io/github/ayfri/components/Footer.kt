@@ -237,13 +237,15 @@ fun Footer() {
 								Text("Portfolio")
 							}
 						}
-						Li {
-							A(href = "/cv.pdf", {
-								target(ATarget.Blank)
-								attr("download", "CV Pierre Roy.pdf")
-							}) {
-								I(FontAwesomeType.SOLID, "file-arrow-down")
-								Text("Download CV")
+						listOf("EN" to "/cv-en.pdf", "FR" to "/cv.pdf").forEach { (lang, href) ->
+							Li {
+								A(href = href, {
+									target(ATarget.Blank)
+									attr("download", "CV Pierre Roy $lang.pdf")
+								}) {
+									I(FontAwesomeType.SOLID, "file-arrow-down")
+									Text("Download CV ($lang)")
+								}
 							}
 						}
 					}
