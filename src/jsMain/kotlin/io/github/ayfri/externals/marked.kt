@@ -4,25 +4,4 @@
 
 package io.github.ayfri.externals
 
-import kotlinx.js.JsPlainObject
-
-external fun use(vararg options: MarkedOptions)
-
 external fun parse(markdown: String): String
-
-@JsPlainObject
-external interface MarkedOptions {
-	var renderer: TextRenderer?
-}
-
-external interface Renderer<T> {
-	fun link(href: String?, title: String?, text: String): String
-	fun image(href: String?, title: String?, text: String): String
-	fun code(code: String, infoString: String, escaped: Boolean): String
-}
-
-open external class TextRenderer : Renderer<String> {
-	override fun link(href: String?, title: String?, text: String): String
-	override fun image(href: String?, title: String?, text: String): String
-	override fun code(code: String, infoString: String, escaped: Boolean): String
-}

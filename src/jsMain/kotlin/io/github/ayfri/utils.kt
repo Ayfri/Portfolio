@@ -4,7 +4,9 @@ import io.github.ayfri.externals.parse
 import js.date.Date
 import js.intl.*
 import org.jetbrains.compose.web.attributes.AttrsScope
+import org.w3c.dom.Element
 import org.w3c.dom.HTMLParagraphElement
+import org.w3c.dom.asList
 import kotlin.math.max
 import kotlin.math.roundToInt
 
@@ -24,6 +26,13 @@ fun AttrsScope<HTMLParagraphElement>.markdownParagraph(
 
 		val textToParse = if (breaks) text.replace("\n", "<br>") else text
 		it.innerHTML = parse(textToParse)
+		/** Tagged after parsing because `marked.use()` only reads enumerable renderer props, which Kotlin class methods never are. */
+		it.querySelectorAll("a").asList().forEach { link -> link.unsafeCast<Element>().classList.add("link") }
+		it.querySelectorAll("pre > code").asList().forEach { node ->
+			val code = node.unsafeCast<Element>()
+			if (code.className.isEmpty()) code.classList.add("nohighlight")
+			code.classList.add("line-numbers")
+		}
 		additionalRefCallback(it)
 		onDispose {}
 	}
