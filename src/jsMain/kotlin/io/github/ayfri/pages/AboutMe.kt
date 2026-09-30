@@ -240,7 +240,7 @@ val sections = listOf(
 			[PokéCards-Collector](https://pokecards-collector.ayfri.com) started in October 2023 with friends: browse the entire Pokémon Trading Card Game catalogue, English and Japanese, and keep track of the cards you own and the ones you are still hunting.
 
 			It runs on [SvelteKit](https://svelte.dev/docs/kit) with [Svelte 5](https://svelte.dev/docs/svelte/what-are-runes) runes, [Tailwind CSS](https://tailwindcss.com) 4 and TypeScript, served from a [Supabase](https://supabase.com) Postgres database on [Cloudflare Workers](https://workers.cloudflare.com).
-			Cards, sets and prices come from [TCGdex](https://tcgdex.dev) and Pokédex entries from [PokéAPI](https://pokeapi.co), pulled by a scraper CLI and refreshed every week by a Cloudflare Workflow.
+			Cards, sets and prices come from [TCGdex](https://tcgdex.dev) and Pokédex entries from [PokéAPI](https://pokeapi.co), pulled by a scraper CLI and refreshed every day by a Cloudflare Workflow.
 
 			On top of the card browser and the collection, there are digital binder pages you can export as an image, pages by artist, set and Pokémon, public profiles, and two daily games: guess the card of the day, or guess its market price.
 		""".trimIndent(), 2023, id = "pokecards", dateLabel = "Since 2023", tags = listOf("SvelteKit", "Svelte 5", "Supabase", "Cloudflare")

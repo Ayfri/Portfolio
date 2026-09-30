@@ -38,7 +38,7 @@ val featuredProjects = listOf(
 	),
 	FeaturedProject(
 		name = "PokéCards-Collector",
-		tagline = "The whole Pokémon TCG catalogue, English and Japanese, with prices, filters and the collection you actually own.",
+		tagline = "The whole Pokémon TCG catalogue, English and Japanese, with cards and prices refreshed every day, filters and the collection you actually own.",
 		image = "projects/pokecards.avif",
 		repository = "Ayfri/PokeCards-Collector",
 		tags = listOf("SvelteKit", "Supabase", "Cloudflare Workers", "Tailwind 4"),
