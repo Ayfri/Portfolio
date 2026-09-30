@@ -3,7 +3,6 @@ package io.github.ayfri.layouts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobwebx.markdown.markdown
@@ -11,33 +10,28 @@ import io.github.ayfri.*
 import io.github.ayfri.components.*
 import io.github.ayfri.components.articles.*
 import io.github.ayfri.externals.HighlightCode
-import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.margin
+import io.github.ayfri.utils.list
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
 import io.github.ayfri.utils.webkitScrollbarTrack
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.AlignItems
-import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
-
 
 @Composable
 fun ArticleLayout(content: @Composable () -> Unit) {
-	Style(AnimationsStyle)
 	Style(AppStyle)
 	Style(MarkdownStyle)
 	Style(CodeTheme)
-	Style(ArticleHeaderStyle)
 
 	val context = rememberPageContext()
-	val markdownData = context.markdown!!.frontMatter
-	val title = markdownData["title"]?.get(0) ?: "Title not found"
-	val description = markdownData["description"]?.get(0) ?: "Description not found"
-	val keywords = markdownData["keywords"]?.get(0) ?: ""
-	val date = markdownData["date-created"]?.get(0) ?: ""
-	val dateModified = markdownData["date-modified"]?.get(0) ?: date
+	val frontMatter = context.markdown!!.frontMatter
+	fun field(name: String) = frontMatter[name]?.firstOrNull()
+
+	val title = field("title") ?: "Title not found"
+	val description = field("description") ?: "Description not found"
+	val keywords = field("keywords") ?: ""
+	val date = field("date-created") ?: ""
+	val dateModified = field("date-modified") ?: date
 	val articleContent = remember(title) { articlesEntries.find { it.title == title }?.content ?: "" }
 
 	// Both walk the whole article with regexes, so they are keyed on the article rather than run per recomposition.
@@ -45,7 +39,7 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 
 	// The path only: with the export query attached this never matched an entry, so each article listed itself.
 	val currentPath = context.route.path
-	val keywordsList = remember(keywords) { keywords.split(",").map { it.trim() } }
+	val keywordsList = remember(keywords) { keywords.split(",").map { it.trim() }.filter { it.isNotEmpty() } }
 	val relatedArticles = remember(currentPath, keywordsList) { findRelatedArticles(currentPath, keywordsList) }
 
 	setRobots(null)
@@ -57,17 +51,11 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	// would ship a canonical pointing at a URL that does not exist. Only the path belongs in a canonical.
 	val canonicalUrl = AppGlobals["url"] + context.route.path.ensureSuffix("/")
 	setCanonical(canonicalUrl)
-
 	setJsonLD()
 
 	HighlightCode()
-
-	// Reading progress bar
 	ReadingProgressBar()
-
-	// Back to top button
 	BackToTopButton()
-
 	Header()
 
 	Main({
@@ -76,23 +64,25 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 		Article({
 			classes(MarkdownStyle.article)
 		}) {
-			ArticleHeader(
-				title = markdownData["title"]?.get(0) ?: title,
-				date = date,
-				dateModified = dateModified,
-				keywords = keywordsList,
-				content = articleContent
-			)
+			Header({
+				classes(MarkdownStyle.header)
+			}) {
+				ArticleMeta(date, dateModified, articleContent)
 
-			if (headings.isNotEmpty()) {
-				TableOfContents(headings)
+				H1 { Text(title) }
+
+				if (keywordsList.isNotEmpty()) Div({
+					classes(MarkdownStyle.keywords)
+				}) {
+					keywordsList.forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
+				}
 			}
+
+			if (headings.isNotEmpty()) TableOfContents(headings)
 
 			content()
 
-			if (relatedArticles.isNotEmpty()) {
-				RelatedArticles(relatedArticles)
-			}
+			if (relatedArticles.isNotEmpty()) RelatedArticles(relatedArticles)
 
 			ShareSection(title, canonicalUrl)
 		}
@@ -101,250 +91,43 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	Footer()
 }
 
-@Composable
-fun ArticleHeader(
-	title: String,
-	date: String,
-	dateModified: String,
-	keywords: List<String>,
-	content: String
-) {
-	Div({
-		classes(ArticleHeaderStyle.container)
-	}) {
-		H1({
-			classes(ArticleHeaderStyle.title)
-		}) {
-			Text(title)
-		}
-
-		Div({
-			classes(ArticleHeaderStyle.meta)
-		}) {
-			val formattedDate = formatLongDate(date)
-
-			Span({
-				classes(ArticleHeaderStyle.metaItem)
-			}) {
-				I(FontAwesomeType.SOLID, "calendar-alt")
-				Text(" $formattedDate")
-			}
-
-			// Reading time estimate
-			val readingTime = remember(content) { calculateReadingTime(content) }
-			Span({
-				classes(ArticleHeaderStyle.metaItem)
-			}) {
-				I(FontAwesomeType.SOLID, "clock")
-				Text(" $readingTime min read")
-			}
-
-			// Check if article was updated
-			if (date != dateModified) {
-				Span({
-					classes(ArticleHeaderStyle.metaItem, ArticleHeaderStyle.updated)
-				}) {
-					I(FontAwesomeType.SOLID, "sync-alt")
-					Text(" Updated")
-				}
-			}
-		}
-
-		if (keywords.isNotEmpty()) {
-			Div({
-				classes(ArticleHeaderStyle.keywordsContainer)
-			}) {
-				keywords.forEach { keyword ->
-					Span({
-						classes(ArticleHeaderStyle.keyword)
-					}) {
-						Text(keyword)
-					}
-				}
-			}
-		}
-
-		Hr {
-			classes(ArticleHeaderStyle.divider)
-		}
-	}
-}
-
-object ArticleHeaderStyle : StyleSheet() {
-	val container by style {
-		borderRadius(1.cssRem)
-		padding(2.cssRem)
-		marginBottom(3.cssRem)
-		border {
-			width(2.px)
-			style(LineStyle.Solid)
-			color(Color.transparent)
-		}
-		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
-		property("box-shadow", "0 0 30px rgba(0, 212, 255, 0.15)")
-	}
-
-	val title by style {
-		fontSize(2.8.cssRem)
-		lineHeight(1.3.em)
-		margin(top = 0.cssRem, bottom = 1.cssRem)
-		backgroundClip(BackgroundClip.Text)
-		backgroundImage(linearGradient(45.deg) {
-			add(Color("#00D4FF"))
-			add(Color("#FF0080"))
-		})
-		property("-webkit-text-fill-color", "transparent")
-		property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
-	}
-
-	val meta by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(1.cssRem)
-		color(Color("#FFFFFF99"))
-		fontSize(0.9.cssRem)
-		marginBottom(1.cssRem)
-	}
-
-	val metaItem by style {
-		display(DisplayStyle.LegacyInlineFlex)
-		alignItems(AlignItems.Center)
-
-		"i" {
-			marginRight(0.3.cssRem)
-			fontSize(0.9.em)
-		}
-	}
-
-	val updated by style {
-		color(Color("#6EBAE7"))
-	}
-
-	val keywordsContainer by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(0.5.cssRem)
-		marginBottom(1.cssRem)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val keyword by style {
-		backgroundColor(Color("#FFFFFF15"))
-		borderRadius(1.cssRem)
-		padding(0.3.cssRem, 0.8.cssRem)
-		fontSize(0.8.cssRem)
-		color(Color("#FFFFFFDD"))
-
-		transitions {
-			"background-color" {
-				duration(0.2.s)
-			}
-		}
-
-		self + hover style {
-			backgroundColor(Color("#FFFFFF25"))
-		}
-	}
-
-	val divider by style {
-		border(0.px)
-		height(1.px)
-		backgroundImage(linearGradient(90.deg) {
-			add(Color("#FFFFFF00"))
-			add(Color("#FFFFFF40"))
-			add(Color("#FFFFFF00"))
-		})
-		margin(1.5.cssRem, 0.px, 1.cssRem)
-	}
-
-	// Responsive styles
-	init {
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			title style {
-				fontSize(2.4.cssRem)
-			}
-		}
-
-		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
-			title style {
-				fontSize(2.cssRem)
-			}
-		}
-	}
-}
-
 object MarkdownStyle : StyleSheet() {
-	init {
-		id("main") style {
-			// Add consistent background styling
-			backgroundImage(linearGradient(180.deg) {
-				add(Color("#0A0A0F"), (-3).percent)
-				add(Color("#1A1225"), 14.percent)
-				add(Color("#2A1B3D"), 65.percent)
-				add(Color("#1E1535"), 90.percent)
-			})
-			minHeight(100.vh)
-		}
-	}
-
 	val article by style {
-		margin(0.px, auto)
-		maxWidth(1000.px)
-		padding(3.cssRem, 1.cssRem)
-		fontSize(1.05.cssRem)
-		lineHeight(1.5.em)
+		boxSizing(BoxSizing.BorderBox)
+		fontSize(1.1.cssRem)
+		lineHeight(1.75.number)
+		margin(0.px, autoLength)
+		maxWidth(50.cssRem)
+		padding(3.cssRem, 1.25.cssRem)
 		property("tab-size", 4)
 
 		"h1" {
-			backgroundClip(BackgroundClip.Text)
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			fontSize(2.5.cssRem)
-			lineHeight(1.3.em)
-			margin(top = 0.cssRem, bottom = 1.cssRem)
-			property("-webkit-text-fill-color", "transparent")
+			color(Color.white)
+			fontSize(2.6.cssRem)
+			margin(.6.cssRem, 0.px, 1.cssRem)
 		}
 
 		"h2" {
-			backgroundClip(BackgroundClip.Text)
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			fontSize(1.75.cssRem)
-			marginTop(2.cssRem)
-			marginBottom(1.cssRem)
-			property("-webkit-text-fill-color", "transparent")
+			fontSize(1.7.cssRem)
+			margin(2.8.cssRem, 0.px, 1.cssRem)
 		}
 
 		"h3" {
-			backgroundClip(BackgroundClip.Text)
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			fontSize(1.35.cssRem)
-			property("-webkit-text-fill-color", "transparent")
+			fontSize(1.3.cssRem)
+			margin(2.cssRem, 0.px, .8.cssRem)
 		}
 
 		"h4" {
-			fontSize(1.25.cssRem)
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			property("-webkit-background-clip", "text")
-			property("background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
+			fontSize(1.1.cssRem)
 		}
 
-		// Create content sections for better visual separation
-		"h2, h3, h4, h5, h6" {
+		list("h2", "h3", "h4", "h5", "h6") style {
 			color(Color.white)
 		}
 
+		list("p", "li") style {
+			color(Color("#D8D3E6"))
+		}
 
 		linkStyle(desc(self, "li"))
 
@@ -352,31 +135,37 @@ object MarkdownStyle : StyleSheet() {
 			self + lastOfType style {
 				marginBottom(0.px)
 			}
+		}
 
-			self + child(not(type("pre")), type("code")) style {
-				backgroundColor(Color("#1d1d20"))
-				borderRadius(.5.cssRem)
-				padding(.3.cssRem, .5.cssRem)
-			}
+		":not(pre) > code" {
+			backgroundColor(Color(AppStyle.SURFACE_RAISED))
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+			borderRadius(.35.cssRem)
+			fontSize(.9.em)
+			padding(.1.cssRem, .35.cssRem)
 		}
 
 		"img" {
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+			borderRadius(.6.cssRem)
 			maxWidth(100.percent)
-			borderRadius(.5.cssRem)
 		}
 
 		"pre" {
-			backgroundColor(Color("#1A1225"))
-			borderRadius(.8.cssRem)
+			backgroundColor(Color(AppStyle.CARD_BACKGROUND))
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+			borderRadius(.7.cssRem)
+			fontSize(.9.cssRem)
+			lineHeight(1.6.number)
 			overflowX(Overflow.Auto)
-			padding(1.5.cssRem)
+			padding(1.25.cssRem)
 
 			self + webkitScrollbar style {
 				height(8.px)
 			}
 
 			self + webkitScrollbarThumb style {
-				backgroundColor(Color("#ffffff40"))
+				backgroundColor(Color("#FFFFFF33"))
 				borderRadius(.5.cssRem)
 			}
 
@@ -385,14 +174,33 @@ object MarkdownStyle : StyleSheet() {
 			}
 		}
 
-		// Enhanced blockquote styling
 		"blockquote" {
-			borderLeft(4.px, LineStyle.Solid, Color("#00D4FF"))
-			backgroundColor(Color("#1A1225"))
-			borderRadius(0.5.cssRem)
-			padding(1.cssRem)
-			margin(1.cssRem, 0.px)
-			fontStyle(FontStyle.Italic)
+			borderLeft(2.px, LineStyle.Solid, Color(AppStyle.ACCENT_COLOR))
+			color(Color(AppStyle.TEXT_MUTED_COLOR))
+			margin(1.5.cssRem, 0.px)
+			padding(.2.cssRem, 0.px, .2.cssRem, 1.25.cssRem)
 		}
+
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
+			"h1" {
+				fontSize(2.cssRem)
+			}
+
+			"h2" {
+				fontSize(1.45.cssRem)
+			}
+		}
+	}
+
+	val header by style {
+		borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+		marginBottom(2.5.cssRem)
+		paddingBottom(1.8.cssRem)
+	}
+
+	val keywords by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.4.cssRem)
 	}
 }

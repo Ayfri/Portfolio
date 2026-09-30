@@ -1,91 +1,83 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import com.varabyte.kobweb.compose.css.backgroundImage
-import com.varabyte.kobweb.compose.css.functions.linearGradient
-import com.varabyte.kobweb.compose.css.zIndex
-import io.github.ayfri.passiveListener
-import kotlinx.browser.document
+import com.varabyte.kobweb.compose.css.*
+import io.github.ayfri.AppStyle
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.HeaderStyle
+import io.github.ayfri.components.I
+import io.github.ayfri.utils.size
 import kotlinx.browser.window
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.JustifyContent
+import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Div
-import org.w3c.dom.events.EventListener
-import kotlin.math.max
-import kotlin.math.min
+
+/** Scroll-driven animations need no scroll listener, browsers lacking them get no bar rather than a full one. */
+private val scrollTimelineSupported: Boolean = js("CSS.supports('animation-timeline: scroll()')")
 
 @Composable
 fun ReadingProgressBar() {
-	Style(ProgressBarStyle)
+	if (!scrollTimelineSupported) return
+	Style(ScrollStyle)
+	Div({ classes(ScrollStyle.progress) })
+}
 
-	val progress = remember { mutableStateOf(0) }
+@Composable
+fun BackToTopButton() {
+	Style(ScrollStyle)
 
-	DisposableEffect(Unit) {
-		val scrollListener = EventListener {
-			val totalHeight = max(
-				document.documentElement?.scrollHeight ?: 0,
-				document.body?.scrollHeight ?: 0
-			) - window.innerHeight
-
-			val currentScroll = window.scrollY
-			val calculatedProgress = if (totalHeight > 0) {
-				min(100, ((currentScroll / totalHeight) * 100).toInt())
-			} else 0
-
-			progress.value = calculatedProgress
-		}
-
-		window.addEventListener("scroll", scrollListener, passiveListener)
-
-		onDispose {
-			window.removeEventListener("scroll", scrollListener)
-		}
-	}
-
-	Div({
-		classes(ProgressBarStyle.container)
+	Button({
+		classes(AppStyle.button, ScrollStyle.backToTop)
+		attr("aria-label", "Back to top")
+		onClick { window.scrollTo(0.0, 0.0) }
 	}) {
-		Div({
-			classes(ProgressBarStyle.progress)
-			style {
-				width(progress.value.percent)
-			}
-		})
+		I(FontAwesomeType.SOLID, "arrow-up")
 	}
 }
 
-object ProgressBarStyle : StyleSheet() {
-	const val PROGRESS_BAR_BACKGROUND_COLOR = "#FFFFFF10"
-	const val PROGRESS_GRADIENT_START_COLOR = "#9C7CF4"
-	const val PROGRESS_GRADIENT_END_COLOR = "#6EBAE7"
-
-	val container by style {
-		position(Position.Fixed)
-		top(0.px)
-		left(0.px)
-		width(100.percent)
-		height(4.px)
-		backgroundColor(Color(PROGRESS_BAR_BACKGROUND_COLOR))
-		zIndex(1000)
+object ScrollStyle : StyleSheet() {
+	val grow by keyframes {
+		from { transform { scaleX(0) } }
+		to { transform { scaleX(1) } }
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
-	val progress by style {
-		height(100.percent)
-		backgroundImage(linearGradient(90.deg) {
-			add(Color(PROGRESS_GRADIENT_START_COLOR))
-			add(Color(PROGRESS_GRADIENT_END_COLOR))
-		})
-		width(0.percent)
-
-		transitions {
-			properties("width") {
-				duration(0.2.s)
-				timingFunction(AnimationTimingFunction.EaseOut)
-			}
+	val reveal by keyframes {
+		from {
+			opacity(0)
+			property("visibility", "hidden")
 		}
+		to {
+			opacity(1)
+			property("visibility", "visible")
+		}
+	}
+
+	/** Sits on the header's bottom edge, so it never covers the navigation. */
+	val progress by style {
+		backgroundColor(Color(AppStyle.ACCENT_COLOR))
+		height(2.px)
+		left(0.px)
+		position(Position.Fixed)
+		property("top", "calc(${HeaderStyle.navbarHeight.value()} - 2px)")
+		property("transform-origin", "left")
+		width(100.percent)
+		zIndex(101)
+		property("animation", "${grow.name} linear both")
+		property("animation-timeline", "scroll(root)")
+	}
+
+	/** Fades in over the first 300px of scroll. */
+	val backToTop by style {
+		bottom(1.5.cssRem)
+		justifyContent(JustifyContent.Center)
+		padding(0.px)
+		position(Position.Fixed)
+		right(1.5.cssRem)
+		size(2.8.cssRem)
+		zIndex(100)
+		property("animation", "${reveal.name} linear both")
+		property("animation-timeline", "scroll(root)")
+		property("animation-range", "0 300px")
 	}
 }

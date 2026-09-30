@@ -1,249 +1,32 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.functions.linearGradient
-import io.github.ayfri.AppStyle
 import io.github.ayfri.articlesEntries
-import io.github.ayfri.calculateReadingTime
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
 import io.github.ayfri.data.ArticleEntry
-import io.github.ayfri.ensureSuffix
-import io.github.ayfri.formatLongDate
-import io.github.ayfri.utils.gradientBorderBackground
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
+import io.github.ayfri.pages.IconHeading
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.AlignItems
-import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 
-// Find related articles based on keywords, falling back to the most recent other articles
+/** Up to 3 other articles sharing the most keywords, or the most recent ones when none overlap. */
 fun findRelatedArticles(currentPath: String, keywords: List<String>): List<ArticleEntry> {
-	// Get all articles except the current one
-	val otherArticles = articlesEntries.filter { it.path != currentPath }
+	val others = articlesEntries.filter { it.path != currentPath }
+	val matched = others
+		.map { article -> article to article.keywords.count { it in keywords } }
+		.filter { it.second > 0 }
+		.sortedByDescending { it.second }
+		.map { it.first }
 
-	// Calculate relevance score for each article based on keyword matches
-	val scoredArticles = otherArticles.map { article ->
-		val matchingKeywords = article.keywords.count { it in keywords }
-		article to matchingKeywords
-	}
-
-	val matched = scoredArticles
-		.filter { (_, score) -> score > 0 }
-		.sortedByDescending { (_, score) -> score }
-		.map { (article, _) -> article }
-
-	// No keyword overlap: fall back to the most recent other articles so every article gets a section
-	if (matched.isEmpty()) {
-		return otherArticles.sortedByDescending { it.date }.take(3)
-	}
-
-	return matched.take(3) // Limit to 3 related articles
+	return matched.ifEmpty { others.sortedByDescending { it.date } }.take(3)
 }
 
 @Composable
 fun RelatedArticles(articles: List<ArticleEntry>) {
-	Style(RelatedArticlesStyle)
+	Style(ArticleListStyle)
 
-	Div({
-		classes(RelatedArticlesStyle.container)
+	Section({
+		style { marginTop(4.cssRem) }
 	}) {
-		H3({
-			classes(RelatedArticlesStyle.title)
-		}) {
-			I(FontAwesomeType.SOLID, "bookmark")
-			Text(" You might also like")
-		}
-
-		Div({
-			classes(RelatedArticlesStyle.grid)
-		}) {
-			articles.forEach { article ->
-				RelatedArticleCard(article)
-			}
-		}
-	}
-}
-
-@Composable
-fun RelatedArticleCard(article: ArticleEntry) {
-	A(
-		href = article.path.ensureSuffix("/"),
-		attrs = {
-			classes(RelatedArticlesStyle.card)
-		}
-	) {
-		H4({
-			classes(RelatedArticlesStyle.cardTitle)
-		}) {
-			Text(article.title)
-		}
-
-		P({
-			classes(RelatedArticlesStyle.cardDescription)
-		}) {
-			Text(article.desc)
-		}
-
-		Div({
-			classes(RelatedArticlesStyle.cardMeta)
-		}) {
-			val date = formatLongDate(article.date)
-
-			Span {
-				I(FontAwesomeType.SOLID, "calendar-alt")
-				Text(" $date")
-			}
-
-			// Reading time
-			val readingTime = calculateReadingTime(article.content)
-			Span {
-				I(FontAwesomeType.SOLID, "clock")
-				Text(" $readingTime min read")
-			}
-		}
-
-		Div({
-			classes(RelatedArticlesStyle.readMore)
-		}) {
-			Text("Read article")
-			I(FontAwesomeType.SOLID, "arrow-right")
-		}
-	}
-}
-
-object RelatedArticlesStyle : StyleSheet() {
-	const val CONTAINER_BG_COLOR = "#1A1225"
-	const val ACCENT_COLOR = "#6EBAE7"
-	const val CARD_BG_COLOR = "#1E1535"
-	const val CARD_HOVER_BG_COLOR = "#2A1B3D"
-	const val CARD_DESC_COLOR = "#FFFFFFCC"
-	const val CARD_META_COLOR = "#FFFFFF99"
-
-	val container by style {
-		marginTop(4.cssRem)
-		paddingTop(0.px)
-		borderRadius(1.cssRem)
-		padding(2.cssRem)
-		border(2.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CONTAINER_BG_COLOR))
-		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")
-	}
-
-	val title by style {
-		fontSize(1.8.cssRem)
-		margin(0.px, 0.px, 2.cssRem)
-		backgroundClip(BackgroundClip.Text)
-		backgroundImage(linearGradient(45.deg) {
-			add(Color("#00D4FF"))
-			add(Color("#FF0080"))
-		})
-		property("-webkit-background-clip", "text")
-		property("-webkit-text-fill-color", "transparent")
-
-		"i" {
-			marginRight(0.5.cssRem)
-		}
-	}
-
-	val grid by style {
-		display(DisplayStyle.Grid)
-		gridTemplateColumns {
-			repeat(GridEntry.Repeat.Auto.Type.AutoFit) {
-				minmax(280.px, 1.fr)
-			}
-		}
-		gap(1.5.cssRem)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val card by style {
-		backgroundColor(Color(CARD_BG_COLOR))
-		borderRadius(1.cssRem)
-		padding(1.5.cssRem)
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		height(100.percent)
-		textDecorationLine(TextDecorationLine.None)
-		color(Color.white)
-
-		transitions {
-			defaultDuration(0.3.s)
-			defaultTimingFunction(AnimationTimingFunction.EaseInOut)
-			properties("background-color", "transform", "box-shadow")
-		}
-
-		self + hover style {
-			backgroundColor(Color(CARD_HOVER_BG_COLOR))
-			boxShadow("0 0 20px rgba(255, 0, 128, 0.2)")
-			transform {
-				translateY((-5).px)
-			}
-		}
-	}
-
-	val cardTitle by style {
-		fontSize(1.2.cssRem)
-		margin(0.px, 0.px, 1.cssRem)
-		backgroundClip(BackgroundClip.Text)
-		backgroundImage(linearGradient(45.deg) {
-			add(Color("#00D4FF"))
-			add(Color("#FF0080"))
-		})
-		property("-webkit-background-clip", "text")
-		property("-webkit-text-fill-color", "transparent")
-	}
-
-	val cardDescription by style {
-		fontSize(0.9.cssRem)
-		lineHeight(1.5.em)
-		color(Color(CARD_DESC_COLOR))
-		margin(0.px, 0.px, 1.cssRem)
-		flexGrow(1)
-	}
-
-	val cardMeta by style {
-		display(DisplayStyle.Flex)
-		justifyContent(JustifyContent.FlexEnd)
-		fontSize(0.8.cssRem)
-		color(Color(CARD_META_COLOR))
-		marginBottom(1.cssRem)
-
-		"i" {
-			marginRight(0.3.cssRem)
-		}
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val readMore by style {
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		justifyContent(JustifyContent.FlexEnd)
-		gap(0.5.cssRem)
-		fontSize(0.9.cssRem)
-		fontWeight(600)
-		color(Color(ACCENT_COLOR))
-
-		transitions {
-			"transform" {
-				duration(0.2.s)
-			}
-		}
-
-		self + hover style {
-			transform {
-				translateX(5.px)
-			}
-		}
-	}
-
-	// Responsive styles
-	init {
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			grid style {
-				gridTemplateColumns(GridEntry.TrackSize(1.fr))
-			}
-		}
+		IconHeading("book-bookmark", "Keep reading")
+		ArticleList(articles)
 	}
 }

@@ -2,31 +2,32 @@ package io.github.ayfri.pages.articles
 
 import androidx.compose.runtime.*
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.articlesEntries
+import io.github.ayfri.components.ChipGroup
+import io.github.ayfri.components.FiltersStyle
 import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.I
+import io.github.ayfri.components.SearchField
 import io.github.ayfri.components.articles.ArticleList
 import io.github.ayfri.components.articles.ArticleListStyle
+import io.github.ayfri.components.countedByFrequency
+import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.utils.focusWithin
-import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.pageBackground
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
-import org.jetbrains.compose.web.attributes.InputType
+import io.github.ayfri.pages.IconStyle
+import org.jetbrains.compose.web.attributes.selected
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.AlignItems
-import org.jetbrains.compose.web.css.AlignSelf
-import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 
-enum class SortOption(val displayName: String) {
-	NEWEST_FIRST("Newest First"),
-	OLDEST_FIRST("Oldest First"),
-	ALPHABETICAL("A-Z")
+enum class SortOption(val displayName: String, val sort: (List<ArticleEntry>) -> List<ArticleEntry>) {
+	NEWEST_FIRST("Newest first", { list -> list.sortedByDescending { it.date } }),
+	OLDEST_FIRST("Oldest first", { list -> list.sortedBy { it.date } }),
+	ALPHABETICAL("A-Z", { list -> list.sortedBy { it.title } }),
 }
+
+/** Tags used by a single article only add noise to the filter row. */
+private val articleTags = articlesEntries.flatMap { it.keywords }.countedByFrequency().filter { it.second > 1 }
 
 @Page
 @Composable
@@ -37,415 +38,97 @@ fun ArticleList() {
 		keywords = "Kotlin blog, Minecraft datapack tutorial, Kore library, Svelte 5 tutorial, programming blog, kotlinx.serialization, web development articles",
 	) {
 		Style(ArticleListStyle)
+		Style(IconStyle)
 		Style(BlogPageStyle)
 
+		var searchQuery by remember { mutableStateOf("") }
+		var selectedTag by remember { mutableStateOf("") }
+		var sortOption by remember { mutableStateOf(SortOption.NEWEST_FIRST) }
+
+		val articles = remember(searchQuery, selectedTag, sortOption) {
+			sortOption.sort(articlesEntries.filter { article ->
+				(selectedTag.isEmpty() || selectedTag in article.keywords) && (
+					searchQuery.isEmpty() ||
+						article.title.contains(searchQuery, true) ||
+						article.desc.contains(searchQuery, true) ||
+						article.keywords.any { it.contains(searchQuery, true) }
+					)
+			})
+		}
+
 		Div({
-			classes(BlogPageStyle.container)
+			classes(AppStyle.sections, BlogPageStyle.container)
 		}) {
-			Div({
-				classes(BlogPageStyle.header)
+			H1({
+				classes(AppStyle.title, BlogPageStyle.title)
 			}) {
-				H1({
-					classes(BlogPageStyle.mainTitle)
-				}) {
-					Text("Blog")
-				}
-
-				P({
-					classes(BlogPageStyle.intro)
-				}) {
-					Text("Explore insightful articles on programming, technology, and more. Discover topics that interest you below or use the search function for specific inquiries.")
-				}
+				Text("Articles")
 			}
 
-			var searchQuery by remember { mutableStateOf("") }
-			var selectedTag by remember { mutableStateOf<String?>(null) }
-			var sortOption by remember { mutableStateOf(SortOption.NEWEST_FIRST) }
-
-			// Extract all unique tags from articles, remove tags only used once, and sort by frequency
-			val allTags = remember {
-				articlesEntries.flatMap { it.keywords }
-					.groupBy { it }
-					.filter { (_, count) -> count.size > 1 }
-					.map { (tag, usages) -> tag to usages.size }
-					.sortedByDescending { it.second }
+			P({
+				classes(BlogPageStyle.intro)
+			}) {
+				Text("Tutorials and write-ups on Kotlin, Minecraft datapacks with Kore, Svelte and the side projects I build along the way.")
 			}
 
 			Div({
-				classes(BlogPageStyle.filterSection)
+				classes(BlogPageStyle.controls)
 			}) {
-				Div({
-					classes(BlogPageStyle.searchBox)
+				SearchField(searchQuery, "Search articles") { searchQuery = it }
+
+				Select({
+					classes(AppStyle.input)
+					attr("aria-label", "Sort articles")
+					onChange { event -> sortOption = SortOption.entries.first { it.name == event.value } }
 				}) {
-					Label("search-input",{
-						classes(BlogPageStyle.searchWrapper)
-					}) {
-						I(FontAwesomeType.SOLID, "search")
-
-						Input(InputType.Text) {
-							classes(BlogPageStyle.searchInput)
-							attr("placeholder", "Search articles...")
-							id("search-input")
-							value(searchQuery)
-							onInput { event ->
-								searchQuery = event.value
-							}
-						}
-					}
-				}
-
-				Div({
-					classes(BlogPageStyle.controlsRow)
-				}) {
-					if (allTags.isNotEmpty()) {
-						Div({
-							classes(BlogPageStyle.tagsContainer)
-						}) {
-							Span({
-								classes(BlogPageStyle.tagLabel)
-							}) {
-								Text("Filter by tag:")
-							}
-
-							Span({
-								classes(BlogPageStyle.tag)
-								if (selectedTag == null) classes(BlogPageStyle.tagSelected)
-								onClick { selectedTag = null }
-							}) {
-								Text("All")
-							}
-
-							allTags.forEach { (name, usages) ->
-								Span({
-									classes(BlogPageStyle.tag)
-									if (selectedTag == name) classes(BlogPageStyle.tagSelected)
-									onClick { selectedTag = name }
-								}) {
-									Text("$name ($usages)")
-								}
-							}
-						}
-					}
-
-					Div({
-						classes(BlogPageStyle.sortContainer)
-					}) {
-						Span({
-							classes(BlogPageStyle.sortLabel)
-						}) {
-							Text("Sort by:")
-						}
-
-						Select({
-							classes(BlogPageStyle.sortSelect)
-							onChange {
-								val selectedValue = it.value
-								sortOption = SortOption.entries.find { option -> option.displayName == selectedValue }
-									?: SortOption.NEWEST_FIRST
-							}
-						}) {
-							SortOption.entries.forEach { option ->
-								Option(
-									value = option.displayName,
-									attrs = {
-										if (option == sortOption) attr("selected", "true")
-									}
-								) {
-									Text(option.displayName)
-								}
-							}
+					SortOption.entries.forEach { option ->
+						Option(option.name, { if (option == sortOption) selected() }) {
+							Text(option.displayName)
 						}
 					}
 				}
 			}
 
-			// Filter and sort articles based on search query, selected tag, and sort option
-			val filteredAndSortedArticles = remember(searchQuery, selectedTag, sortOption) {
-				val filtered = articlesEntries.filter { article ->
-					val matchesSearch = searchQuery.isEmpty() ||
-						article.title.contains(searchQuery, ignoreCase = true) ||
-						article.desc.contains(searchQuery, ignoreCase = true) ||
-						article.keywords.any { it.contains(searchQuery, ignoreCase = true) }
+			ChipGroup("Filter by tag", "tags", articleTags, selectedTag) { selectedTag = it }
 
-					val matchesTag = selectedTag == null || article.keywords.contains(selectedTag)
-
-					matchesSearch && matchesTag
-				}
-
-				when (sortOption) {
-					SortOption.NEWEST_FIRST -> filtered.sortedByDescending { it.date }
-					SortOption.OLDEST_FIRST -> filtered.sortedBy { it.date }
-					SortOption.ALPHABETICAL -> filtered.sortedBy { it.title }
+			P({
+				classes(FiltersStyle.label, BlogPageStyle.resultsInfo)
+			}) {
+				Span({ classes(IconStyle.label) }) {
+					I(FontAwesomeType.SOLID, if (articles.isEmpty()) "magnifying-glass" else "filter")
+					Text(if (articles.isEmpty()) "No article matches these filters." else "Showing ${articles.size} article${if (articles.size != 1) "s" else ""}")
 				}
 			}
 
-			if (filteredAndSortedArticles.isEmpty()) {
-				Div({
-					classes(BlogPageStyle.noResults)
-				}) {
-					P {
-						Text("No articles found matching your criteria. Try adjusting your search or filters.")
-					}
-				}
-			} else {
-				Div({
-					classes(BlogPageStyle.resultsInfo)
-				}) {
-					Text("Showing ${filteredAndSortedArticles.size} article${if (filteredAndSortedArticles.size != 1) "s" else ""}")
-				}
-
-				ArticleList(entries = filteredAndSortedArticles)
-			}
+			ArticleList(entries = articles)
 		}
 	}
 }
 
 object BlogPageStyle : StyleSheet() {
-	init {
-		id("main") style {
-			pageBackground()
-			minHeight(100.vh)
-		}
-	}
-
 	val container by style {
-		maxWidth(900.px)
-		margin(0.px, autoLength)
-		padding(1.cssRem, 1.cssRem)
+		maxWidth(60.cssRem)
 	}
 
-	val header by style {
-		marginBottom(0.px)
-		textAlign(TextAlign.Center)
-		padding(1.cssRem)
-	}
-
-	val mainTitle by style {
-		fontSize(3.cssRem)
-		margin(1.cssRem)
-		backgroundImage(linearGradient(45.deg) {
-			add(Color("#00D4FF"))
-			add(Color("#FF0080"))
-		})
-		backgroundClip(BackgroundClip.Text)
-		textShadow(TextShadow.of(color = rgba(0, 212, 255, 0.5), offsetX = 0.px, offsetY = 0.px, blurRadius = 10.px))
-		property("-webkit-background-clip", BackgroundClip.Text)
-		property("-webkit-text-fill-color", Color.transparent)
+	val title by style {
+		marginBottom(.8.cssRem)
 	}
 
 	val intro by style {
-		fontSize(1.2.cssRem)
-		lineHeight(1.6.em)
-		maxWidth(700.px)
-		margin(0.px, autoLength)
-		color(Color("#FFFFFFDD"))
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		fontSize(1.15.cssRem)
+		margin(0.px, 0.px, 2.cssRem)
+		maxWidth(40.cssRem)
 	}
 
-	val filterSection by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		gap(1.cssRem)
-		marginBottom(1.5.cssRem)
-		padding(1.cssRem)
-	}
-
-	val searchBox by style {
-		display(DisplayStyle.Flex)
-		justifyContent(JustifyContent.Center)
-		width(100.percent)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val searchWrapper by style {
-		alignItems(AlignItems.Center)
-		border(2.px, LineStyle.Solid, Color.transparent)
-		borderRadius(2.cssRem)
-		color(Color("#FFFFFFB0"))
-		display(DisplayStyle.Flex)
-		fontSize(1.1.cssRem)
-		maxWidth(600.px)
-		padding(0.8.cssRem, 1.cssRem)
-		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
-		transitions {
-			defaultDuration(0.3.s)
-			properties("color", "box-shadow")
-		}
-		width(100.percent)
-
-		self + focusWithin style {
-			color(Color.white)
-			boxShadow("0 0 20px rgba(0, 212, 255, 0.4)")
-		}
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val searchInput by style {
-		backgroundColor(Color.transparent)
-		borderStyle(LineStyle.None)
-		color(CSSColor.Inherit)
-		padding(0.px)
-		outlineStyle(LineStyle.None)
-		paddingLeft(0.75.cssRem)
-		width(100.percent)
-
-		focus style {
-			outlineStyle(LineStyle.None)
-			borderColor(Color("#FFFFFF80"))
-			backgroundColor(Color("#FFFFFF15"))
-			boxShadow(0.px, 0.px, 10.px, 0.px, Color("#FFFFFF20"))
-		}
-	}
-
-	val controlsRow by style {
+	val controls by style {
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
-		justifyContent(JustifyContent.SpaceBetween)
-		alignItems(AlignItems.Center)
-		gap(1.5.cssRem)
-	}
-
-	val tagsContainer by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		alignItems(AlignItems.Center)
-		gap(0.8.cssRem)
-		marginTop(0.5.cssRem)
-	}
-
-	val tagLabel by style {
-		color(Color("#FFFFFFAA"))
-		alignSelf(AlignSelf.Center)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val tag by style {
-		borderRadius(1.cssRem)
-		padding(0.4.cssRem, 1.cssRem)
-		fontSize(0.9.cssRem)
-		color(Color("#FFFFFFDD"))
-		cursor(Cursor.Pointer)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
-
-		transitions {
-			"background-color" {
-				duration(0.2.s)
-			}
-			"transform" {
-				duration(0.2.s)
-			}
-			"box-shadow" {
-				duration(0.2.s)
-			}
-		}
-
-		hover style {
-			backgroundColor(Color("#1E1535"))
-			boxShadow("0 0 15px rgba(0, 212, 255, 0.3)")
-			transform {
-				scale(1.05)
-			}
-		}
-	}
-
-	val tagSelected by style {
-		border(2.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(
-			fillColor = Color(AppStyle.CARD_BACKGROUND),
-			borderGradient = linearGradient(45.deg) {
-				add(Color("#FF0080"))
-				add(Color("#00D4FF"))
-			}
-		)
-		boxShadow("0 0 15px rgba(255, 0, 128, 0.3)")
-
-		hover style {
-			backgroundColor(Color("#1E1535"))
-			boxShadow("0 0 20px rgba(255, 0, 128, 0.5)")
-		}
-	}
-
-	val sortContainer by style {
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		gap(0.8.cssRem)
-	}
-
-	val sortLabel by style {
-		color(Color("#FFFFFFAA"))
-	}
-
-	val sortSelect by style {
-		backgroundColor(Color("#FFFFFF15"))
-		color(Color.white)
-		border(1.px, LineStyle.Solid, Color("#FFFFFF40"))
-		borderRadius(0.5.cssRem)
-		padding(0.4.cssRem, 0.8.cssRem)
-		fontSize(0.9.cssRem)
-		cursor(Cursor.Pointer)
-
-		focus style {
-			outlineStyle(LineStyle.None)
-			borderColor(Color("#FFFFFF80"))
-		}
-
-		"option" {
-			backgroundColor(Color("#212125"))
-		}
+		gap(.75.cssRem)
+		marginBottom(1.25.cssRem)
 	}
 
 	val resultsInfo by style {
-		textAlign(TextAlign.Right)
-		color(Color("#FFFFFF80"))
-		fontSize(0.9.cssRem)
-		marginBottom(1.cssRem)
-		fontStyle(FontStyle.Italic)
-	}
-
-	val noResults by style {
-		textAlign(TextAlign.Center)
-		padding(3.cssRem, 1.cssRem)
-		color(Color("#FFFFFFBB"))
-		fontSize(1.2.cssRem)
-	}
-
-	// Responsive styles
-	init {
-		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-			mainTitle style {
-				fontSize(2.8.cssRem)
-			}
-
-			intro style {
-				fontSize(1.1.cssRem)
-			}
-
-			controlsRow style {
-				justifyContent(JustifyContent.Center)
-				gap(1.cssRem)
-			}
-		}
-
-		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
-			container style {
-				padding(1.5.cssRem, 1.cssRem, 3.cssRem)
-			}
-
-			mainTitle style {
-				fontSize(2.2.cssRem)
-			}
-
-			intro style {
-				fontSize(1.cssRem)
-			}
-
-			filterSection style {
-				gap(1.cssRem)
-			}
-
-			resultsInfo style {
-				textAlign(TextAlign.Center)
-			}
-		}
+		margin(1.5.cssRem, 0.px, 1.cssRem)
 	}
 }

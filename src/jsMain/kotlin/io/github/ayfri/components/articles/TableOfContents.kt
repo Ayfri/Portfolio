@@ -1,12 +1,11 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.functions.linearGradient
+import com.varabyte.kobweb.compose.css.ListStyle
+import com.varabyte.kobweb.compose.css.listStyle
+import io.github.ayfri.AppStyle
 import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.I
-import io.github.ayfri.utils.gradientBorderBackground
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
@@ -32,14 +31,15 @@ fun headingToId(text: String) = text.lowercase()
 fun TableOfContents(headings: List<Pair<Int, String>>) {
 	Style(TableOfContentsStyle)
 
-	Div({
-		classes(TableOfContentsStyle.container)
+	Nav({
+		classes(AppStyle.card, TableOfContentsStyle.container)
+		attr("aria-label", "Table of contents")
 	}) {
-		H3({
+		P({
 			classes(TableOfContentsStyle.title)
 		}) {
-			I(FontAwesomeType.SOLID, "list")
-			Text(" Table of Contents")
+			I(FontAwesomeType.SOLID, "list-ul")
+			Text("Contents")
 		}
 
 		Ul({
@@ -47,14 +47,9 @@ fun TableOfContents(headings: List<Pair<Int, String>>) {
 		}) {
 			headings.forEach { (level, text) ->
 				Li({
-					classes(TableOfContentsStyle.item)
-					style {
-						paddingLeft((level - 1).cssRem)
-					}
+					style { paddingLeft((level - 1).cssRem) }
 				}) {
-					A(href = "#${headingToId(text)}") {
-						Text(text)
-					}
+					A("#${headingToId(text)}") { Text(text) }
 				}
 			}
 		}
@@ -62,33 +57,23 @@ fun TableOfContents(headings: List<Pair<Int, String>>) {
 }
 
 object TableOfContentsStyle : StyleSheet() {
-	const val CONTAINER_BACKGROUND_COLOR = "#1A1225"
-	const val ITEM_TEXT_COLOR = "#FFFFFFCC"
-	const val ITEM_HOVER_BACKGROUND_COLOR = "#FFFFFF15"
-	const val ITEM_HOVER_TEXT_COLOR = "#6EBAE7"
-
 	val container by style {
-		gradientBorderBackground(Color(CONTAINER_BACKGROUND_COLOR))
-		border(2.px, LineStyle.Solid, Color.transparent)
-		borderRadius(1.cssRem)
-		boxShadow("0 0 30px rgba(0, 212, 255, 0.15)")
-		padding(2.cssRem)
-		marginBottom(3.cssRem)
+		marginBottom(2.5.cssRem)
+		padding(1.4.cssRem, 1.6.cssRem)
 	}
 
 	val title by style {
-		backgroundClip(BackgroundClip.Text)
-		backgroundImage(linearGradient(45.deg) {
-			add(Color("#00D4FF"))
-			add(Color("#FF0080"))
-		})
-		fontSize(1.5.cssRem)
-		margin(0.px, 0.px, 1.cssRem)
-		property("-webkit-background-clip", "text")
-		property("-webkit-text-fill-color", "transparent")
+		alignItems(AlignItems.Center)
+		color(Color.white)
+		display(DisplayStyle.Flex)
+		fontFamily(AppStyle.MONO_FONT_FAMILY, "monospace")
+		fontSize(.9.cssRem)
+		fontWeight(700)
+		gap(.5.cssRem)
+		margin(0.px, 0.px, .6.cssRem)
 
 		"i" {
-			marginRight(0.5.cssRem)
+			color(Color(AppStyle.VIOLET_COLOR))
 		}
 	}
 
@@ -96,32 +81,16 @@ object TableOfContentsStyle : StyleSheet() {
 		listStyle(ListStyle.None)
 		margin(0.px)
 		padding(0.px)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val item by style {
-		margin(0.2.cssRem, 0.px)
 
 		"a" {
-			color(Color(ITEM_TEXT_COLOR))
-			textDecorationLine(TextDecorationLine.None)
-			fontSize(0.95.cssRem)
+			color(Color(AppStyle.TEXT_MUTED_COLOR))
 			display(DisplayStyle.Block)
-			padding(0.35.cssRem, 0.8.cssRem)
-			borderRadius(0.5.cssRem)
+			fontSize(.95.cssRem)
+			padding(.2.cssRem, 0.px)
+		}
 
-			transitions {
-				defaultDuration(0.2.s)
-				properties("background-color", "color", "transform")
-			}
-
-			self + hover style {
-				backgroundColor(Color(ITEM_HOVER_BACKGROUND_COLOR))
-				color(Color(ITEM_HOVER_TEXT_COLOR))
-				transform {
-					translateX(5.px)
-				}
-			}
+		"a:hover" {
+			color(Color(AppStyle.LINK_COLOR))
 		}
 	}
 }
