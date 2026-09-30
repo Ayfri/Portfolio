@@ -18,4 +18,5 @@ fun initKobweb(context: InitKobwebContext) {
 	context.router.setErrorPage {
 		NotFoundPage()
 	}
+	enableViewTransitions(context.router)
 }
