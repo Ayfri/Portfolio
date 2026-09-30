@@ -32,13 +32,15 @@ import org.jetbrains.compose.web.dom.*
 import web.location.location
 import kotlin.js.Date
 
-private val readmeUrlRegex = Regex("""(src|href)="([^"]+?)"""")
+/** The URL of an HTML `src`/`href` attribute or of a markdown `[...](url)` link or image. */
+private val readmeUrlRegex = Regex("""((?:src|href)="|\]\()([^")\s]+)""")
+private val schemeRegex = Regex("""^[a-zA-Z][a-zA-Z0-9+.-]*:""")
 
 /** README links and images are relative to the repository, so they are rewritten to its raw files. */
 private fun GitHubRepository.absoluteReadme() = readmeContent?.replace(readmeUrlRegex) { match ->
-	val (attr, url) = match.destructured
-	if (url.startsWith("http://") || url.startsWith("https://")) match.value
-	else "$attr=\"$htmlUrl/raw/$defaultBranch/$url\""
+	val (prefix, url) = match.destructured
+	if (url.startsWith("#") || schemeRegex.containsMatchIn(url)) match.value
+	else "$prefix$htmlUrl/raw/$defaultBranch/${url.removePrefix("./").removePrefix("/")}"
 }
 
 private fun formatDate(date: String) = Date(date).toLocaleDateString("en-GB")
