@@ -17,11 +17,10 @@ import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 
-/** One role; [logo] falls back to a briefcase icon when the company has no image. */
 data class Job(
 	val company: String,
 	val url: String,
-	val logo: String?,
+	val logo: String,
 	val role: String,
 	val period: String,
 	val kind: String,
@@ -53,7 +52,7 @@ val jobs = listOf(
 	Job(
 		company = "Eliophot",
 		url = "https://www.eliophot.com/en/",
-		logo = null,
+		logo = localImage("logos/eliophot.svg"),
 		role = "Full-Stack Developer",
 		period = "Sep 2023 - Sep 2025",
 		kind = "Work-study",
@@ -134,8 +133,7 @@ fun Experiences() {
 								classes(ExperiencesStyle.header)
 							}) {
 								Div({ classes(ExperiencesStyle.logo) }) {
-									if (job.logo != null) Img(job.logo, "${job.company} logo")
-									else I(FontAwesomeType.SOLID, "briefcase")
+									Img(job.logo, "${job.company} logo")
 								}
 
 								Div({ classes(ExperiencesStyle.titles) }) {
