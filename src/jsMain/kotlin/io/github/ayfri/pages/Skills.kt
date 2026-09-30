@@ -2,9 +2,7 @@ package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.css.functions.max
-import com.varabyte.kobweb.compose.css.functions.toImage
 import com.varabyte.kobweb.core.Page
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
@@ -19,9 +17,8 @@ import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.marker
 import io.github.ayfri.utils.n
-import io.github.ayfri.utils.pageBackground
+import io.github.ayfri.utils.revealOnScroll
 import io.github.ayfri.utils.size
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.AlignSelf
@@ -81,9 +78,7 @@ data class Skill(val language: Language) {
 					classes("left")
 				}) {
 					Img(language.iconUrl, alt = "${language.name} icon")
-					H2({
-						classes(AppStyle.monoFont)
-					}) {
+					H2 {
 						Text(language.name)
 					}
 				}
@@ -102,7 +97,7 @@ data class Skill(val language: Language) {
 			}
 
 			P({
-				markdownParagraph(language.description, false, AppStyle.monoFont, "description")
+				markdownParagraph(language.description, false, "description")
 			})
 		}
 
@@ -113,14 +108,7 @@ data class Skill(val language: Language) {
 			fun section(name: String, iconType: FontAwesomeType, iconName: String, list: List<GitHubRepository>) {
 				if (list.isEmpty()) return
 
-				H3({
-					classes(AppStyle.monoFont)
-					style {
-						display(DisplayStyle.Flex)
-						alignItems(AlignItems.Center)
-						gap(.5.cssRem)
-					}
-				}) {
+				H3 {
 					I(iconType, iconName)
 					Text(name)
 				}
@@ -136,9 +124,9 @@ data class Skill(val language: Language) {
 
 			val githubNotSchoolProjects = githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
 			val (contributedProjects, ownProjects) = githubNotSchoolProjects.partition { it.fork || it.owner.login != "Ayfri" }
-			section("GitHub Projects:", FontAwesomeType.BRAND, "github", ownProjects)
-			section("Contributed Projects:", FontAwesomeType.SOLID, "code-branch", contributedProjects)
-			section("School Projects:", FontAwesomeType.SOLID, "graduation-cap", schoolProjects)
+			section("GitHub projects", FontAwesomeType.BRAND, "github", ownProjects)
+			section("Contributions", FontAwesomeType.SOLID, "code-branch", contributedProjects)
+			section("School projects", FontAwesomeType.SOLID, "graduation-cap", schoolProjects)
 		}
 	}
 
@@ -499,14 +487,12 @@ fun Skills() {
 		Style(SkillsStyle)
 
 		Div({
-			classes(AppStyle.sections, SkillsStyle.skills)
+			classes(AppStyle.sections)
 		}) {
 			H1({
-				classes(AppStyle.monoFont, AppStyle.title)
+				classes(AppStyle.title)
 			}) {
-				Span {
-					Text("My Skills:")
-				}
+				Text("Skills")
 			}
 
 			Section({
@@ -526,12 +512,6 @@ fun Skills() {
 }
 
 object SkillsStyle : StyleSheet() {
-	const val SKILL_BACKGROUND_COLOR = "#141414"
-
-	val skills by style {
-		pageBackground()
-	}
-
 	val skillsList by style {
 		display(DisplayStyle.Grid)
 		gridTemplateColumns {
@@ -549,62 +529,36 @@ object SkillsStyle : StyleSheet() {
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val skill by style {
-		borderRadius(.8.cssRem)
-		border {
-			color(Color.transparent)
-			style(LineStyle.Solid)
-			width(2.px)
-		}
-
-		gradientBorderBackground(Color(SKILL_BACKGROUND_COLOR))
-		property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
-
-		color(Color.white)
-
-		transitions {
-			properties("transform") {
-				duration(0.3.s)
-			}
-		}
-
-		self + hover style {
-			transform {
-				translateY((-3).px)
-			}
-		}
+		borderRadius(.9.cssRem)
+		border(1.px, LineStyle.Solid, Color.transparent)
+		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
+		color(Color(AppStyle.TEXT_COLOR))
+		revealOnScroll()
 
 		"img" {
-			size(3.5.cssRem)
-			borderRadius(.3.cssRem)
+			size(3.cssRem)
+			borderRadius(.4.cssRem)
 		}
 
 		"h2" {
-			fontSize(1.cssRem)
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			property("-webkit-background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
-			property("-moz-text-fill-color", "transparent")
-			property("-moz-background-clip", "text")
+			color(Color.white)
+			fontSize(1.15.cssRem)
+			margin(.5.cssRem, 0.px, 0.px)
 		}
 
 		"p" {
-			fontSize(.92.cssRem)
+			fontSize(.95.cssRem)
 		}
 
 		child(self, type("div")) + not(empty) style {
-			padding(max(1.cssRem, 1.5.vw))
+			padding(max(1.2.cssRem, 1.5.vw))
 		}
 
 		className("top") style {
-			textAlign(TextAlign.Center)
-
 			group(className("description"), desc(className("description"), type("p"))) style {
-				margin(1.2.cssRem, 0.px, 0.px)
+				color(Color(AppStyle.TEXT_MUTED_COLOR))
+				margin(1.cssRem, 0.px, 0.px)
 			}
 
 			className("info") style {
@@ -616,26 +570,13 @@ object SkillsStyle : StyleSheet() {
 				textAlign(TextAlign.Start)
 
 				className("left") style {
-					borderRadius(.5.cssRem)
-					padding(.7.cssRem)
+					minWidth(6.cssRem)
 					textAlign(TextAlign.Center)
-					border {
-						width(1.px)
-						style(LineStyle.Solid)
-						color(Color.transparent)
-					}
-					property("background", """
-						transparent padding-box,
-						linear-gradient(45deg, #00D4FF, #FF0080) border-box
-					""")
-
-					"p" {
-						margin(.5.cssRem, 0.px, 0.px)
-					}
 				}
 
 				child(self, type("p")) style {
-					fontWeight(700)
+					color(Color(AppStyle.TEXT_MUTED_COLOR))
+					fontSize(.9.cssRem)
 					margin(0.px)
 					lineHeight(1.5.cssRem)
 
@@ -644,7 +585,8 @@ object SkillsStyle : StyleSheet() {
 					}
 
 					"i" {
-						color(Color("#FFE547"))
+						color(Color(AppStyle.ACCENT_COLOR))
+						fontSize(.75.cssRem)
 					}
 				}
 			}
@@ -652,25 +594,20 @@ object SkillsStyle : StyleSheet() {
 
 		className("bottom") style {
 			self + not(empty) style {
-				borderTop(2.px, LineStyle.Solid, Color.transparent)
-				borderImageSource(linearGradient(45.deg) {
-					add(Color("#00D4FF"))
-					add(Color("#FF0080"))
-				}.toImage())
-				borderImageSlice(BorderImageSlice.of(1))
+				borderTop(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
 			}
 
 			"h3" {
+				alignItems(AlignItems.Center)
+				color(Color.white)
+				display(DisplayStyle.Flex)
+				fontSize(.95.cssRem)
+				gap(.5.cssRem)
 				margin(0.px)
 
-				backgroundImage(linearGradient(45.deg) {
-					add(Color("#00D4FF"))
-					add(Color("#FF0080"))
-				})
-				property("-webkit-background-clip", "text")
-				property("-webkit-text-fill-color", "transparent")
-				property("-moz-text-fill-color", "transparent")
-				property("-moz-background-clip", "text")
+				"i" {
+					color(Color(AppStyle.TEXT_MUTED_COLOR))
+				}
 
 				self + nthOfType(2.n) style {
 					marginTop(1.2.cssRem)

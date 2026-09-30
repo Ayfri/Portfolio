@@ -11,9 +11,8 @@ import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.pageBackground
+import io.github.ayfri.utils.revealOnScroll
 import io.github.ayfri.utils.size
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
@@ -30,67 +29,48 @@ val portfolioStats = listOf(
 	PortfolioStat("Hosting", "Cloudflare Pages", "cloud"),
 )
 
-data class PortfolioSection(
-	val title: String,
-	val text: String,
-	val image: String,
-	val imageOnRight: Boolean,
-	val icon: String,
-)
+data class PortfolioSection(val title: String, val icon: String, val text: String, val image: String)
 
 val portfolioSections = listOf(
 	PortfolioSection(
 		title = "Why I Built It",
+		icon = "lightbulb",
 		text = """
 			My school asked for a portfolio to validate the first year, but I wanted more than a template someone could fill in a weekend.
 			Something that could explain what I do, how, and why, beyond a bare GitHub profile.
 		""".trimIndent(),
 		image = localImage("portfolio-1.png"),
-		imageOnRight = true,
-		icon = "lightbulb",
 	),
 	PortfolioSection(
 		title = "Designing It",
+		icon = "palette",
 		text = """
 			The early visual identity started as mockups in Figma, with my internship tutor pushing me on layout and color while I focused on the code.
 			These days the design lives directly in Compose HTML: styling and layout are iterated on in Kotlin itself, no separate design tool.
 		""".trimIndent(),
 		image = localImage("portfolio-2.png"),
-		imageOnRight = false,
-		icon = "palette",
 	),
 	PortfolioSection(
 		title = "Building It",
+		icon = "hammer",
 		text = """
 			Everything is Kotlin: pages, styling, and the build script itself, compiled to JavaScript through [Kobweb](https://kobweb.varabyte.com/) and Compose HTML.
 			One typed language for the whole site means the compiler catches broken links and typo'd CSS colors before they ever ship.
 		""".trimIndent(),
 		image = localImage("portfolio-3.png"),
-		imageOnRight = true,
-		icon = "hammer",
 	),
 	PortfolioSection(
 		title = "Shipping It",
+		icon = "rocket",
 		text = """
 			The site is statically exported with `kobwebExport`, then deployed to Cloudflare Pages straight from GitHub Actions on every push to master.
 			No manual uploads, no dynamic server to maintain, just static files served from the edge.
 		""".trimIndent(),
 		image = localImage("portfolio-4.png"),
-		imageOnRight = false,
-		icon = "rocket",
 	),
 )
 
-data class TechBadge(val name: String)
-
-val techBadges = listOf(
-	TechBadge("Kotlin 2.4"),
-	TechBadge("Kobweb 0.25"),
-	TechBadge("Compose HTML 1.11"),
-	TechBadge("Gradle 9.6"),
-	TechBadge("GitHub Actions"),
-	TechBadge("Cloudflare Pages"),
-)
+val techBadges = listOf("Kotlin 2.4", "Kobweb 0.25", "Compose HTML 1.12", "Gradle 9.8", "GitHub Actions", "Cloudflare Pages")
 
 @Page("/portfolio/index")
 @Composable
@@ -108,9 +88,7 @@ fun Portfolio() {
 			H1({
 				classes(AppStyle.title)
 			}) {
-				Span {
-					Text("This Portfolio")
-				}
+				Text("This portfolio")
 			}
 
 			Section({
@@ -129,21 +107,17 @@ fun Portfolio() {
 					classes(PortfolioStyle.introActions)
 				}) {
 					A("/articles/building-this-portfolio/", {
-						classes(AppStyle.button)
+						classes(AppStyle.button, AppStyle.primaryButton)
 					}) {
 						Text("Read the full story")
-						I(FontAwesomeType.SOLID, "arrow-right") {
-							marginLeft(0.5.cssRem)
-						}
+						I(FontAwesomeType.SOLID, "arrow-right")
 					}
 
 					A("https://github.com/Ayfri/Portfolio", {
-						classes(PortfolioStyle.secondaryButton)
+						classes(AppStyle.button)
 						target(ATarget.Blank)
 					}) {
-						I(FontAwesomeType.BRAND, "github") {
-							marginRight(0.5.cssRem)
-						}
+						I(FontAwesomeType.BRAND, "github")
 						Text("View source")
 					}
 				}
@@ -176,40 +150,19 @@ fun Portfolio() {
 			Div({
 				classes(PortfolioStyle.features)
 			}) {
-				portfolioSections.forEach { section ->
+				portfolioSections.forEachIndexed { index, section ->
 					Div({
 						classes(PortfolioStyle.feature)
-						if (section.imageOnRight) classes(PortfolioStyle.featureReverse)
+						if (index % 2 == 0) classes(PortfolioStyle.featureReverse)
 					}) {
-						Div({
-							classes(PortfolioStyle.featureImageFrame)
-						}) {
-							Div({
-								classes(PortfolioStyle.featureImageBar)
-							}) {
-								Span({ classes(PortfolioStyle.dot, PortfolioStyle.dotRed) })
-								Span({ classes(PortfolioStyle.dot, PortfolioStyle.dotYellow) })
-								Span({ classes(PortfolioStyle.dot, PortfolioStyle.dotGreen) })
-							}
-
-							Img(section.image, alt = "${section.title} screenshot") {
-								classes(PortfolioStyle.featureImage)
-							}
+						Img(section.image, alt = "${section.title} screenshot") {
+							classes(PortfolioStyle.featureImage)
 						}
 
 						Div({
 							classes(PortfolioStyle.featureText)
 						}) {
-							H2({
-								style {
-									display(DisplayStyle.Flex)
-									alignItems(AlignItems.Center)
-									gap(.6.cssRem)
-								}
-							}) {
-								I(FontAwesomeType.SOLID, section.icon)
-								Text(section.title)
-							}
+							IconHeading(section.icon, section.title)
 
 							P({
 								markdownParagraph(section.text, true)
@@ -222,27 +175,12 @@ fun Portfolio() {
 			Section({
 				classes(PortfolioStyle.techStack)
 			}) {
-				H2({
-					style {
-						display(DisplayStyle.Flex)
-						alignItems(AlignItems.Center)
-						gap(.6.cssRem)
-					}
-				}) {
-					I(FontAwesomeType.SOLID, "layer-group")
-					Text("Built With")
-				}
+				IconHeading("layer-group", "Built with")
 
 				Div({
 					classes(PortfolioStyle.techStackList)
 				}) {
-					techBadges.forEach { badge ->
-						Span({
-							classes(PortfolioStyle.techBadge, AppStyle.monoFont)
-						}) {
-							Text(badge.name)
-						}
-					}
+					techBadges.forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
 				}
 			}
 
@@ -261,7 +199,6 @@ fun Portfolio() {
 	}
 }
 
-@OptIn(ExperimentalComposeWebApi::class)
 object PortfolioStyle : StyleSheet() {
 	val portfolio by style {
 		display(DisplayStyle.Flex)
@@ -270,8 +207,6 @@ object PortfolioStyle : StyleSheet() {
 		gap(3.cssRem)
 
 		padding(2.cssRem)
-
-		pageBackground()
 
 		media(mediaMaxWidth(AppStyle.mobileSecondBreak)) {
 			self {
@@ -308,30 +243,6 @@ object PortfolioStyle : StyleSheet() {
 		justifyContent(JustifyContent.Center)
 	}
 
-	val secondaryButton by style {
-		alignItems(AlignItems.Center)
-		backgroundColor(Color.transparent)
-		border(2.px, LineStyle.Solid, Color("#3A3450"))
-		borderRadius(.4.cssRem)
-		color(Color.white)
-		cursor(Cursor.Pointer)
-		display(DisplayStyle.Flex)
-		fontSize(1.1.cssRem)
-		fontWeight(700)
-		padding(.65.cssRem, 1.2.cssRem)
-		textDecorationLine(TextDecorationLine.None)
-
-		transitions {
-			defaultDelay(.25.s)
-			properties("border-color", "background-color")
-		}
-
-		hover(self) style {
-			backgroundColor(Color("#ffffff10"))
-			borderColor(Color(AppStyle.BRAND_GRADIENT_FROM))
-		}
-	}
-
 	val stats by style {
 		display(DisplayStyle.Grid)
 		gap(1.2.cssRem)
@@ -346,16 +257,17 @@ object PortfolioStyle : StyleSheet() {
 
 	val statTile by style {
 		alignItems(AlignItems.Center)
-		border(2.px, LineStyle.Solid, Color.transparent)
+		border(1.px, LineStyle.Solid, Color.transparent)
 		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
 		borderRadius(.8.cssRem)
 		display(DisplayStyle.Flex)
 		gap(1.cssRem)
 		padding(1.2.cssRem)
+		revealOnScroll()
 
-		"svg" {
-			color(Color("#00D4FF"))
-			fontSize(1.5.cssRem)
+		group(desc(self, "svg"), desc(self, "i")) style {
+			color(Color(AppStyle.VIOLET_COLOR))
+			fontSize(1.3.cssRem)
 		}
 
 		"p" {
@@ -368,7 +280,7 @@ object PortfolioStyle : StyleSheet() {
 	}
 
 	val statLabel by style {
-		color(Color("#B0AEC0"))
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
 		fontSize(.85.cssRem)
 	}
 
@@ -385,6 +297,7 @@ object PortfolioStyle : StyleSheet() {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Row)
 		gap(2.5.cssRem)
+		revealOnScroll()
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
@@ -401,43 +314,13 @@ object PortfolioStyle : StyleSheet() {
 		}
 	}
 
-	val featureImageFrame by style {
-		backgroundColor(Color("#0F0B17"))
-		border(1.px, LineStyle.Solid, Color("#3A3450"))
-		borderRadius(.6.cssRem)
-		flex(1)
-		overflow(Overflow.Hidden)
-		width(100.percent)
-	}
-
-	val featureImageBar by style {
-		alignItems(AlignItems.Center)
-		backgroundColor(Color("#1D1730"))
-		borderBottom(1.px, LineStyle.Solid, Color("#3A3450"))
-		display(DisplayStyle.Flex)
-		gap(.4.cssRem)
-		padding(.55.cssRem, .8.cssRem)
-	}
-
-	val dot by style {
-		borderRadius(50.percent)
-		size(.6.cssRem)
-	}
-
-	val dotRed by style {
-		backgroundColor(Color("#FF5F56"))
-	}
-
-	val dotYellow by style {
-		backgroundColor(Color("#FFBD2E"))
-	}
-
-	val dotGreen by style {
-		backgroundColor(Color("#27C93F"))
-	}
-
 	val featureImage by style {
+		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
+		borderRadius(.6.cssRem)
+		boxSizing(BoxSizing.BorderBox)
 		display(DisplayStyle.Block)
+		flex(1)
+		minWidth(0.px)
 		height(16.cssRem)
 		objectFit(ObjectFit.Cover)
 		property("object-position", "top")
@@ -448,21 +331,13 @@ object PortfolioStyle : StyleSheet() {
 		flex(1)
 
 		"h2" {
-			backgroundClip(BackgroundClip.Text)
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			fontSize(1.6.cssRem)
+			color(Color.white)
+			fontSize(1.5.cssRem)
 			margin(0.px, 0.px, .8.cssRem)
-			property("-webkit-background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
-			property("-moz-text-fill-color", "transparent")
-			property("-moz-background-clip", "text")
 		}
 
 		"p" {
-			lineHeight(1.5.cssRem)
+			color(Color(AppStyle.TEXT_MUTED_COLOR))
 			margin(0.px)
 		}
 	}
@@ -476,34 +351,17 @@ object PortfolioStyle : StyleSheet() {
 		textAlign(TextAlign.Center)
 
 		"h2" {
-			backgroundClip(BackgroundClip.Text)
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			fontSize(1.8.cssRem)
+			color(Color.white)
+			fontSize(1.6.cssRem)
 			margin(0.px)
-			property("-webkit-background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
-			property("-moz-text-fill-color", "transparent")
-			property("-moz-background-clip", "text")
 		}
 	}
 
 	val techStackList by style {
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
-		gap(.8.cssRem)
+		gap(.6.cssRem)
 		justifyContent(JustifyContent.Center)
-	}
-
-	val techBadge by style {
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color("#252525"))
-		borderRadius(1.cssRem)
-		color(Color.white)
-		fontSize(.9.cssRem)
-		padding(.5.cssRem, 1.1.cssRem)
 	}
 
 	val outro by style {
