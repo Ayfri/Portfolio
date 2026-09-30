@@ -16,22 +16,21 @@ import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.passiveListener
+import io.github.ayfri.tint
 import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.pageBackground
+import io.github.ayfri.utils.revealOnScroll
 import io.github.ayfri.utils.size
 import kotlinx.browser.document
 import kotlinx.browser.window
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
-import org.w3c.dom.HTMLElement
-import org.w3c.dom.events.Event
-import org.w3c.dom.events.EventListener
+import web.intersection.IntersectionObserver
+import web.intersection.IntersectionObserverEntry
+import web.intersection.IntersectionObserverInit
 
 data class AboutMeSection(
 	val content: String,
@@ -44,18 +43,12 @@ data class AboutMeSection(
 	val title: (@Composable AboutMeSection.() -> Unit),
 ) {
 	var additionalContent: (@Composable () -> Unit)? = null
-	var htmlElement: HTMLElement? = null
 
 	@Composable
 	fun Display(selected: Boolean = false) = Section({
 		if (image) classes(AboutMeStyle.withImage)
 		if (selected) classes("selected")
 		id(id)
-
-		ref {
-			htmlElement = it
-			onDispose {}
-		}
 	}) {
 		if (image) title()
 		else Div({
@@ -93,7 +86,7 @@ data class AboutMeSection(
 			classes(AboutMeStyle.tags)
 		}) {
 			tags.forEach { tag ->
-				Span({ classes(AboutMeStyle.tag, AppStyle.monoFont) }) { Text(tag) }
+				Span({ classes(AppStyle.tag) }) { Text(tag) }
 			}
 		}
 	}
@@ -302,28 +295,17 @@ fun AboutMe() {
 
 		var roundSelected by remember { mutableStateOf(0) }
 
-		// A single passive listener drives the selected round; registering it from the composition (as attrs or bare
-		// calls) leaked a new listener on every scroll-triggered recomposition.
+		/** The section crossing a thin band at 35% of the viewport is the selected one, no layout reads on scroll. */
 		DisposableEffect(Unit) {
-			val onScroll = EventListener {
-				sections.forEachIndexed { index, section ->
-					if (index == roundSelected) return@forEachIndexed
-					val element = document.querySelector("#${section.id}") ?: return@forEachIndexed
-					val elementOffset = element.asDynamic().offsetTop as Double - TIMELINE_DEFAULT_OFFSET * 2
-					val elementHeight = element.asDynamic().offsetHeight as Double
-
-					if (window.scrollY in elementOffset..(elementOffset + elementHeight)) roundSelected = index
+			val observer = IntersectionObserver({ entries, _ ->
+				entries.unsafeCast<Array<IntersectionObserverEntry>>().lastOrNull { it.isIntersecting }?.let { entry ->
+					roundSelected = sections.indexOfFirst { it.id == entry.target.id.toString() }
 				}
-			}
+			}, IntersectionObserverInit(rootMargin = "-35% 0px -64% 0px"))
 
-			window.addEventListener("scroll", onScroll, passiveListener)
-			window.addEventListener("resize", onScroll, passiveListener)
-			onScroll.handleEvent(Event("scroll"))
-
-			onDispose {
-				window.removeEventListener("scroll", onScroll)
-				window.removeEventListener("resize", onScroll)
-			}
+			// Looked up by id: this effect runs before the sections' own `ref` callbacks, so refs would still be null here.
+			sections.forEach { section -> document.getElementById(section.id)?.let { observer.observe(it.unsafeCast<web.dom.Element>()) } }
+			onDispose { observer.disconnect() }
 		}
 
 		Div({
@@ -379,11 +361,6 @@ fun TextIcon(text: String, fontAwesomeType: FontAwesomeType, icon: String, color
 }
 
 object AboutMeStyle : StyleSheet() {
-	const val BACKGROUND_SECTION_ODD_COLOR = "#1A1225"
-	const val BACKGROUND_SECTION_EVEN_COLOR = "#1E1535"
-	const val TIMELINE_BG_GRADIANT_END_COLOR = "#FF0080"
-	const val TIMELINE_BG_GRADIANT_START_COLOR = "#00D4FF"
-
 	val timelineSize by variable<CSSSizeValue<*>>()
 
 	init {
@@ -394,8 +371,6 @@ object AboutMeStyle : StyleSheet() {
 		id("main") style {
 			timelineSize(max(6.cssRem, 8.vw))
 			paddingBottom(2.cssRem)
-
-			pageBackground()
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
@@ -411,22 +386,12 @@ object AboutMeStyle : StyleSheet() {
 		}
 
 		"h1" {
-			fontSize(3.cssRem)
+			color(Color.white)
+			fontSize(2.8.cssRem)
 			margin(0.px)
-
-			backgroundImage(linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			property("-webkit-background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
-			property("-moz-text-fill-color", "transparent")
-			property("-moz-background-clip", "text")
-			property("text-shadow", "0 0 20px rgba(0, 212, 255, 0.5)")
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	private fun generateKeyframe(
 		fromOpacity: Double = 0.0,
 		fromTransform: TransformBuilder.() -> Unit,
@@ -462,20 +427,13 @@ object AboutMeStyle : StyleSheet() {
 		translateX((-50).percent)
 	}
 
-	val sectionSelection by keyframes {
-		from {
-			backgroundPosition(BackgroundPosition.of(CSSPosition(200.percent, 0.percent)))
-		}
-
-		to {
-			backgroundPosition(BackgroundPosition.of(CSSPosition(0.percent, 0.percent)))
-		}
-	}
-
 	val layout by style {
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Row)
 		alignItems(AlignItems.Stretch)
+		boxSizing(BoxSizing.BorderBox)
+		margin(0.px, autoLength)
+		maxWidth(1200.px + 8.cssRem)
 		// Left padding keeps room for the year label rendered on the left side of the selected round.
 		padding(0.px, 1.5.cssRem, 0.px, 1.cssRem)
 
@@ -486,10 +444,9 @@ object AboutMeStyle : StyleSheet() {
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
 	val timeline by style {
-		val thickness = 4.px
-		val roundSize = 1.1.cssRem
+		val thickness = 1.px
+		val roundSize = .8.cssRem
 
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
@@ -502,48 +459,36 @@ object AboutMeStyle : StyleSheet() {
 		width(timelineSize.value())
 		flexShrink(0)
 
-		child(self, universal) style {
-			backgroundImage(linearGradient {
-				add(Color(TIMELINE_BG_GRADIANT_START_COLOR))
-				add(Color(TIMELINE_BG_GRADIANT_END_COLOR))
-			})
-			backgroundAttachment(BackgroundAttachment.Fixed)
-			property("box-shadow", "0 0 15px rgba(0, 212, 255, 0.4)")
-		}
-
 		className("round") style {
 			size(roundSize)
-			borderRadius(10.cssRem)
+			boxSizing(BoxSizing.BorderBox)
+			backgroundColor(Color(AppStyle.CONTENT_BACKGROUND_COLOR))
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
+			borderRadius(50.percent)
 			position(Position.Relative)
 			flexShrink(0)
 
 			transitions {
-				defaultDelay(.4.s)
-				defaultTimingFunction(AnimationTimingFunction.cubicBezier(.47, 2.0, .41, .8))
-				properties("transform", "box-shadow")
-			}
-
-			group(hover(self), self + className("selected")) style {
-				boxShadow(color = Color("#FF008080"), blurRadius = .8.cssRem)
-				zIndex(3)
+				defaultDuration(.25.s)
+				properties("transform", "background-color", "border-color", "box-shadow")
 			}
 
 			hover(self) style {
-				transform { scale(1.15) }
+				borderColor(Color(AppStyle.ACCENT_COLOR))
 				cursor(Cursor.Pointer)
 			}
 
 			self + className("selected") style {
-				transform { scale(1.35) }
-				border {
-					color(Color("#00D4FF"))
-					style(LineStyle.Solid)
-					width(2.px)
-				}
-				property("box-shadow", "0 0 20px rgba(255, 0, 128, 0.6)")
+				transform { scale(1.3) }
+				backgroundColor(Color(AppStyle.ACCENT_COLOR))
+				borderColor(Color(AppStyle.ACCENT_COLOR))
+				boxShadow("0 0 12px ${tint(AppStyle.ACCENT_COLOR, 60)}")
+				zIndex(3)
 
 				self + after style {
 					content("attr(data-date)".unsafeCast<Content>())
+					color(Color(AppStyle.TEXT_COLOR))
+					fontFamily(AppStyle.MONO_FONT_FAMILY, "monospace")
 					fontWeight(700)
 					fontSize(.75.cssRem)
 
@@ -565,6 +510,7 @@ object AboutMeStyle : StyleSheet() {
 		// The separators grow instead of having a fixed length, so the whole timeline always fits its sticky height,
 		// however many sections the list has.
 		className("separator") style {
+			backgroundColor(Color(AppStyle.BORDER_STRONG_COLOR))
 			flex("1 1 0")
 			minHeight(0.px)
 			width(thickness)
@@ -580,12 +526,8 @@ object AboutMeStyle : StyleSheet() {
 
 				padding(.2.cssRem, .4.cssRem)
 				borderRadius(.5.cssRem)
-				border {
-					width(1.px)
-					style(LineStyle.Solid)
-					color(Color.transparent)
-				}
-				gradientBorderBackground(Color("#00000090"))
+				border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
+				backgroundColor(Color(AppStyle.CARD_BACKGROUND))
 
 				animation(appearBottom) {
 					duration(.3.s)
@@ -639,10 +581,9 @@ object AboutMeStyle : StyleSheet() {
 	}
 
 	val dateBadge by style {
-		backgroundColor(Color("#FFFFFF10"))
-		border(1.px, LineStyle.Solid, Color("#00D4FF40"))
-		borderRadius(1.cssRem)
-		color(Color("#FFFFFFCC"))
+		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
+		borderRadius(.4.cssRem)
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
 		fontSize(.8.cssRem)
 		fontWeight(600)
 		padding(.25.cssRem, .8.cssRem)
@@ -656,15 +597,6 @@ object AboutMeStyle : StyleSheet() {
 		marginTop(1.25.cssRem)
 	}
 
-	val tag by style {
-		backgroundColor(Color("#FFFFFF12"))
-		borderRadius(1.cssRem)
-		color(Color("#FFFFFFDD"))
-		fontSize(.75.cssRem)
-		padding(.25.cssRem, .7.cssRem)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
 	val content by style {
 		val titleHeight by variable<CSSSizeValue<*>>()
 
@@ -677,82 +609,36 @@ object AboutMeStyle : StyleSheet() {
 		"section" {
 			titleHeight(max(1.75.cssRem, 2.4.vw))
 
-			fontFamily(AppStyle.MONO_FONT_FAMILY)
 			padding(2.cssRem, max(2.cssRem, 3.vw))
 			position(Position.Relative)
-			borderRadius(1.cssRem)
-			border {
-				width(2.px)
-				style(LineStyle.Solid)
-				color(Color.transparent)
-			}
-			gradientBorderBackground(Color(BACKGROUND_SECTION_ODD_COLOR))
-			property("box-shadow", "0 0 20px rgba(0, 212, 255, 0.1)")
+			borderRadius(.9.cssRem)
+			border(1.px, LineStyle.Solid, Color.transparent)
+			gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
+			revealOnScroll()
 
-			transitions {
-				defaultDuration(.3.s)
-				defaultTimingFunction(AnimationTimingFunction.EaseInOut)
-				properties("transform", "box-shadow")
-			}
-
+			/** The section being read gets a cyan edge fading out, matching the lit round on the timeline. */
 			self + className("selected") style {
-				val offset = 4.px
-				transform {
-					scaleX(1.005)
-					translateX(-offset)
-				}
-
-				borderRadius(topLeft = 1.cssRem, bottomLeft = 1.cssRem, topRight = 1.cssRem, bottomRight = 1.cssRem)
-				property("box-shadow", "0 0 30px rgba(255, 0, 128, 0.3)")
-
-				overflow(Overflow.Hidden)
-				animation(sectionSelection) {
-					delay(.1.s)
-					duration(.4.s)
-					timingFunction(AnimationTimingFunction.EaseInOut)
-				}
-
-				backgroundImage(linearGradient(90.deg) {
-					add(Color("#2A1B3D"))
-					add(Color("#1A1225"))
-					add(Color.transparent)
+				gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND), linearGradient(160.deg) {
+					add(Color(AppStyle.ACCENT_COLOR))
+					add(Color(AppStyle.VIOLET_COLOR), 30.percent)
+					add(Color(AppStyle.BORDER_COLOR), 60.percent)
 				})
-				backgroundRepeat(BackgroundRepeat.NoRepeat)
-				backgroundSize(BackgroundSize.of(200.percent, 100.percent))
-			}
-
-			self + nthChild(Nth.Even) style {
-				gradientBorderBackground(Color(BACKGROUND_SECTION_EVEN_COLOR))
 			}
 
 			"h2" {
-				backgroundImage(linearGradient(45.deg) {
-					add(Color("#00D4FF"))
-					add(Color("#FF0080"))
-				})
-				property("-webkit-background-clip", "text")
-				property("-webkit-text-fill-color", "transparent")
-				property("-moz-text-fill-color", "transparent")
-				property("-moz-background-clip", "text")
+				color(Color.white)
 
 				group(desc(self, type("img")), desc(self, type("i"))) style {
 					val iconPadding = .4.cssRem
 					val iconHeight = titleHeight.value() + (iconPadding * 2)
 
-					borderRadius(.75.cssRem)
+					backgroundColor(Color("#FFFFFF08"))
+					border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+					borderRadius(.6.cssRem)
 					height(iconHeight)
 					lineHeight(iconHeight)
 					padding(iconPadding)
 					width(auto)
-					border {
-						width(1.px)
-						style(LineStyle.Solid)
-						color(Color.transparent)
-					}
-					property("background", """
-						transparent padding-box,
-						linear-gradient(45deg, #00D4FF, #FF0080) border-box
-					""")
 				}
 
 				fontSize(titleHeight.value())
@@ -760,20 +646,20 @@ object AboutMeStyle : StyleSheet() {
 			}
 
 			"p" {
-				color(Color("#FFFFFFE6"))
-				fontSize(1.05.cssRem)
-				lineHeight(1.8.number)
+				color(Color(AppStyle.TEXT_COLOR))
+				fontSize(1.08.cssRem)
+				lineHeight(1.75.number)
 				margin(0.px)
 			}
 
 			"a" {
-				color(Color("#7FE3FF"))
-				property("text-decoration-color", "#7FE3FF60")
+				color(Color(AppStyle.LINK_COLOR))
+				property("text-decoration-color", tint(AppStyle.LINK_COLOR, 40))
 				property("text-underline-offset", "3px")
 
 				hover(self) style {
-					color(Color("#FF6FB5"))
-					property("text-decoration-color", "#FF6FB5")
+					color(Color(AppStyle.LINK_HOVER_COLOR))
+					property("text-decoration-color", AppStyle.LINK_HOVER_COLOR)
 				}
 			}
 
