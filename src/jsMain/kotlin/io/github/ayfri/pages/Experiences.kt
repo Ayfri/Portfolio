@@ -1,45 +1,105 @@
 package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.BackgroundClip
-import com.varabyte.kobweb.compose.css.TransitionTimingFunction
-import com.varabyte.kobweb.compose.css.backgroundClip
-import com.varabyte.kobweb.compose.css.backgroundImage
-import com.varabyte.kobweb.compose.css.boxShadow
+import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
-import io.github.ayfri.AnimationsStyle
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.P
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.markdownParagraph
-import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.pageBackground
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
+import io.github.ayfri.localImage
+import io.github.ayfri.tint
+import io.github.ayfri.utils.size
+import org.jetbrains.compose.web.attributes.ATarget
+import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 
-@Composable
-fun Experience(
-	text: String,
-	animationDelay: CSSSizeValue<out CSSUnitTime> = 0.s
-) {
-	Section({
-		classes(ExperiencesStyle.experience)
-		style {
-			animation(AnimationsStyle.appearFromBelow) {
-				duration(0.8.s)
-				timingFunction(AnimationTimingFunction.EaseInOut)
-				fillMode(AnimationFillMode.Forwards)
-				delay(animationDelay)
-			}
-			opacity(0)
-		}
-	}) {
-		P({
-			markdownParagraph(text)
-		})
-	}
-}
+/** One role; [logo] falls back to a briefcase icon when the company has no image. */
+data class Job(
+	val company: String,
+	val url: String,
+	val logo: String?,
+	val role: String,
+	val period: String,
+	val kind: String,
+	val location: String,
+	val summary: String,
+	val highlights: List<String>,
+	val stack: List<String>,
+)
+
+/** Newest first, like the home page timeline. */
+val jobs = listOf(
+	Job(
+		company = "Link2Brain",
+		url = "https://www.link2brain.com/",
+		logo = localImage("logos/link2brain.webp"),
+		role = "Lead Full-Stack & AI Developer",
+		period = "Sep 2025 - Sep 2026",
+		kind = "Work-study",
+		location = "Marseille",
+		summary = "A startup building an AI platform that turns a company's own website into ready-to-publish social media content. It grew out of ScriptGraf, the research project I worked on at Ynov in 2023, and I led its development.",
+		highlights = listOf(
+			"Built Python AI agents with RAG to generate text, images and short videos",
+			"Worked on the API and database layer, plus social network integrations to schedule and publish posts",
+			"Owned the DevOps side: Docker, Dokploy deployments and the CI pipeline",
+			"Led technical decisions, code review and task splitting, organized with GitHub Projects",
+		),
+		stack = listOf("Python", "RAG", "FastAPI", "MariaDB", "Vue", "Nuxt", "Docker", "Dokploy", "GitHub Actions"),
+	),
+	Job(
+		company = "Eliophot",
+		url = "https://www.eliophot.com/en/",
+		logo = null,
+		role = "Full-Stack Developer",
+		period = "Sep 2023 - Sep 2025",
+		kind = "Work-study",
+		location = "Aix-en-Provence",
+		summary = "Two years in a 360° marketing and communications agency of about 25 people, building client websites and internal tools on long-running projects.",
+		highlights = listOf(
+			"Built and maintained web apps with Svelte, Astro and Tailwind CSS, including e-commerce and portfolio sites",
+			"Created custom WordPress plugins with Advanced Custom Fields for client CMS needs",
+			"Set up deployment pipelines with Dokploy and RunDeck",
+			"Evaluated new tools for the agency and planned parallel client projects in Asana",
+		),
+		stack = listOf("Svelte", "Astro", "Tailwind CSS", "WordPress", "PHP", "Dokploy"),
+	),
+	Job(
+		company = "Ynov",
+		url = "https://www.ynov.com/",
+		logo = localImage("ynov-icon.avif"),
+		role = "AI Research Intern, ScriptGraf",
+		period = "Jun 2023 - Aug 2023",
+		kind = "Internship",
+		location = "Aix-en-Provence",
+		summary = "A school-run AI internship on ScriptGraf, a prototype that writes social media posts for companies. It later became Link2Brain, where I joined two years later.",
+		highlights = listOf(
+			"Researched ChatGPT, autonomous agents and ways to extend GPT's context",
+			"Built the first prototype with friends and first-year students",
+			"Followed the Data Scientist track at Ynov, graduating with a Master's degree in 2026",
+		),
+		stack = listOf("Python", "OpenAI API", "LLM agents"),
+	),
+	Job(
+		company = "BlueFrog",
+		url = "https://www.bluefrog.fr/",
+		logo = "https://www.bluefrog.fr/images/logo.png",
+		role = "Web Developer",
+		period = "Jun 2022 - Aug 2022",
+		kind = "Internship",
+		location = "France",
+		summary = "A one-person web agency building PHP and WordPress sites for individuals. I integrated the designs my tutor mocked up.",
+		highlights = listOf(
+			"Learned PHP and WordPress from scratch, then shipped several sites and plugins",
+			"Worked on CSS animations with my tutor, which sharpened my CSS a lot",
+			"Introduced Git and GitHub so we could work on the same code",
+		),
+		stack = listOf("PHP", "WordPress", "CSS", "Git"),
+	),
+)
 
 @Page("/experiences/index")
 @Composable
@@ -52,211 +112,258 @@ fun Experiences() {
 		Style(ExperiencesStyle)
 
 		Div({
-			classes(AppStyle.monoFont, AppStyle.sections, ExperiencesStyle.experiences)
+			classes(AppStyle.sections, ExperiencesStyle.page)
 		}) {
-			H1({
-				classes(AppStyle.title)
-				style {
-					animation(AnimationsStyle.appearFromBelow) {
-						duration(0.6.s)
-						timingFunction(AnimationTimingFunction.EaseInOut)
-						fillMode(AnimationFillMode.Forwards)
-					}
-					opacity(0)
-				}
-			}) {
-				Span {
-					Text("Experiences:")
-				}
+			H1({ classes(AppStyle.title) }) { Text("Experience") }
+
+			P({ classes(ExperiencesStyle.intro) }) {
+				Text("From WordPress sites at a one-person web agency to leading development at an AI startup, newest first.")
 			}
 
-			P("My professional journey includes various roles in web development and AI research. Below is a timeline of my work experiences, showcasing my growth and the diverse projects I've contributed to.", ExperiencesStyle.experiencesDescription)
-
-			Div({
-				classes(ExperiencesStyle.experiencesList)
+			Ol({
+				classes(ExperiencesStyle.timeline)
 			}) {
-				Experience(
-					"""
-					## [BlueFrog](https://www.bluefrog.fr/) Internship during summer 2022
+				jobs.forEach { job ->
+					Li({
+						classes(ExperiencesStyle.entry)
+					}) {
+						Article({
+							classes(AppStyle.card, ExperiencesStyle.job)
+						}) {
+							Header({
+								classes(ExperiencesStyle.header)
+							}) {
+								Div({ classes(ExperiencesStyle.logo) }) {
+									if (job.logo != null) Img(job.logo, "${job.company} logo")
+									else I(FontAwesomeType.SOLID, "briefcase")
+								}
 
-					[BlueFrog](https://www.bluefrog.fr/) is a company that develops websites mainly in [PHP](https://www.php.net) for individuals, it is only composed of one employee. From June 2022 to August 2022, I had an internship in the company.
-					Starting by learning PHP from scratch, while also learning [WordPress](https://wordpress.org) and then creating multiple websites & plugins. It was pretty interesting to learn a lot of new technologies and team working.
-					Also taught [Git](https://git-scm.com/) & [GitHub](https://github.com) and a few other technologies to my boss, so we could work together more efficiently.
+								Div({ classes(ExperiencesStyle.titles) }) {
+									H2 { Text(job.role) }
+									A(job.url, {
+										target(ATarget.Blank)
+									}) {
+										Text(job.company)
+									}
+								}
 
-					My boss was very nice and was creating the mock-ups for the websites, I was only integrating the code and the design. We were also often talking about the animations, which lead me to improve my CSS skills a lot.
-					The internship was 2 months long with a good environment, it was pretty far from my home, but I adapted easily, thus it was not a big deal.
+								Div({
+									classes(AppStyle.monoFont, ExperiencesStyle.meta)
+								}) {
+									Span {
+										I(FontAwesomeType.REGULAR, "calendar")
+										Text(job.period)
+									}
+									Span {
+										I(FontAwesomeType.SOLID, "location-dot")
+										Text("${job.kind} · ${job.location}")
+									}
+								}
+							}
 
-					Maybe it was a bit repetitive because it was only WordPress websites and no big plugins that change the experience.
+							P({ classes(ExperiencesStyle.summary) }) { Text(job.summary) }
 
-					My days were from 10AM to 6PM with the option to ask for home working if we needed to.
-				""".trimIndent(),
-					0.1.s
-				)
+							Ul({
+								classes(ExperiencesStyle.highlights)
+							}) {
+								job.highlights.forEach { Li { Text(it) } }
+							}
 
-				Experience(
-					"""
-					## [Ynov](https://www.ynov.com/) Internship during summer 2023
-
-					[Ynov](https://www.ynov.com/) is a school teaching computer science. I followed the [Data Scientist](https://www.ynov.com/metiers/data-scientist) course there and graduated with my Master's degree in summer 2026.<br>
-					From June 2023 to August 2023, I had an internship organized by the school about AI.<br>
-					We've done a lot of research about [ChatGPT](https://chat.openai.com/), autonomous agents, and expanding the context of GPT.
-
-					The project was named ScriptGraf, its purpose is to automatically create posts for a company's social media.<br>
-					The internship was 2 months long with a good environment, as it was in the school, it was pretty close to my home and in a place I already knew.<br>
-					I was working with some friends and other students in their first year.
-
-					That prototype is now a company: ScriptGraf grew into [Link2Brain](https://www.link2brain.com/), a Marseille startup selling the finished product, and I joined its team two years later.
-				""".trimIndent(),
-					0.3.s
-				)
-
-				Experience(
-					"""
-					## [Eliophot](https://www.eliophot.com/en/) – Full-Stack Developer (2023 - 2025)
-
-					I worked at [Eliophot](https://www.eliophot.com/en/), a 360° marketing and communications agency, as a Full-Stack Developer from September 2023 to September 2025.
-					During my 2-year internship, I had the chance to fully integrate into the team and contribute to long-term strategic projects.
-
-					My responsibilities were quite diverse. Day-to-day, I built and maintained web applications using modern front-end tools like [Svelte](https://svelte.dev/), [Astro](https://astro.build/), and [Tailwind CSS](https://tailwindcss.com/).
-					I created several websites from scratch, including [e-commerce](https://en.wikipedia.org/wiki/E-commerce) platforms and interactive portfolio sites, which required finding creative UI solutions.
-
-					A particularly valuable part of this experience was working on long-term, large-scale projects, something new to me at the time.
-					These projects spanned several months and involved collaboration with multiple departments, which significantly improved my skills in planning, architecture and teamwork.
-
-					Besides regular web development, I also built customized [WordPress](https://wordpress.org/) plugins, integrating tools like [Advanced Custom Fields](https://www.advancedcustomfields.com/) to enhance client content management systems.
-					I even stepped into [DevOps](https://en.wikipedia.org/wiki/DevOps), setting up deployment pipelines with tools such as [Dokploy](https://docs.dokploy.com/) and [RunDeck](https://www.rundeck.com/),
-					which gave me valuable insights into managing the entire software lifecycle.
-
-					Another interesting part of the job was technology research and evaluation: regularly exploring and testing new tools, so the agency could stay up-to-date and make smart tech decisions.
-					Day-to-day coordination went through [Asana](https://asana.com/), which is where I learned to plan my own workload across several parallel client projects.
-
-					Working in a larger team (around 25 people) greatly improved my communication and teamwork skills.
-					I learned how to independently manage my projects, prioritize tasks more effectively, and troubleshoot complex legacy code, all of which are useful in any development role.
-
-					The atmosphere was great, with supportive colleagues and a culture that encouraged innovation.
-					I built meaningful relationships across multiple teams and gained a deeper understanding of how development work aligns with broader business goals.
-				""".trimIndent(),
-					0.5.s
-				)
-
-				Experience(
-					"""
-					## [Link2Brain](https://www.link2brain.com/) – Lead Full-Stack & AI Developer (2025 - 2026)
-
-					[Link2Brain](https://www.link2brain.com/) is a Marseille startup building an AI platform that turns a company's own website into ready-to-publish social media content, with no prompt to write.
-					It is what ScriptGraf became: the research project I worked on at [Ynov](https://www.ynov.com/) in 2023 shipped as a real product. The service is live with paying clients, and I was the lead developer of the team building it, as a work-study from September 2025 to September 2026.
-
-					Most of my work was [Python](https://www.python.org/) on the AI side, where I built agent systems using [RAG](https://en.wikipedia.org/wiki/Retrieval-augmented_generation) and state-of-the-art models to generate text, images and short videos.
-					I also worked on the API and the database layer, and I built the integrations with the social network APIs so posts can be scheduled and published from a single editorial calendar.
-
-					On the front-end I worked with [Vue](https://vuejs.org/) and [Nuxt](https://nuxt.com/), and the [DevOps](https://en.wikipedia.org/wiki/DevOps) side was mine too: [Docker](https://www.docker.com/), [Dokploy](https://docs.dokploy.com/) deployments and the CI pipeline that tests a change before it ships.
-					I set up the team's [GitHub Projects](https://github.com/features/issues) boards as well, so issues, branches and releases stay traceable.
-
-					We built the whole platform together, three developers alongside the founder handling product and marketing. I led the development side, which meant technical decisions, code review and splitting the work,
-					while still owning a wide slice of the codebase rather than a narrow specialty.
-
-					Taking a prototype I had seen at its very first step and watching it reach real marketing teams is the part I value most, and working across AI, web and infrastructure meant I saw the whole product rather than a single layer of it.
-				""".trimIndent(),
-					0.7.s
-				)
+							Div({
+								classes(ExperiencesStyle.stack)
+							}) {
+								job.stack.forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
+							}
+						}
+					}
+				}
 			}
 		}
 	}
 }
 
 object ExperiencesStyle : StyleSheet() {
-	const val EXPERIENCE_BACKGROUND_COLOR = "#1E1E1E"
+	private val railWidth = 2.5.cssRem
 
-	val experiences by style {
-		pageBackground()
+	val page by style {
+		maxWidth(62.cssRem)
 	}
 
-	val experiencesDescription by style {
-		fontSize(1.2.cssRem)
-		lineHeight(1.5.number)
-		color(Color("#FFFFFF"))
-		padding(0.5.cssRem, 0.cssRem)
+	val intro by style {
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		fontSize(1.15.cssRem)
+		margin(0.px, 0.px, 2.5.cssRem)
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
-	val experiencesList by style {
+	/** The rail is the list's own left border, each entry draws its node on it. */
+	val timeline by style {
+		borderLeft(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
-		gap(3.cssRem)
+		gap(1.75.cssRem)
+		listStyle(ListStyle.None)
+		margin(0.px, 0.px, 0.px, .5.cssRem)
+		padding(0.px, 0.px, 0.px, railWidth)
 
-		type("section") style {
-			borderRadius(1.cssRem)
-			padding(1.cssRem, 2.cssRem)
-			border(2.px, LineStyle.Solid, Color.transparent)
-			gradientBorderBackground(Color(EXPERIENCE_BACKGROUND_COLOR))
-			boxShadow("0 0 20px rgba(0, 212, 255, 0.1)")
-
-			transitions {
-				properties("transform", "box-shadow") {
-					duration(0.3.s)
-					timingFunction(TransitionTimingFunction.EaseInOut)
-				}
-			}
-
-			self + hover style {
-				transform {
-					translateY((-5).px)
-				}
-				boxShadow("0 0 30px rgba(255, 0, 128, 0.3)")
-			}
-
-			media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-				self {
-					padding(.8.cssRem, 1.2.cssRem)
-				}
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
+			self {
+				borderLeft(0.px, LineStyle.None, Color.transparent)
+				margin(0.px)
+				padding(0.px)
 			}
 		}
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
-	val experience by style {
-		lineHeight(1.5.cssRem)
+	val entry by style {
+		position(Position.Relative)
 
-		type("h2") style {
-			marginTop(0.px)
-			fontSize(1.5.cssRem)
-
-			backgroundClip(BackgroundClip.Text)
-			backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			property("-webkit-background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
-			property("-moz-text-fill-color", "transparent")
-			property("-moz-background-clip", "text")
-
-			media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
-				self {
-					fontSize(1.3.cssRem)
-				}
-			}
+		self + before style {
+			backgroundColor(Color(AppStyle.CONTENT_BACKGROUND_COLOR))
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
+			borderRadius(50.percent)
+			boxSizing(BoxSizing.BorderBox)
+			content("")
+			position(Position.Absolute)
+			property("left", "calc(-$railWidth - .4rem - .5px)")
+			size(.8.cssRem)
+			top(1.9.cssRem)
 		}
 
-		type("a") style {
-			color(Color(AppStyle.LINK_COLOR))
-			transitions {
-				properties("color") {
-					duration(0.2.s)
-					timingFunction(TransitionTimingFunction.EaseInOut)
-				}
-			}
+		self + firstChild + before style {
+			backgroundColor(Color(AppStyle.ACCENT_COLOR))
+			borderColor(Color(AppStyle.ACCENT_COLOR))
+			boxShadow("0 0 12px ${tint(AppStyle.ACCENT_COLOR, 60)}")
+		}
 
-			hover {
-				color(Color(AppStyle.LINK_HOVER_COLOR))
+		media(mediaMaxWidth(AppStyle.mobileThirdBreak)) {
+			self + before style {
+				display(DisplayStyle.None)
 			}
+		}
+	}
+
+	val job by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		gap(1.cssRem)
+		padding(1.6.cssRem, 1.8.cssRem)
+
+		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
+			self {
+				padding(1.2.cssRem)
+			}
+		}
+	}
+
+	val header by style {
+		alignItems(AlignItems.Center)
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.6.cssRem, 1.cssRem)
+	}
+
+	val logo by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color("#FFFFFF08"))
+		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+		borderRadius(.7.cssRem)
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		display(DisplayStyle.Flex)
+		flexShrink(0)
+		fontSize(1.2.cssRem)
+		justifyContent(JustifyContent.Center)
+		overflow(Overflow.Hidden)
+		size(3.cssRem)
+
+		"img" {
+			objectFit(ObjectFit.Contain)
+			size(2.2.cssRem)
+		}
+	}
+
+	val titles by style {
+		display(DisplayStyle.Flex)
+		flex(1)
+		flexDirection(FlexDirection.Column)
+		gap(.15.cssRem)
+		minWidth(12.cssRem)
+
+		"h2" {
+			color(Color.white)
+			fontSize(1.2.cssRem)
+			margin(0.px)
+		}
+
+		"a" {
+			color(Color(AppStyle.LINK_COLOR))
+			fontWeight(600)
+			width(Width.FitContent)
+		}
+
+		"a:hover" {
+			color(Color(AppStyle.LINK_HOVER_COLOR))
+		}
+	}
+
+	val meta by style {
+		alignItems(AlignItems.End)
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		fontSize(.8.cssRem)
+		gap(.25.cssRem)
+
+		"span" {
+			alignItems(AlignItems.Center)
+			display(DisplayStyle.Flex)
+			gap(.45.cssRem)
+			whiteSpace(WhiteSpace.NoWrap)
 		}
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
-				fontSize(.9.cssRem)
-				lineHeight(1.35.cssRem)
+				alignItems(AlignItems.Start)
+				width(100.percent)
 			}
 		}
+	}
+
+	val summary by style {
+		color(Color(AppStyle.TEXT_COLOR))
+		lineHeight(1.65.number)
+		margin(0.px)
+	}
+
+	/** Small violet diamonds as markers, echoing the logo tube instead of default bullets. */
+	val highlights by style {
+		display(DisplayStyle.Flex)
+		flexDirection(FlexDirection.Column)
+		gap(.45.cssRem)
+		listStyle(ListStyle.None)
+		margin(0.px)
+		padding(0.px)
+
+		"li" {
+			color(Color(AppStyle.TEXT_MUTED_COLOR))
+			paddingLeft(1.3.cssRem)
+			position(Position.Relative)
+		}
+
+		"li::before" {
+			backgroundColor(Color(AppStyle.VIOLET_COLOR))
+			content("")
+			left(.2.cssRem)
+			position(Position.Absolute)
+			size(.4.cssRem)
+			top(.62.em)
+			transform { rotate(45.deg) }
+		}
+	}
+
+	val stack by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.4.cssRem)
+		paddingTop(.2.cssRem)
 	}
 }
