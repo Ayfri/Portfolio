@@ -255,10 +255,10 @@ val sections = listOf(
 
 			The same summer, I did an internship at Ynov organised by the Data Engineering teacher, researching [ChatGPT](https://chatgpt.com), autonomous agents and ways to expand a model's context. That research became ScriptGraf, a tool that writes a company's social media posts on its own.
 
-			That prototype became a company. ScriptGraf is now [Link2Brain](https://www.link2brain.com/), a Marseille startup selling the finished product, live with paying clients, and I joined it in September 2025 as lead full-stack and AI developer.
-			Most of my work is [Python](https://www.python.org) on the AI side, building agents with [RAG](https://en.wikipedia.org/wiki/Retrieval-augmented_generation) and state-of-the-art models that generate text, images and short videos, plus the API and database layers, the [Vue](https://vuejs.org) and [Nuxt](https://nuxt.com) front-end, and the [Docker](https://www.docker.com) and [Dokploy](https://docs.dokploy.com) deployments.
+			That prototype became a company. ScriptGraf is now [Link2Brain](https://www.link2brain.com/), a Marseille startup selling the finished product, live with paying clients, and I was its lead full-stack and AI developer as a work-study from September 2025 to September 2026.
+			Most of my work was [Python](https://www.python.org) on the AI side, building agents with [RAG](https://en.wikipedia.org/wiki/Retrieval-augmented_generation) and state-of-the-art models that generate text, images and short videos, plus the API and database layers, the [Vue](https://vuejs.org) and [Nuxt](https://nuxt.com) front-end, and the [Docker](https://www.docker.com) and [Dokploy](https://docs.dokploy.com) deployments.
 			Taking a school prototype I saw at step zero all the way to real marketing teams using it every day is the part I value most.
-		""".trimIndent(), 2023, id = "link2brain", dateLabel = "Since 2023", tags = listOf("Python", "RAG", "Nuxt", "Docker", "DevOps")
+		""".trimIndent(), 2023, id = "link2brain", dateLabel = "2023 - 2026", tags = listOf("Python", "RAG", "Nuxt", "Docker", "DevOps")
 	) {
 		TextIcon("ScriptGraf to Link2Brain", localImage("logos/link2brain.webp"))
 	},

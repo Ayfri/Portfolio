@@ -141,21 +141,21 @@ fun Experiences() {
 
 				Experience(
 					"""
-					## [Link2Brain](https://www.link2brain.com/) – Lead Full-Stack & AI Developer (Since September 2025)
+					## [Link2Brain](https://www.link2brain.com/) – Lead Full-Stack & AI Developer (2025 - 2026)
 
 					[Link2Brain](https://www.link2brain.com/) is a Marseille startup building an AI platform that turns a company's own website into ready-to-publish social media content, with no prompt to write.
-					It is what ScriptGraf became: the research project I worked on at [Ynov](https://www.ynov.com/) in 2023 shipped as a real product. The service is live with paying clients, and I joined in September 2025 as lead developer of the team building it.
+					It is what ScriptGraf became: the research project I worked on at [Ynov](https://www.ynov.com/) in 2023 shipped as a real product. The service is live with paying clients, and I was the lead developer of the team building it, as a work-study from September 2025 to September 2026.
 
-					Most of my work is [Python](https://www.python.org/) on the AI side, where I build agent systems using [RAG](https://en.wikipedia.org/wiki/Retrieval-augmented_generation) and state-of-the-art models to generate text, images and short videos.
-					I also work on the API and the database layer, and I build the integrations with the social network APIs so posts can be scheduled and published from a single editorial calendar.
+					Most of my work was [Python](https://www.python.org/) on the AI side, where I built agent systems using [RAG](https://en.wikipedia.org/wiki/Retrieval-augmented_generation) and state-of-the-art models to generate text, images and short videos.
+					I also worked on the API and the database layer, and I built the integrations with the social network APIs so posts can be scheduled and published from a single editorial calendar.
 
-					On the front-end I work with [Vue](https://vuejs.org/) and [Nuxt](https://nuxt.com/), and the [DevOps](https://en.wikipedia.org/wiki/DevOps) side is mine too: [Docker](https://www.docker.com/), [Dokploy](https://docs.dokploy.com/) deployments and the CI pipeline that tests a change before it ships.
+					On the front-end I worked with [Vue](https://vuejs.org/) and [Nuxt](https://nuxt.com/), and the [DevOps](https://en.wikipedia.org/wiki/DevOps) side was mine too: [Docker](https://www.docker.com/), [Dokploy](https://docs.dokploy.com/) deployments and the CI pipeline that tests a change before it ships.
 					I set up the team's [GitHub Projects](https://github.com/features/issues) boards as well, so issues, branches and releases stay traceable.
 
-					We built the whole platform together, three developers alongside the founder handling product and marketing. I lead the development side, which means technical decisions, code review and splitting the work,
+					We built the whole platform together, three developers alongside the founder handling product and marketing. I led the development side, which meant technical decisions, code review and splitting the work,
 					while still owning a wide slice of the codebase rather than a narrow specialty.
 
-					Taking a prototype I had seen at its very first step and watching it reach real marketing teams is the part I value most, and working across AI, web and infrastructure means I see the whole product rather than a single layer of it.
+					Taking a prototype I had seen at its very first step and watching it reach real marketing teams is the part I value most, and working across AI, web and infrastructure meant I saw the whole product rather than a single layer of it.
 				""".trimIndent(),
 					0.7.s
 				)
