@@ -79,8 +79,14 @@ val featuredProjects = listOf(
 	),
 )
 
+/**
+ * The whole card opens the project page, or the GitHub repository when the repo is missing from the snapshot
+ * ([stars] is null then): the title link stretches over the card, the Live and Source links sit above it.
+ */
 @Composable
 fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = false) {
+	val repositoryUrl = "https://github.com/${project.repository}"
+
 	Article({
 		classes(FeaturedProjectStyle.card)
 		if (hero) classes(FeaturedProjectStyle.heroCard)
@@ -100,7 +106,13 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 			Div({
 				classes(FeaturedProjectStyle.header)
 			}) {
-				H3 { Text(project.name) }
+				H3 {
+					A(if (stars != null) "/projects/${project.repository}/" else repositoryUrl, {
+						classes(FeaturedProjectStyle.cardLink)
+					}) {
+						Text(project.name)
+					}
+				}
 
 				stars?.let {
 					Span({
@@ -138,7 +150,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 					}
 				}
 
-				A("https://github.com/${project.repository}", {
+				A(repositoryUrl, {
 					classes(AppStyle.button, FeaturedProjectStyle.projectLink)
 				}) {
 					I(FontAwesomeType.BRAND, "github")
@@ -164,9 +176,11 @@ object FeaturedProjectStyle : StyleSheet() {
 
 	/** Neutral at rest, the neon logo edge, a violet halo and a slow screenshot zoom only show up on hover. */
 	val card by style {
+		cursor(Cursor.Pointer)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		overflow(Overflow.Hidden)
+		position(Position.Relative)
 		borderRadius(0.9.cssRem)
 		border(1.px, LineStyle.Solid, Color.transparent)
 		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
@@ -276,12 +290,29 @@ object FeaturedProjectStyle : StyleSheet() {
 		gap(0.4.cssRem)
 	}
 
+	/** Stays above the stretched title link so both buttons keep their own targets. */
 	val links by style {
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
 		gap(0.6.cssRem)
 		marginTop(autoLength)
 		paddingTop(0.4.cssRem)
+		position(Position.Relative)
+		zIndex(1)
+	}
+
+	val cardLink by style {
+		color(Color.white)
+
+		self + after style {
+			content("")
+			position(Position.Absolute)
+			property("inset", "0")
+		}
+
+		hover(self) style {
+			color(Color(AppStyle.ACCENT_COLOR))
+		}
 	}
 
 	/** Compact [AppStyle.button]; the live link only differs by its cyan label, a filled button per card would be too loud. */
