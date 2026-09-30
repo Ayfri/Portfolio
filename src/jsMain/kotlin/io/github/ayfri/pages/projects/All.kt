@@ -1,802 +1,356 @@
 package io.github.ayfri.pages.projects
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.AlignItems
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
-import io.github.ayfri.AppStyle.LINK_HOVER_COLOR
 import io.github.ayfri.CodeTheme
-import io.github.ayfri.components.*
+import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.I
+import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.portfolioData
-import io.github.ayfri.ensureSuffix
 import io.github.ayfri.externals.HighlightCode
 import io.github.ayfri.jsonld.JsonLD
 import io.github.ayfri.jsonld.generateProjectJsonLD
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.n
-import io.github.ayfri.utils.pageBackground
+import io.github.ayfri.pages.IconHeading
+import io.github.ayfri.pages.IconStyle
+import io.github.ayfri.utils.list
 import io.github.ayfri.utils.size
-import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
+import io.github.ayfri.components.Dd
+import io.github.ayfri.components.Dl
+import io.github.ayfri.components.Dt
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.dom.*
 import web.location.location
 import kotlin.js.Date
 
+private val readmeUrlRegex = Regex("""(src|href)="([^"]+?)"""")
+
+/** README links and images are relative to the repository, so they are rewritten to its raw files. */
+private fun GitHubRepository.absoluteReadme() = readmeContent?.replace(readmeUrlRegex) { match ->
+	val (attr, url) = match.destructured
+	if (url.startsWith("http://") || url.startsWith("https://")) match.value
+	else "$attr=\"$htmlUrl/raw/$defaultBranch/$url\""
+}
+
+private fun formatDate(date: String) = Date(date).toLocaleDateString("en-GB")
+
 @Page("{user}/{project}")
 @Composable
 fun All() {
-	Style(ProjectStyle)
-
 	val context = rememberPageContext()
-	val userName = context.route.params["user"]
-	val projectName = context.route.params["project"]
-
-	if (projectName == null || userName == null) {
-		location.href = "/projects/"
-		return
-	}
-
-		val portfolio = portfolioData()
-
-		val projects = portfolio.repos
-	val project = projects.find { it.fullName == "$userName/$projectName" }
+	val fullName = "${context.route.params["user"]}/${context.route.params["project"]}"
+	val project = portfolioData().repos.find { it.fullName == fullName }
 
 	if (project == null) {
 		location.href = "/projects/"
 		return
 	}
 
-	val path = context.route.toString()
-	setTitle("${project.name} by ${project.owner.login} - ${AppGlobals["author"]}'s Portfolio")
-	setDescription(project.description ?: AppGlobals["description"]!!)
-	val projectKeywords = (project.topics.toList() + listOfNotNull(project.language)).distinct()
-	if (projectKeywords.isNotEmpty()) setKeywords(projectKeywords.joinToString(", "))
-	setCanonical(AppGlobals["url"] + path.ensureSuffix("/"))
+	PageLayout(
+		"${project.name} by ${project.owner.login}",
+		description = project.description ?: AppGlobals["description"]!!,
+		keywords = (project.topics.toList() + listOfNotNull(project.language)).distinct().joinToString(", "),
+	) {
+		Style(ProjectStyle)
+		Style(IconStyle)
+		Style(CodeTheme)
+		HighlightCode()
+		JsonLD(generateProjectJsonLD(project, context.route.toString()))
 
-	HighlightCode()
-
-	PageLayout(project.name) {
-		// Add JSON-LD
-		val jsonLd = generateProjectJsonLD(project, path)
-		JsonLD(jsonLd)
+		val readme = remember(project) { project.absoluteReadme() }
 
 		Div({
-			classes(ProjectStyle.content)
+			classes(AppStyle.sections)
 		}) {
-			// Breadcrumb Navigation
-			Div({
+			Nav({
 				classes(ProjectStyle.breadcrumbs)
+				attr("aria-label", "Breadcrumb")
 			}) {
-				A("/", {
-					classes(ProjectStyle.breadcrumbLink)
-				}) {
-					I(FontAwesomeType.SOLID, "home")
-					Text(" Home")
+				A("/projects/") {
+					I(FontAwesomeType.SOLID, "folder-open")
+					Text(" Projects")
 				}
-
-				Span({
-					classes(ProjectStyle.breadcrumbSeparator)
-				}) {
-					I(FontAwesomeType.SOLID, "chevron-right")
-				}
-
-				A("/projects/", {
-					classes(ProjectStyle.breadcrumbLink)
-				}) {
-					Text("Projects")
-				}
-
-				Span({
-					classes(ProjectStyle.breadcrumbSeparator)
-				}) {
-					I(FontAwesomeType.SOLID, "chevron-right")
-				}
-
-				A("/projects/?user=${project.owner.login}", {
-					classes(ProjectStyle.breadcrumbLink)
-				}) {
-					Text(project.owner.login)
-				}
-
-				Span({
-					classes(ProjectStyle.breadcrumbSeparator)
-				}) {
-					I(FontAwesomeType.SOLID, "chevron-right")
-				}
-
-				Span({
-					classes(ProjectStyle.breadcrumbCurrent)
-				}) {
-					Text(project.name)
-				}
+				Text(" / ")
+				A("/projects/?user=${project.owner.login}") { Text(project.owner.login) }
+				Text(" / ")
+				Span { Text(project.name) }
 			}
 
-			// Project Header
-			Div({
+			Header({
 				classes(ProjectStyle.header)
 			}) {
 				H1({
-					classes(ProjectStyle.title)
+					classes(AppStyle.title)
 				}) {
 					Img(project.owner.avatarUrl, project.owner.login)
 					Text(project.name)
-					Span(" by ${project.owner.login}")
 				}
 
-				P(project.description ?: "No description provided.", ProjectStyle.description)
+				P({ classes(ProjectStyle.description) }) { Text(project.description ?: "No description provided.") }
 
-				// Quick Stats
-				Div({
-					classes(ProjectStyle.quickStats)
+				P({
+					classes(AppStyle.monoFont, ProjectStyle.meta)
 				}) {
-					QuickStat(project.language ?: "Unknown", "code")
-					QuickStat("${project.stargazersCount} stars", "star")
-					QuickStat("${project.forksCount} forks", "code-branch")
-					QuickStat(formatDate(project.updatedAt), "calendar-alt")
+					listOfNotNull(
+						project.language?.let { "code" to it },
+						"star" to "${project.stargazersCount} stars",
+						"code-branch" to "${project.forksCount} forks",
+						"clock-rotate-left" to "updated ${formatDate(project.updatedAt)}",
+					).forEach { (icon, text) ->
+						Span({ classes(IconStyle.label) }) {
+							I(FontAwesomeType.SOLID, icon)
+							Text(text)
+						}
+					}
 				}
 
-				// Project Topics
-				if (project.topics.isNotEmpty()) {
-					Div({
-						classes(ProjectStyle.topicsContainer, ProjectStyle.headerTopics)
-					}) {
-						Div({
-							classes(ProjectStyle.topicsList)
-						}) {
-							project.topics.forEach { topic ->
-								A("/projects/?tag=${topic}", {
-									classes(ProjectStyle.topicTag)
-								}) {
-									Text(topic)
-								}
-							}
-						}
+				if (project.topics.isNotEmpty()) Div({
+					classes(ProjectStyle.topics)
+				}) {
+					project.topics.forEach { topic ->
+						A("/projects/?tag=$topic", { classes(AppStyle.tag) }) { Text(topic) }
 					}
 				}
 			}
 
-			// Main Content Layout
 			Div({
-				classes(ProjectStyle.mainLayout)
+				classes(ProjectStyle.layout)
 			}) {
-				// Left Column - README
-				Div({
-					classes(ProjectStyle.readmeSection)
+				P({
+					markdownParagraph(readme ?: "No README provided.", false, AppStyle.card, ProjectStyle.readme)
+				})
+
+				Aside({
+					classes(ProjectStyle.sidebar)
 				}) {
-
-					// Fix images/links, prepend with base url if they don't have a protocol
-					val baseUrl = "${project.htmlUrl}/raw/${project.defaultBranch}/"
-					val readmeContent = project.readmeContent?.replace(Regex("""(src|href)="([^"]+?)"""")) { match ->
-						val (attr, url) = match.destructured
-						if (url.startsWith("http://") || url.startsWith("https://")) {
-							"$attr=\"$url\""
-						} else {
-							"$attr=\"$baseUrl$url\""
-						}
-					}
-
-					Div {
-						Style(CodeTheme)
-						P({
-							markdownParagraph(readmeContent ?: "No README provided.", false, ProjectStyle.readme)
-						})
-					}
-				}
-
-				// Right Column - Project Info
-				Div({
-					classes(ProjectStyle.sidebarSection)
-				}) {
-					// Project Links
 					Div({
-						classes(ProjectStyle.infoCard)
+						classes(AppStyle.card, ProjectStyle.panel)
 					}) {
-						H3 {
-							I(FontAwesomeType.SOLID, "link")
-							Text(" Links")
+						IconHeading("link", "Links")
+
+						A(project.htmlUrl, {
+							classes(AppStyle.button, AppStyle.primaryButton)
+							target(ATarget.Blank)
+						}) {
+							I(FontAwesomeType.BRAND, "github")
+							Text("GitHub repository")
 						}
 
-						Div({
-							classes(ProjectStyle.linksList)
-						}) {
-							A(project.htmlUrl, {
-								classes(ProjectStyle.linkItem)
+						project.homepage?.takeIf { it.isNotBlank() }?.let {
+							A(it, {
+								classes(AppStyle.button)
 								target(ATarget.Blank)
 							}) {
-								I(FontAwesomeType.BRAND, "github")
-								Span("GitHub Repository")
+								I(FontAwesomeType.SOLID, "globe")
+								Text("Website")
 							}
+						}
 
-							project.homepage?.let {
-								A(it, {
-									classes(ProjectStyle.linkItem)
-									target(ATarget.Blank)
-								}) {
-									I(FontAwesomeType.SOLID, "globe")
+						A("${project.htmlUrl}/archive/refs/heads/${project.defaultBranch}.zip", {
+							classes(AppStyle.button)
+						}) {
+							I(FontAwesomeType.SOLID, "download")
+							Text("Download ZIP")
+						}
+					}
 
-									Span("Project Homepage")
+					Div({
+						classes(AppStyle.card, ProjectStyle.panel)
+					}) {
+						IconHeading("chart-simple", "Details")
+
+						Dl {
+							listOfNotNull(
+								Triple("star", "Stars", project.stargazersCount.toString()),
+								Triple("code-branch", "Forks", project.forksCount.toString()),
+								Triple("eye", "Watchers", project.watchersCount.toString()),
+								Triple("circle-exclamation", "Open issues", project.openIssuesCount.toString()),
+								Triple("code-commit", "Commits", project.commitsCount.toString()),
+								Triple("users", "Contributors", project.contributorsCount.toString()),
+								Triple("hard-drive", "Size", "${project.size} KB"),
+								Triple("calendar-plus", "Created", formatDate(project.createdAt)),
+								Triple("clock-rotate-left", "Last push", formatDate(project.pushedAt)),
+								Triple("globe", "Visibility", project.visibility.replaceFirstChar { it.titlecase() }),
+								Triple("box-archive", "Archived", "Yes").takeIf { project.archived },
+								Triple("code-fork", "Fork", "Yes").takeIf { project.fork },
+								Triple("copy", "Template", "Yes").takeIf { project.isTemplate },
+							).forEach { (icon, label, value) ->
+								Dt {
+									I(FontAwesomeType.SOLID, icon)
+									Text(label)
 								}
+								Dd { Text(value) }
 							}
-
-							// Add download link
-							A("${project.htmlUrl}/archive/refs/heads/${project.defaultBranch}.zip", {
-								classes(ProjectStyle.linkItem)
-								target(ATarget.Blank)
-							}) {
-								I(FontAwesomeType.SOLID, "download")
-								Span("Download ZIP")
-							}
-						}
-					}
-
-					// Project Stats
-					Div({
-						classes(ProjectStyle.infoCard)
-					}) {
-						H3 {
-							I(FontAwesomeType.SOLID, "chart-bar")
-							Text(" Statistics")
-						}
-
-						Div({
-							classes(ProjectStyle.statsGrid)
-						}) {
-							StatCard("Stars", project.stargazersCount.toString(), "star")
-							StatCard("Forks", project.forksCount.toString(), "code-branch")
-							StatCard("Watchers", project.watchersCount.toString(), "eye")
-							StatCard("Issues", project.openIssuesCount.toString(), "exclamation-circle")
-							StatCard("Commits", project.commitsCount.toString(), "code-commit")
-							StatCard("Contributors", project.contributorsCount.toString(), "users")
-							StatCard("Size", "${project.size} KB", "file")
-						}
-					}
-
-					// Project Timeline
-					Div({
-						classes(ProjectStyle.infoCard)
-					}) {
-						H3 {
-							I(FontAwesomeType.SOLID, "history")
-							Text(" Timeline")
-						}
-
-						Div({
-							classes(ProjectStyle.datesList)
-						}) {
-							DateItem("Created", formatDate(project.createdAt))
-							DateItem("Last Updated", formatDate(project.updatedAt))
-							DateItem("Last Push", formatDate(project.pushedAt))
-						}
-					}
-
-					// Project Status
-					Div({
-						classes(ProjectStyle.infoCard)
-					}) {
-						H3 {
-							I(FontAwesomeType.SOLID, "info-circle")
-							Text(" Status")
-						}
-
-						Div({
-							classes(ProjectStyle.statusList)
-						}) {
-							StatusItem("Visibility", project.visibility.capitalize())
-							StatusItem("Template", if (project.isTemplate) "Yes" else "No")
-							StatusItem("Archived", if (project.archived) "Yes" else "No")
-							StatusItem("Fork", if (project.fork) "Yes" else "No")
 						}
 					}
 				}
 			}
 		}
 	}
-}
-
-@Composable
-private fun QuickStat(value: String, iconName: String) {
-	Div({
-		classes(ProjectStyle.quickStatItem)
-	}) {
-		I(FontAwesomeType.SOLID, iconName)
-		Text(" $value")
-	}
-}
-
-@Composable
-private fun StatCard(label: String, value: String, iconName: String) {
-	Div({
-		classes(ProjectStyle.statCard)
-	}) {
-		Div({
-			classes(ProjectStyle.statIcon)
-		}) {
-			I(FontAwesomeType.SOLID, iconName)
-		}
-		Div({
-			classes(ProjectStyle.statContent)
-		}) {
-			Span({
-				classes(ProjectStyle.statValue)
-			}) {
-				Text(value)
-			}
-			Span({
-				classes(ProjectStyle.statLabel)
-			}) {
-				Text(label)
-			}
-		}
-	}
-}
-
-@Composable
-private fun DateItem(label: String, date: String) {
-	Div({
-		classes(ProjectStyle.dateItem)
-	}) {
-		I(FontAwesomeType.SOLID, "calendar-alt")
-		Span({
-			classes(ProjectStyle.dateLabel)
-		}) {
-			Text(label)
-		}
-		Span({
-			classes(ProjectStyle.dateValue)
-		}) {
-			Text(date)
-		}
-	}
-}
-
-@Composable
-private fun StatusItem(label: String, value: String) {
-	Div({
-		classes(ProjectStyle.statusItem)
-	}) {
-		I(FontAwesomeType.SOLID, "info-circle")
-		Span({
-			classes(ProjectStyle.statusLabel)
-		}) {
-			Text(label)
-		}
-		Span({
-			classes(ProjectStyle.statusValue)
-		}) {
-			Text(value)
-		}
-	}
-}
-
-private fun formatDate(dateString: String): String {
-	val date = Date(dateString)
-	return date.toLocaleDateString()
-}
-
-private fun String.capitalize(): String {
-	return this.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 }
 
 object ProjectStyle : StyleSheet() {
-	// Color constants
-	const val CARD_BACKGROUND = "#151020"
-	const val ITEM_BACKGROUND_HOVER = "#ffffff15"
-	const val BORDER_COLOR = "#ffffff20"
-	const val TEXT_SECONDARY = "#ffffffaa"
+	val breadcrumbs by style {
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		fontSize(.9.cssRem)
+		marginBottom(1.5.cssRem)
 
-	init {
-		id("main") style {
-			pageBackground()
+		"a" {
+			color(Color(AppStyle.TEXT_MUTED_COLOR))
 		}
 
-		group(type("td"), type("th")) style {
-			borderCollapse(BorderCollapse.Collapse)
-			padding(10.px)
+		"a:hover" {
+			color(Color.white)
 		}
 
-		child(type("thead"), type("tr")) style {
-			backgroundColor(Color("#ffffff20"))
+		"span" {
+			color(Color.white)
 		}
-
-		type("table") style {
-			borderRadius(10.px)
-			overflow(Overflow.Hidden)
-			borderCollapse(BorderCollapse.Collapse)
-		}
-
-		type("tr") + nthOfType(2.n) style {
-			backgroundColor(Color("#ffffff0b"))
-		}
-
-		type("pre") style {
-			borderRadius(10.px)
-		}
-
-		type("h3") style {
-			margin(0.px, 0.px, 15.px)
-			fontSize(1.4.cssRem)
-			backgroundClip(BackgroundClip.Text)
-			backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(45.deg) {
-				add(Color("#00D4FF"))
-				add(Color("#FF0080"))
-			})
-			property("-webkit-background-clip", "text")
-			property("-webkit-text-fill-color", "transparent")
-			property("-moz-text-fill-color", "transparent")
-			property("-moz-background-clip", "text")
-		}
-	}
-
-	val content by style {
-		padding(25.px, 15.px)
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		gap(30.px)
-		maxWidth(1500.px)
-		margin(0.px, autoLength)
 	}
 
 	val header by style {
-		marginBottom(20.px)
-		borderBottom(1.px, LineStyle.Solid, Color(BORDER_COLOR))
-		paddingBottom(20.px)
-	}
+		borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+		marginBottom(2.cssRem)
+		paddingBottom(1.8.cssRem)
 
-	val title by style {
-		margin(0.px, 0.px, 10.px)
-		fontSize(3.cssRem)
-
-		backgroundClip(BackgroundClip.Text)
-		backgroundImage(com.varabyte.kobweb.compose.css.functions.linearGradient(45.deg) {
-			add(Color("#00D4FF"))
-			add(Color("#FF0080"))
-		})
-		property("-webkit-background-clip", "text")
-		property("-webkit-text-fill-color", "transparent")
-		property("-moz-text-fill-color", "transparent")
-		property("-moz-background-clip", "text")
-		textShadow(TextShadow.of(
-			color = rgba(0, 212, 255, 0.5),
-			offsetX = 0.px,
-			offsetY = 0.px,
-			blurRadius = 20.px
-		))
-
-		type("img") style {
-			borderRadius(50.percent)
-			marginRight(10.px)
-			size(2.5.cssRem)
+		"h1" {
+			alignItems(AlignItems.Center)
+			display(DisplayStyle.Flex)
+			gap(.8.cssRem)
+			margin(0.px, 0.px, .8.cssRem)
 		}
 
-		type("span") style {
-			fontSize(2.7.cssRem)
+		"h1 img" {
+			borderRadius(50.percent)
+			size(2.6.cssRem)
 		}
 	}
 
 	val description by style {
-		fontSize(1.4.cssRem)
-		margin(0.px, 0.px, 20.px)
+		fontSize(1.25.cssRem)
+		margin(0.px, 0.px, .8.cssRem)
+		maxWidth(48.cssRem)
 	}
 
-	val quickStats by style {
+	val meta by style {
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
-		gap(20.px)
-		marginBottom(20.px)
+		fontSize(.85.cssRem)
+		gap(.4.cssRem, 1.3.cssRem)
+		margin(0.px, 0.px, 1.cssRem)
 	}
 
-	val quickStatItem by style {
-		color(Color(TEXT_SECONDARY))
-		fontSize(1.1.cssRem)
+	val topics by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.4.cssRem)
 
-		type("i") style {
-			color(Color("#00D4FF"))
-			marginRight(5.px)
+		"a:hover" {
+			color(Color.white)
 		}
 	}
 
-	val headerTopics by style {
-		marginTop(10.px)
-		marginBottom(0.px)
-	}
-
-	val mainLayout by style {
+	val layout by style {
+		alignItems(AlignItems.Start)
 		display(DisplayStyle.Grid)
-		gridTemplateColumns {
-			minmax(0.px, 2.fr)
-			minmax(300.px, 1.fr)
-		}
-		gap(30.px)
+		gap(1.5.cssRem)
+		gridTemplateColumns("minmax(0, 2fr) minmax(17rem, 1fr)")
 
 		media(mediaMaxWidth(AppStyle.mobileFirstBreak)) {
 			self {
-				gridTemplateColumns(GridEntry.TrackSize(1.fr))
+				gridTemplateColumns("minmax(0, 1fr)")
 			}
 		}
 	}
 
-	val infoCard by style {
-		borderRadius(15.px)
-		padding(20.px)
-		marginBottom(20.px)
-		border(2.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CARD_BACKGROUND))
-		boxShadow(BoxShadow.of(
-			color = rgba(0, 212, 255, 0.1),
-			offsetX = 0.px,
-			offsetY = 0.px,
-			blurRadius = 20.px
-		))
-	}
-
-	val statsGrid by style {
-		display(DisplayStyle.Grid)
-		gridTemplateColumns {
-			repeat(GridEntry.Repeat.Auto.Type.AutoFill) {
-				minmax(120.px, 1.fr)
-			}
-		}
-		gap(15.px)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val statCard by style {
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		gap(10.px)
-		borderRadius(10.px)
-		padding(15.px)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CARD_BACKGROUND))
-		transitions {
-			properties("all") {
-				duration(0.3.s)
-			}
-		}
-
-		self + hover style {
-			gradientBorderBackground(Color(ITEM_BACKGROUND_HOVER))
-			transform { scale(1.05) }
-			boxShadow(BoxShadow.of(
-				color = rgba(255, 0, 128, 0.3),
-				offsetX = 0.px,
-				offsetY = 0.px,
-				blurRadius = 20.px
-			))
-		}
-	}
-
-	val statIcon by style {
-		color(Color("#00D4FF"))
-		fontSize(1.5.cssRem)
-	}
-
-	val statContent by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-	}
-
-	val statValue by style {
-		fontSize(1.2.cssRem)
-		fontWeight(FontWeight.Bold)
-	}
-
-	val statLabel by style {
-		fontSize(0.9.cssRem)
-		color(Color(TEXT_SECONDARY))
-	}
-
-	val linksList by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		gap(10.px)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val linkItem by style {
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		gap(10.px)
-		borderRadius(10.px)
-		padding(15.px)
-		textDecorationLine(TextDecorationLine.None)
-		color(Color.white)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CARD_BACKGROUND))
-		transitions {
-			properties("all") {
-				duration(0.3.s)
-			}
-		}
-
-		self + hover style {
-			gradientBorderBackground(Color(ITEM_BACKGROUND_HOVER))
-			color(Color(LINK_HOVER_COLOR))
-			transform { translateX(5.px) }
-			boxShadow(BoxShadow.of(
-				color = rgba(0, 212, 255, 0.3),
-				offsetX = 0.px,
-				offsetY = 0.px,
-				blurRadius = 20.px
-			))
-		}
-	}
-
-	val datesList by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		gap(10.px)
-	}
-
-	val dateItem by style {
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		gap(10.px)
-		borderRadius(10.px)
-		padding(15.px)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CARD_BACKGROUND))
-	}
-
-	val dateLabel by style {
-		fontWeight(FontWeight.Bold)
-	}
-
-	val dateValue by style {
-		marginLeft(autoLength)
-		color(Color("#00D4FF"))
-	}
-
-	val topicsContainer by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		gap(15.px)
-	}
-
-	val topicsList by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(10.px)
-	}
-
-	@OptIn(ExperimentalComposeWebApi::class)
-	val topicTag by style {
-		padding(.3125.cssRem, .9375.cssRem)
-		color(Color.white)
-		border(2.px, LineStyle.Solid, Color.transparent)
-		borderRadius(1.25.cssRem)
-		fontSize(0.9.cssRem)
-		cursor(Cursor.Pointer)
-		textDecorationLine(TextDecorationLine.None)
-		property("background", """
-			transparent padding-box,
-			linear-gradient(45deg, #00D4FF, #FF0080) border-box
-		""")
-
-		transitions {
-			properties("all") {
-				duration(0.3.s)
-			}
-		}
-
-		hover(self) style {
-			gradientBorderBackground(Color(ITEM_BACKGROUND_HOVER))
-			transform { scale(1.05) }
-			boxShadow(BoxShadow.of(
-				color = rgba(0, 212, 255, 0.3),
-				offsetX = 0.px,
-				offsetY = 0.px,
-				blurRadius = 15.px
-			))
-		}
-	}
-
-	val statusList by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		gap(10.px)
-	}
-
-	val statusItem by style {
-		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		gap(10.px)
-		borderRadius(10.px)
-		padding(15.px)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CARD_BACKGROUND))
-	}
-
-	val statusLabel by style {
-		fontWeight(FontWeight.Bold)
-	}
-
-	val statusValue by style {
-		marginLeft(autoLength)
-		color(Color("#00D4FF"))
-	}
-
-	val sidebarSection by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-	}
-
-	val readmeSection by style {
-		display(DisplayStyle.Flex)
-		flexDirection(FlexDirection.Column)
-		gap(15.px)
-	}
-
+	/** GitHub READMEs bring their own tables, code blocks and badges, scoped here so they never leak to other pages. */
 	val readme by style {
-		borderRadius(20.px)
 		margin(0.px)
-		padding(30.px)
-		border(2.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CARD_BACKGROUND))
-		boxShadow(BoxShadow.of(
-			color = rgba(0, 212, 255, 0.1),
-			offsetX = 0.px,
-			offsetY = 0.px,
-			blurRadius = 20.px
-		))
+		overflowX(Overflow.Auto)
+		padding(2.cssRem)
 
-		type("img") style {
-			borderRadius(5.px)
-			margin(10.px)
+		"img" {
 			maxWidth(100.percent)
 		}
 
-		type("pre") style {
-			backgroundColor(Color("#00000040"))
+		"pre" {
+			backgroundColor(Color(AppStyle.CONTENT_BACKGROUND_COLOR))
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+			borderRadius(.6.cssRem)
+			overflowX(Overflow.Auto)
+			padding(1.cssRem)
+		}
+
+		"table" {
+			borderCollapse(BorderCollapse.Collapse)
+		}
+
+		list("td", "th") style {
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+			padding(.5.cssRem, .75.cssRem)
+		}
+
+		list("h1", "h2", "h3") style {
+			color(Color.white)
 		}
 	}
 
-	val breadcrumbs by style {
+	val sidebar by style {
 		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		flexWrap(FlexWrap.Wrap)
-		gap(8.px)
-		marginBottom(25.px)
-		padding(10.px, 15.px)
-		borderRadius(10.px)
-		fontSize(0.9.cssRem)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(CARD_BACKGROUND))
+		flexDirection(FlexDirection.Column)
+		gap(1.5.cssRem)
+		position(Position.Sticky)
+		property("top", "calc(${io.github.ayfri.components.HeaderStyle.navbarHeight.value()} + 1.5rem)")
 	}
 
-	@OptIn(ExperimentalComposeWebApi::class)
-	val breadcrumbLink by style {
-		color(Color(TEXT_SECONDARY))
-		textDecorationLine(TextDecorationLine.None)
+	val panel by style {
 		display(DisplayStyle.Flex)
-		alignItems(AlignItems.Center)
-		gap(5.px)
+		flexDirection(FlexDirection.Column)
+		gap(.6.cssRem)
+		padding(1.4.cssRem)
 
-		transitions {
-			properties("color") {
-				duration(0.2.s)
-			}
+		"h2" {
+			color(Color.white)
+			fontSize(1.cssRem)
+			margin(0.px, 0.px, .4.cssRem)
 		}
 
-		self + hover style {
-			color(Color("#00D4FF"))
+		"dl" {
+			display(DisplayStyle.Grid)
+			gap(.5.cssRem, 1.cssRem)
+			gridTemplateColumns("auto 1fr")
+			margin(0.px)
 		}
-	}
 
-	val breadcrumbSeparator by style {
-		color(Color(BORDER_COLOR))
-		fontSize(0.7.cssRem)
-	}
+		"dt" {
+			alignItems(AlignItems.Center)
+			color(Color(AppStyle.TEXT_MUTED_COLOR))
+			display(DisplayStyle.Flex)
+			gap(.55.cssRem)
+		}
 
-	val breadcrumbCurrent by style {
-		color(Color("#00D4FF"))
-		fontWeight(FontWeight.Bold)
+		"dt i" {
+			color(Color(AppStyle.VIOLET_COLOR))
+			fontSize(.8.em)
+			textAlign(TextAlign.Center)
+			width(1.cssRem)
+		}
+
+		"dd" {
+			fontFamily(AppStyle.MONO_FONT_FAMILY, "monospace")
+			fontSize(.9.cssRem)
+			margin(0.px)
+			textAlign(TextAlign.Right)
+		}
 	}
 }
