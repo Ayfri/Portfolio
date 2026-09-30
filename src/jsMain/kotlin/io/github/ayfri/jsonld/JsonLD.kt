@@ -2,7 +2,10 @@ package io.github.ayfri.jsonld
 
 import kotlinx.js.JsPlainObject
 
-
+/**
+ * Collections are JS arrays because these objects go straight to `JSON.stringify`: a Kotlin `List` only serializes
+ * through its `toJSON`, which `emptyList()` lacks, so an empty one dumps Kotlin internals, including a BigInt that throws.
+ */
 @JsPlainObject
 external interface JsonLD {
 	@JsName("@context")
@@ -15,7 +18,7 @@ external interface JsonLD {
 @JsPlainObject
 external interface GraphJsonLD : JsonLD {
 	@JsName("@graph")
-	val graph: List<JsonLD>
+	val graph: Array<JsonLD>
 }
 
 @JsPlainObject
@@ -26,7 +29,7 @@ external interface BlogArticleJsonLD : JsonLD {
 	val headline: String
 	val image: String?
 	val inLanguage: String?
-	val keywords: List<String>?
+	val keywords: Array<String>?
 	val mainEntityOfPage: WebPageJsonLD
 	val url: String
 }
@@ -36,7 +39,7 @@ external interface PersonJsonLD : JsonLD {
 	val image: String?
 	val jobTitle: String?
 	val name: String
-	val sameAs: List<String>?
+	val sameAs: Array<String>?
 	val url: String?
 }
 
@@ -44,14 +47,14 @@ external interface PersonJsonLD : JsonLD {
 external interface WebPageJsonLD : JsonLD {
 	val headline: String
 	val image: String?
-	val keywords: List<String>?
+	val keywords: Array<String>?
 	val url: String
 }
 
 @JsPlainObject
 external interface WebSiteJsonLD : JsonLD {
 	val name: String
-	val sameAs: List<String>?
+	val sameAs: Array<String>?
 	val url: String
 }
 
@@ -62,7 +65,7 @@ external interface SoftwareSourceCodeJsonLD : JsonLD {
 	val dateCreated: String?
 	val dateModified: String?
 	val description: String?
-	val keywords: List<String>?
+	val keywords: Array<String>?
 	val license: String?
 	val name: String
 	val programmingLanguage: String?
@@ -71,7 +74,7 @@ external interface SoftwareSourceCodeJsonLD : JsonLD {
 
 @JsPlainObject
 external interface ItemListJsonLD : JsonLD {
-	val itemListElement: List<ListItemJsonLD>
+	val itemListElement: Array<ListItemJsonLD>
 	val numberOfItems: Int
 }
 
@@ -83,5 +86,5 @@ external interface ListItemJsonLD : JsonLD {
 
 @JsPlainObject
 external interface BreadcrumbListJsonLD : JsonLD {
-	val itemListElement: List<ListItemJsonLD>
+	val itemListElement: Array<ListItemJsonLD>
 }

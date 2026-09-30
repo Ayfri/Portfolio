@@ -5,7 +5,7 @@ import io.github.ayfri.articlesEntries
 import io.github.ayfri.data.*
 import io.github.ayfri.ensureSuffix
 
-val socialMediaLinks = listOf(
+val socialMediaLinks = arrayOf(
 	GITHUB_PROFILE,
 	LINKEDIN_LINK,
 	TWITCH_LINK,
@@ -18,13 +18,13 @@ fun generateJsonLD(path: String) = GraphJsonLD(
 		getArticleJsonLD(path),
 		defaultJsonLD(),
 		getMeJsonLD(),
-	),
+	).toTypedArray(),
 	type = "Graph",
 )
 
 fun generateProjectJsonLD(project: GitHubRepository, path: String) = GraphJsonLD(
 	context = "https://schema.org",
-	graph = listOf(
+	graph = arrayOf(
 		getProjectJsonLD(project, path),
 		getProjectBreadcrumbJsonLD(project, path),
 		getMeJsonLD(),
@@ -34,7 +34,7 @@ fun generateProjectJsonLD(project: GitHubRepository, path: String) = GraphJsonLD
 
 fun generateProjectsListJsonLD(projects: List<GitHubRepository>) = GraphJsonLD(
 	context = "https://schema.org",
-	graph = listOf(
+	graph = arrayOf(
 		getProjectsListJsonLD(projects),
 		getMeJsonLD(),
 	),
@@ -50,12 +50,12 @@ fun getArticleJsonLD(path: String) = articlesEntries.find { it.path == path }?.l
 		headline = it.title,
 		image = null,
 		inLanguage = "en-US",
-		keywords = it.keywords,
+		keywords = it.keywords.toTypedArray(),
 		mainEntityOfPage = WebPageJsonLD(
 			context = "https://schema.org",
 			headline = it.title,
 			image = null,
-			keywords = it.keywords,
+			keywords = it.keywords.toTypedArray(),
 			type = "WebPage",
 			url = AppGlobals["url"] + it.path.ensureSuffix("/"),
 		),
@@ -78,7 +78,7 @@ fun getProjectJsonLD(project: GitHubRepository, path: String) = SoftwareSourceCo
 	dateCreated = project.createdAt,
 	dateModified = project.updatedAt,
 	description = project.description,
-	keywords = project.topics.toList(),
+	keywords = project.topics,
 	license = null,
 	name = project.name,
 	programmingLanguage = project.language,
@@ -88,7 +88,7 @@ fun getProjectJsonLD(project: GitHubRepository, path: String) = SoftwareSourceCo
 
 fun getProjectBreadcrumbJsonLD(project: GitHubRepository, path: String) = BreadcrumbListJsonLD(
 	context = "https://schema.org",
-	itemListElement = listOf(
+	itemListElement = arrayOf(
 		ListItemJsonLD(
 			context = "https://schema.org",
 			item = WebPageJsonLD(
@@ -174,7 +174,7 @@ fun getProjectsListJsonLD(projects: List<GitHubRepository>) = ItemListJsonLD(
 			position = index + 1,
 			type = "ListItem",
 		)
-	},
+	}.toTypedArray(),
 	numberOfItems = projects.take(10).size,
 	type = "ItemList",
 )
