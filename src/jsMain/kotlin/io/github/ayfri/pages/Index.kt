@@ -540,6 +540,7 @@ object HomeStyle : StyleSheet() {
 	/**
 	 * Avatar inside two orbit rings, each carrying a satellite in a logo color, turning in opposite directions.
 	 * The whole system blurs in after the hero text, and the rotations stop for visitors asking for reduced motion.
+	 * Each ring box overhangs its outline by the satellite glow radius, a background can't paint outside its box.
 	 */
 	val orbit by style {
 		alignItems(AlignItems.Center)
@@ -558,21 +559,23 @@ object HomeStyle : StyleSheet() {
 		}
 
 		self + before style {
-			border(1.px, LineStyle.Dashed, Color("#FFFFFF1A"))
-			property("inset", "9%")
+			property("inset", "calc(9% - 7px)")
+			property("outline", "1px dashed #FFFFFF1A")
+			property("outline-offset", "-7px")
 			property(
 				"background",
-				"radial-gradient(circle at 50% 100%, ${AppStyle.ACCENT_SECONDARY_COLOR} 0 2px, ${tint(AppStyle.ACCENT_SECONDARY_COLOR, 40)} 3px, transparent 7px) no-repeat"
+				"radial-gradient(circle at 50% calc(100% - 7px), ${AppStyle.ACCENT_SECONDARY_COLOR} 0 2px, ${tint(AppStyle.ACCENT_SECONDARY_COLOR, 40)} 3px, transparent 7px) no-repeat"
 			)
 			property("animation", "${spin.name} 26s linear infinite reverse")
 		}
 
 		self + after style {
-			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
-			property("inset", "0")
+			property("inset", "-9px")
+			property("outline", "1px solid ${AppStyle.BORDER_STRONG_COLOR}")
+			property("outline-offset", "-9px")
 			property(
 				"background",
-				"radial-gradient(circle at 50% 0%, ${AppStyle.ACCENT_COLOR} 0 3px, ${tint(AppStyle.ACCENT_COLOR, 40)} 4px, transparent 9px) no-repeat"
+				"radial-gradient(circle at 50% 9px, ${AppStyle.ACCENT_COLOR} 0 3px, ${tint(AppStyle.ACCENT_COLOR, 40)} 4px, transparent 9px) no-repeat"
 			)
 			property("animation", "${spin.name} 40s linear infinite")
 		}
