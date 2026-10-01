@@ -4,7 +4,7 @@ title: How I Built This Portfolio in Kotlin with Kobweb
 description: The story and the tech behind [ayfri.com](https://ayfri.com), a portfolio written entirely in Kotlin with [Kobweb](https://kobweb.varabyte.com/) and Compose for Web.
 keywords: kotlin, kobweb, compose for web, compose html, kotlin/js, static site, portfolio, kotlin web framework, css in kotlin, ssg
 date-created: 2026-07-10
-date-modified: 2026-07-10
+date-modified: 2026-10-01
 root: .layouts.ArticleLayout
 routeOverride: /articles/building-this-portfolio/index
 ---
@@ -39,6 +39,7 @@ Some milestones from the git log:
 - **2022-2023** - Slow iteration. Meta tags moved into the HTML directly so they actually work for SEO, localStorage safe-guards, dependency bumps.
 - **November 2023** - The big one. I [installed Kobweb](https://kobweb.varabyte.com/), moved everything into the `io.github.ayfri` package, switched to Gradle [version catalogs](https://docs.gradle.org/current/userguide/version_catalogs.html), and ripped out `routing-compose` in favor of Kobweb's file-based routing and layouts.
 - **2024-2026** - Steady modernization. Kotlin 1.9 to 2.3, Compose 1.5 to 1.10, Kobweb 0.15 to 0.24, plus a 404 page, a generated sitemap, JSON-LD schema, and proper meta descriptions per page and article.
+- **September 2026** - A full redesign around the colors of my logo, page transitions, scroll-driven animations instead of scroll listeners, and a faster build. More on that [below](#the-september-2026-redesign).
 
 The migration to Kobweb in late 2023 is the moment this went from a hobby experiment to something maintainable. Dropping `routing-compose` for `@Page`-annotated files meant a new page is just a new Kotlin file in the right folder.
 
@@ -71,36 +72,33 @@ The `PageLayout` wraps the content with the header, footer, and shared page chro
 
 ## CSS in Kotlin, no stylesheet files
 
-There are zero `.css` files I wrote for layout. Styling is done with Compose HTML's `StyleSheet` DSL, which is type-safe and colocated with the component. A real example, the back-to-top button:
+There are zero `.css` files I wrote for layout. Styling is done with Compose HTML's `StyleSheet` DSL, which is type-safe and colocated with the component. A real example, the filter chips of the projects and articles pages:
 
 ```kotlin
-data object BackToTopStyle : StyleSheet() {
-	const val BUTTON_COLOR = "#FFFFFF1A"
-	const val BUTTON_HOVER_COLOR = "#FFFFFF40"
+/** Toggleable filter pill, `active` class for the selected state. */
+val chip by style {
+	backgroundColor(Color.transparent)
+	border(1.px, LineStyle.Solid, Color(BORDER_STRONG_COLOR))
+	borderRadius(2.cssRem)
+	color(Color(TEXT_MUTED_COLOR))
+	cursor(Cursor.Pointer)
+	fontSize(.85.cssRem)
+	padding(.3.cssRem, .85.cssRem)
 
-	val button by style {
-		position(Position.Fixed)
-		bottom(30.px)
-		right(30.px)
-		size(50.px)
-		borderRadius(50.percent)
-		backgroundColor(Color(BUTTON_COLOR))
-		opacity(0)
+	hover(self) style {
+		borderColor(Color(tint(VIOLET_COLOR, 70)))
+		color(Color.white)
+	}
 
-		transitions {
-			"opacity" { duration(0.3.s) }
-			"transform" { duration(0.3.s) }
-		}
-
-		self + hover style {
-			backgroundColor(Color(BUTTON_HOVER_COLOR))
-			transform { scale(1.1) }
-		}
+	group(self + className("active"), self + className("active") + hover) style {
+		backgroundColor(Color(tint(VIOLET_COLOR, 22)))
+		borderColor(Color(VIOLET_COLOR))
+		color(Color.white)
 	}
 }
 ```
 
-`self + hover` compiles to a `:hover` selector. Units like `30.px`, `0.3.s`, and `50.percent` are real Kotlin extension properties, so a typo is a compile error, not a silently broken rule. I get autocomplete on CSS properties, which sounds small but adds up over hundreds of rules.
+`hover(self)` compiles to a `:hover` selector and `self + className("active")` to `.active` on the same element. Units like `1.px` and `.85.cssRem` are real Kotlin extension properties, so a typo is a compile error, not a silently broken rule. `tint` is a one-line helper emitting a `color-mix()`, so translucent variants always derive from the palette instead of new hex literals. I get autocomplete on CSS properties, which sounds small but adds up over hundreds of rules.
 
 ## The build script does the heavy lifting
 
@@ -133,18 +131,66 @@ My GitHub projects are not fetched in the browser. A `downloadData` Gradle task 
 
 The `generateSitemap` task walks the `pages/` directory looking for `@Page` annotations to discover static routes, then reads each article's `routeOverride` and `date-modified` from front matter for accurate `lastmod` values. The sitemap is generated from the source of truth, so it can never drift out of sync with the actual routes.
 
+## The September 2026 redesign
+
+By late 2026 the site looked like a patchwork of every year it went through, so I rebuilt the whole theme in one go.
+
+### One palette, taken from the logo
+
+Every color now comes from my logo, a neon tube fading cyan -> violet -> orchid, on a violet-black starfield. All the colors and shared primitives (cards, tags, chips, inputs, buttons, page titles) live in a single `AppStyle` sheet, and pages only compose them. The full logo gradient is reserved for a handful of highlights, like the hovered featured project cards, so it still means something when it shows up.
+
+The home page got the biggest rework: a left-aligned hero with an animated orbit around my photo, a hand-picked selection of flagship projects with screenshots of the live sites instead of a ranking by GitHub stars, and a compact experience timeline. The experiences page presents each role as a card on a timeline, with its logo, period, highlights and stack.
+
+### Page transitions with the View Transitions API
+
+Navigating between pages runs a [view transition](https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API): the header stays in place, the old page lifts away, the new one rises in, and the page title and the active tab morph from one page to the next. It only takes a `view-transition-name` on the elements that should morph, and the browser animates the rest.
+
+### Scroll-driven animations instead of scroll listeners
+
+Every "on scroll" effect of the site is now pure CSS with [scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations), so there is no scroll listener left doing layout reads on the main thread. The back-to-top button of this article fades in over the first 300px of scroll:
+
+```kotlin
+val backToTop by style {
+	bottom(1.5.cssRem)
+	position(Position.Fixed)
+	right(1.5.cssRem)
+	property("animation", "${reveal.name} linear both")
+	property("animation-timeline", "scroll(root)")
+	property("animation-range", "0 300px")
+}
+```
+
+The reading progress bar at the top works the same way, and cards fade in as they enter the viewport with a `view()` timeline. The About me page highlights the section you are reading with an `IntersectionObserver`, and long lists skip rendering off-screen items with `content-visibility: auto`.
+
+### Native HTML over JavaScript
+
+The mobile menu is a native [popover](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API), which brings Escape and click-outside closing for free. The screenshots of the portfolio page open in a modal `<dialog>` through [invoker commands](https://developer.mozilla.org/en-US/docs/Web/API/Invoker_Commands_API): a button with `commandfor` and `command="show-modal"`, and `closedby="any"` on the dialog, without a single line of JavaScript.
+
+### A faster build and a lighter first paint
+
+- The production bundle is minified with [SWC](https://swc.rs/) instead of Terser, and the source map the static export discards is no longer built.
+- The GitHub snapshot keys are converted to camelCase at build time, so the browser parses the JSON straight into typed external interfaces instead of walking every object through a reviver on first paint.
+- The Kotlin/JS toolchain uses npm instead of Yarn, and Gradle runs with the parallel configuration cache.
+- My photo is an AVIF served through `<picture>`, with a PNG fallback for the browsers that can't decode it.
+- Icons are inline [Lucide](https://lucide.dev/) SVGs from Kobweb's `silk-icons-lucide` artifact, one typed composable per icon, so no icon font or third-party kit script is downloaded, and only the icons the site uses end up in the bundle.
+
 ## The current stack
 
-As of writing, the versions are:
+As of October 2026, the versions are:
 
-- **Kotlin 2.4.0** targeting ES2015 with ES modules and ES classes
-- **Compose HTML 1.11.1** for the UI, Compose runtime 1.10
-- **Kobweb 0.25** for routing, export, and the head DSL
-- **kotlinx wrappers** for typed browser APIs, plus a bit of `marked` via npm
+- **Kotlin 2.4.20** targeting ES2015 with ES modules and ES classes
+- **Compose HTML 1.12** for the UI, Compose runtime 1.12
+- **Kobweb 0.25.1** for routing, export, and the head DSL
+- **Kotlin wrappers** for typed browser APIs, plus [`marked`](https://marked.js.org/) via npm for the project READMEs
+- **Gradle 9.8** with the configuration cache, and SWC to minify the bundle
 
 The Kotlin/JS compiler flags are tuned for a smaller, faster bundle: `-Xir-property-lazy-initialization`, no polyfill generation, and `es2015` output so I ship modern JS instead of transpiled-down cruft.
 
-Here is the home page today, July 2026, grown well past a single scrollable page:
+Here is the home page today, October 2026, after the redesign:
+
+![The October 2026 version of the portfolio, with a hero next to an animated orbit around my photo, featured projects, top skills, experiences and articles on the home page](/images/building-portfolio/2026-10-screenshot.avif)
+
+And for comparison, the July 2026 version right before it:
 
 ![The July 2026 version of the portfolio, with featured projects, top skills, a portfolio teaser, professional experience, about me, articles, and contact sections all on the home page](/images/building-portfolio/2026-07-screenshot.avif)
 
