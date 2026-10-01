@@ -2,14 +2,12 @@ package io.github.ayfri.externals
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import org.w3c.dom.ParentNode
 import web.timers.Interval
 import web.timers.clearInterval
 import web.timers.setInterval
 
 external object Prism {
 	fun highlightAll()
-	fun highlightAllUnder(container: ParentNode)
 }
 
 /** `prism.min.js` is loaded `async`, so poll for it instead of assuming it is there on the first tick. */

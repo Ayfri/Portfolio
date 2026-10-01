@@ -49,9 +49,6 @@ object AppStyle : StyleSheet() {
 
 	const val LINK_COLOR = "#6FEBF3"
 	const val LINK_HOVER_COLOR = "#C6F8FB"
-	const val SPECIAL_TEXT_COLOR = ACCENT_COLOR
-
-	const val BRAND_GRADIENT = "linear-gradient(135deg, $ACCENT_COLOR, $VIOLET_COLOR 55%, $ACCENT_SECONDARY_COLOR)"
 
 	const val MONO_FONT_FAMILY = "JetBrains Mono"
 	const val SANS_FONT_FAMILY = "Source Sans 3"
@@ -340,10 +337,6 @@ object AppStyle : StyleSheet() {
 
 	val monoFont by style {
 		fontFamily(MONO_FONT_FAMILY, "monospace")
-	}
-
-	val numberColor by style {
-		color(Color(SPECIAL_TEXT_COLOR))
 	}
 
 	/** Secondary action: outlined, the accent only shows up on hover. [buttonColor] overrides the fill. */

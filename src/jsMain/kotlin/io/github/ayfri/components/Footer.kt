@@ -8,7 +8,6 @@ import io.github.ayfri.MAIL_TO
 import io.github.ayfri.data.*
 import io.github.ayfri.ifNotBlank
 import io.github.ayfri.pages.IconHeading
-import io.github.ayfri.utils.list
 import io.github.ayfri.utils.n
 import kotlinx.browser.document
 import kotlinx.browser.window

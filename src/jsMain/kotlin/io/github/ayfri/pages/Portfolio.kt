@@ -2,7 +2,6 @@ package io.github.ayfri.pages
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.AppStyle
@@ -15,7 +14,6 @@ import io.github.ayfri.markdownParagraph
 import io.github.ayfri.tint
 import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.revealOnScroll
-import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
