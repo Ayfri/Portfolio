@@ -14,6 +14,7 @@ import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideComputer
 import io.github.ayfri.AppStyle
+import io.github.ayfri.components.Avatar
 import io.github.ayfri.components.DiscordIcon
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.components.Icon
@@ -100,7 +101,7 @@ val sections = listOf(
 	AboutMeSection(
 		MAIN_PRESENTATION.trimIndent().trimIndent(), 2002, true, id = "me"
 	) {
-		Img(localImage("avatar@300x300.webp"), "avatar") {
+		Avatar("Pierre Roy") {
 			classes(AppStyle.avatar)
 		}
 

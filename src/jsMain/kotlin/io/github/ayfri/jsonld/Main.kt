@@ -189,7 +189,7 @@ fun defaultJsonLD() = WebSiteJsonLD(
 
 fun getMeJsonLD() = PersonJsonLD(
 	context = "https://schema.org",
-	image = AppGlobals["url"]!! + "/images/avatar@300x300.webp",
+	image = AppGlobals["url"]!! + "/images/avatar.png",
 	jobTitle = "Software Engineer",
 	name = "Ayfri",
 	sameAs = socialMediaLinks,

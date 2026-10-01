@@ -237,7 +237,7 @@ kobweb {
 				Discover my projects and my blog on this website.
 			""".trimIndent()
 
-			val image = "$url/images/avatar.webp"
+			val image = "$url/images/avatar.png"
 
 			globals["author"] = author
 			globals["description"] = description

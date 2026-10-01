@@ -5,6 +5,7 @@ import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.*
+import io.github.ayfri.components.Avatar
 import io.github.ayfri.components.GitHubIcon
 import io.github.ayfri.components.Icon
 import io.github.ayfri.components.LinkedInIcon
@@ -213,11 +214,9 @@ fun Home() {
 			Div({
 				classes(HomeStyle.orbit)
 			}) {
-				Img(localImage("avatar@300x300.webp"), "Pierre Roy") {
+				Avatar("Pierre Roy") {
 					classes(HomeStyle.avatar)
 					fetchPriority(FetchPriority.high)
-					height(300)
-					width(300)
 				}
 			}
 		}

@@ -1,7 +1,11 @@
 package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
+import io.github.ayfri.height
+import io.github.ayfri.width
 import org.jetbrains.compose.web.attributes.AttrsScope
+import org.jetbrains.compose.web.css.DisplayStyle
+import org.jetbrains.compose.web.css.display
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLElement
 import org.w3c.dom.HTMLImageElement
@@ -39,6 +43,22 @@ private val imgBuilder = ElementBuilder.createBuilder<HTMLImageElement>("img")
 @Composable
 fun Img(attrs: AttrsScope<HTMLImageElement>.() -> Unit = {}) =
 	TagElement(imgBuilder, applyAttrs = attrs, content = null)
+
+/** AVIF avatar with a PNG fallback, the `picture` wrapper uses `display: contents` so the parent sizes the `img` directly. */
+@Composable
+fun Avatar(alt: String, attrs: AttrsScope<HTMLImageElement>.() -> Unit) {
+	Picture({ style { display(DisplayStyle.Contents) } }) {
+		Source({
+			attr("srcset", "/images/avatar.avif")
+			attr("type", "image/avif")
+		})
+		Img("/images/avatar.png", alt) {
+			height(600)
+			width(600)
+			attrs()
+		}
+	}
+}
 
 /** Description list tags, which Compose HTML doesn't ship. */
 private val dlBuilder = ElementBuilder.createBuilder<HTMLElement>("dl")
