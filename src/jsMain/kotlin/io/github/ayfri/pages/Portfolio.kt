@@ -6,11 +6,13 @@ import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.AppStyle
+import io.github.ayfri.components.Dialog
 import io.github.ayfri.components.GitHubIcon
 import io.github.ayfri.components.Icon
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
+import io.github.ayfri.tint
 import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.revealOnScroll
 import io.github.ayfri.utils.size
@@ -19,6 +21,7 @@ import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
+import org.jetbrains.compose.web.css.keywords.auto
 import org.jetbrains.compose.web.dom.*
 
 data class PortfolioStat(val label: String, val value: String, val icon: Icon)
@@ -86,15 +89,15 @@ fun Portfolio() {
 		Div({
 			classes(PortfolioStyle.portfolio)
 		}) {
-			H1({
-				classes(AppStyle.title)
-			}) {
-				Text("This portfolio")
-			}
-
 			Section({
 				classes(PortfolioStyle.intro)
 			}) {
+				H1({
+					classes(AppStyle.title)
+				}) {
+					Text("This portfolio")
+				}
+
 				P({
 					markdownParagraph(
 						"""
@@ -156,8 +159,31 @@ fun Portfolio() {
 						classes(PortfolioStyle.feature)
 						if (index % 2 == 0) classes(PortfolioStyle.featureReverse)
 					}) {
-						Img(section.image, alt = "${section.title} screenshot") {
+						val dialogId = "portfolio-image-$index"
+						val alt = "${section.title} screenshot"
+
+						Button({
 							classes(PortfolioStyle.featureImage)
+							attr("aria-label", "Enlarge the ${section.title.lowercase()} screenshot")
+							attr("command", "show-modal")
+							attr("commandfor", dialogId)
+						}) {
+							Img(section.image, alt) { attr("loading", "lazy") }
+							LucideExpand()
+						}
+
+						Dialog({
+							classes(PortfolioStyle.lightbox)
+							id(dialogId)
+							attr("closedby", "any")
+						}) {
+							Button({
+								attr("aria-label", "Close")
+								attr("command", "close")
+								attr("commandfor", dialogId)
+							}) {
+								Img(section.image, alt)
+							}
 						}
 
 						Div({
@@ -230,9 +256,14 @@ object PortfolioStyle : StyleSheet() {
 		maxWidth(textWidth)
 		textAlign(TextAlign.Center)
 
+		"h1" {
+			margin(1.cssRem, 0.px, 0.px)
+		}
+
 		"p" {
 			lineHeight(1.6.cssRem)
 			fontSize(1.05.cssRem)
+			margin(0.px)
 		}
 	}
 
@@ -315,21 +346,101 @@ object PortfolioStyle : StyleSheet() {
 		}
 	}
 
+	val lightboxIn by keyframes {
+		from {
+			opacity(0)
+			property("scale", ".94")
+		}
+	}
+
+	/** Thumbnail button opening its [lightbox], the expand icon only shows up on hover or keyboard focus. */
 	val featureImage by style {
-		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
-		borderRadius(.6.cssRem)
-		boxSizing(BoxSizing.BorderBox)
+		backgroundColor(Color.transparent)
+		cursor(Cursor.ZoomIn)
 		display(DisplayStyle.Block)
-		flex(1)
+		flex(3)
 		minWidth(0.px)
-		height(16.cssRem)
-		objectFit(ObjectFit.Cover)
-		property("object-position", "top")
+		padding(0.px)
+		position(Position.Relative)
 		width(100.percent)
+
+		"img" {
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
+			borderRadius(.6.cssRem)
+			boxSizing(BoxSizing.BorderBox)
+			display(DisplayStyle.Block)
+			height(auto)
+			width(100.percent)
+
+			transitions {
+				properties("border-color", "box-shadow") {
+					duration(.25.s)
+				}
+			}
+		}
+
+		"svg" {
+			backgroundColor(Color(tint(AppStyle.CONTENT_BACKGROUND_COLOR, 80)))
+			borderRadius(.4.cssRem)
+			color(Color.white)
+			fontSize(.85.cssRem)
+			opacity(0)
+			padding(.5.cssRem)
+			position(Position.Absolute)
+			property("right", ".7rem")
+			property("top", ".7rem")
+
+			transitions {
+				properties("opacity") {
+					duration(.25.s)
+				}
+			}
+		}
+
+		group(desc(hover(self), "img"), desc(self + focusVisible, "img")) style {
+			borderColor(Color(tint(AppStyle.VIOLET_COLOR, 70)))
+			boxShadow("0 14px 40px -14px ${tint(AppStyle.VIOLET_COLOR, 50)}")
+		}
+
+		group(desc(hover(self), "svg"), desc(self + focusVisible, "svg")) style {
+			opacity(1)
+		}
+	}
+
+	/** Modal `dialog` opened through invoker commands, closed by Escape or a click anywhere thanks to `closedby="any"`. */
+	val lightbox by style {
+		backgroundColor(Color.transparent)
+		borderStyle(LineStyle.None)
+		property("animation", "${lightboxIn.name} .25s cubic-bezier(.2, .8, .2, 1)")
+		maxHeight(100.vh)
+		maxWidth(100.vw)
+		overflow(Overflow.Visible)
+		padding(0.px)
+
+		self + selector("::backdrop") style {
+			backgroundColor(Color(tint(AppStyle.CONTENT_BACKGROUND_COLOR, 85)))
+			property("backdrop-filter", "blur(6px)")
+		}
+
+		"button" {
+			backgroundColor(Color.transparent)
+			cursor(Cursor.ZoomOut)
+			display(DisplayStyle.Block)
+			padding(0.px)
+		}
+
+		"img" {
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_STRONG_COLOR))
+			borderRadius(.8.cssRem)
+			boxShadow("0 30px 90px -20px ${tint(AppStyle.VIOLET_COLOR, 45)}")
+			display(DisplayStyle.Block)
+			maxHeight(90.vh)
+			maxWidth(94.vw)
+		}
 	}
 
 	val featureText by style {
-		flex(1)
+		flex(2)
 
 		"h2" {
 			color(Color.white)

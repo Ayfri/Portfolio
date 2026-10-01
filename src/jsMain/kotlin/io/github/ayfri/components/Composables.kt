@@ -74,6 +74,11 @@ fun Dt(content: ContentBuilder<HTMLElement>) = TagElement(dtBuilder, null, conte
 @Composable
 fun Dd(content: ContentBuilder<HTMLElement>) = TagElement(ddBuilder, null, content)
 
+private val dialogBuilder = ElementBuilder.createBuilder<HTMLElement>("dialog")
+
+@Composable
+fun Dialog(attrs: AttrsScope<HTMLElement>.() -> Unit, content: ContentBuilder<HTMLElement>) = TagElement(dialogBuilder, attrs, content)
+
 @Composable
 fun CodeBlock(text: String, lang: String? = null) {
 	Pre {
