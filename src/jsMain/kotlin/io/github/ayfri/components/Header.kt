@@ -5,6 +5,7 @@ import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.blur
 import com.varabyte.kobweb.compose.css.functions.clamp
 import com.varabyte.kobweb.navigation.Anchor
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideMenu
 import io.github.ayfri.AppStyle
 import io.github.ayfri.AppStyle.mobileSecondBreak
 import io.github.ayfri.data.REPO_LINK
@@ -57,7 +58,7 @@ fun Header() {
 			title("GitHub")
 			attr("aria-label", "GitHub")
 		}) {
-			I(FontAwesomeType.BRAND, "github")
+			GitHubIcon()
 		}
 
 		Button({
@@ -65,7 +66,7 @@ fun Header() {
 			attr("aria-label", "Menu")
 			attr("popovertarget", NAV_ID)
 		}) {
-			I(FontAwesomeType.SOLID, "bars")
+			LucideMenu()
 		}
 	}
 }

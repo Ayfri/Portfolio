@@ -4,10 +4,13 @@ import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.max
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideGitBranch
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideGraduationCap
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideStar
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
+import io.github.ayfri.components.GitHubIcon
+import io.github.ayfri.components.Icon
 import io.github.ayfri.components.P
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.portfolioData
@@ -83,17 +86,21 @@ data class Skill(val language: Language) {
 					}
 				}
 
-				P({
-					val learnedAndNowUserFor = if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
-					else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
+				Div({
+					classes("details")
+				}) {
+					P({
+						val learnedAndNowUserFor = if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
+						else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
 
-					markdownParagraph(
-						"""
-							Since: ${language.since}$learnedAndNowUserFor
-							Level: ${"<i class='fa-solid fa-star'></i> ".repeat(language.level)}
-						""".trimIndent(), true
-					)
-				})
+						markdownParagraph("Since: ${language.since}$learnedAndNowUserFor")
+					})
+
+					P {
+						Text("Level: ")
+						repeat(language.level) { LucideStar() }
+					}
+				}
 			}
 
 			P({
@@ -105,11 +112,11 @@ data class Skill(val language: Language) {
 			classes("bottom")
 		}) {
 			@Composable
-			fun section(name: String, iconType: FontAwesomeType, iconName: String, list: List<GitHubRepository>) {
+			fun section(name: String, list: List<GitHubRepository>, icon: Icon) {
 				if (list.isEmpty()) return
 
 				H3 {
-					I(iconType, iconName)
+					icon()
 					Text(name)
 				}
 
@@ -124,9 +131,9 @@ data class Skill(val language: Language) {
 
 			val githubNotSchoolProjects = githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
 			val (contributedProjects, ownProjects) = githubNotSchoolProjects.partition { it.fork || it.owner.login != "Ayfri" }
-			section("GitHub projects", FontAwesomeType.BRAND, "github", ownProjects)
-			section("Contributions", FontAwesomeType.SOLID, "code-branch", contributedProjects)
-			section("School projects", FontAwesomeType.SOLID, "graduation-cap", schoolProjects)
+			section("GitHub projects", ownProjects) { GitHubIcon() }
+			section("Contributions", contributedProjects) { LucideGitBranch() }
+			section("School projects", schoolProjects) { LucideGraduationCap() }
 		}
 	}
 
@@ -574,19 +581,19 @@ object SkillsStyle : StyleSheet() {
 					textAlign(TextAlign.Center)
 				}
 
-				child(self, type("p")) style {
+				className("details") style {
 					color(Color(AppStyle.TEXT_MUTED_COLOR))
-					fontSize(.9.cssRem)
-					margin(0.px)
 					lineHeight(1.5.cssRem)
 
 					"p" {
 						margin(0.px)
 					}
 
-					"i" {
+					"svg" {
 						color(Color(AppStyle.ACCENT_COLOR))
+						property("fill", "currentColor")
 						fontSize(.75.cssRem)
+						marginRight(.25.em)
 					}
 				}
 			}
@@ -605,7 +612,7 @@ object SkillsStyle : StyleSheet() {
 				gap(.5.cssRem)
 				margin(0.px)
 
-				"i" {
+				"svg" {
 					color(Color(AppStyle.TEXT_MUTED_COLOR))
 				}
 
@@ -646,7 +653,7 @@ object SkillsStyle : StyleSheet() {
 				desc(className("top"), className("info")) style {
 					flexDirection(FlexDirection.Column)
 
-					child(self, type("p")) style {
+					className("details") style {
 						alignSelf(AlignSelf.Start)
 					}
 

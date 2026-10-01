@@ -288,10 +288,6 @@ kobweb {
 						async = true
 					}
 
-					script(src = "https://kit.fontawesome.com/74fed0e2b5.js", type = "text/javascript") {
-						async = true
-					}
-
 					script(src = "https://www.googletagmanager.com/gtag/js?id=G-TS3BHPVFKK", type = "text/javascript") {
 						defer = true
 					}
@@ -363,6 +359,7 @@ kotlin {
 				implementation(libs.compose.runtime)
 				implementation(libs.kobweb.core)
 				implementation(libs.kobwebx.markdown)
+				implementation(libs.kobwebx.silk.icons.lucide)
 				implementation(libs.kotlinx.wrappers.browser)
 				implementation(npm("marked", libs.versions.marked.get()))
 			}

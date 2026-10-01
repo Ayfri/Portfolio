@@ -3,9 +3,11 @@ package io.github.ayfri.components.articles
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.navigation.Anchor
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideCalendar
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideClock
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideRefreshCw
 import io.github.ayfri.*
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
+import io.github.ayfri.components.Icon
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.pages.IconStyle
 import io.github.ayfri.utils.renderWhenVisible
@@ -16,9 +18,9 @@ import org.jetbrains.compose.web.dom.*
 private const val VISIBLE_KEYWORDS = 5
 
 @Composable
-private fun MetaItem(type: FontAwesomeType, icon: String, text: String, vararg classes: String) {
+private fun MetaItem(text: String, vararg classes: String, icon: Icon) {
 	Span({ classes(IconStyle.label, *classes) }) {
-		I(type, icon)
+		icon()
 		Text(text)
 	}
 }
@@ -32,9 +34,9 @@ fun ArticleMeta(date: String, dateModified: String, content: String) {
 	P({
 		classes(AppStyle.monoFont, ArticleListStyle.meta)
 	}) {
-		MetaItem(FontAwesomeType.REGULAR, "calendar", formatLongDate(date))
-		MetaItem(FontAwesomeType.REGULAR, "clock", "${calculateReadingTime(content)} min read")
-		if (date != dateModified) MetaItem(FontAwesomeType.SOLID, "rotate", "updated ${formatLongDate(dateModified)}", ArticleListStyle.updated)
+		MetaItem(formatLongDate(date)) { LucideCalendar() }
+		MetaItem("${calculateReadingTime(content)} min read") { LucideClock() }
+		if (date != dateModified) MetaItem("updated ${formatLongDate(dateModified)}", ArticleListStyle.updated) { LucideRefreshCw() }
 	}
 }
 

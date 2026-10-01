@@ -3,9 +3,9 @@ package io.github.ayfri.pages
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideCalendar
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideMapPin
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.tint
@@ -149,11 +149,11 @@ fun Experiences() {
 									classes(AppStyle.monoFont, ExperiencesStyle.meta)
 								}) {
 									Span {
-										I(FontAwesomeType.REGULAR, "calendar")
+										LucideCalendar()
 										Text(job.period)
 									}
 									Span {
-										I(FontAwesomeType.SOLID, "location-dot")
+										LucideMapPin()
 										Text("${job.kind} · ${job.location}")
 									}
 								}

@@ -5,6 +5,8 @@ import com.varabyte.kobweb.compose.css.functions.max
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.AlignSelf
 import org.jetbrains.compose.web.css.selectors.CSSSelector
 
 fun StyleSheet.linkStyle(parent: CSSSelector) {
@@ -177,6 +179,18 @@ object AppStyle : StyleSheet() {
 			property("text-wrap", "pretty")
 		}
 
+		/**
+		 * Inline SVGs are the [io.github.ayfri.components.Icon]s, their ink stops 1px short of their 24px grid so 1.15em matches a glyph.
+		 * An SVG has no text baseline, so icon rows align their items on `baseline` (the text's) and the icon centers itself.
+		 */
+		"svg" {
+			alignSelf(AlignSelf.Center)
+			flexShrink(0)
+			height(1.15.em)
+			property("vertical-align", "-.25em")
+			width(1.15.em)
+		}
+
 		"::selection" {
 			backgroundColor(Color(tint(VIOLET_COLOR, 45)))
 			color(Color.white)
@@ -334,7 +348,7 @@ object AppStyle : StyleSheet() {
 
 	/** Secondary action: outlined, the accent only shows up on hover. [buttonColor] overrides the fill. */
 	val button by style {
-		alignItems("center")
+		alignItems(AlignItems.Baseline)
 		backgroundColor(buttonColor.value(Color(SURFACE_RAISED)))
 		border(1.px, LineStyle.Solid, Color(BORDER_STRONG_COLOR))
 		borderRadius(.5.cssRem)

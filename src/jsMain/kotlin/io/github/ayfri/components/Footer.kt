@@ -2,6 +2,7 @@ package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.AppStyle
 import io.github.ayfri.MAIL_TO
 import io.github.ayfri.data.*
@@ -20,14 +21,14 @@ import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
 import kotlin.js.Date
 
-data class FooterSocial(val iconName: String, val url: String)
+data class FooterSocial(val name: String, val icon: Icon, val url: String)
 
 val footerSocials = listOf(
-	FooterSocial("discord", DISCORD_LINK),
-	FooterSocial("github", REPO_LINK),
-	FooterSocial("linkedin", LINKEDIN_LINK),
-	FooterSocial("twitch", TWITCH_LINK),
-	FooterSocial("x-twitter", TWITTER_LINK),
+	FooterSocial("Discord", { DiscordIcon() }, DISCORD_LINK),
+	FooterSocial("GitHub", { GitHubIcon() }, REPO_LINK),
+	FooterSocial("LinkedIn", { LinkedInIcon() }, LINKEDIN_LINK),
+	FooterSocial("Twitch", { TwitchIcon() }, TWITCH_LINK),
+	FooterSocial("X", { XIcon() }, TWITTER_LINK),
 )
 
 data class ProjectLink(val name: String, val url: String)
@@ -43,17 +44,17 @@ val projectLinks = listOf(
 	ProjectLink("Shayders", "https://shayders.ayfri.com"),
 )
 
-data class PageLink(val name: String, val url: String, val icon: String, val download: String? = null)
+data class PageLink(val name: String, val url: String, val icon: Icon, val download: String? = null)
 
 val footerPages = listOf(
-	PageLink("Home", "/", "house"),
-	PageLink("About me", "/about-me/", "user"),
-	PageLink("Skills", "/skills/", "code"),
-	PageLink("Experiences", "/experiences/", "briefcase"),
-	PageLink("Articles", "/articles/", "newspaper"),
-	PageLink("This portfolio", "/portfolio/", "folder-open"),
-	PageLink("CV (English, PDF)", "/cv-en.pdf", "file-arrow-down", "CV Pierre Roy EN.pdf"),
-	PageLink("CV (French, PDF)", "/cv.pdf", "file-arrow-down", "CV Pierre Roy FR.pdf"),
+	PageLink("Home", "/", { LucideHouse() }),
+	PageLink("About me", "/about-me/", { LucideUser() }),
+	PageLink("Skills", "/skills/", { LucideCode() }),
+	PageLink("Experiences", "/experiences/", { LucideBriefcase() }),
+	PageLink("Articles", "/articles/", { LucideNewspaper() }),
+	PageLink("This portfolio", "/portfolio/", { LucideFolderOpen() }),
+	PageLink("CV (English, PDF)", "/cv-en.pdf", { LucideFileDown() }, "CV Pierre Roy EN.pdf"),
+	PageLink("CV (French, PDF)", "/cv.pdf", { LucideFileDown() }, "CV Pierre Roy FR.pdf"),
 )
 
 @Composable
@@ -87,14 +88,14 @@ fun FooterContactField(
 }
 
 @Composable
-fun FooterColumn(heading: String, icon: String, content: @Composable () -> Unit) {
+fun FooterColumn(heading: String, icon: Icon, content: @Composable () -> Unit) {
 	Div({
 		classes(FooterStyle.footerColumn)
 	}) {
 		H3({
 			classes(FooterStyle.footerHeading)
 		}) {
-			I(FontAwesomeType.SOLID, icon)
+			icon()
 			Text(heading)
 		}
 
@@ -115,7 +116,7 @@ fun Footer() {
 			Div({
 				classes(FooterStyle.contact)
 			}) {
-				IconHeading("envelope-open-text", "Contact me", FooterStyle.contactHeading)
+				IconHeading({ LucideMailOpen() }, "Contact me", FooterStyle.contactHeading)
 
 				P({
 					classes(FooterStyle.contactHint)
@@ -154,7 +155,7 @@ fun Footer() {
 						window.open("mailto:$MAIL_TO?subject=$subject&body=$body", "_blank")
 					}
 				}) {
-					I(FontAwesomeType.SOLID, "paper-plane")
+					LucideSend()
 					Text("Send message")
 				}
 			}
@@ -162,7 +163,7 @@ fun Footer() {
 			Div({
 				classes(FooterStyle.columns)
 			}) {
-				FooterColumn("Projects", "rocket") {
+				FooterColumn("Projects", { LucideRocket() }) {
 					Ul({
 						classes(FooterStyle.footerList)
 					}) {
@@ -182,13 +183,13 @@ fun Footer() {
 								classes(FooterStyle.moreLink)
 							}) {
 								Text("All projects")
-								I(FontAwesomeType.SOLID, "arrow-right")
+								LucideArrowRight()
 							}
 						}
 					}
 				}
 
-				FooterColumn("Pages", "compass") {
+				FooterColumn("Pages", { LucideCompass() }) {
 					Ul({
 						classes(FooterStyle.footerList)
 					}) {
@@ -200,7 +201,7 @@ fun Footer() {
 										attr("download", it)
 									}
 								}) {
-									I(FontAwesomeType.SOLID, page.icon)
+									page.icon()
 									Text(page.name)
 								}
 							}
@@ -208,7 +209,7 @@ fun Footer() {
 					}
 				}
 
-				FooterColumn("Elsewhere", "satellite-dish") {
+				FooterColumn("Elsewhere", { LucideSatelliteDish() }) {
 					Div({
 						classes(FooterStyle.socialLinks)
 					}) {
@@ -216,9 +217,10 @@ fun Footer() {
 							A(footerSocial.url, {
 								classes(FooterStyle.socialIcon)
 								target(ATarget.Blank)
-								title(footerSocial.iconName.replaceFirstChar { it.titlecase() })
+								title(footerSocial.name)
+								attr("aria-label", footerSocial.name)
 							}) {
-								I(FontAwesomeType.BRAND, footerSocial.iconName)
+								footerSocial.icon()
 							}
 						}
 					}
@@ -228,7 +230,7 @@ fun Footer() {
 						target(ATarget.Blank)
 						title("Support me on Buy Me A Coffee")
 					}) {
-						I(FontAwesomeType.SOLID, "mug-hot")
+						LucideCoffee()
 						Text("Buy me a coffee")
 					}
 				}
@@ -361,7 +363,7 @@ object FooterStyle : StyleSheet() {
 		gap(.5.cssRem)
 		margin(0.px, 0.px, 1.cssRem)
 
-		"i" {
+		"svg" {
 			color(Color(AppStyle.VIOLET_COLOR))
 			fontSize(.8.em)
 		}
@@ -387,11 +389,9 @@ object FooterStyle : StyleSheet() {
 			}
 		}
 
-		"a i" {
+		"a svg" {
 			fontSize(.8.em)
 			opacity(.7)
-			textAlign(TextAlign.Center)
-			width(1.cssRem)
 		}
 	}
 
@@ -400,7 +400,7 @@ object FooterStyle : StyleSheet() {
 		display(DisplayStyle.LegacyInlineFlex)
 		gap(.4.cssRem)
 
-		"i" {
+		"svg" {
 			fontSize(.75.cssRem)
 		}
 	}
@@ -408,7 +408,7 @@ object FooterStyle : StyleSheet() {
 	val socialLinks by style {
 		display(DisplayStyle.Flex)
 		flexWrap(FlexWrap.Wrap)
-		gap(1.1.cssRem)
+		gap(.7.cssRem)
 	}
 
 	val socialIcon by style {
@@ -424,7 +424,7 @@ object FooterStyle : StyleSheet() {
 		fontSize(.9.cssRem)
 		marginTop(1.4.cssRem)
 
-		"i" {
+		"svg" {
 			color(Color("#FFDD11"))
 		}
 	}

@@ -6,10 +6,11 @@ import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
+import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.AppStyle
 import io.github.ayfri.CodeTheme
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
+import io.github.ayfri.components.GitHubIcon
+import io.github.ayfri.components.Icon
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.portfolioData
 import io.github.ayfri.externals.HighlightCode
@@ -78,7 +79,7 @@ fun All() {
 				attr("aria-label", "Breadcrumb")
 			}) {
 				A("/projects/") {
-					I(FontAwesomeType.SOLID, "folder-open")
+					LucideFolderOpen()
 					Text(" Projects")
 				}
 				Text(" / ")
@@ -102,14 +103,14 @@ fun All() {
 				P({
 					classes(AppStyle.monoFont, ProjectStyle.meta)
 				}) {
-					listOfNotNull(
-						project.language?.let { "code" to it },
-						"star" to "${project.stargazersCount} stars",
-						"code-branch" to "${project.forksCount} forks",
-						"clock-rotate-left" to "updated ${formatDate(project.updatedAt)}",
+					listOfNotNull<Pair<Icon, String>>(
+						project.language?.let { Pair({ LucideCode() }, it) },
+						Pair({ LucideStar() }, "${project.stargazersCount} stars"),
+						Pair({ LucideGitBranch() }, "${project.forksCount} forks"),
+						Pair({ LucideHistory() }, "updated ${formatDate(project.updatedAt)}"),
 					).forEach { (icon, text) ->
 						Span({ classes(IconStyle.label) }) {
-							I(FontAwesomeType.SOLID, icon)
+							icon()
 							Text(text)
 						}
 					}
@@ -137,13 +138,13 @@ fun All() {
 					Div({
 						classes(AppStyle.card, ProjectStyle.panel)
 					}) {
-						IconHeading("link", "Links")
+						IconHeading({ LucideLink() }, "Links")
 
 						A(project.htmlUrl, {
 							classes(AppStyle.button, AppStyle.primaryButton)
 							target(ATarget.Blank)
 						}) {
-							I(FontAwesomeType.BRAND, "github")
+							GitHubIcon()
 							Text("GitHub repository")
 						}
 
@@ -152,7 +153,7 @@ fun All() {
 								classes(AppStyle.button)
 								target(ATarget.Blank)
 							}) {
-								I(FontAwesomeType.SOLID, "globe")
+								LucideGlobe()
 								Text("Website")
 							}
 						}
@@ -160,7 +161,7 @@ fun All() {
 						A("${project.htmlUrl}/archive/refs/heads/${project.defaultBranch}.zip", {
 							classes(AppStyle.button)
 						}) {
-							I(FontAwesomeType.SOLID, "download")
+							LucideDownload()
 							Text("Download ZIP")
 						}
 					}
@@ -168,26 +169,26 @@ fun All() {
 					Div({
 						classes(AppStyle.card, ProjectStyle.panel)
 					}) {
-						IconHeading("chart-simple", "Details")
+						IconHeading({ LucideChartNoAxesColumn() }, "Details")
 
 						Dl {
-							listOfNotNull(
-								Triple("star", "Stars", project.stargazersCount.toString()),
-								Triple("code-branch", "Forks", project.forksCount.toString()),
-								Triple("eye", "Watchers", project.watchersCount.toString()),
-								Triple("circle-exclamation", "Open issues", project.openIssuesCount.toString()),
-								Triple("code-commit", "Commits", project.commitsCount.toString()),
-								Triple("users", "Contributors", project.contributorsCount.toString()),
-								Triple("hard-drive", "Size", "${project.size} KB"),
-								Triple("calendar-plus", "Created", formatDate(project.createdAt)),
-								Triple("clock-rotate-left", "Last push", formatDate(project.pushedAt)),
-								Triple("globe", "Visibility", project.visibility.replaceFirstChar { it.titlecase() }),
-								Triple("box-archive", "Archived", "Yes").takeIf { project.archived },
-								Triple("code-fork", "Fork", "Yes").takeIf { project.fork },
-								Triple("copy", "Template", "Yes").takeIf { project.isTemplate },
+							listOfNotNull<Triple<Icon, String, String>>(
+								Triple({ LucideStar() }, "Stars", project.stargazersCount.toString()),
+								Triple({ LucideGitBranch() }, "Forks", project.forksCount.toString()),
+								Triple({ LucideEye() }, "Watchers", project.watchersCount.toString()),
+								Triple({ LucideCircleAlert() }, "Open issues", project.openIssuesCount.toString()),
+								Triple({ LucideGitCommitHorizontal() }, "Commits", project.commitsCount.toString()),
+								Triple({ LucideUsers() }, "Contributors", project.contributorsCount.toString()),
+								Triple({ LucideHardDrive() }, "Size", "${project.size} KB"),
+								Triple({ LucideCalendarPlus() }, "Created", formatDate(project.createdAt)),
+								Triple({ LucideHistory() }, "Last push", formatDate(project.pushedAt)),
+								Triple({ LucideGlobe() }, "Visibility", project.visibility.replaceFirstChar { it.titlecase() }),
+								if (project.archived) Triple({ LucideArchive() }, "Archived", "Yes") else null,
+								if (project.fork) Triple({ LucideGitFork() }, "Fork", "Yes") else null,
+								if (project.isTemplate) Triple({ LucideCopy() }, "Template", "Yes") else null,
 							).forEach { (icon, label, value) ->
 								Dt {
-									I(FontAwesomeType.SOLID, icon)
+									icon()
 									Text(label)
 								}
 								Dd { Text(value) }
@@ -341,11 +342,9 @@ object ProjectStyle : StyleSheet() {
 			gap(.55.cssRem)
 		}
 
-		"dt i" {
+		"dt svg" {
 			color(Color(AppStyle.VIOLET_COLOR))
 			fontSize(.8.em)
-			textAlign(TextAlign.Center)
-			width(1.cssRem)
 		}
 
 		"dd" {

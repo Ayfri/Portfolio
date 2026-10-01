@@ -2,9 +2,13 @@ package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.*
 import com.varabyte.kobweb.compose.css.borderTop
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideCheck
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideLink
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
+import io.github.ayfri.components.BlueskyIcon
+import io.github.ayfri.components.Icon
+import io.github.ayfri.components.LinkedInIcon
+import io.github.ayfri.components.XIcon
 import js.uri.encodeURIComponent
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
@@ -12,12 +16,12 @@ import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 import web.navigator.navigator
 
-private data class ShareTarget(val name: String, val icon: String, val link: (title: String, url: String) -> String)
+private data class ShareTarget(val name: String, val icon: Icon, val link: (title: String, url: String) -> String)
 
 private val shareTargets = listOf(
-	ShareTarget("X", "x-twitter") { title, url -> "https://twitter.com/intent/tweet?text=$title&url=$url" },
-	ShareTarget("LinkedIn", "linkedin") { _, url -> "https://www.linkedin.com/sharing/share-offsite/?url=$url" },
-	ShareTarget("Bluesky", "bluesky") { title, url -> "https://bsky.app/intent/compose?text=$title%20$url" },
+	ShareTarget("X", { XIcon() }) { title, url -> "https://twitter.com/intent/tweet?text=$title&url=$url" },
+	ShareTarget("LinkedIn", { LinkedInIcon() }) { _, url -> "https://www.linkedin.com/sharing/share-offsite/?url=$url" },
+	ShareTarget("Bluesky", { BlueskyIcon() }) { title, url -> "https://bsky.app/intent/compose?text=$title%20$url" },
 )
 
 @Composable
@@ -50,7 +54,7 @@ fun ShareSection(title: String, url: String) {
 				target(ATarget.Blank)
 				attr("rel", "noopener noreferrer")
 			}) {
-				I(FontAwesomeType.BRAND, target.icon)
+				target.icon()
 				Text(target.name)
 			}
 		}
@@ -62,7 +66,7 @@ fun ShareSection(title: String, url: String) {
 				copied = true
 			}
 		}) {
-			I(FontAwesomeType.SOLID, if (copied) "check" else "link")
+			if (copied) LucideCheck() else LucideLink()
 			Text(if (copied) "Copied" else "Copy link")
 		}
 	}

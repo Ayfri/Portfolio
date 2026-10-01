@@ -2,10 +2,9 @@ package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideArrowUp
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.FontAwesomeType
 import io.github.ayfri.components.HeaderStyle
-import io.github.ayfri.components.I
 import io.github.ayfri.utils.size
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.*
@@ -32,7 +31,7 @@ fun BackToTopButton() {
 		attr("aria-label", "Back to top")
 		onClick { window.scrollTo(0.0, 0.0) }
 	}) {
-		I(FontAwesomeType.SOLID, "arrow-up")
+		LucideArrowUp()
 	}
 }
 

@@ -3,9 +3,11 @@ package io.github.ayfri.pages
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.*
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
+import io.github.ayfri.components.GitHubIcon
+import io.github.ayfri.components.Icon
+import io.github.ayfri.components.LinkedInIcon
 import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.FeaturedProjectCard
 import io.github.ayfri.data.FeaturedProjectStyle
@@ -20,6 +22,7 @@ import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
+import org.jetbrains.compose.web.css.AlignSelf
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 import web.http.FetchPriority
@@ -51,13 +54,13 @@ val timelineEntries = listOf(
 
 /** `h2` led by a small icon in a violet-tinted square, the site's single icon + heading treatment. */
 @Composable
-fun IconHeading(icon: String, title: String, vararg classes: String, type: FontAwesomeType = FontAwesomeType.SOLID) {
+fun IconHeading(icon: Icon, title: String, vararg classes: String) {
 	Style(IconStyle)
 
 	H2({
 		classes(IconStyle.heading, *classes)
 	}) {
-		Span({ classes(IconStyle.badge) }) { I(type, icon) }
+		Span({ classes(IconStyle.badge) }) { icon() }
 		Text(title)
 	}
 }
@@ -65,17 +68,17 @@ fun IconHeading(icon: String, title: String, vararg classes: String, type: FontA
 /** Shared icon treatments: [heading] + [badge] for titles, [label] for a muted icon inline before some text. */
 object IconStyle : StyleSheet() {
 	val heading by style {
-		alignItems(AlignItems.Center)
+		alignItems(AlignItems.Baseline)
 		display(DisplayStyle.Flex)
 		gap(.7.cssRem)
 	}
 
 	val label by style {
-		alignItems(AlignItems.Center)
+		alignItems(AlignItems.Baseline)
 		display(DisplayStyle.LegacyInlineFlex)
 		gap(.45.cssRem)
 
-		"i" {
+		"svg" {
 			color(Color(AppStyle.TEXT_MUTED_COLOR))
 			fontSize(.85.em)
 			opacity(.8)
@@ -84,6 +87,7 @@ object IconStyle : StyleSheet() {
 
 	val badge by style {
 		alignItems(AlignItems.Center)
+		alignSelf(AlignSelf.Center)
 		backgroundColor(Color(tint(AppStyle.VIOLET_COLOR, 14)))
 		border(1.px, LineStyle.Solid, Color(tint(AppStyle.VIOLET_COLOR, 30)))
 		borderRadius(.55.cssRem)
@@ -97,7 +101,7 @@ object IconStyle : StyleSheet() {
 }
 
 @Composable
-fun HomeSectionHeader(icon: String, title: String, linkLabel: String, link: String) {
+fun HomeSectionHeader(icon: Icon, title: String, linkLabel: String, link: String) {
 	Div({
 		classes(HomeStyle.sectionHeader)
 	}) {
@@ -107,15 +111,15 @@ fun HomeSectionHeader(icon: String, title: String, linkLabel: String, link: Stri
 			classes(HomeStyle.sectionLink)
 		}) {
 			Text(linkLabel)
-			I(FontAwesomeType.SOLID, "arrow-right")
+			LucideArrowRight()
 		}
 	}
 }
 
 @Composable
-fun HomeFact(icon: String, value: String, label: String) {
+fun HomeFact(icon: Icon, value: String, label: String) {
 	Li {
-		I(FontAwesomeType.SOLID, icon)
+		icon()
 		B { Text(value) }
 		Text(label)
 	}
@@ -168,7 +172,7 @@ fun Home() {
 					A("/projects/", {
 						classes(AppStyle.button, AppStyle.primaryButton)
 					}) {
-						I(FontAwesomeType.SOLID, "rocket")
+						LucideRocket()
 						Text("See my projects")
 					}
 
@@ -177,21 +181,21 @@ fun Home() {
 						target(ATarget.Blank)
 						attr("download", "CV Pierre Roy EN.pdf")
 					}) {
-						I(FontAwesomeType.SOLID, "file-arrow-down")
+						LucideFileDown()
 						Text("Download CV")
 					}
 
-					listOf(
-						Triple(FontAwesomeType.BRAND, "github", REPO_LINK),
-						Triple(FontAwesomeType.BRAND, "linkedin", LINKEDIN_LINK),
-						Triple(FontAwesomeType.SOLID, "envelope", "mailto:pierre@ayfri.com"),
-					).forEach { (type, icon, url) ->
+					listOf<Triple<String, Icon, String>>(
+						Triple("GitHub", { GitHubIcon() }, REPO_LINK),
+						Triple("LinkedIn", { LinkedInIcon() }, LINKEDIN_LINK),
+						Triple("Email", { LucideMail() }, "mailto:pierre@ayfri.com"),
+					).forEach { (label, icon, url) ->
 						A(url, {
 							classes(HomeStyle.iconLink)
-							title(icon.replaceFirstChar { it.titlecase() })
-							attr("aria-label", icon)
+							title(label)
+							attr("aria-label", label)
 						}) {
-							I(type, icon)
+							icon()
 						}
 					}
 				}
@@ -199,10 +203,10 @@ fun Home() {
 				Ul({
 					classes(AppStyle.monoFont, HomeStyle.facts)
 				}) {
-					HomeFact("star", portfolio.repos.sumOf { it.stargazersCount }.toString(), "GitHub stars")
-					HomeFact("code-branch", portfolio.repos.size.toString(), "public repositories")
-					HomeFact("terminal", "$codingYears+", "years of code")
-					HomeFact("pen-nib", articlesEntries.size.toString(), "articles")
+					HomeFact({ LucideStar() }, portfolio.repos.sumOf { it.stargazersCount }.toString(), "GitHub stars")
+					HomeFact({ LucideGitBranch() }, portfolio.repos.size.toString(), "public repositories")
+					HomeFact({ LucideTerminal() }, "$codingYears+", "years of code")
+					HomeFact({ LucidePenTool() }, articlesEntries.size.toString(), "articles")
 				}
 			}
 
@@ -221,7 +225,7 @@ fun Home() {
 		Section({
 			classes(HomeStyle.section)
 		}) {
-			HomeSectionHeader("rocket", "Featured projects", "All projects", "/projects/")
+			HomeSectionHeader({ LucideRocket() }, "Featured projects", "All projects", "/projects/")
 
 			Div({
 				classes(FeaturedProjectStyle.grid)
@@ -235,7 +239,7 @@ fun Home() {
 		Section({
 			classes(HomeStyle.section)
 		}) {
-			HomeSectionHeader("screwdriver-wrench", "Tools I use most", "All skills", "/skills/")
+			HomeSectionHeader({ LucideWrench() }, "Tools I use most", "All skills", "/skills/")
 
 			Div({
 				classes(HomeStyle.skills)
@@ -254,7 +258,7 @@ fun Home() {
 			classes(HomeStyle.section, HomeStyle.split)
 		}) {
 			Div {
-				HomeSectionHeader("briefcase", "Experience", "Details", "/experiences/")
+				HomeSectionHeader({ LucideBriefcase() }, "Experience", "Details", "/experiences/")
 
 				P({
 					markdownParagraph(EXPERIENCE_SUMMARY.trimIndent(), false)
@@ -282,7 +286,7 @@ fun Home() {
 						Span({
 							classes(HomeStyle.muted, IconStyle.label)
 						}) {
-							I(FontAwesomeType.SOLID, "building")
+							LucideBuilding2()
 							Text(entry.company)
 						}
 					}
@@ -293,7 +297,7 @@ fun Home() {
 		Section({
 			classes(HomeStyle.section)
 		}) {
-			HomeSectionHeader("newspaper", "Latest articles", "All articles", "/articles/")
+			HomeSectionHeader({ LucideNewspaper() }, "Latest articles", "All articles", "/articles/")
 
 			Ul({
 				classes(HomeStyle.articles)
@@ -306,7 +310,7 @@ fun Home() {
 							Span({
 								classes(AppStyle.monoFont, HomeStyle.articleDate, IconStyle.label)
 							}) {
-								I(FontAwesomeType.REGULAR, "calendar")
+								LucideCalendar()
 								Text(formatLongDate(article.date))
 							}
 
@@ -330,7 +334,7 @@ fun Home() {
 			Div({
 				classes(HomeStyle.more)
 			}) {
-				IconHeading("book-open", "The long version")
+				IconHeading({ LucideBookOpen() }, "The long version")
 				P({
 					classes(HomeStyle.muted)
 				}) {
@@ -340,14 +344,14 @@ fun Home() {
 					classes(AppStyle.button)
 				}) {
 					Text("Read my story")
-					I(FontAwesomeType.SOLID, "arrow-right")
+					LucideArrowRight()
 				}
 			}
 
 			Div({
 				classes(HomeStyle.more)
 			}) {
-				IconHeading("wand-magic-sparkles", "How this site is built")
+				IconHeading({ LucideWandSparkles() }, "How this site is built")
 				P({
 					classes(HomeStyle.muted)
 				}) {
@@ -357,7 +361,7 @@ fun Home() {
 					classes(AppStyle.button)
 				}) {
 					Text("About this portfolio")
-					I(FontAwesomeType.SOLID, "arrow-right")
+					LucideArrowRight()
 				}
 			}
 		}
@@ -524,7 +528,7 @@ object HomeStyle : StyleSheet() {
 			gap(.45.cssRem)
 		}
 
-		"i" {
+		"svg" {
 			color(Color(AppStyle.VIOLET_COLOR))
 			fontSize(.8.cssRem)
 		}
@@ -650,7 +654,7 @@ object HomeStyle : StyleSheet() {
 		gap(.45.cssRem)
 		whiteSpace(WhiteSpace.NoWrap)
 
-		"i" {
+		"svg" {
 			fontSize(.75.cssRem)
 			transitions {
 				properties("transform") { duration(.2.s) }
@@ -661,7 +665,7 @@ object HomeStyle : StyleSheet() {
 			color(Color(AppStyle.ACCENT_COLOR))
 		}
 
-		desc(hover(self), "i") style {
+		desc(hover(self), "svg") style {
 			transform { translateX(3.px) }
 		}
 	}
@@ -827,7 +831,7 @@ object HomeStyle : StyleSheet() {
 			margin(0.px)
 		}
 
-		"a i" {
+		"a svg" {
 			fontSize(.8.em)
 		}
 

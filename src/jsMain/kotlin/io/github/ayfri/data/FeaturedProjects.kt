@@ -2,10 +2,11 @@ package io.github.ayfri.data
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideExternalLink
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideStar
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.A
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
+import io.github.ayfri.components.GitHubIcon
 import io.github.ayfri.localImage
 import io.github.ayfri.tint
 import io.github.ayfri.utils.gradientBorderBackground
@@ -118,7 +119,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 					Span({
 						classes(FeaturedProjectStyle.stars)
 					}) {
-						I(FontAwesomeType.SOLID, "star")
+						LucideStar()
 						Text(it.toString())
 					}
 				}
@@ -145,7 +146,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 					A(url, {
 						classes(AppStyle.button, FeaturedProjectStyle.projectLink, FeaturedProjectStyle.primaryLink)
 					}) {
-						I(FontAwesomeType.SOLID, "arrow-up-right-from-square")
+						LucideExternalLink()
 						Text("Live")
 					}
 				}
@@ -153,7 +154,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 				A(repositoryUrl, {
 					classes(AppStyle.button, FeaturedProjectStyle.projectLink)
 				}) {
-					I(FontAwesomeType.BRAND, "github")
+					GitHubIcon()
 					Text("Source")
 				}
 			}

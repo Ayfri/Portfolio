@@ -4,9 +4,10 @@ import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
+import io.github.ayfri.components.GitHubIcon
+import io.github.ayfri.components.Icon
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
@@ -20,21 +21,21 @@ import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 
-data class PortfolioStat(val label: String, val value: String, val icon: String)
+data class PortfolioStat(val label: String, val value: String, val icon: Icon)
 
 val portfolioStats = listOf(
-	PortfolioStat("Started", "June 2022", "seedling"),
-	PortfolioStat("Language", "100% Kotlin", "code"),
-	PortfolioStat("Framework", "Kobweb + Compose HTML", "layer-group"),
-	PortfolioStat("Hosting", "Cloudflare Pages", "cloud"),
+	PortfolioStat("Started", "June 2022") { LucideSprout() },
+	PortfolioStat("Language", "100% Kotlin") { LucideCode() },
+	PortfolioStat("Framework", "Kobweb + Compose HTML") { LucideLayers() },
+	PortfolioStat("Hosting", "Cloudflare Pages") { LucideCloud() },
 )
 
-data class PortfolioSection(val title: String, val icon: String, val text: String, val image: String)
+data class PortfolioSection(val title: String, val icon: Icon, val text: String, val image: String)
 
 val portfolioSections = listOf(
 	PortfolioSection(
 		title = "Why I Built It",
-		icon = "lightbulb",
+		icon = { LucideLightbulb() },
 		text = """
 			My school asked for a portfolio to validate the first year, but I wanted more than a template someone could fill in a weekend.
 			Something that could explain what I do, how, and why, beyond a bare GitHub profile.
@@ -43,7 +44,7 @@ val portfolioSections = listOf(
 	),
 	PortfolioSection(
 		title = "Designing It",
-		icon = "palette",
+		icon = { LucidePalette() },
 		text = """
 			The early visual identity started as mockups in Figma, with my internship tutor pushing me on layout and color while I focused on the code.
 			These days the design lives directly in Compose HTML: styling and layout are iterated on in Kotlin itself, no separate design tool.
@@ -52,7 +53,7 @@ val portfolioSections = listOf(
 	),
 	PortfolioSection(
 		title = "Building It",
-		icon = "hammer",
+		icon = { LucideHammer() },
 		text = """
 			Everything is Kotlin: pages, styling, and the build script itself, compiled to JavaScript through [Kobweb](https://kobweb.varabyte.com/) and Compose HTML.
 			One typed language for the whole site means the compiler catches broken links and typo'd CSS colors before they ever ship.
@@ -61,7 +62,7 @@ val portfolioSections = listOf(
 	),
 	PortfolioSection(
 		title = "Shipping It",
-		icon = "rocket",
+		icon = { LucideRocket() },
 		text = """
 			The site is statically exported with `kobwebExport`, then deployed to Cloudflare Pages straight from GitHub Actions on every push to master.
 			No manual uploads, no dynamic server to maintain, just static files served from the edge.
@@ -110,14 +111,14 @@ fun Portfolio() {
 						classes(AppStyle.button, AppStyle.primaryButton)
 					}) {
 						Text("Read the full story")
-						I(FontAwesomeType.SOLID, "arrow-right")
+						LucideArrowRight()
 					}
 
 					A("https://github.com/Ayfri/Portfolio", {
 						classes(AppStyle.button)
 						target(ATarget.Blank)
 					}) {
-						I(FontAwesomeType.BRAND, "github")
+						GitHubIcon()
 						Text("View source")
 					}
 				}
@@ -130,7 +131,7 @@ fun Portfolio() {
 					Div({
 						classes(PortfolioStyle.statTile)
 					}) {
-						I(FontAwesomeType.SOLID, stat.icon)
+						stat.icon()
 						Div {
 							P({
 								classes(PortfolioStyle.statValue)
@@ -175,7 +176,7 @@ fun Portfolio() {
 			Section({
 				classes(PortfolioStyle.techStack)
 			}) {
-				IconHeading("layer-group", "Built with")
+				IconHeading({ LucideLayers() }, "Built with")
 
 				Div({
 					classes(PortfolioStyle.techStackList)
@@ -265,7 +266,7 @@ object PortfolioStyle : StyleSheet() {
 		padding(1.2.cssRem)
 		revealOnScroll()
 
-		group(desc(self, "svg"), desc(self, "i")) style {
+		"svg" {
 			color(Color(AppStyle.VIOLET_COLOR))
 			fontSize(1.3.cssRem)
 		}

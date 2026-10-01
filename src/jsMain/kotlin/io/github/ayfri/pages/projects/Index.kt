@@ -4,12 +4,11 @@ import androidx.compose.runtime.*
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
+import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.AppStyle
 import io.github.ayfri.CodeTheme
 import io.github.ayfri.components.ChipGroup
 import io.github.ayfri.components.FiltersStyle
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
 import io.github.ayfri.components.SearchField
 import io.github.ayfri.components.countedByFrequency
 import io.github.ayfri.data.DataStyle
@@ -113,15 +112,15 @@ fun Projects() {
 					}
 				}
 
-				ChipGroup("Popular tags", "tags", allTags.take(10), tagFilter) { tagFilter = it }
-				ChipGroup("Users and organizations", "users", allUsers, selectedUser) { selectedUser = it }
+				ChipGroup("Popular tags", { LucideTags() }, allTags.take(10), tagFilter) { tagFilter = it }
+				ChipGroup("Users and organizations", { LucideUsers() }, allUsers, selectedUser) { selectedUser = it }
 			}
 
 			P({
 				classes(FiltersStyle.label, ProjectsStyle.resultsCount)
 			}) {
 				Span({ classes(IconStyle.label) }) {
-					I(FontAwesomeType.SOLID, "filter")
+					LucideFunnel()
 					Text("Showing ${filteredRepos.size} of ${allRepos.size} projects")
 				}
 			}
@@ -132,7 +131,7 @@ fun Projects() {
 				if (filteredRepos.isEmpty()) Div({
 					classes(ProjectsStyle.noResults)
 				}) {
-					IconHeading("magnifying-glass", "No project matches these filters")
+					IconHeading({ LucideSearch() }, "No project matches these filters")
 
 					Button({
 						classes(AppStyle.button)
@@ -143,7 +142,7 @@ fun Projects() {
 							selectedUser = ""
 						}
 					}) {
-						I(FontAwesomeType.SOLID, "rotate-left")
+						LucideRotateCcw()
 						Text("Reset all filters")
 					}
 				} else filteredRepos.forEach { ProjectCard(it) }

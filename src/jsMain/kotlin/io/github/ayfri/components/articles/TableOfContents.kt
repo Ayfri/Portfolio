@@ -3,9 +3,8 @@ package io.github.ayfri.components.articles
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.ListStyle
 import com.varabyte.kobweb.compose.css.listStyle
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideList
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
@@ -38,7 +37,7 @@ fun TableOfContents(headings: List<Pair<Int, String>>) {
 		P({
 			classes(TableOfContentsStyle.title)
 		}) {
-			I(FontAwesomeType.SOLID, "list-ul")
+			LucideList()
 			Text("Contents")
 		}
 
@@ -72,7 +71,7 @@ object TableOfContentsStyle : StyleSheet() {
 		gap(.5.cssRem)
 		margin(0.px, 0.px, .6.cssRem)
 
-		"i" {
+		"svg" {
 			color(Color(AppStyle.VIOLET_COLOR))
 		}
 	}

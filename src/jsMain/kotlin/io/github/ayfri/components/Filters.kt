@@ -1,6 +1,7 @@
 package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideSearch
 import io.github.ayfri.AppStyle
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.attributes.placeholder
@@ -18,7 +19,7 @@ fun SearchField(query: String, placeholder: String, onInput: (String) -> Unit) {
 	Label(attrs = {
 		classes(FiltersStyle.search)
 	}) {
-		I(FontAwesomeType.SOLID, "search")
+		LucideSearch()
 		Input(InputType.Search) {
 			classes(AppStyle.input)
 			attr("aria-label", placeholder)
@@ -31,7 +32,7 @@ fun SearchField(query: String, placeholder: String, onInput: (String) -> Unit) {
 
 /** Clicking the selected chip again clears the filter, so an empty [selected] means "everything". */
 @Composable
-fun ChipGroup(label: String, icon: String, values: List<Pair<String, Int>>, selected: String, onSelect: (String) -> Unit) {
+fun ChipGroup(label: String, icon: Icon, values: List<Pair<String, Int>>, selected: String, onSelect: (String) -> Unit) {
 	if (values.isEmpty()) return
 	Style(FiltersStyle)
 
@@ -39,7 +40,7 @@ fun ChipGroup(label: String, icon: String, values: List<Pair<String, Int>>, sele
 		classes(FiltersStyle.chipGroup)
 	}) {
 		Span({ classes(FiltersStyle.label) }) {
-			I(FontAwesomeType.SOLID, icon)
+			icon()
 			Text(label)
 		}
 
@@ -65,7 +66,7 @@ object FiltersStyle : StyleSheet() {
 		flex("1 1 18rem")
 		position(Position.Relative)
 
-		"i" {
+		"svg" {
 			color(Color(AppStyle.TEXT_MUTED_COLOR))
 			left(.9.cssRem)
 			position(Position.Absolute)
@@ -98,7 +99,7 @@ object FiltersStyle : StyleSheet() {
 		fontSize(.9.cssRem)
 		gap(.5.cssRem)
 
-		"i" {
+		"svg" {
 			color(Color(AppStyle.VIOLET_COLOR))
 			fontSize(.8.cssRem)
 		}

@@ -2,9 +2,10 @@ package io.github.ayfri.data
 
 import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideGitBranch
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideHistory
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideStar
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
 import io.github.ayfri.pages.TextIcon
 import io.github.ayfri.utils.renderWhenVisible
 import io.github.ayfri.utils.size
@@ -45,8 +46,8 @@ fun ProjectCard(repository: GitHubRepository) {
 			Div({
 				classes("stats")
 			}) {
-				TextIcon(repository.stargazersCount.toString(), FontAwesomeType.SOLID, "star")
-				TextIcon(repository.forksCount.toString(), FontAwesomeType.SOLID, "code-branch")
+				TextIcon(repository.stargazersCount.toString()) { LucideStar() }
+				TextIcon(repository.forksCount.toString()) { LucideGitBranch() }
 			}
 		}
 
@@ -66,7 +67,7 @@ fun ProjectCard(repository: GitHubRepository) {
 		Span({
 			classes("updated")
 		}) {
-			I(FontAwesomeType.SOLID, "history")
+			LucideHistory()
 			Text(" Updated ${formatRelativeTime(repository.updatedAt)}")
 		}
 	}

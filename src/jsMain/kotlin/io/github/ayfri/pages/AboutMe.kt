@@ -9,10 +9,14 @@ import androidx.compose.runtime.setValue
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import com.varabyte.kobweb.compose.css.functions.max
+import com.varabyte.kobweb.compose.ui.Modifier
+import com.varabyte.kobweb.compose.ui.modifiers.color
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideComputer
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.FontAwesomeType
+import io.github.ayfri.components.DiscordIcon
 import io.github.ayfri.components.HeaderStyle
+import io.github.ayfri.components.Icon
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
@@ -116,7 +120,7 @@ val sections = listOf(
 			However, I found myself mostly copying the tutorials without attempting to create projects on my own, and therefore didn't have a deep understanding of what I was doing.
 		""".trimIndent(), 2014, id = "intro", tags = listOf("Python", "C++", "Unity")
 	) {
-		TextIcon("Introduction to programming", FontAwesomeType.SOLID, "computer")
+		TextIcon("Introduction to programming") { LucideComputer() }
 	},
 
 	AboutMeSection(
@@ -145,7 +149,7 @@ val sections = listOf(
 			That was the end of this era for me: after about two years of writing almost nothing but Discord bots, I ran out of motivation for them and moved on to other things.
 		""".trimIndent(), 2018, id = "second-intro", dateLabel = "2018 - 2019", tags = listOf("JavaScript", "Node.js", "Discord API")
 	) {
-		TextIcon("Discord bots", FontAwesomeType.BRAND, "discord", Color("#5865f2"))
+		TextIcon("Discord bots") { DiscordIcon(Modifier.color(Color("#5865f2"))) }
 	},
 
 	AboutMeSection(
@@ -353,10 +357,8 @@ fun TextIcon(text: String, icon: String) {
 }
 
 @Composable
-fun TextIcon(text: String, fontAwesomeType: FontAwesomeType, icon: String, color: CSSColorValue? = null) {
-	io.github.ayfri.components.I(fontAwesomeType, icon) {
-		color?.let { color(it) }
-	}
+fun TextIcon(text: String, icon: Icon) {
+	icon()
 	Text(text)
 }
 
@@ -628,7 +630,7 @@ object AboutMeStyle : StyleSheet() {
 			"h2" {
 				color(Color.white)
 
-				group(desc(self, type("img")), desc(self, type("i"))) style {
+				group(desc(self, type("img")), desc(self, type("svg"))) style {
 					val iconPadding = .4.cssRem
 					val iconHeight = titleHeight.value() + (iconPadding * 2)
 

@@ -3,12 +3,13 @@ package io.github.ayfri.pages.articles
 import androidx.compose.runtime.*
 import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.core.Page
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideFunnel
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideSearch
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideTags
 import io.github.ayfri.AppStyle
 import io.github.ayfri.articlesEntries
 import io.github.ayfri.components.ChipGroup
 import io.github.ayfri.components.FiltersStyle
-import io.github.ayfri.components.FontAwesomeType
-import io.github.ayfri.components.I
 import io.github.ayfri.components.SearchField
 import io.github.ayfri.components.articles.ArticleList
 import io.github.ayfri.components.articles.ArticleListStyle
@@ -89,13 +90,13 @@ fun ArticleList() {
 				}
 			}
 
-			ChipGroup("Filter by tag", "tags", articleTags, selectedTag) { selectedTag = it }
+			ChipGroup("Filter by tag", { LucideTags() }, articleTags, selectedTag) { selectedTag = it }
 
 			P({
 				classes(FiltersStyle.label, BlogPageStyle.resultsInfo)
 			}) {
 				Span({ classes(IconStyle.label) }) {
-					I(FontAwesomeType.SOLID, if (articles.isEmpty()) "magnifying-glass" else "filter")
+					if (articles.isEmpty()) LucideSearch() else LucideFunnel()
 					Text(if (articles.isEmpty()) "No article matches these filters." else "Showing ${articles.size} article${if (articles.size != 1) "s" else ""}")
 				}
 			}

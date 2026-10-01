@@ -1,6 +1,7 @@
 package io.github.ayfri.components.articles
 
 import androidx.compose.runtime.Composable
+import com.varabyte.kobweb.silk.components.icons.lucide.LucideBookMarked
 import io.github.ayfri.articlesEntries
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.pages.IconHeading
@@ -26,7 +27,7 @@ fun RelatedArticles(articles: List<ArticleEntry>) {
 	Section({
 		style { marginTop(4.cssRem) }
 	}) {
-		IconHeading("book-bookmark", "Keep reading")
+		IconHeading({ LucideBookMarked() }, "Keep reading")
 		ArticleList(articles)
 	}
 }
