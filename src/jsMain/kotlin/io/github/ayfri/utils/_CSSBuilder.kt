@@ -39,11 +39,12 @@ fun StyleScope.animationDelay(value: String) = property("animation-delay", value
 /**
  * Fades and lifts the element in as it scrolls into view, a scroll-driven animation with no JS. Browsers without
  * `animation-timeline` run it as a zero-length animation and show the element right away.
+ * The range is a fixed scroll distance, a percentage of `cover` would keep tall elements (READMEs) faded for screens.
  */
 fun StyleScope.revealOnScroll() {
 	property("animation", "${AppStyle.revealUp.name} linear both")
 	property("animation-timeline", "view()")
-	property("animation-range", "entry 0% cover 18%")
+	property("animation-range", "entry 0% entry 12rem")
 }
 
 /**
