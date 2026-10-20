@@ -11,7 +11,7 @@ routeOverride: /articles/minecraft-in-four-kilobytes/index
 
 [4k-minecraft](https://4k-minecraft.ayfri.com) is Minecraft in one HTML file of at most 4096 bytes. You open it in Chrome, click, and you walk around a 1024x1024x128 world with lakes, a snowy massif, caves, trees and flowers, a day and night cycle, and blocks you can break and place. The source is on GitHub: [Ayfri/4k-minecraft](https://github.com/Ayfri/4k-minecraft).
 
-![4k-minecraft at noon near the spawn, grass terraces with flowers and trees below a snowy mountain](/images/4k-minecraft/hero.avif)
+![4k-minecraft at noon near the spawn, grass terraces with flowers and trees below a snowy mountain](/images/4k-minecraft/hero.webp)
 
 It is a remake of [Minecraft 4k](https://minecraft.wiki/w/Minecraft_4k), the entry Notch made for the Java 4K contest in December 2009. His was 2581 bytes: a 64x64x63 world drawn by a CPU raycaster at about 214x120 pixels, and grass as the only block to place. Mine moves everything to the GPU. One WebGPU compute shader generates the world at load, then marches a ray through the voxels for every pixel and writes it straight into the canvas. Most of it got written in two days, 136 commits over four.
 
