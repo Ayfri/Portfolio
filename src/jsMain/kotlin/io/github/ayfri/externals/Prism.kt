@@ -25,14 +25,18 @@ private val prism by lazy {
 			head.append(this)
 		}
 		script.addEventListener("load", { resolve(Unit) })
-	}.then { tagTypeNames() }
+	}.then { extendGrammars() }
 }
 
-/** Prism only sees a JS/TS class after `class`, `new` or `extends`: colour every PascalCase name (`Uint8Array`) as one, ALL_CAPS stays a constant. */
-private fun tagTypeNames(): Unit = js("""
-	['javascript', 'typescript'].forEach(function (lang) {
-		Prism.languages.insertBefore(lang, 'operator', { 'type-name': { pattern: /\b[A-Z](?=[$\w]*[a-z])[$\w]*/, alias: 'class-name' } });
-	})
+/** Prism misses most classes and calls: PascalCase is a class except after a dot (`Machin.Truc` is an entry), plus Kotlin `buildString {` and `{ k -> }`. */
+private fun extendGrammars(): Unit = js("""
+	['javascript', 'typescript', 'kotlin'].forEach(function (lang) {
+		Prism.languages.insertBefore(lang, 'operator', { 'type-name': { pattern: /(^|[^.$\w])[A-Z](?=[$\w]*[a-z])[$\w]*/, lookbehind: true, alias: 'class-name' } });
+	});
+	Prism.languages.insertBefore('kotlin', 'operator', {
+		'lambda-call': { pattern: /\b[a-z_]\w*(?=\s*\{)/, alias: 'function' },
+		'lambda-parameter': { pattern: /(\{\s*)[\w\s,()]+?(?=\s*->)/, lookbehind: true, alias: 'parameter', inside: { punctuation: /[(),]/ } }
+	});
 """)
 
 @Composable

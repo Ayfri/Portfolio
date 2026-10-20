@@ -57,7 +57,7 @@ object CodeTheme : StyleSheet() {
 			color(commentColor)
 		}
 
-		scope("number", "boolean", "constant", "entity") style {
+		scope("number", "boolean", "constant", "entity", "parameter") style {
 			color(valueColor)
 		}
 
