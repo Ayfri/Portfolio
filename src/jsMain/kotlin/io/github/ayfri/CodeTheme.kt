@@ -15,6 +15,7 @@ object CodeTheme : StyleSheet() {
 	val punctuationColor = Color("#89ddff")
 	val stringColor = Color("#c3e88d")
 	val symbolColor = Color("#467cda")
+	val tagColor = Color("#f07178")
 	val valueColor = Color("#f78c6c")
 
 	fun scope(vararg names: String): CSSSelector {
@@ -52,11 +53,11 @@ object CodeTheme : StyleSheet() {
 			textShadow(TextShadow.of(color = Color.transparent, offsetX = 0.px, offsetY = 0.px, blurRadius = 0.px))
 		}
 
-		scope("comment") style {
+		scope("comment", "doctype") style {
 			color(commentColor)
 		}
 
-		scope("number", "boolean") style {
+		scope("number", "boolean", "constant", "entity") style {
 			color(valueColor)
 		}
 
@@ -95,6 +96,23 @@ object CodeTheme : StyleSheet() {
 
 		scope("class-name", "builtin") style {
 			color(classColor)
+		}
+
+		scope("tag") style {
+			color(tagColor)
+		}
+
+		scope("attr-name") style {
+			color(keywordColor)
+		}
+
+		scope("attr-value") style {
+			color(stringColor)
+		}
+
+		/** Inline event handlers (`onload="..."`) are JavaScript inside an attribute value, plain identifiers stay text-coloured. */
+		scope("value") style {
+			color(textColor)
 		}
 	}
 }

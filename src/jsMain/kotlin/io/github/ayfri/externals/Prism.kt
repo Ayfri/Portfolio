@@ -25,8 +25,15 @@ private val prism by lazy {
 			head.append(this)
 		}
 		script.addEventListener("load", { resolve(Unit) })
-	}
+	}.then { tagTypeNames() }
 }
+
+/** Prism only sees a JS/TS class after `class`, `new` or `extends`: colour every PascalCase name (`Uint8Array`) as one, ALL_CAPS stays a constant. */
+private fun tagTypeNames(): Unit = js("""
+	['javascript', 'typescript'].forEach(function (lang) {
+		Prism.languages.insertBefore(lang, 'operator', { 'type-name': { pattern: /\b[A-Z](?=[$\w]*[a-z])[$\w]*/, alias: 'class-name' } });
+	})
+""")
 
 @Composable
 fun HighlightCode() = LaunchedEffect(Unit) {
