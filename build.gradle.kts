@@ -253,6 +253,8 @@ kobweb {
 					}
 
 					meta(name = "Author", content = author)
+					meta(name = "color-scheme", content = "dark")
+					meta(name = "theme-color", content = "#0B0916")
 
 					meta(property = "og:locale", content = "en_US")
 					meta(property = "og:site_name", content = author)
