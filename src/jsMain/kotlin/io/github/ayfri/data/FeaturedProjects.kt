@@ -40,6 +40,14 @@ val featuredProjects = listOf(
 		liveUrl = "https://kore.ayfri.com",
 	),
 	FeaturedProject(
+		name = "4k-minecraft",
+		tagline = "Minecraft remade in one HTML file of 4096 bytes: a 1024x1024x128 world generated and ray-marched by a single WebGPU compute shader.",
+		image = "projects/4k-minecraft.avif",
+		repository = "Ayfri/4k-minecraft",
+		tags = listOf("WebGPU", "WGSL", "TypeScript", "Size coding"),
+		liveUrl = "https://4k-minecraft.ayfri.com",
+	),
+	FeaturedProject(
 		name = "PokéCards-Collector",
 		tagline = "The whole Pokémon TCG catalogue, English and Japanese, with cards and prices refreshed every day, filters and the collection you actually own.",
 		image = "projects/pokecards.avif",
