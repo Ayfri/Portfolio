@@ -130,9 +130,8 @@ fun HomeFact(icon: Icon, value: String, label: String) {
 @Composable
 fun Home() {
 	PageLayout(
-		"Home",
+		"Full-Stack and AI Developer",
 		description = "Pierre Roy (Ayfri), a Kotlin and Compose Multiplatform developer building web apps, Minecraft datapacks with Kore, and AI-powered side projects.",
-		keywords = "Pierre Roy, Ayfri, Kotlin developer, Compose Multiplatform, Kotlin Multiplatform, Svelte developer, TypeScript developer, software engineer portfolio, Minecraft datapack developer",
 	) {
 		val portfolio = portfolioData()
 		val starsByRepository = portfolio.repos.associate { it.fullName to it.stargazersCount }

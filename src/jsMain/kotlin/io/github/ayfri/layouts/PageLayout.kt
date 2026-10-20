@@ -7,36 +7,35 @@ import com.varabyte.kobweb.core.rememberPageContext
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.*
 import io.github.ayfri.ensureSuffix
+import io.github.ayfri.jsonld.JsonLD
+import io.github.ayfri.jsonld.PageType
+import io.github.ayfri.jsonld.pageGraph
 import kotlinx.browser.window
 import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.dom.Main
-import web.url.URL
 
 @Composable
 fun PageLayout(
 	title: String,
 	description: String = AppGlobals["description"]!!,
-	keywords: String = "",
+	schemaType: PageType = PageType.WebPage,
+	jsonLD: Array<JsonLD> = emptyArray(),
 	content: @Composable () -> Unit,
 ) {
 	Style(AppStyle)
-	setRobots(null)
-	setMarkdownAlternate(null)
-	setTitle("$title - ${AppGlobals["author"]}'s Portfolio")
-	setDescription(description)
-	if (keywords.isNotEmpty()) setKeywords(keywords)
-
-	Header()
 
 	val context = rememberPageContext()
 	val currentStub = context.route
-	val url = URL(AppGlobals["url"] + currentStub.path)
-	url.search = ""
-	url.hash = ""
-	url.pathname = url.pathname.ensureSuffix("/")
+	val canonical = AppGlobals["url"] + currentStub.path.ensureSuffix("/")
 
-	setCanonical(url.toString())
-	setJsonLD()
+	setPageHead(
+		"$title - ${AppGlobals["author"]}'s Portfolio",
+		description,
+		canonical,
+		jsonLD = pageGraph(canonical, schemaType, title, description, *jsonLD),
+	)
+
+	Header()
 
 	Main({
 		id("main")

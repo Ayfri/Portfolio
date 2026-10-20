@@ -7,8 +7,7 @@ import io.github.ayfri.components.*
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
-// Statically exported so Cloudflare Pages can serve it as `404.html` with a real 404 status
-// (see .github/workflows/CD.yml, which copies this page's export output into place).
+/** The export writes this page as `404.html`, which Cloudflare Pages serves with a real 404 status. */
 @Page("/404")
 @Composable
 fun NotFound404Page() = NotFoundPage()
@@ -16,11 +15,8 @@ fun NotFound404Page() = NotFoundPage()
 @Composable
 fun NotFoundPage() {
 	Style(AppStyle)
-	setTitle("404 - Page Not Found")
 
-	// Tell crawlers to drop this URL instead of endlessly re-crawling it.
-	setRobots("noindex, nofollow")
-	setMarkdownAlternate(null)
+	setPageHead("404 - Page Not Found", "This page doesn't exist, or it moved.", canonical = null, robots = "noindex, nofollow")
 
 	Header()
 

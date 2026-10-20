@@ -10,12 +10,19 @@ import io.github.ayfri.*
 import io.github.ayfri.components.*
 import io.github.ayfri.components.articles.*
 import io.github.ayfri.externals.HighlightCode
+import io.github.ayfri.jsonld.AVATAR_URL
+import io.github.ayfri.jsonld.PageType
+import io.github.ayfri.jsonld.articleImage
+import io.github.ayfri.jsonld.articleNodes
+import io.github.ayfri.jsonld.pageGraph
 import io.github.ayfri.utils.list
 import io.github.ayfri.utils.webkitScrollbar
 import io.github.ayfri.utils.webkitScrollbarThumb
 import io.github.ayfri.utils.webkitScrollbarTrack
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
+
+private val markdownLink = Regex("""\[([^\]]*)\]\([^)]*\)""")
 
 @Composable
 fun ArticleLayout(content: @Composable () -> Unit) {
@@ -32,7 +39,9 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	val keywords = field("keywords") ?: ""
 	val date = field("date-created") ?: ""
 	val dateModified = field("date-modified") ?: date
-	val articleContent = remember(title) { articlesEntries.find { it.title == title }?.content ?: "" }
+	val entry = remember(title) { articlesEntries.find { it.title == title } }
+	val articleContent = entry?.content ?: ""
+	val plainDescription = remember(description) { description.replace(markdownLink, "$1").replace("`", "") }
 
 	// Both walk the whole article with regexes, so they are keyed on the article rather than run per recomposition.
 	val headings = remember(title, articleContent) { extractHeadings(title, articleContent) }
@@ -42,17 +51,26 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	val keywordsList = remember(keywords) { keywords.split(",").map { it.trim() }.filter { it.isNotEmpty() } }
 	val relatedArticles = remember(currentPath, keywordsList) { findRelatedArticles(currentPath, keywordsList) }
 
-	setRobots(null)
-	setTitle("$title - ${AppGlobals["author"]}'s Blog")
-	setDescription(description)
-	if (keywords.isNotEmpty()) setKeywords(keywords)
-
 	// `context.route.toString()` still carries the `?_kobwebIsExporting=...` query during a static export, which
 	// would ship a canonical pointing at a URL that does not exist. Only the path belongs in a canonical.
 	val canonicalUrl = AppGlobals["url"] + context.route.path.ensureSuffix("/")
-	setCanonical(canonicalUrl)
-	setMarkdownAlternate(canonicalUrl + "index.md")
-	setJsonLD()
+	val image = remember(entry) { entry?.let(::articleImage) ?: AVATAR_URL }
+	/** X and Facebook share cards don't render AVIF, while Google reads it fine in the BlogPosting image. */
+	val shareImage = image.takeUnless { it == AVATAR_URL || it.endsWith(".avif") }
+	val jsonLD = remember(entry, canonicalUrl) {
+		entry?.let { pageGraph(canonicalUrl, PageType.WebPage, title, plainDescription, *articleNodes(it, canonicalUrl, plainDescription, image)) }
+	}
+
+	setPageHead(
+		"$title - ${AppGlobals["author"]}'s Blog",
+		plainDescription,
+		canonicalUrl,
+		markdownAlternate = canonicalUrl + "index.md",
+		article = entry,
+		image = shareImage ?: AVATAR_URL,
+		imageAlt = shareImage?.let { title } ?: "Portrait of Pierre Roy",
+		jsonLD = jsonLD,
+	)
 
 	HighlightCode()
 	ReadingProgressBar()

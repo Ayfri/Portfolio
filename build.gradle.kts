@@ -6,6 +6,10 @@ import kotlinx.html.*
 import org.commonmark.node.Text
 import java.net.HttpURLConnection
 import java.net.URI
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 plugins {
 	alias(libs.plugins.kotlin.compose)
@@ -165,13 +169,11 @@ kobweb {
 				}
 
 				val keywords = fm["keywords"]?.firstOrNull()?.split(Regex(",\\s*")) ?: emptyList()
-				// Dates are only formatted in this format "2023-11-13"
-				val dateCreatedComplete = dateCreated.split("-").let { (year, month, day) ->
-					"$year-$month-${day}T00:00:00.000000000+01:00"
-				}
-				val dateModifiedComplete = dateModified.split("-").let { (year, month, day) ->
-					"$year-$month-${day}T00:00:00.000000000+01:00"
-				}
+				// Dates are formatted as "2023-11-13" and become midnight in Paris, e.g. "2023-11-13T00:00:00+01:00".
+				fun String.atParisMidnight() =
+					LocalDate.parse(this).atStartOfDay(ZoneId.of("Europe/Paris")).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+				val dateCreatedComplete = dateCreated.atParisMidnight()
+				val dateModifiedComplete = dateModified.atParisMidnight()
 
 				blogEntries.add(
 					BlogEntry(
@@ -232,20 +234,14 @@ kobweb {
 			val author = "Pierre Roy"
 			val twitterHandle = "@Ayfri_"
 
-			val description = """
-				Hi, I'm Pierre Roy, an IT student, and I'm passionate about computer science and especially programming.
-				Discover my projects and my blog on this website.
-			""".trimIndent()
-
-			val image = "$url/images/avatar.png"
+			val description = "Pierre Roy (Ayfri), a French full-stack and AI developer and open-source creator. " +
+				"Projects, experience and a technical blog on Kotlin, Kore and web development."
 
 			globals["author"] = author
 			globals["description"] = description
 			globals["url"] = url
 
 			faviconPath = "/logo.png"
-
-			this.description = description
 
 			head.apply {
 				add {
@@ -256,22 +252,18 @@ kobweb {
 						}
 					}
 
-					meta(charset = "utf-8")
-					meta(name = "viewport", content = "width=device-width, initial-scale=1.0")
 					meta(name = "Author", content = author)
 
-					meta(property = "og:description", content = description)
-					meta(property = "og:image", content = image)
-					meta(property = "og:type", content = "website")
-					meta(property = "og:url", content = url)
+					meta(property = "og:locale", content = "en_US")
+					meta(property = "og:site_name", content = author)
 
-					meta(property = "twitter:card", content = "summary")
-					meta(property = "twitter:creator", content = twitterHandle)
-					meta(property = "twitter:description", content = description)
-					meta(property = "twitter:image", content = image)
-					meta(property = "twitter:site", content = twitterHandle)
+					meta(name = "twitter:creator", content = twitterHandle)
+					meta(name = "twitter:site", content = twitterHandle)
 
 					link(rel = "describedby", href = "/llms.txt")
+					link(href = "/feed.xml", rel = "alternate", type = "application/rss+xml") {
+						attributes["title"] = "Pierre Roy's Blog"
+					}
 					link(rel="preconnect", href="https://fonts.googleapis.com")
 					link(href = "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..800;1,300..800&display=swap", rel = "stylesheet")
 					link(href = "/JetBrainsMono.css", rel = "preload", htmlAs = LinkAs.style) {
@@ -458,17 +450,18 @@ class Link(val label: String, val url: String, val note: String)
 
 val generateLlmsFilesTask = tasks.register("generateLlmsFiles") {
 	group = "build"
-	description = "Generate llms.txt, llms-full.txt and a Markdown copy of every article for LLMs and agents."
+	description = "Generate llms.txt, llms-full.txt, a Markdown copy of every article and the RSS feed for LLMs, agents and feed readers."
 
 	val articleDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
 	val publicOut = portfolioGeneratedResourcesRoot.map { it.dir("public") }
 	val articlesOut = publicOut.map { it.dir("articles") }
 	val llmsOut = publicOut.map { it.file("llms.txt") }
 	val llmsFullOut = publicOut.map { it.file("llms-full.txt") }
+	val feedOut = publicOut.map { it.file("feed.xml") }
 
 	inputs.dir(articleDir)
 	outputs.dir(articlesOut)
-	outputs.files(llmsOut, llmsFullOut)
+	outputs.files(llmsOut, llmsFullOut, feedOut)
 
 	doLast {
 		val baseUrl = "https://ayfri.com"
@@ -504,6 +497,9 @@ val generateLlmsFilesTask = tasks.register("generateLlmsFiles") {
 			val missing = listOf("title", "description", "routeOverride").filter { fields[it].isNullOrBlank() }
 			if (missing.isNotEmpty()) throw GradleException("'${file.name}' is missing the front matter fields $missing.")
 
+			val invalidDates = listOf("date-created", "date-modified").filter { key -> fields[key]?.let { runCatching { LocalDate.parse(it) }.isFailure } == true }
+			if (invalidDates.isNotEmpty()) throw GradleException("'${file.name}' has invalid dates in $invalidDates, expected yyyy-MM-dd.")
+
 			val created = fields["date-created"].orEmpty()
 			Article(
 				slug = fields.getValue("routeOverride").removeSuffix("/index").trim('/').removePrefix("articles/"),
@@ -538,10 +534,11 @@ val generateLlmsFilesTask = tasks.register("generateLlmsFiles") {
 
 		val optional = listOf(
 			Link("All articles in one file", "$baseUrl/llms-full.txt", "every article above as a single Markdown document"),
+			Link("RSS feed", "$baseUrl/feed.xml", "every article, newest first"),
 			Link("GitHub", "https://github.com/Ayfri", "open-source projects and contributions"),
 			Link("LinkedIn", "https://www.linkedin.com/in/pierre-roy-ayfri/", "professional profile"),
 			Link("Portfolio source code", "https://github.com/Ayfri/Portfolio", "the source of this site"),
-			Link("Twitter", "https://twitter.com/@ayfri_", "updates and announcements"),
+			Link("X", "https://x.com/ayfri_", "updates and announcements"),
 			Link("Twitch", "https://www.twitch.tv/ayfri_", "live streams"),
 			Link("Discord", "https://discord.gg/invite/BySjRNQ9Je", "community server"),
 			Link("Kore documentation for LLMs", "https://kore.ayfri.com/llms.txt", "llms.txt of the Kore datapack library docs"),
@@ -573,7 +570,26 @@ val generateLlmsFilesTask = tasks.register("generateLlmsFiles") {
 			"# $name - articles\n\n> $summary\n\n" + articles.joinToString("\n\n---\n\n") { it.markdown }
 		)
 
-		logger.lifecycle("Generated llms.txt, llms-full.txt and ${articles.size} article Markdown files in '${publicOut.get()}'")
+		fun String.xml() = replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;")
+		fun String.rfc1123() = LocalDate.parse(this).atStartOfDay(ZoneOffset.UTC).format(DateTimeFormatter.RFC_1123_DATE_TIME)
+
+		val lastBuildDate = articles.maxOfOrNull { it.modified }?.takeIf { it.isNotBlank() }
+		val items = articles.joinToString("\n") { article ->
+			val pubDate = if (article.created.isBlank()) "" else "\n<pubDate>${article.created.rfc1123()}</pubDate>"
+			val plainDescription = article.description.replace(markdownLink) { match -> match.groupValues[1] }.replace("`", "")
+			"<item>\n<title>${article.title.xml()}</title>\n<link>${article.url}</link>\n" +
+				"<guid isPermaLink=\"true\">${article.url}</guid>\n<description>${plainDescription.xml()}</description>$pubDate\n</item>"
+		}
+
+		feedOut.get().asFile.writeText(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+				"<rss version=\"2.0\" xmlns:atom=\"http://www.w3.org/2005/Atom\">\n<channel>\n" +
+				"<title>Pierre Roy's Blog</title>\n<link>$baseUrl/articles/</link>\n<description>${summary.xml()}</description>\n<language>en</language>\n" +
+				(lastBuildDate?.let { "<lastBuildDate>${it.rfc1123()}</lastBuildDate>\n" } ?: "") +
+				"<atom:link href=\"$baseUrl/feed.xml\" rel=\"self\" type=\"application/rss+xml\"/>\n$items\n</channel>\n</rss>\n"
+		)
+
+		logger.lifecycle("Generated llms.txt, llms-full.txt, feed.xml and ${articles.size} article Markdown files in '${publicOut.get()}'")
 	}
 }
 

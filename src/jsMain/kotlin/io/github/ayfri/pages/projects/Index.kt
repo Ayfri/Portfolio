@@ -15,8 +15,8 @@ import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.ProjectCard
 import io.github.ayfri.data.portfolioData
-import io.github.ayfri.jsonld.JsonLD
-import io.github.ayfri.jsonld.generateProjectsListJsonLD
+import io.github.ayfri.jsonld.PageType
+import io.github.ayfri.jsonld.projectsListNode
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.pages.IconHeading
 import io.github.ayfri.pages.IconStyle
@@ -30,13 +30,20 @@ import org.w3c.dom.url.URLSearchParams
 @Page
 @Composable
 fun Projects() {
+	val portfolio = portfolioData()
+	val allRepos = remember(portfolio) {
+		portfolio.repos.sortedWith(
+			compareByDescending(GitHubRepository::stargazersCount)
+				.thenBy(String.CASE_INSENSITIVE_ORDER, GitHubRepository::fullName)
+		)
+	}
+
 	PageLayout(
 		"Projects",
 		description = "Open-source projects by Pierre Roy (Ayfri) on GitHub: Kotlin libraries, Minecraft tools, web apps, and more, searchable by language and tag.",
-		keywords = "GitHub projects, open source Kotlin, Minecraft tools, Ayfri GitHub, developer portfolio projects",
+		schemaType = PageType.CollectionPage,
+		jsonLD = arrayOf(projectsListNode(allRepos)),
 	) {
-		val portfolio = portfolioData()
-
 		Style(ProjectsStyle)
 		Style(IconStyle)
 		Style(DataStyle)
@@ -45,12 +52,6 @@ fun Projects() {
 		rememberPageContext()
 		val searchParams = URLSearchParams(window.location.search)
 
-		val allRepos = remember(portfolio) {
-			portfolio.repos.sortedWith(
-				compareByDescending(GitHubRepository::stargazersCount)
-					.thenBy(String.CASE_INSENSITIVE_ORDER, GitHubRepository::fullName)
-			)
-		}
 		val allTags = remember(allRepos) { allRepos.flatMap { it.topics.toList() }.countedByFrequency() }
 		val allLanguages = remember(allRepos) { allRepos.mapNotNull { it.language }.countedByFrequency() }
 		val allUsers = remember(allRepos) { allRepos.map { it.owner.login }.countedByFrequency() }
@@ -69,13 +70,15 @@ fun Projects() {
 			}
 		}
 
-		JsonLD(generateProjectsListJsonLD(allRepos))
-
+		/** The first run only normalizes the landing URL, so it replaces the history entry instead of needing a second Back press. */
+		val isFirstRun = remember { booleanArrayOf(true) }
 		LaunchedEffect(tagFilter, selectedUser) {
 			val query = listOf("tag" to tagFilter, "user" to selectedUser)
 				.filter { it.second.isNotEmpty() }
 				.joinToString("&") { (key, value) -> "$key=$value" }
-			window.history.pushState(null, "", window.location.pathname + if (query.isEmpty()) "" else "?$query")
+			val url = window.location.pathname + if (query.isEmpty()) "" else "?$query"
+			if (isFirstRun[0]) window.history.replaceState(null, "", url) else window.history.pushState(null, "", url)
+			isFirstRun[0] = false
 		}
 
 		Div({

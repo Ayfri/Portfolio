@@ -106,7 +106,6 @@ fun Experiences() {
 	PageLayout(
 		"Experiences",
 		description = "Professional experience of Pierre Roy (Ayfri): AI and DevOps at Link2Brain, full-stack development at Eliophot, the ScriptGraf research project at Ynov and WordPress work at BlueFrog.",
-		keywords = "software engineer experience, full-stack developer, AI developer, Link2Brain, Eliophot, Ynov, BlueFrog, Svelte, Python, DevOps",
 	) {
 		Style(ExperiencesStyle)
 

@@ -14,8 +14,8 @@ import io.github.ayfri.components.Icon
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.portfolioData
 import io.github.ayfri.externals.HighlightCode
-import io.github.ayfri.jsonld.JsonLD
-import io.github.ayfri.jsonld.generateProjectJsonLD
+import io.github.ayfri.ensureSuffix
+import io.github.ayfri.jsonld.projectNodes
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.pages.IconHeading
@@ -58,16 +58,17 @@ fun All() {
 		return
 	}
 
+	val canonical = AppGlobals["url"] + context.route.path.ensureSuffix("/")
+
 	PageLayout(
 		"${project.name} by ${project.owner.login}",
 		description = project.description ?: AppGlobals["description"]!!,
-		keywords = (project.topics.toList() + listOfNotNull(project.language)).distinct().joinToString(", "),
+		jsonLD = projectNodes(project, canonical),
 	) {
 		Style(ProjectStyle)
 		Style(IconStyle)
 		Style(CodeTheme)
 		HighlightCode()
-		JsonLD(generateProjectJsonLD(project, context.route.toString()))
 
 		val readme = remember(project) { project.absoluteReadme() }
 

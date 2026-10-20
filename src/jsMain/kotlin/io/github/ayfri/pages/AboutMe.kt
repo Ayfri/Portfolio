@@ -18,6 +18,7 @@ import io.github.ayfri.components.Avatar
 import io.github.ayfri.components.DiscordIcon
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.components.Icon
+import io.github.ayfri.jsonld.PageType
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
@@ -293,7 +294,7 @@ fun AboutMe() {
 	PageLayout(
 		"About Me",
 		description = "The story of Pierre Roy (Ayfri): from first steps in Python in 2014 to Kotlin, AI, and Minecraft development today.",
-		keywords = "Pierre Roy story, Ayfri biography, self-taught developer, programming journey, full-stack developer France, Minecraft developer",
+		schemaType = PageType.ProfilePage,
 	) {
 		Style(AboutMeStyle)
 
@@ -352,7 +353,7 @@ fun AboutMe() {
 
 @Composable
 fun TextIcon(text: String, icon: String) {
-	Img(icon, "icon")
+	Img(icon, "")
 	Text(text)
 }
 

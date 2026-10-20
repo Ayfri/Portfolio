@@ -80,7 +80,6 @@ fun Portfolio() {
 	PageLayout(
 		"Portfolio",
 		description = "How this Kotlin and Compose for Web portfolio was designed and built, from the first school-project prototype in 2022 to the site you're browsing today.",
-		keywords = "Kotlin Compose for Web, Kobweb, portfolio website design, Kotlin web development, static site generation",
 	) {
 		Style(PortfolioStyle)
 

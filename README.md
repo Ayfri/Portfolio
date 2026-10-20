@@ -19,7 +19,7 @@ It is a Kotlin/Compose for Web site built with [Kobweb](https://kobweb.varabyte.
 
 - Responsive portfolio pages: home, about, skills, experience, projects, and selected work.
 - Markdown articles with front matter, syntax highlighting, SEO metadata, JSON-LD, related articles, and table of contents.
-- A generated sitemap at `/sitemap.xml`.
+- A generated sitemap at `/sitemap.xml` and an RSS 2.0 feed of the articles at `/feed.xml`.
 - A GitHub project catalogue embedded into the build and rendered into static HTML.
 
 ## Requirements

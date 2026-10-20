@@ -2,3 +2,6 @@
   Content-Type: text/markdown; charset=utf-8
   Link: </llms.txt>; rel="describedby"
   Link: <https://ayfri.com/articles/:slug/>; rel="canonical"
+
+/feed.xml
+  Content-Type: application/rss+xml; charset=utf-8

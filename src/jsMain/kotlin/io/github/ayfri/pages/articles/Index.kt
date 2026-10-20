@@ -15,6 +15,7 @@ import io.github.ayfri.components.articles.ArticleList
 import io.github.ayfri.components.articles.ArticleListStyle
 import io.github.ayfri.components.countedByFrequency
 import io.github.ayfri.data.ArticleEntry
+import io.github.ayfri.jsonld.PageType
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.pages.IconStyle
 import org.jetbrains.compose.web.attributes.selected
@@ -36,7 +37,7 @@ fun ArticleList() {
 	PageLayout(
 		"Blog Posts",
 		description = "Tutorials and deep dives by Pierre Roy (Ayfri) on Kotlin, Minecraft datapacks with Kore, Svelte, and AI side projects.",
-		keywords = "Kotlin blog, Minecraft datapack tutorial, Kore library, Svelte 5 tutorial, programming blog, kotlinx.serialization, web development articles",
+		schemaType = PageType.CollectionPage,
 	) {
 		Style(ArticleListStyle)
 		Style(IconStyle)

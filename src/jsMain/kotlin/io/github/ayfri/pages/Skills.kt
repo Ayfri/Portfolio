@@ -489,7 +489,6 @@ fun Skills() {
 	PageLayout(
 		"Skills",
 		description = "Technical skills of Pierre Roy (Ayfri): Kotlin, TypeScript, Python, Java, C#, Godot, and more, with real GitHub and school projects for each.",
-		keywords = "Kotlin skills, TypeScript developer, Python developer, Java developer, programming languages, tech stack, GitHub projects, Godot developer, MySQL, Redis",
 	) {
 		Style(SkillsStyle)
 
