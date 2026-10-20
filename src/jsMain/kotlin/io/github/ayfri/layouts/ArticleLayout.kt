@@ -125,7 +125,7 @@ object MarkdownStyle : StyleSheet() {
 			color(Color.white)
 		}
 
-		list("p", "li") style {
+		list("p", "li", "td") style {
 			color(Color("#D8D3E6"))
 		}
 
@@ -172,6 +172,26 @@ object MarkdownStyle : StyleSheet() {
 			self + webkitScrollbarTrack style {
 				backgroundColor(Color.transparent)
 			}
+		}
+
+		"table" {
+			borderCollapse(BorderCollapse.Collapse)
+			display(DisplayStyle.Block)
+			fontSize(.9.cssRem)
+			margin(1.5.cssRem, 0.px)
+			overflowX(Overflow.Auto)
+		}
+
+		list("td", "th") style {
+			border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
+			padding(.5.cssRem, .75.cssRem)
+			textAlign("left")
+			property("vertical-align", "top")
+		}
+
+		"th" {
+			backgroundColor(Color(AppStyle.SURFACE_RAISED))
+			color(Color.white)
 		}
 
 		"blockquote" {
