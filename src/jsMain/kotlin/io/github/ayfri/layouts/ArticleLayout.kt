@@ -104,6 +104,8 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 			if (relatedArticles.isNotEmpty()) RelatedArticles(relatedArticles)
 
 			ShareSection(title, canonicalUrl)
+
+			PreferredSource()
 		}
 	}
 

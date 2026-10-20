@@ -232,6 +232,15 @@ fun Footer() {
 						LucideCoffee()
 						Text("Buy me a coffee")
 					}
+
+					A(GOOGLE_SOURCE_LINK, {
+						classes(FooterStyle.sourceLink)
+						target(ATarget.Blank)
+						attr("rel", "noopener noreferrer")
+					}) {
+						LucideStar()
+						Text("Add as a preferred source on Google")
+					}
 				}
 			}
 		}
@@ -425,6 +434,25 @@ object FooterStyle : StyleSheet() {
 
 		"svg" {
 			color(Color("#FFDD11"))
+		}
+	}
+
+	val sourceLink by style {
+		alignItems(AlignItems.Center)
+		color(Color(AppStyle.TEXT_MUTED_COLOR))
+		display(DisplayStyle.Flex)
+		fontSize(.95.cssRem)
+		gap(.55.cssRem)
+		marginTop(1.2.cssRem)
+
+		hover(self) style {
+			color(Color.white)
+		}
+
+		"svg" {
+			flexShrink(0)
+			fontSize(.8.em)
+			opacity(.7)
 		}
 	}
 
