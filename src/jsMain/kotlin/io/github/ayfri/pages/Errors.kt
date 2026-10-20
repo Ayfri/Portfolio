@@ -20,6 +20,7 @@ fun NotFoundPage() {
 
 	// Tell crawlers to drop this URL instead of endlessly re-crawling it.
 	setRobots("noindex, nofollow")
+	setMarkdownAlternate(null)
 
 	Header()
 

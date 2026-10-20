@@ -271,6 +271,7 @@ kobweb {
 					meta(property = "twitter:image", content = image)
 					meta(property = "twitter:site", content = twitterHandle)
 
+					link(rel = "describedby", href = "/llms.txt")
 					link(rel="preconnect", href="https://fonts.googleapis.com")
 					link(href = "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,300..800;1,300..800&display=swap", rel = "stylesheet")
 					link(href = "/JetBrainsMono.css", rel = "preload", htmlAs = LinkAs.style) {
@@ -345,7 +346,7 @@ kotlin {
 		}
 
 		jsMain {
-			resources.srcDir(portfolioGeneratedResourcesRoot)
+			resources.srcDir(files(portfolioGeneratedResourcesRoot).builtBy("generateSitemap", "generateLlmsFiles"))
 			kotlin.srcDir(portfolioGeneratedKotlinRoot)
 
 			dependencies {
@@ -426,7 +427,7 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 			val content = f.readText()
 			val routeOverride = routeRegex.find(content)?.groupValues?.getOrNull(1) ?: continue
 			val dateModified = dateRegex.find(content)?.groupValues?.getOrNull(1) ?: continue
-			var clean = routeOverride.removeSuffix("/index").removeSuffix("index")
+			var clean = routeOverride.removeSuffix("/index")
 			if (!clean.endsWith('/')) clean += '/'
 			lastmodMap[clean] = dateModified
 			routes.add(clean)
@@ -453,8 +454,131 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 	}
 }
 
+class Link(val label: String, val url: String, val note: String)
+
+val generateLlmsFilesTask = tasks.register("generateLlmsFiles") {
+	group = "build"
+	description = "Generate llms.txt, llms-full.txt and a Markdown copy of every article for LLMs and agents."
+
+	val articleDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
+	val publicOut = portfolioGeneratedResourcesRoot.map { it.dir("public") }
+	val articlesOut = publicOut.map { it.dir("articles") }
+	val llmsOut = publicOut.map { it.file("llms.txt") }
+	val llmsFullOut = publicOut.map { it.file("llms-full.txt") }
+
+	inputs.dir(articleDir)
+	outputs.dir(articlesOut)
+	outputs.files(llmsOut, llmsFullOut)
+
+	doLast {
+		val baseUrl = "https://ayfri.com"
+		val name = "Pierre Roy (Ayfri)"
+		val frontMatterKey = Regex("""^([\w-]+):\s*(.*)$""")
+		val markdownLink = Regex("""\[([^\]]*)]\([^)]*\)""")
+
+		val rootRelativeLink = Regex("""\]\(/(?!/)""")
+
+		class Article(
+			val slug: String,
+			val title: String,
+			val description: String,
+			val created: String,
+			val body: String,
+			val modified: String,
+		) {
+			val url = "$baseUrl/articles/$slug/"
+			val markdown = "# $title\n\n> $description\n\nPublished $created, updated $modified. Canonical: $url\n\n$body\n"
+		}
+
+		/** A missing field fails the build: `ArticleLayout` always links the Markdown copy, which would be a 404. */
+		val articles = (articleDir.asFile.listFiles() ?: emptyArray()).filter { it.extension == "md" }.map { file ->
+			val lines = file.readText().lines()
+			val end = lines.drop(1).indexOfFirst { it.trim() == "---" } + 1
+			if (lines.first().trimStart('﻿').trim() != "---" || end == 0) {
+				throw GradleException("'${file.name}' has no front matter.")
+			}
+
+			val fields = lines.subList(1, end)
+				.mapNotNull { frontMatterKey.find(it)?.destructured }
+				.associate { (key, value) -> key to value.trim().removeSurrounding("\"").removeSurrounding("'") }
+			val missing = listOf("title", "description", "routeOverride").filter { fields[it].isNullOrBlank() }
+			if (missing.isNotEmpty()) throw GradleException("'${file.name}' is missing the front matter fields $missing.")
+
+			val created = fields["date-created"].orEmpty()
+			Article(
+				slug = fields.getValue("routeOverride").removeSuffix("/index").trim('/').removePrefix("articles/"),
+				title = fields.getValue("title"),
+				description = fields.getValue("description"),
+				created = created,
+				modified = fields["date-modified"] ?: created,
+				body = lines.drop(end + 1).joinToString("\n").trim().replace(rootRelativeLink, "]($baseUrl/"),
+			)
+		}.sortedWith(compareByDescending<Article> { it.created }.thenBy { it.title })
+
+		val articlesDir = articlesOut.get().asFile
+		articlesDir.deleteRecursively()
+		articles.forEach { article ->
+			articlesDir.resolve("${article.slug}/index.md").apply { parentFile.mkdirs() }.writeText(article.markdown)
+		}
+
+		val summary = "Pierre Roy (Ayfri) is a French full-stack and AI developer and open-source creator. " +
+			"This site is his portfolio and a technical blog on Kotlin, Kore (Minecraft datapacks) and web development."
+
+		val pages = listOf(
+			Link("Home", "$baseUrl/", "hero, featured projects and a short timeline"),
+			Link("About me", "$baseUrl/about-me/", "his story, from first programs in 2014 to Kotlin, Minecraft modding, AI and web projects"),
+			Link("Experiences", "$baseUrl/experiences/", "work and internships at Link2Brain, Eliophot, Ynov and BlueFrog"),
+			Link("Skills", "$baseUrl/skills/", "languages, frameworks and tools, each backed by real projects"),
+			Link("Portfolio", "$baseUrl/portfolio/", "how this Kotlin and Compose for Web portfolio was designed and built"),
+			Link("Projects", "$baseUrl/projects/", "open-source projects on GitHub, searchable by language and tag"),
+			Link("Blog", "$baseUrl/articles/", "all articles, searchable and filterable by tag"),
+			Link("CV in English (PDF)", "$baseUrl/cv-en.pdf", "the resume in English"),
+			Link("CV in French (PDF)", "$baseUrl/cv.pdf", "the resume in French"),
+		)
+
+		val optional = listOf(
+			Link("All articles in one file", "$baseUrl/llms-full.txt", "every article above as a single Markdown document"),
+			Link("GitHub", "https://github.com/Ayfri", "open-source projects and contributions"),
+			Link("LinkedIn", "https://www.linkedin.com/in/pierre-roy-ayfri/", "professional profile"),
+			Link("Portfolio source code", "https://github.com/Ayfri/Portfolio", "the source of this site"),
+			Link("Twitter", "https://twitter.com/@ayfri_", "updates and announcements"),
+			Link("Twitch", "https://www.twitch.tv/ayfri_", "live streams"),
+			Link("Discord", "https://discord.gg/invite/BySjRNQ9Je", "community server"),
+			Link("Kore documentation for LLMs", "https://kore.ayfri.com/llms.txt", "llms.txt of the Kore datapack library docs"),
+		)
+
+		val articleLinks = articles.map {
+			Link(it.title, "${it.url}index.md", it.description.replace(markdownLink) { match -> match.groupValues[1] })
+		}
+
+		fun section(title: String, links: List<Link>) =
+			"## $title\n\n" + links.joinToString("\n") { "- [${it.label}](${it.url}): ${it.note}" } + "\n"
+
+		val intro = "Pierre is based in France and holds a Data Scientist Master's degree from Ynov Aix (2026). " +
+			"He builds web products with Kotlin, Svelte and TypeScript, ships AI features in Python, " +
+			"and maintains Kore, the Kotlin library used to generate Minecraft datapacks. " +
+			"He worked as a full-stack developer at Eliophot (2023 to 2025) and as lead full-stack and AI developer at Link2Brain (2025 to 2026). " +
+			"His side projects include PokéCards-Collector, Atom Clicker and GPT Images."
+
+		llmsOut.get().asFile.writeText(
+			listOf(
+				"# $name\n\n> $summary\n\n$intro\n\nEvery HTML page on ayfri.com also returns Markdown when requested with an `Accept: text/markdown` header. Every article is also available as Markdown at `/articles/<slug>/index.md`.\n",
+				section("Articles", articleLinks),
+				section("Pages", pages),
+				section("Optional", optional),
+			).joinToString("\n")
+		)
+
+		llmsFullOut.get().asFile.writeText(
+			"# $name - articles\n\n> $summary\n\n" + articles.joinToString("\n\n---\n\n") { it.markdown }
+		)
+
+		logger.lifecycle("Generated llms.txt, llms-full.txt and ${articles.size} article Markdown files in '${publicOut.get()}'")
+	}
+}
+
 tasks.named("jsProcessResources") {
-	dependsOn(downloadDataTask, generateSitemapTask)
+	dependsOn(downloadDataTask)
 }
 
 tasks.matching { it.name.endsWith("KotlinJs") }.configureEach {

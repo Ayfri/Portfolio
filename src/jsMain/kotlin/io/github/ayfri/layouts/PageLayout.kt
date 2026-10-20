@@ -21,6 +21,7 @@ fun PageLayout(
 ) {
 	Style(AppStyle)
 	setRobots(null)
+	setMarkdownAlternate(null)
 	setTitle("$title - ${AppGlobals["author"]}'s Portfolio")
 	setDescription(description)
 	if (keywords.isNotEmpty()) setKeywords(keywords)

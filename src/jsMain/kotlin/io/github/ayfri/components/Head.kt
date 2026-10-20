@@ -70,6 +70,13 @@ fun setRobots(value: String?) {
 	value?.let { addToHead(element("meta", "name" to "robots", "content" to it)) }
 }
 
+/** Points agents at the Markdown copy of an article, and has to be cleared on every other page like [setRobots]. */
+fun setMarkdownAlternate(url: String?) {
+	document.querySelector("link[rel=alternate][type='text/markdown']")?.remove()
+
+	url?.let { addToHead(element("link", "rel" to "alternate", "type" to "text/markdown", "href" to it)) }
+}
+
 /** Clears every JSON-LD script, so pages adding their own [io.github.ayfri.jsonld.JsonLD] must call this first. */
 fun setJsonLD() {
 	selectAll("script[type*=ld]").forEach(HTMLElement::remove)

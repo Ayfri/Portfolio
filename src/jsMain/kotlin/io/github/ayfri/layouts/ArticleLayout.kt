@@ -51,6 +51,7 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	// would ship a canonical pointing at a URL that does not exist. Only the path belongs in a canonical.
 	val canonicalUrl = AppGlobals["url"] + context.route.path.ensureSuffix("/")
 	setCanonical(canonicalUrl)
+	setMarkdownAlternate(canonicalUrl + "index.md")
 	setJsonLD()
 
 	HighlightCode()
