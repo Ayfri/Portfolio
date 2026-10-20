@@ -271,16 +271,6 @@ kobweb {
 						onLoad = "this.rel='stylesheet'"
 					}
 
-					link(rel = "preload", href = "/prism.min.css", htmlAs = LinkAs.style) {
-						attributes += "fetchpriority" to "low"
-						onLoad = "this.rel='stylesheet'"
-					}
-					script(src = "/prism.min.js", type = "text/javascript") {
-						attributes += "data-manual" to ""
-						attributes += "fetchpriority" to "low"
-						async = true
-					}
-
 					script(src = "https://www.googletagmanager.com/gtag/js?id=G-TS3BHPVFKK", type = "text/javascript") {
 						defer = true
 					}
