@@ -1,0 +1,23 @@
+name: Data cron
+
+# GitHub only fires `schedule` from the default branch, while the Data workflow lives on `api` next to the code it runs.
+# This starts it there, about 6 hours before the scheduled CD that reads the snapshot it commits.
+# Minute 17 stays off the top of the hour, when GitHub delays or drops scheduled runs under load.
+on:
+  schedule:
+    - cron: "17 0 * * 1"
+
+  workflow_dispatch:
+
+permissions:
+  actions: write
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Start the Data workflow on the api branch
+        run: gh workflow run data.yml --repo "$GITHUB_REPOSITORY" --ref api
+        env:
+          GH_TOKEN: ${{ github.token }}
