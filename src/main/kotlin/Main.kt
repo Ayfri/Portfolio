@@ -1,17 +1,6 @@
-import entities.Result
-import entities.ResultRepository
-import entities.ResultUser
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonNamingStrategy
 import java.io.File
 
 private const val RESULT_JSON = "result.json"
-
-@OptIn(ExperimentalSerializationApi::class)
-private val json = Json {
-	namingStrategy = JsonNamingStrategy.SnakeCase
-}
 
 suspend fun main() {
 	println("Getting data from GitHub...")
@@ -19,16 +8,9 @@ suspend fun main() {
 	val ayfri = GitHubAPI.getUser()
 	println("Got user '${ayfri.name}'.")
 
-	val repos = GitHubAPI.getAllUserRepos().toMutableList()
-	println("Got ${repos.size} repos.")
+	val repos = GitHubAPI.getRepositories().sortedWith(compareBy({ it.owner.login }, { it.private }, { it.archived }, { it.name }))
+	println("Got ${repos.size} repos with their commits, contributors and watchers counts and their README.")
 
-	repos.sortWith(compareBy({ it.owner.login }, { it.private }, { it.archived }, { it.name }))
-	println("Sorted repos.")
-
-	val result = Result(ResultUser.fromUser(ayfri), repos.mapConcurrently { ResultRepository.fromRepository(it) })
-	println("Got result, mapped repositories, got commits/readme/watchers count.")
-
-	File(RESULT_JSON).writeText(json.encodeToString(result))
-
+	File(RESULT_JSON).writeText(GitHubAPI.json.encodeToString(Snapshot(ayfri, repos)))
 	println("Wrote result to file '$RESULT_JSON'.")
 }
