@@ -12,7 +12,6 @@ import io.github.ayfri.components.articles.*
 import io.github.ayfri.externals.HighlightCode
 import io.github.ayfri.jsonld.AVATAR_URL
 import io.github.ayfri.jsonld.PageType
-import io.github.ayfri.jsonld.articleImage
 import io.github.ayfri.jsonld.articleNodes
 import io.github.ayfri.jsonld.pageGraph
 import io.github.ayfri.utils.list
@@ -39,11 +38,10 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	val date = field("date-created") ?: ""
 	val dateModified = field("date-modified") ?: date
 	val entry = remember(title) { articlesEntries.find { it.title == title } }
-	val articleContent = entry?.content ?: ""
 	val plainDescription = remember(description) { description.withoutMarkdownLinks().replace("`", "") }
 
-	/** Both walk the whole article with regexes, so they are keyed on the article rather than run per recomposition. */
-	val headings = remember(title, articleContent) { extractHeadings(title, articleContent) }
+	/** The entry holds the headings of the body only, the title is always the first line of the table of contents. */
+	val headings = remember(title, entry) { listOf(1 to title) + entry?.headings.orEmpty() }
 
 	/** The path only: with the export query attached this never matched an entry, so each article listed itself. */
 	val currentPath = context.route.path
@@ -51,7 +49,7 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	val relatedArticles = remember(currentPath, keywordsList) { findRelatedArticles(currentPath, keywordsList) }
 
 	val canonicalUrl = context.canonicalUrl
-	val image = remember(entry) { entry?.let(::articleImage) ?: AVATAR_URL }
+	val image = remember(entry) { entry?.image?.let { AppGlobals["url"] + it } ?: AVATAR_URL }
 	/** X and Facebook share cards don't render AVIF, while Google reads it fine in the BlogPosting image. */
 	val shareImage = image.takeUnless { it == AVATAR_URL || it.endsWith(".avif") }
 	val jsonLD = remember(entry, canonicalUrl) {
@@ -83,7 +81,7 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 			Header({
 				classes(MarkdownStyle.header)
 			}) {
-				ArticleMeta(date, dateModified, articleContent)
+				ArticleMeta(date, dateModified, entry?.readingTime ?: 1)
 
 				H1 { Text(title) }
 

@@ -14,6 +14,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import kotlin.math.roundToInt
 import kotlin.time.Duration.Companion.seconds
 
 plugins {
@@ -37,8 +38,6 @@ repositories {
 operator fun <K : Any, V : Any> MapProperty<K, V>.set(key: K, value: V) {
 	put(key, value)
 }
-
-operator fun <K : Any, V : Any> MapProperty<K, V>.get(key: K) = getting(key)
 
 val portfolioGeneratedResourcesRoot = layout.buildDirectory.dir("generated/portfolio-resources")
 val portfolioGeneratedKotlinRoot = layout.buildDirectory.dir("generated/portfolio-data/src/jsMain/kotlin")
@@ -111,6 +110,7 @@ val downloadDataTask = tasks.register("downloadData") {
 
 data class BlogEntry(
 	val file: File,
+	val path: String,
 	val date: String,
 	val title: String,
 	val desc: String,
@@ -139,8 +139,14 @@ kobweb {
 	val blogInputDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
 
 	markdown {
-		fun String.escapeQuotes() = this.replace("\"", "\\\"")
 		fun String.escapeVariables() = this.replace("$", """${'$'}{"$"}""")
+		fun String.literal() = "\"" + replace("\\", "\\\\").replace("\"", "\\\"").escapeVariables() + "\""
+
+		/** `(?U)` makes `\s` match the non-breaking space and the other Unicode spaces, as it does in JavaScript. */
+		val wordSeparatorRegex = Regex("(?U)\\s+")
+		val headingRegex = Regex("(?mU)^(#{1,6})\\s+(.+)$")
+		val codeBlockRegex = Regex("```[\\s\\S]*?```")
+		val markdownImageRegex = Regex("""(?U)!\[[^\]]*\]\((/[^)\s]+)""")
 
 		handlers {
 			text.set { text ->
@@ -167,41 +173,37 @@ kobweb {
 		}
 
 		process = { markdownFiles ->
-			val blogEntries = mutableListOf<BlogEntry>()
+			val requiredFields = listOf("title", "description", "date-created", "date-modified", "nav-title", "routeOverride")
 
-			markdownFiles.forEach { entry ->
-				val path = File(entry.filePath)
-				val fileName = path.name
-				val fm = entry.frontMatter
-				val requiredFields = listOf("title", "description", "date-created", "date-modified", "nav-title")
-				val title = fm["title"]?.firstOrNull()
-				val desc = fm["description"]?.firstOrNull()
-				val dateCreated = fm["date-created"]?.firstOrNull()
-				val dateModified = fm["date-modified"]?.firstOrNull()
-				val navTitle = fm["nav-title"]?.firstOrNull()
+			val blogEntries = markdownFiles.mapNotNull { entry ->
+				fun field(name: String) = entry.frontMatter[name]?.firstOrNull()
 
-				if (title == null || desc == null || dateCreated == null || dateModified == null || navTitle == null) {
-					println("Skipping '$fileName', missing required fields in front matter of $fileName: ${requiredFields.filter { fm[it] == null }}")
-					return@forEach
+				val fileName = File(entry.filePath).name
+				val title = field("title")
+				val desc = field("description")
+				val dateCreated = field("date-created")
+				val dateModified = field("date-modified")
+				val navTitle = field("nav-title")
+				val routeOverride = field("routeOverride")
+
+				if (title == null || desc == null || dateCreated == null || dateModified == null || navTitle == null || routeOverride == null) {
+					println("Skipping '$fileName', missing required fields in front matter of $fileName: ${requiredFields.filter { field(it) == null }}")
+					return@mapNotNull null
 				}
 
-				val keywords = fm["keywords"]?.firstOrNull()?.split(Regex(",\\s*")) ?: emptyList()
 				// Dates are formatted as "2023-11-13" and become midnight in Paris, e.g. "2023-11-13T00:00:00+01:00".
 				fun String.atParisMidnight() =
 					LocalDate.parse(this).atStartOfDay(ZoneId.of("Europe/Paris")).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-				val dateCreatedComplete = dateCreated.atParisMidnight()
-				val dateModifiedComplete = dateModified.atParisMidnight()
 
-				blogEntries.add(
-					BlogEntry(
-						file = path,
-						date = dateCreatedComplete,
-						title = title,
-						desc = desc,
-						navTitle = navTitle,
-						keywords = keywords,
-						dateModified = dateModifiedComplete
-					)
+				BlogEntry(
+					file = blogInputDir.asFile.resolve(fileName),
+					path = routeOverride.removeSuffix("index"),
+					date = dateCreated.atParisMidnight(),
+					title = title,
+					desc = desc,
+					navTitle = navTitle,
+					keywords = field("keywords")?.split(Regex(",\\s*")) ?: emptyList(),
+					dateModified = dateModified.atParisMidnight()
 				)
 			}
 
@@ -215,24 +217,24 @@ kobweb {
 				appendLine("val articlesEntries = listOf${if (blogEntries.isEmpty()) "<ArticleEntry>" else ""}( ")
 
 				blogEntries.sortedByDescending(BlogEntry::date).forEach { entry ->
-					val blogInputFile = blogInputDir.asFile.resolve(entry.file.name)
-					val content = blogInputFile.readText().substringAfter("\n---")
-						.escapeVariables()
-						.replace("\"\"\"", "\${\"\\\"\\\"\\\"\"}")
+					val content = entry.file.readText().substringAfter("\n---")
+					val readingTime = maxOf(1, (content.split(wordSeparatorRegex).size / 250.0).roundToInt())
+					/** Code blocks are dropped first because comment lines would be picked up as headings. */
+					val headings = headingRegex.findAll(content.replace(codeBlockRegex, "")).joinToString {
+						"${it.groupValues[1].length} to ${it.groupValues[2].trim().literal()}"
+					}
+					val image = markdownImageRegex.find(content)?.groupValues?.get(1)?.literal()
 
-					appendLine("	ArticleEntry(\"/articles/${
-						entry.file.nameWithoutExtension
-							.splitCamelCase()
-							.joinToString("-") { word -> word.lowercase() }
-							.ensureSurrounded("", "/")
-					}\",")
+					appendLine("	ArticleEntry(${entry.path.literal()},")
 					appendLine("		\"${entry.date}\",")
-					appendLine("		\"${entry.title.escapeQuotes().escapeVariables()}\",")
-					appendLine("		\"${entry.desc.escapeQuotes().escapeVariables()}\",")
-					appendLine("		\"${entry.navTitle.escapeQuotes().escapeVariables()}\",")
-					appendLine("		listOf(${entry.keywords.joinToString { "\"${it.escapeQuotes().escapeVariables()}\"" }}),")
+					appendLine("		${entry.title.literal()},")
+					appendLine("		${entry.desc.literal()},")
+					appendLine("		${entry.navTitle.literal()},")
+					appendLine("		listOf(${entry.keywords.joinToString { it.literal() }}),")
 					appendLine("		\"${entry.dateModified}\",")
-					appendLine("		\"\"\"$content\"\"\"")
+					appendLine("		$readingTime,")
+					appendLine("		$image,")
+					appendLine("		listOf($headings)")
 					appendLine("	),")
 				}
 

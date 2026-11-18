@@ -7,8 +7,6 @@ import org.jetbrains.compose.web.attributes.AttrsScope
 import org.w3c.dom.Element
 import org.w3c.dom.HTMLParagraphElement
 import org.w3c.dom.asList
-import kotlin.math.max
-import kotlin.math.roundToInt
 
 inline fun localImage(path: String) = "/images/$path"
 
@@ -31,11 +29,6 @@ fun AttrsScope<HTMLParagraphElement>.markdownParagraph(
 		onDispose {}
 	}
 }
-
-private val wordSeparatorRegex = Regex("\\s+")
-
-/** Estimated reading time in minutes, at an average 250 words per minute. */
-fun calculateReadingTime(content: String) = max(1, (content.split(wordSeparatorRegex).size / 250.0).roundToInt())
 
 private val longDateOptions = DateTimeFormatOptions(
 	year = YearFormat.numeric,

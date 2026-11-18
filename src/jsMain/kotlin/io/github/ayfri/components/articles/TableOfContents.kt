@@ -8,18 +8,8 @@ import io.github.ayfri.AppStyle
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
-private val headingRegex = Regex("^(#{1,6})\\s+(.+)$", RegexOption.MULTILINE)
-private val codeBlockRegex = Regex("```[\\s\\S]*?```")
 private val nonSlugRegex = Regex("[^a-z0-9\\s-]")
 private val whitespaceRegex = Regex("\\s+")
-
-/** Extract headings from markdown content, ignoring code blocks because comment lines would be picked up as headings. */
-fun extractHeadings(title: String, content: String) = buildList {
-	add(1 to title)
-	headingRegex.findAll(content.replace(codeBlockRegex, "")).forEach {
-		add(it.groupValues[1].length to it.groupValues[2].trim())
-	}
-}
 
 fun headingToId(text: String) = text.lowercase()
 	.replace(nonSlugRegex, "")

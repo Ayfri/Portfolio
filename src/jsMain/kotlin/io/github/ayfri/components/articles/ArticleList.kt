@@ -17,12 +17,12 @@ import org.jetbrains.compose.web.dom.*
 
 /** Date, reading time and last update line, shared by the article list and the article page header. */
 @Composable
-fun ArticleMeta(date: String, dateModified: String, content: String) {
+fun ArticleMeta(date: String, dateModified: String, readingTime: Int) {
 	P({
 		classes(AppStyle.monoFont, ArticleListStyle.meta)
 	}) {
 		IconLabel(formatLongDate(date)) { LucideCalendar() }
-		IconLabel("${calculateReadingTime(content)} min read") { LucideClock() }
+		IconLabel("$readingTime min read") { LucideClock() }
 		if (date != dateModified) IconLabel("updated ${formatLongDate(dateModified)}", ArticleListStyle.updated) { LucideRefreshCw() }
 	}
 }
@@ -37,7 +37,7 @@ fun ArticleList(entries: List<ArticleEntry>) {
 				Anchor(entry.path, {
 					classes(ArticleListStyle.article)
 				}) {
-					ArticleMeta(entry.date, entry.dateModified, entry.content)
+					ArticleMeta(entry.date, entry.dateModified, entry.readingTime)
 
 					H2 { Text(entry.title) }
 

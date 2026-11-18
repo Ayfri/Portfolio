@@ -1,6 +1,5 @@
 package io.github.ayfri.jsonld
 
-import com.varabyte.kobweb.core.AppGlobals
 import io.github.ayfri.data.*
 import js.undefined.undefinedOrNull
 
@@ -8,8 +7,6 @@ private const val PERSON_ID = "https://ayfri.com/#person"
 private const val WEBSITE_ID = "https://ayfri.com/#website"
 private const val SITE_URL = "https://ayfri.com/"
 const val AVATAR_URL = "https://ayfri.com/images/avatar.png"
-
-private val markdownImage = Regex("""!\[[^\]]*\]\((/[^)\s]+)""")
 
 private val socialMediaLinks = arrayOf(GITHUB_PROFILE, LINKEDIN_LINK, TWITCH_LINK, TWITTER_LINK)
 
@@ -62,9 +59,6 @@ fun pageGraph(canonical: String, type: PageType, name: String, description: Stri
 		*nodes,
 	),
 )
-
-/** The first root-relative Markdown image of the article as an absolute URL, `null` when it has none. */
-fun articleImage(entry: ArticleEntry) = markdownImage.find(entry.content)?.let { AppGlobals["url"] + it.groupValues[1] }
 
 fun articleNodes(entry: ArticleEntry, canonical: String, description: String, image: String): Array<JsonLD> = arrayOf(
 	BlogPostingJsonLD(
