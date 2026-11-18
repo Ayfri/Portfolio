@@ -4,6 +4,8 @@ import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
 import com.varabyte.kobwebx.gradle.markdown.children
 import kotlinx.html.*
 import org.commonmark.node.Text
+import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
+import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
 import java.net.HttpURLConnection
 import java.net.URI
 import java.time.LocalDate
@@ -309,18 +311,9 @@ kobweb {
 }
 
 kotlin {
-	val isDevProperty = project.providers.gradleProperty("kobwebEnv").orNull
 	configAsKobwebApplication("portfolio")
 
 	js {
-		browser {
-			commonWebpackConfig {
-				val isDev = isDevProperty == "DEV"
-				sourceMaps = isDev
-				devServer?.open = false
-			}
-		}
-
 		compilerOptions {
 			target = "es2015"
 			useEsClasses = true
@@ -350,8 +343,8 @@ kotlin {
 			kotlin.srcDir(portfolioGeneratedKotlinRoot)
 
 			dependencies {
-				// Minifier for the production bundle, see `webpack.config.d/00-bundle-speed.js`.
-				implementation(devNpm("@swc/core", libs.versions.swc.get()))
+				/** esbuild bundles the site script (see bundleProductionSite), build time only. */
+				implementation(devNpm("esbuild", libs.versions.esbuild.get()))
 			}
 		}
 		commonMain {
@@ -616,11 +609,6 @@ tasks.matching { it.name.endsWith("KotlinJs") }.configureEach {
 	dependsOn(downloadDataTask)
 }
 
-// The export discards the source map (`includeSourceMap = false`), so building it only slows minification down.
-tasks.withType<org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack>()
-	.matching { it.name == "jsBrowserProductionWebpack" }
-	.configureEach { sourceMaps = false }
-
 /** Kobweb logs a page that timed out and moves on, so without this check a missing project page ships as a 404. */
 tasks.named("kobwebExport") {
 	/** The full-stack layout, Kobweb's default, writes its pages one folder deeper than the static one. */
@@ -630,5 +618,49 @@ tasks.named("kobwebExport") {
 	doLast {
 		val missing = routes.filterNot { pages.file("${it.removePrefix("/")}index.html").asFile.isFile }
 		if (missing.isNotEmpty()) throw GradleException("The export has no page for $missing, see the timeouts above.")
+	}
+}
+
+/**
+ * esbuild bundles the modules the Kotlin compiler links, in place of webpack and SWC: a Gradle run of the bundle task takes 4.0 s where
+ * webpack takes 7.4 s for the dev script and 3.4 s where it takes 8.9 s for the minified one, which is 2% larger once brotli-compressed
+ * (575 KB against 563 KB). Its source maps point at the Kotlin files.
+ */
+mapOf(
+	"Development" to listOf("--sourcemap=linked"),
+	/** The export discards the source map (includeSourceMap = false), so the production bundle builds none. */
+	"Production" to listOf("--legal-comments=none", "--minify", "--target=es2020"),
+).forEach { (mode, options) ->
+	val bundle = tasks.register<Exec>("bundle${mode}Site") {
+		group = "build"
+		description = "Bundles the ${mode.lowercase()} site script with esbuild, where `.kobweb/conf.yaml` reads it."
+
+		val linked = tasks.named<KotlinJsIrLink>("compile${mode}ExecutableKotlinJs").flatMap { it.destinationDirectory }
+		val nodeModules = layout.buildDirectory.dir("js/node_modules").get()
+		val script = layout.buildDirectory.file("site-bundle/${mode.lowercase()}/portfolio.js")
+
+		inputs.dir(linked).withPropertyName("linked")
+		/** The lock the install writes stands for the npm packages the bundle takes in, esbuild and `marked`. */
+		inputs.files(tasks.named("kotlinNpmInstall")).withPropertyName("npmInstall")
+		outputs.dir(script.map { it.asFile.parentFile }).withPropertyName("bundle")
+
+		// The linked modules sit outside the npm workspace, `marked` resolves through NODE_PATH.
+		environment("NODE_PATH", nodeModules.asFile.path)
+		executable(project.extensions.getByType<NodeJsEnvSpec>().executable.get())
+		args(nodeModules.file("esbuild/bin/esbuild").asFile.path, "--bundle", "--format=iife", "--log-level=warning")
+		args(options)
+		argumentProviders += CommandLineArgumentProvider {
+			listOf(linked.get().file("portfolio.mjs").asFile.path, "--outfile=${script.get().asFile.path}")
+		}
+	}
+
+	// Kobweb's start and export tasks depend on the webpack task by name: it stays as an empty shell pulling the bundle in, and the
+	// copy of the linked modules into the npm workspace, made for webpack alone, is skipped with it.
+	tasks.named("js${mode}ExecutableCompileSync") {
+		enabled = false
+	}
+	tasks.named("jsBrowser${mode}Webpack") {
+		enabled = false
+		dependsOn(bundle)
 	}
 }

@@ -12,7 +12,7 @@ It is a Kotlin/Compose for Web site built with [Kobweb](https://kobweb.varabyte.
 - KobwebX Markdown for articles
 - Gradle 9.7.1 via the included wrapper
 - npm for the Kotlin/JS toolchain, locked in `kotlin-js-store/package-lock.json`
-- SWC as the production webpack minifier, configured in `webpack.config.d/00-bundle-speed.js`
+- esbuild bundles the linked Kotlin/JS modules into the site script (`bundleDevelopmentSite` and `bundleProductionSite` in `build.gradle.kts`), minified in production
 - Cloudflare Pages for deployment
 
 ## What Is Here
