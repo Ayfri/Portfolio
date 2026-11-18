@@ -4,7 +4,7 @@ title: How I Built This Portfolio in Kotlin with Kobweb
 description: The story and the tech behind [ayfri.com](https://ayfri.com), a portfolio written entirely in Kotlin with [Kobweb](https://kobweb.varabyte.com/) and Compose for Web.
 keywords: kotlin, kobweb, compose for web, compose html, kotlin/js, static site, portfolio, kotlin web framework, css in kotlin, ssg
 date-created: 2026-07-10
-date-modified: 2026-10-01
+date-modified: 2026-11-18
 root: .layouts.ArticleLayout
 routeOverride: /articles/building-this-portfolio/index
 ---
@@ -125,11 +125,11 @@ I also override the Markdown handlers so images get `loading="lazy"` and `decodi
 
 ### Project data fetched at build time
 
-My GitHub projects are not fetched in the browser. A `downloadData` Gradle task pulls a [JSON snapshot](https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json) of my repos and generates Kotlin source from it. The data is available during static export, so crawlers receive the final project content without hitting the GitHub API on every visit.
+My GitHub projects are not fetched in the browser. A `downloadData` Gradle task pulls a [JSON snapshot](https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json) of my repos and generates Kotlin source from it. The data is available during static export, so crawlers receive the final project content without hitting the GitHub API on every visit. The same snapshot gives the export its list of project pages, one static page per repository.
 
 ### A sitemap that reads my own source
 
-The `generateSitemap` task walks the `pages/` directory looking for `@Page` annotations to discover static routes, then reads each article's `routeOverride` and `date-modified` from front matter for accurate `lastmod` values. The sitemap is generated from the source of truth, so it can never drift out of sync with the actual routes.
+The `generateSitemap` task walks the `pages/` directory looking for `@Page` annotations to discover static routes, then reads each article's `routeOverride` and `date-modified` from front matter for accurate `lastmod` values. During an export it adds every project page, with the date of the repository's last update. The sitemap is generated from the source of truth, so it can never drift out of sync with the actual routes.
 
 ## The September 2026 redesign
 
@@ -174,15 +174,49 @@ The mobile menu is a native [popover](https://developer.mozilla.org/en-US/docs/W
 - My photo is an AVIF served through `<picture>`, with a PNG fallback for the browsers that can't decode it.
 - Icons are inline [Lucide](https://lucide.dev/) SVGs from Kobweb's `silk-icons-lucide` artifact, one typed composable per icon, so no icon font or third-party kit script is downloaded, and only the icons the site uses end up in the bundle.
 
+## The November 2026 build pass
+
+Two months after the redesign I went through the build itself, borrowing what I had just done on the [Kore website](https://kore.ayfri.com), which runs on the same stack.
+
+### 135 project pages that answered 404
+
+Every repository of the [projects page](https://ayfri.com/projects/) has its own page, `/projects/{user}/{project}/`, with its README. Kobweb exports the routes it can list, and a route with parameters is not one of them, so none of those pages existed as a file. Cloudflare served `404.html` instead, with a 404 status, and the single-page app then drew the right page on top. It looked fine in a browser, and it was a 404 for every crawler.
+
+The fix is to hand Kobweb the full list of routes. They come from the same JSON snapshot as the rest of the project data, and Kobweb only takes extra routes while Gradle configures the build, so the export reads the snapshot at configuration time:
+
+```kotlin
+kobweb {
+	app {
+		export {
+			projectPages.keys.forEach { addExtraRoute(it) }
+		}
+	}
+}
+```
+
+The same list feeds the sitemap, and the export fails if one of the pages is missing, because Kobweb only logs a page that timed out and moves on. The export went from 19 pages to 154.
+
+### esbuild instead of webpack
+
+The Kotlin compiler already links the site into ES modules. webpack was only there to turn them into one file, and SWC to minify it. [esbuild](https://esbuild.github.io/) does both in one pass: on my machine the bundle step went from 8.9 s to 3.4 s for the minified script, and from 7.4 s to 4.0 s for the dev one, Gradle startup included. Kobweb depends on the webpack tasks by name, so they stay as disabled shells that pull the esbuild bundle in.
+
+The pages render the same, I compared the computed style of every element on twelve pages before and after. The price is a script 2% larger once compressed, 575 KB of brotli against 563 KB.
+
+### Not running KSP for nothing
+
+Kobweb finds the pages with a [KSP](https://kotlinlang.org/docs/ksp-overview.html) processor, which reads `@Page` functions and never looks inside a function body. KSP still analyzes the whole module every time a file changes, and that took 27 seconds here. The build now hashes the declaration lines of the sources and skips the task while the hash stays the same: changing a string in a page and compiling went from 27 s to 5.5 s.
+
+One Gradle property mattered too. With file watching left on `auto`, 4 builds out of 18 stalled for about 25 seconds on my Windows machine. With `org.gradle.vfs.watch=true`, none out of 16 did.
+
 ## The current stack
 
-As of October 2026, the versions are:
+As of November 2026, the versions are:
 
-- **Kotlin 2.4.20** targeting ES2015 with ES modules and ES classes
+- **Kotlin 2.4.21** targeting ES2015 with ES modules and ES classes
 - **Compose HTML 1.12** for the UI, Compose runtime 1.12
 - **Kobweb 0.25.1** for routing, export, and the head DSL
 - **Kotlin wrappers** for typed browser APIs, plus [`marked`](https://marked.js.org/) via npm for the project READMEs
-- **Gradle 9.8** with the configuration cache, and SWC to minify the bundle
+- **Gradle 9.9** with the configuration cache, and esbuild to bundle and minify the script
 
 The Kotlin/JS compiler flags are tuned for a smaller, faster bundle: `-Xir-property-lazy-initialization`, no polyfill generation, and `es2015` output so I ship modern JS instead of transpiled-down cruft.
 
