@@ -8,6 +8,7 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.components.Dialog
 import io.github.ayfri.components.GitHubIcon
 import io.github.ayfri.components.Icon
+import io.github.ayfri.components.TagList
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
@@ -201,11 +202,7 @@ fun Portfolio() {
 			}) {
 				IconHeading({ LucideLayers() }, "Built with")
 
-				Div({
-					classes(PortfolioStyle.techStackList)
-				}) {
-					techBadges.forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
-				}
+				TagList(techBadges, PortfolioStyle.techStackList)
 			}
 
 			Section({
@@ -287,7 +284,7 @@ object PortfolioStyle : StyleSheet() {
 	val statTile by style {
 		alignItems(AlignItems.Center)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
+		gradientBorderBackground()
 		borderRadius(.8.cssRem)
 		display(DisplayStyle.Flex)
 		gap(1.cssRem)
@@ -467,8 +464,6 @@ object PortfolioStyle : StyleSheet() {
 	}
 
 	val techStackList by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
 		gap(.6.cssRem)
 		justifyContent(JustifyContent.Center)
 	}

@@ -31,7 +31,7 @@ data class Language(
 	val name: String,
 	val since: Int,
 	val learnedFor: String,
-	val nowUsing: String,
+	val nowUsing: String = learnedFor,
 	val level: Int,
 	val description: String,
 	val iconUrl: String,
@@ -44,7 +44,7 @@ data class Language(
 }
 
 /** The snapshot is a build-time constant, so every skill's project list is derived once instead of during composition. */
-private val languageRepos by lazy { portfolioData().repos.filter { it.language != null } }
+private val languageRepos by lazy { portfolioData.repos.filter { it.language != null } }
 
 /**
  * Coursework markers actually used across the repos: a `TP` in the name, or a description mentioning school,
@@ -151,7 +151,6 @@ val skills = listOf(
 		name = "Bash",
 		since = 2022,
 		learnedFor = "Creating scripts on Linux.",
-		nowUsing = "Creating scripts on Linux.",
 		level = 4,
 		description = """
 			Bash is a sh-compatible command language interpreter that executes commands read from the standard input or from a file.
@@ -178,7 +177,6 @@ val skills = listOf(
 		name = "C#",
 		since = 2017,
 		learnedFor = "Creating games in Unity.",
-		nowUsing = "Creating games in Unity.",
 		level = 3,
 		description = """
 			C# (pronounced "C-sharp") is an object-oriented programming language from Microsoft that aims to combine the computing power of C++ with the programming ease of Visual Basic.
@@ -193,7 +191,6 @@ val skills = listOf(
 		name = "CSS",
 		since = 2017,
 		learnedFor = "Styling websites.",
-		nowUsing = "Styling websites.",
 		level = 5,
 		description = """
 			Cascading Style Sheets (CSS) is a stylesheet language used to describe the presentation of a document written in HTML or XML (including XML dialects such as SVG, MathML or XHTML).
@@ -218,7 +215,6 @@ val skills = listOf(
 		name = "Go",
 		since = 2021,
 		learnedFor = "Creating websites/APIs.",
-		nowUsing = "Creating websites/APIs.",
 		level = 4,
 		description = """
 			It is a statically typed language with syntax loosely derived from that of C, adding garbage collection, type safety, some dynamic-typing capabilities, additional built-in types such as variable-length arrays & key-value maps, and a large standard library.
@@ -239,7 +235,6 @@ val skills = listOf(
 		name = "Godot",
 		since = 2023,
 		learnedFor = "Creating games.",
-		nowUsing = "Creating games.",
 		level = 4,
 		description = """
 			Godot is a feature-packed, cross-platform game engine to create 2D and 3D games from a unified interface.
@@ -259,7 +254,6 @@ val skills = listOf(
 		name = "HTML",
 		since = 2017,
 		learnedFor = "Creating websites.",
-		nowUsing = "Creating websites.",
 		level = 5,
 		description = """
 			HyperText Markup Language (HTML) is the basic scripting language used by web browsers to render pages on the World Wide Web. HyperText allows a user to click a link and be redirected to a new page referenced by that link.
@@ -389,7 +383,6 @@ val skills = listOf(
 		name = "PHP",
 		since = 2022,
 		learnedFor = "Creating websites/plugins with WordPress.",
-		nowUsing = "Creating websites/plugins with WordPress.",
 		level = 4,
 		description = """
 			PHP is a server side scripting language that is embedded in HTML. It is used to manage dynamic content, databases, session tracking, even build entire e-commerce sites.
@@ -404,7 +397,6 @@ val skills = listOf(
 		name = "PowerShell",
 		since = 2022,
 		learnedFor = "Automating tasks on Windows.",
-		nowUsing = "Automating tasks on Windows.",
 		level = 3,
 		description = """
 			PowerShell is a task automation and configuration management framework from Microsoft, consisting of a command-line shell and associated scripting language.
@@ -463,7 +455,6 @@ val skills = listOf(
 		name = "Redis",
 		since = 2023,
 		learnedFor = "Caching data.",
-		nowUsing = "Caching data.",
 		level = 3,
 		description = """
 			Redis is an open-source, in-memory data structure store, used as a database, cache, and message broker.
@@ -538,7 +529,7 @@ object SkillsStyle : StyleSheet() {
 	val skill by style {
 		borderRadius(.9.cssRem)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
+		gradientBorderBackground()
 		color(Color(AppStyle.TEXT_COLOR))
 		revealOnScroll()
 
@@ -630,7 +621,6 @@ object SkillsStyle : StyleSheet() {
 
 			"a" {
 				color(Color(AppStyle.LINK_COLOR))
-				textDecorationLine(TextDecorationLine.None)
 
 				hover {
 					color(Color(AppStyle.LINK_HOVER_COLOR))

@@ -51,7 +51,7 @@ private fun formatDate(date: String) = Date(date).toLocaleDateString("en-GB")
 fun All() {
 	val context = rememberPageContext()
 	val fullName = "${context.route.params["user"]}/${context.route.params["project"]}"
-	val project = portfolioData().repos.find { it.fullName == fullName }
+	val project = portfolioData.repos.find { it.fullName == fullName }
 
 	if (project == null) {
 		location.href = "/projects/"

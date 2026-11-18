@@ -21,7 +21,6 @@ fun extractHeadings(title: String, content: String) = buildList {
 	}
 }
 
-// Generate an ID from heading text for anchor links
 fun headingToId(text: String) = text.lowercase()
 	.replace(nonSlugRegex, "")
 	.replace(whitespaceRegex, "-")

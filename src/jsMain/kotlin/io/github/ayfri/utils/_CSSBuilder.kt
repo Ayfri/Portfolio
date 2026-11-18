@@ -4,7 +4,6 @@ import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.compose.css.functions.Gradient
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle
-import io.github.ayfri.pages.HomeStyle.selector
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.selectors.Nth
 
@@ -15,7 +14,7 @@ fun StyleScope.size(height: CSSNumeric, width: CSSNumeric = height) {
 	width(width)
 }
 
-inline val StyleScope.marker get() = selector("::marker")
+val SelectorsScope.marker get() = selector("::marker")
 
 val Int.n get() = Nth.Functional(this)
 
@@ -53,13 +52,15 @@ val neonEdgeGradient = linearGradient(135.deg) {
 }
 
 /**
- * Two-layer background trick: a fill on padding-box over a gradient on border-box, drawn through a transparent border.
+ * Two-layer background trick: a [AppStyle.CARD_BACKGROUND] fill on padding-box over a gradient on border-box, drawn through a transparent border.
  * Only works with an opaque fill, a transparent one lets the border gradient show through the whole element.
  */
-fun StyleScope.gradientBorderBackground(
-	fillGradient: Gradient,
-	borderGradient: Gradient = cardEdgeGradient,
-) {
+fun StyleScope.gradientBorderBackground(borderGradient: Gradient = cardEdgeGradient) {
+	val fill = linearGradient {
+		add(Color(AppStyle.CARD_BACKGROUND))
+		add(Color(AppStyle.CARD_BACKGROUND))
+	}
+
 	background(Background.list(
 		Background.of(
 			image = BackgroundImage.of(borderGradient),
@@ -67,22 +68,9 @@ fun StyleScope.gradientBorderBackground(
 			clip = BackgroundClip.BorderBox
 		),
 		Background.of(
-			image = BackgroundImage.of(fillGradient),
+			image = BackgroundImage.of(fill),
 			origin = BackgroundOrigin.PaddingBox,
 			clip = BackgroundClip.PaddingBox
 		)
 	))
-}
-
-fun StyleScope.gradientBorderBackground(
-	fillColor: CSSColorValue,
-	borderGradient: Gradient = cardEdgeGradient,
-) {
-	gradientBorderBackground(
-		fillGradient = linearGradient {
-			add(fillColor)
-			add(fillColor)
-		},
-		borderGradient = borderGradient
-	)
 }

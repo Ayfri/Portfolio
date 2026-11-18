@@ -18,6 +18,7 @@ import io.github.ayfri.components.Avatar
 import io.github.ayfri.components.DiscordIcon
 import io.github.ayfri.components.HeaderStyle
 import io.github.ayfri.components.Icon
+import io.github.ayfri.components.TagList
 import io.github.ayfri.jsonld.PageType
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
@@ -87,19 +88,13 @@ data class AboutMeSection(
 			})
 		}
 
-		if (tags.isNotEmpty()) Div({
-			classes(AboutMeStyle.tags)
-		}) {
-			tags.forEach { tag ->
-				Span({ classes(AppStyle.tag) }) { Text(tag) }
-			}
-		}
+		TagList(tags, AboutMeStyle.tags)
 	}
 }
 
 val sections = listOf(
 	AboutMeSection(
-		MAIN_PRESENTATION.trimIndent().trimIndent(), 2002, true, id = "me"
+		MAIN_PRESENTATION.trimIndent(), 2002, true, id = "me"
 	) {
 		Avatar("Pierre Roy") {
 			classes(AppStyle.avatar)
@@ -286,8 +281,6 @@ val sections = listOf(
 		TextIcon("GPT Images", localImage("logos/gpt-images.webp"))
 	})
 
-const val TIMELINE_DEFAULT_OFFSET = 125.0
-
 @Page("/about-me/index")
 @Composable
 fun AboutMe() {
@@ -368,7 +361,7 @@ object AboutMeStyle : StyleSheet() {
 
 	init {
 		"html" {
-			scrollPaddingTop(HeaderStyle.navbarHeight.value() + TIMELINE_DEFAULT_OFFSET.px)
+			scrollPaddingTop(HeaderStyle.navbarHeight.value() + 125.px)
 		}
 
 		id("main") style {
@@ -594,9 +587,6 @@ object AboutMeStyle : StyleSheet() {
 	}
 
 	val tags by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(.4.cssRem)
 		marginTop(1.25.cssRem)
 	}
 
@@ -616,12 +606,12 @@ object AboutMeStyle : StyleSheet() {
 			position(Position.Relative)
 			borderRadius(.9.cssRem)
 			border(1.px, LineStyle.Solid, Color.transparent)
-			gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
+			gradientBorderBackground()
 			revealOnScroll()
 
 			/** The section being read gets a cyan edge fading out, matching the lit round on the timeline. */
 			self + className("selected") style {
-				gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND), linearGradient(160.deg) {
+				gradientBorderBackground(linearGradient(160.deg) {
 					add(Color(AppStyle.ACCENT_COLOR))
 					add(Color(AppStyle.VIOLET_COLOR), 30.percent)
 					add(Color(AppStyle.BORDER_COLOR), 60.percent)

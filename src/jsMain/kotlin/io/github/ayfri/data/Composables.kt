@@ -6,6 +6,7 @@ import com.varabyte.kobweb.silk.components.icons.lucide.LucideGitBranch
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideHistory
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideStar
 import io.github.ayfri.AppStyle
+import io.github.ayfri.components.TagList
 import io.github.ayfri.pages.TextIcon
 import io.github.ayfri.utils.renderWhenVisible
 import io.github.ayfri.utils.size
@@ -57,12 +58,7 @@ fun ProjectCard(repository: GitHubRepository) {
 			Text(repository.description ?: "No description provided.")
 		}
 
-		if (repository.topics.isNotEmpty()) Div({
-			classes("topics")
-		}) {
-			repository.topics.take(3).forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
-			if (repository.topics.size > 3) Span({ classes(AppStyle.tag) }) { Text("+${repository.topics.size - 3}") }
-		}
+		TagList(repository.topics.asList(), max = 3)
 
 		Span({
 			classes("updated")
@@ -183,12 +179,6 @@ object DataStyle : StyleSheet() {
 			property("display", "-webkit-box")
 			property("-webkit-line-clamp", "2")
 			property("-webkit-box-orient", "vertical")
-		}
-
-		className("topics") style {
-			display(DisplayStyle.Flex)
-			flexWrap(FlexWrap.Wrap)
-			gap(.4.cssRem)
 		}
 
 		className("updated") style {

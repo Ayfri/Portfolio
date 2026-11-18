@@ -8,13 +8,13 @@ import io.github.ayfri.MAIL_TO
 import io.github.ayfri.data.*
 import io.github.ayfri.ifNotBlank
 import io.github.ayfri.pages.IconHeading
-import io.github.ayfri.utils.n
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.attributes.*
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
+import org.jetbrains.compose.web.css.selectors.Nth
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLTextAreaElement
@@ -60,11 +60,10 @@ val footerPages = listOf(
 fun FooterContactField(
 	label: String,
 	id: String,
-	type: InputType<String> = InputType.Text,
+	range: IntRange,
+	autocomplete: String,
 	required: Boolean = false,
-	range: IntRange? = null,
 	textArea: Boolean = false,
-	autocomplete: String? = null,
 ) {
 	Div {
 		Label(id) {
@@ -75,14 +74,12 @@ fun FooterContactField(
 			classes(AppStyle.input)
 			id(id)
 			if (required) attr("required", "")
-			range?.let {
-				attr("minlength", it.first.toString())
-				attr("maxlength", it.last.toString())
-			}
-			autocomplete?.let { attr("autocomplete", it) }
+			attr("minlength", range.first.toString())
+			attr("maxlength", range.last.toString())
+			attr("autocomplete", autocomplete)
 		}
 
-		if (textArea) TextArea(attrs = attrs) else Input(type, attrs)
+		if (textArea) TextArea(attrs = attrs) else Input(InputType.Text, attrs)
 	}
 }
 
@@ -146,7 +143,7 @@ fun Footer() {
 
 						val body = """
 							${name.ifNotBlank { "Name: $name" }}
-							${subject.ifNotBlank { "Subject: $subject" }}
+							Subject: $subject
 
 							${message.ifNotBlank { "Message: $message" }}
 						""".trimIndent().replace("\n", "%0A")
@@ -305,11 +302,7 @@ object FooterStyle : StyleSheet() {
 		gap(.9.cssRem)
 		gridTemplateColumns("1fr 1fr")
 
-		child(self, nthChild(3.n)) style {
-			gridColumn("1 / -1")
-		}
-
-		child(self, nthChild(4.n)) style {
+		child(self, nthChild(Nth.Functional(1, 3))) style {
 			gridColumn("1 / -1")
 		}
 
@@ -450,7 +443,6 @@ object FooterStyle : StyleSheet() {
 		}
 
 		"svg" {
-			flexShrink(0)
 			fontSize(.8.em)
 			opacity(.7)
 		}

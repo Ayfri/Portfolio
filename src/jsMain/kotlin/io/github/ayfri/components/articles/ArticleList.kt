@@ -8,14 +8,13 @@ import com.varabyte.kobweb.silk.components.icons.lucide.LucideClock
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideRefreshCw
 import io.github.ayfri.*
 import io.github.ayfri.components.Icon
+import io.github.ayfri.components.TagList
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.pages.IconStyle
 import io.github.ayfri.utils.renderWhenVisible
 import io.github.ayfri.utils.revealOnScroll
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
-
-private const val VISIBLE_KEYWORDS = 5
 
 @Composable
 private fun MetaItem(text: String, vararg classes: String, icon: Icon) {
@@ -47,7 +46,7 @@ fun ArticleList(entries: List<ArticleEntry>) {
 	}) {
 		entries.forEach { entry ->
 			Li {
-				Anchor(entry.path.ensureSuffix("/"), {
+				Anchor(entry.path, {
 					classes(ArticleListStyle.article)
 				}) {
 					ArticleMeta(entry.date, entry.dateModified, entry.content)
@@ -56,14 +55,7 @@ fun ArticleList(entries: List<ArticleEntry>) {
 
 					P({ classes(ArticleListStyle.description) }) { Text(entry.desc.withoutMarkdownLinks()) }
 
-					if (entry.keywords.isNotEmpty()) Div({
-						classes(ArticleListStyle.keywords)
-					}) {
-						entry.keywords.take(VISIBLE_KEYWORDS).forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
-						if (entry.keywords.size > VISIBLE_KEYWORDS) {
-							Span({ classes(AppStyle.tag) }) { Text("+${entry.keywords.size - VISIBLE_KEYWORDS}") }
-						}
-					}
+					TagList(entry.keywords, ArticleListStyle.keywords, max = 5)
 				}
 			}
 		}
@@ -127,9 +119,6 @@ object ArticleListStyle : StyleSheet() {
 	}
 
 	val keywords by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(.4.cssRem)
 		marginTop(.3.cssRem)
 	}
 }

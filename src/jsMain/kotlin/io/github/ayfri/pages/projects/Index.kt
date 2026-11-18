@@ -6,7 +6,6 @@ import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.AppStyle
-import io.github.ayfri.CodeTheme
 import io.github.ayfri.components.ChipGroup
 import io.github.ayfri.components.FiltersStyle
 import io.github.ayfri.components.SearchField
@@ -30,7 +29,7 @@ import org.w3c.dom.url.URLSearchParams
 @Page
 @Composable
 fun Projects() {
-	val portfolio = portfolioData()
+	val portfolio = portfolioData
 	val allRepos = remember(portfolio) {
 		portfolio.repos.sortedWith(
 			compareByDescending(GitHubRepository::stargazersCount)
@@ -47,7 +46,6 @@ fun Projects() {
 		Style(ProjectsStyle)
 		Style(IconStyle)
 		Style(DataStyle)
-		Style(CodeTheme)
 
 		rememberPageContext()
 		val searchParams = URLSearchParams(window.location.search)

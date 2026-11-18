@@ -19,8 +19,6 @@ fun StyleSheet.linkStyle(parent: CSSSelector) {
 	}
 }
 
-fun StyleSheet.linkStyle(parent: String) = linkStyle(selector(parent))
-
 /** Translucent version of a palette color, `tint(ACCENT_COLOR, 25)` is the accent at 25% opacity. */
 fun tint(color: String, percent: Int) = "color-mix(in oklab, $color $percent%, transparent)"
 
@@ -61,8 +59,6 @@ object AppStyle : StyleSheet() {
 	val scrollbarColor = Color(CONTENT_BACKGROUND_COLOR)
 	val scrollbarThumbColor = Color("#2E2745")
 	val scrollbarWidth = 13.px
-
-	val buttonColor by variable<CSSColorValue>()
 
 	/** `--reveal-shift` drops to 0 under reduced motion, leaving a plain fade. */
 	val revealUp by keyframes {
@@ -207,7 +203,7 @@ object AppStyle : StyleSheet() {
 			textDecorationLine(TextDecorationLine.None)
 		}
 
-		linkStyle("p")
+		linkStyle(selector("p"))
 
 		"button" {
 			borderStyle(LineStyle.None)
@@ -255,9 +251,7 @@ object AppStyle : StyleSheet() {
 		property("view-transition-name", "page-title")
 		property("width", "fit-content")
 		color(Color.white)
-		fontFamily(MONO_FONT_FAMILY, "monospace")
 		fontSize(2.6.cssRem)
-		fontWeight(700)
 		margin(1.cssRem, 0.px, 2.5.cssRem)
 
 		media(mediaMaxWidth(mobileFirstBreak)) {
@@ -290,6 +284,13 @@ object AppStyle : StyleSheet() {
 		fontSize(.78.cssRem)
 		padding(.2.cssRem, .6.cssRem)
 		whiteSpace(WhiteSpace.NoWrap)
+	}
+
+	/** Wrapping row of [tag]s, rendered by [io.github.ayfri.components.TagList]. */
+	val tagList by style {
+		display(DisplayStyle.Flex)
+		flexWrap(FlexWrap.Wrap)
+		gap(.4.cssRem)
 	}
 
 	/** Toggleable filter pill, `active` class for the selected state. */
@@ -339,10 +340,10 @@ object AppStyle : StyleSheet() {
 		fontFamily(MONO_FONT_FAMILY, "monospace")
 	}
 
-	/** Secondary action: outlined, the accent only shows up on hover. [buttonColor] overrides the fill. */
+	/** Secondary action: outlined, the accent only shows up on hover. */
 	val button by style {
 		alignItems(AlignItems.Baseline)
-		backgroundColor(buttonColor.value(Color(SURFACE_RAISED)))
+		backgroundColor(Color(SURFACE_RAISED))
 		border(1.px, LineStyle.Solid, Color(BORDER_STRONG_COLOR))
 		borderRadius(.5.cssRem)
 		color(Color(TEXT_COLOR))

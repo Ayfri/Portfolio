@@ -6,6 +6,7 @@ import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideCalendar
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideMapPin
 import io.github.ayfri.AppStyle
+import io.github.ayfri.components.TagList
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.tint
@@ -166,11 +167,7 @@ fun Experiences() {
 								job.highlights.forEach { Li { Text(it) } }
 							}
 
-							Div({
-								classes(ExperiencesStyle.stack)
-							}) {
-								job.stack.forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
-							}
+							TagList(job.stack, ExperiencesStyle.stack)
 						}
 					}
 				}
@@ -358,9 +355,6 @@ object ExperiencesStyle : StyleSheet() {
 	}
 
 	val stack by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(.4.cssRem)
 		paddingTop(.2.cssRem)
 	}
 }

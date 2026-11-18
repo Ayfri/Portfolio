@@ -1,8 +1,7 @@
 package io.github.ayfri.components
 
 import androidx.compose.runtime.Composable
-import io.github.ayfri.height
-import io.github.ayfri.width
+import io.github.ayfri.AppStyle
 import org.jetbrains.compose.web.attributes.AttrsScope
 import org.jetbrains.compose.web.css.DisplayStyle
 import org.jetbrains.compose.web.css.display
@@ -20,16 +19,7 @@ fun P(text: String, vararg classes: String = emptyArray()) {
 }
 
 @Composable
-fun Span(text: String, vararg classes: String = emptyArray()) {
-	Span({
-		classes(*classes)
-	}) {
-		Text(text)
-	}
-}
-
-@Composable
-fun A(href: String, content: String = "", vararg classes: String = arrayOf("link")) {
+fun A(href: String, content: String = "", vararg classes: String) {
 	A(href, {
 		classes(*classes)
 	}) {
@@ -37,12 +27,15 @@ fun A(href: String, content: String = "", vararg classes: String = arrayOf("link
 	}
 }
 
-// Builder hoisted: `createBuilder` allocates, and this composable re-runs on every recomposition.
-private val imgBuilder = ElementBuilder.createBuilder<HTMLImageElement>("img")
-
+/** Row of [AppStyle.tag]s, nothing when [tags] is empty. Tags past [max] collapse into a `+N` tag. */
 @Composable
-fun Img(attrs: AttrsScope<HTMLImageElement>.() -> Unit = {}) =
-	TagElement(imgBuilder, applyAttrs = attrs, content = null)
+fun TagList(tags: List<String>, vararg classes: String, max: Int = tags.size) {
+	if (tags.isEmpty()) return
+	Div({ classes(AppStyle.tagList, *classes) }) {
+		tags.take(max).forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
+		if (tags.size > max) Span({ classes(AppStyle.tag) }) { Text("+${tags.size - max}") }
+	}
+}
 
 /** AVIF avatar with a PNG fallback, the `picture` wrapper uses `display: contents` so the parent sizes the `img` directly. */
 @Composable
@@ -53,8 +46,8 @@ fun Avatar(alt: String, attrs: AttrsScope<HTMLImageElement>.() -> Unit) {
 			attr("type", "image/avif")
 		})
 		Img("/images/avatar.png", alt) {
-			height(600)
-			width(600)
+			attr("height", "600")
+			attr("width", "600")
 			attrs()
 		}
 	}
@@ -80,10 +73,10 @@ private val dialogBuilder = ElementBuilder.createBuilder<HTMLElement>("dialog")
 fun Dialog(attrs: AttrsScope<HTMLElement>.() -> Unit, content: ContentBuilder<HTMLElement>) = TagElement(dialogBuilder, attrs, content)
 
 @Composable
-fun CodeBlock(text: String, lang: String? = null) {
+fun CodeBlock(text: String, lang: String) {
 	Pre {
 		Code(attrs = {
-			classes(lang?.let { "language-$it" } ?: "nohighlight", "line-numbers")
+			classes("language-$lang", "line-numbers")
 		}) {
 			Text(text)
 		}

@@ -16,21 +16,18 @@ fun AttrsScope<HTMLParagraphElement>.markdownParagraph(
 	text: String,
 	breaks: Boolean = false,
 	vararg classes: String,
-	additionalRefCallback: AttrsScope<HTMLParagraphElement>.(HTMLParagraphElement) -> Unit = {},
 ) {
 	ref {
 		if (classes.isNotEmpty()) it.classList.add(*classes)
 
 		val textToParse = if (breaks) text.replace("\n", "<br>") else text
 		it.innerHTML = parse(textToParse)
-		/** Tagged after parsing because `marked.use()` only reads enumerable renderer props, which Kotlin class methods never are. */
-		it.querySelectorAll("a").asList().forEach { link -> link.unsafeCast<Element>().classList.add("link") }
+		/** Code blocks are tagged after parsing because `marked.use()` only reads enumerable renderer props, which Kotlin class methods never are. */
 		it.querySelectorAll("pre > code").asList().forEach { node ->
 			val code = node.unsafeCast<Element>()
 			if (code.className.isEmpty()) code.classList.add("nohighlight")
 			code.classList.add("line-numbers")
 		}
-		additionalRefCallback(it)
 		onDispose {}
 	}
 }

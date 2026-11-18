@@ -6,7 +6,6 @@ import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.selectors.CSSSelector
 
 object CodeTheme : StyleSheet() {
-	val backgroundColor = Color.transparent
 	val textColor = Color.white
 	val classColor = Color("#ffcb6b")
 	val commentColor = Color("#757575")
@@ -61,11 +60,11 @@ object CodeTheme : StyleSheet() {
 			color(valueColor)
 		}
 
-		scope("string", "char", "regex") style {
+		scope("string", "char", "regex", "attr-value") style {
 			color(stringColor)
 		}
 
-		scope("keyword", "annotation.builtin") style {
+		scope("keyword", "annotation.builtin", "property", "attr-name") style {
 			color(keywordColor)
 		}
 
@@ -73,16 +72,12 @@ object CodeTheme : StyleSheet() {
 			fontStyle(FontStyle.Italic)
 		}
 
-		scope("property") style {
-			color(keywordColor)
-		}
-
 		scope("symbol") style {
 			color(symbolColor)
 		}
 
 		scope("punctuation", "operator") style {
-			backgroundColor(backgroundColor)
+			backgroundColor(Color.transparent)
 			color(punctuationColor)
 		}
 
@@ -100,14 +95,6 @@ object CodeTheme : StyleSheet() {
 
 		scope("tag") style {
 			color(tagColor)
-		}
-
-		scope("attr-name") style {
-			color(keywordColor)
-		}
-
-		scope("attr-value") style {
-			color(stringColor)
 		}
 
 		/** Inline event handlers (`onload="..."`) are JavaScript inside an attribute value, plain identifiers stay text-coloured. */

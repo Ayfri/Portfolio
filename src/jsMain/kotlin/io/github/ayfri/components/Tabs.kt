@@ -19,7 +19,7 @@ val tabs = listOf(
 )
 
 @Composable
-fun Tab(tab: Tab, onClick: (SyntheticMouseEvent) -> Unit = {}) {
+fun Tab(tab: Tab, onClick: (SyntheticMouseEvent) -> Unit) {
 	Anchor(tab.link, {
 		if (tab.link == window.location.pathname) classes("active")
 

@@ -9,7 +9,6 @@ import io.github.ayfri.components.Avatar
 import io.github.ayfri.components.GitHubIcon
 import io.github.ayfri.components.Icon
 import io.github.ayfri.components.LinkedInIcon
-import io.github.ayfri.data.DataStyle
 import io.github.ayfri.data.FeaturedProjectCard
 import io.github.ayfri.data.FeaturedProjectStyle
 import io.github.ayfri.data.LINKEDIN_LINK
@@ -26,8 +25,6 @@ import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.AlignSelf
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
-import web.http.FetchPriority
-import web.http.high
 import kotlin.js.Date
 
 /** Counted from the first Python scripts in 2014, the starting point of the About Me timeline. */
@@ -133,12 +130,11 @@ fun Home() {
 		"Full-Stack and AI Developer",
 		description = "Pierre Roy (Ayfri), a Kotlin and Compose Multiplatform developer building web apps, Minecraft datapacks with Kore, and AI-powered side projects.",
 	) {
-		val portfolio = portfolioData()
+		val portfolio = portfolioData
 		val starsByRepository = portfolio.repos.associate { it.fullName to it.stargazersCount }
 
 		Style(HomeStyle)
 		Style(IconStyle)
-		Style(DataStyle)
 		Style(FeaturedProjectStyle)
 
 		Section({
@@ -215,7 +211,7 @@ fun Home() {
 			}) {
 				Avatar("Pierre Roy") {
 					classes(HomeStyle.avatar)
-					fetchPriority(FetchPriority.high)
+					attr("fetchpriority", "high")
 				}
 			}
 		}

@@ -22,8 +22,6 @@ import io.github.ayfri.utils.webkitScrollbarTrack
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
-private val markdownLink = Regex("""\[([^\]]*)\]\([^)]*\)""")
-
 @Composable
 fun ArticleLayout(content: @Composable () -> Unit) {
 	Style(AppStyle)
@@ -34,14 +32,14 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	val frontMatter = context.markdown!!.frontMatter
 	fun field(name: String) = frontMatter[name]?.firstOrNull()
 
-	val title = field("title") ?: "Title not found"
-	val description = field("description") ?: "Description not found"
+	val title = field("title")!!
+	val description = field("description")!!
 	val keywords = field("keywords") ?: ""
 	val date = field("date-created") ?: ""
 	val dateModified = field("date-modified") ?: date
 	val entry = remember(title) { articlesEntries.find { it.title == title } }
 	val articleContent = entry?.content ?: ""
-	val plainDescription = remember(description) { description.replace(markdownLink, "$1").replace("`", "") }
+	val plainDescription = remember(description) { description.withoutMarkdownLinks().replace("`", "") }
 
 	// Both walk the whole article with regexes, so they are keyed on the article rather than run per recomposition.
 	val headings = remember(title, articleContent) { extractHeadings(title, articleContent) }
@@ -90,11 +88,7 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 
 				H1 { Text(title) }
 
-				if (keywordsList.isNotEmpty()) Div({
-					classes(MarkdownStyle.keywords)
-				}) {
-					keywordsList.forEach { Span({ classes(AppStyle.tag) }) { Text(it) } }
-				}
+				TagList(keywordsList)
 			}
 
 			if (headings.isNotEmpty()) TableOfContents(headings)
@@ -237,11 +231,5 @@ object MarkdownStyle : StyleSheet() {
 		borderBottom(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
 		marginBottom(2.5.cssRem)
 		paddingBottom(1.8.cssRem)
-	}
-
-	val keywords by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(.4.cssRem)
 	}
 }

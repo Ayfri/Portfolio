@@ -5,8 +5,8 @@ import com.varabyte.kobweb.compose.css.*
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideExternalLink
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideStar
 import io.github.ayfri.AppStyle
-import io.github.ayfri.components.A
 import io.github.ayfri.components.GitHubIcon
+import io.github.ayfri.components.TagList
 import io.github.ayfri.localImage
 import io.github.ayfri.tint
 import io.github.ayfri.utils.gradientBorderBackground
@@ -139,13 +139,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 				Text(project.tagline)
 			}
 
-			Div({
-				classes(FeaturedProjectStyle.tags)
-			}) {
-				project.tags.forEach { tag ->
-					Span({ classes(AppStyle.tag) }) { Text(tag) }
-				}
-			}
+			TagList(project.tags)
 
 			Div({
 				classes(FeaturedProjectStyle.links)
@@ -192,7 +186,7 @@ object FeaturedProjectStyle : StyleSheet() {
 		position(Position.Relative)
 		borderRadius(0.9.cssRem)
 		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND))
+		gradientBorderBackground()
 		revealOnScroll()
 
 		transitions {
@@ -200,7 +194,7 @@ object FeaturedProjectStyle : StyleSheet() {
 		}
 
 		hover(self) style {
-			gradientBorderBackground(Color(AppStyle.CARD_BACKGROUND), neonEdgeGradient)
+			gradientBorderBackground(neonEdgeGradient)
 			boxShadow("0 12px 40px -18px ${tint(AppStyle.VIOLET_COLOR, 60)}")
 		}
 
@@ -291,12 +285,6 @@ object FeaturedProjectStyle : StyleSheet() {
 		color(Color(AppStyle.TEXT_MUTED_COLOR))
 		fontSize(0.95.cssRem)
 		lineHeight(1.55.number)
-	}
-
-	val tags by style {
-		display(DisplayStyle.Flex)
-		flexWrap(FlexWrap.Wrap)
-		gap(0.4.cssRem)
 	}
 
 	/** Stays above the stretched title link so both buttons keep their own targets. */
