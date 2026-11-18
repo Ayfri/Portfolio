@@ -328,7 +328,9 @@ fun AboutMe() {
 							window.location.hash = "#${section.id}"
 						}
 					}) {
-						A(href = "#${section.id}")
+						A(href = "#${section.id}", {
+							attr("aria-label", "${section.dateLabel}: ${section.id.replace('-', ' ')}")
+						})
 					}
 				}
 			}
