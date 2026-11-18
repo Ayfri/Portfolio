@@ -7,6 +7,7 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.MAIL_TO
 import io.github.ayfri.data.*
 import io.github.ayfri.ifNotBlank
+import js.uri.encodeURIComponent
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.attributes.*
@@ -138,16 +139,12 @@ fun Footer() {
 						val message = (document.querySelector("#message") as HTMLTextAreaElement).value
 
 						val subject = subjectString.ifBlank { "No Subject" }
-						val name = firstName.ifBlank { lastName }
+						val name = "$firstName $lastName".trim()
 
-						val body = """
-							${name.ifNotBlank { "Name: $name" }}
-							Subject: $subject
+						/** Built from plain lines: `trimIndent` finds no indent to remove once a multi-line message is interpolated. */
+						val body = "${name.ifNotBlank { "Name: $name" }}\nSubject: $subject\n\n${message.ifNotBlank { "Message: $message" }}"
 
-							${message.ifNotBlank { "Message: $message" }}
-						""".trimIndent().replace("\n", "%0A")
-
-						window.open("mailto:$MAIL_TO?subject=$subject&body=$body", "_blank")
+						window.open("mailto:$MAIL_TO?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}", "_blank")
 					}
 				}) {
 					LucideSend()
