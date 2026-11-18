@@ -11,7 +11,6 @@ import io.github.ayfri.localImage
 import io.github.ayfri.tint
 import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.neonEdgeGradient
-import io.github.ayfri.utils.revealOnScroll
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.JustifyContent
@@ -97,7 +96,7 @@ fun FeaturedProjectCard(project: FeaturedProject, stars: Int?, hero: Boolean = f
 	val repositoryUrl = "https://github.com/${project.repository}"
 
 	Article({
-		classes(FeaturedProjectStyle.card)
+		classes(AppStyle.litCard, FeaturedProjectStyle.card)
 		if (hero) classes(FeaturedProjectStyle.heroCard)
 	}) {
 		Div({
@@ -184,10 +183,6 @@ object FeaturedProjectStyle : StyleSheet() {
 		flexDirection(FlexDirection.Column)
 		overflow(Overflow.Hidden)
 		position(Position.Relative)
-		borderRadius(0.9.cssRem)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground()
-		revealOnScroll()
 
 		transitions {
 			properties("box-shadow") { duration(0.3.s) }
@@ -213,7 +208,7 @@ object FeaturedProjectStyle : StyleSheet() {
 				alignItems(AlignItems.Stretch)
 			}
 
-			// flex-shrink stays on: without it the 960px screenshot keeps its intrinsic width and squeezes the text column.
+			/** flex-shrink stays on: without it the 960px screenshot keeps its intrinsic width and squeezes the text column. */
 			desc(self, className("thumbnail")) style {
 				flex("1 1 58%")
 				minWidth(0.px)

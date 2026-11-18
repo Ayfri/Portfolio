@@ -8,6 +8,8 @@ import io.github.ayfri.*
 import io.github.ayfri.components.Avatar
 import io.github.ayfri.components.GitHubIcon
 import io.github.ayfri.components.Icon
+import io.github.ayfri.components.IconHeading
+import io.github.ayfri.components.IconLabel
 import io.github.ayfri.components.LinkedInIcon
 import io.github.ayfri.data.FeaturedProjectCard
 import io.github.ayfri.data.FeaturedProjectStyle
@@ -22,7 +24,6 @@ import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
-import org.jetbrains.compose.web.css.AlignSelf
 import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 import kotlin.js.Date
@@ -49,54 +50,6 @@ val timelineEntries = listOf(
 	TimelineEntry("Summer 2023", "AI Research, ScriptGraf", "Ynov"),
 	TimelineEntry("Summer 2022", "Web Developer", "BlueFrog"),
 )
-
-/** `h2` led by a small icon in a violet-tinted square, the site's single icon + heading treatment. */
-@Composable
-fun IconHeading(icon: Icon, title: String, vararg classes: String) {
-	Style(IconStyle)
-
-	H2({
-		classes(IconStyle.heading, *classes)
-	}) {
-		Span({ classes(IconStyle.badge) }) { icon() }
-		Text(title)
-	}
-}
-
-/** Shared icon treatments: [heading] + [badge] for titles, [label] for a muted icon inline before some text. */
-object IconStyle : StyleSheet() {
-	val heading by style {
-		alignItems(AlignItems.Baseline)
-		display(DisplayStyle.Flex)
-		gap(.7.cssRem)
-	}
-
-	val label by style {
-		alignItems(AlignItems.Baseline)
-		display(DisplayStyle.LegacyInlineFlex)
-		gap(.45.cssRem)
-
-		"svg" {
-			color(Color(AppStyle.TEXT_MUTED_COLOR))
-			fontSize(.85.em)
-			opacity(.8)
-		}
-	}
-
-	val badge by style {
-		alignItems(AlignItems.Center)
-		alignSelf(AlignSelf.Center)
-		backgroundColor(Color(tint(AppStyle.VIOLET_COLOR, 14)))
-		border(1.px, LineStyle.Solid, Color(tint(AppStyle.VIOLET_COLOR, 30)))
-		borderRadius(.55.cssRem)
-		color(Color(AppStyle.VIOLET_COLOR))
-		display(DisplayStyle.LegacyInlineFlex)
-		flexShrink(0)
-		fontSize(.55.em)
-		justifyContent(JustifyContent.Center)
-		size(1.9.em)
-	}
-}
 
 @Composable
 fun HomeSectionHeader(icon: Icon, title: String, linkLabel: String, link: String) {
@@ -134,7 +87,6 @@ fun Home() {
 		val starsByRepository = portfolio.repos.associate { it.fullName to it.stargazersCount }
 
 		Style(HomeStyle)
-		Style(IconStyle)
 		Style(FeaturedProjectStyle)
 
 		Section({
@@ -187,7 +139,7 @@ fun Home() {
 						Triple("Email", { LucideMail() }, "mailto:pierre@ayfri.com"),
 					).forEach { (label, icon, url) ->
 						A(url, {
-							classes(HomeStyle.iconLink)
+							classes(AppStyle.iconButton, HomeStyle.iconLink)
 							title(label)
 							attr("aria-label", label)
 						}) {
@@ -239,8 +191,8 @@ fun Home() {
 				classes(HomeStyle.skills)
 			}) {
 				skillsByLevel.take(8).forEach { skill ->
-					A("/skills/#${skill.language.name}", {
-						classes(HomeStyle.skill)
+					A("/skills/#${skill.name}", {
+						classes(AppStyle.card, HomeStyle.skill)
 					}) {
 						skill.DisplaySimple()
 					}
@@ -277,12 +229,7 @@ fun Home() {
 							Text(entry.role)
 						}
 
-						Span({
-							classes(HomeStyle.muted, IconStyle.label)
-						}) {
-							LucideBuilding2()
-							Text(entry.company)
-						}
+						IconLabel(entry.company, HomeStyle.muted) { LucideBuilding2() }
 					}
 				}
 			}
@@ -301,12 +248,7 @@ fun Home() {
 						A(article.path, {
 							classes(HomeStyle.article)
 						}) {
-							Span({
-								classes(AppStyle.monoFont, HomeStyle.articleDate, IconStyle.label)
-							}) {
-								LucideCalendar()
-								Text(formatLongDate(article.date))
-							}
+							IconLabel(formatLongDate(article.date), AppStyle.monoFont, HomeStyle.articleDate) { LucideCalendar() }
 
 							Div {
 								H3 { Text(article.navTitle) }
@@ -326,7 +268,7 @@ fun Home() {
 			classes(HomeStyle.section, HomeStyle.split)
 		}) {
 			Div({
-				classes(HomeStyle.more)
+				classes(AppStyle.card, HomeStyle.more)
 			}) {
 				IconHeading({ LucideBookOpen() }, "The long version")
 				P({
@@ -343,7 +285,7 @@ fun Home() {
 			}
 
 			Div({
-				classes(HomeStyle.more)
+				classes(AppStyle.card, HomeStyle.more)
 			}) {
 				IconHeading({ LucideWandSparkles() }, "How this site is built")
 				P({
@@ -492,18 +434,7 @@ object HomeStyle : StyleSheet() {
 	}
 
 	val iconLink by style {
-		alignItems(AlignItems.Center)
-		borderRadius(.5.cssRem)
-		color(Color(AppStyle.TEXT_MUTED_COLOR))
-		display(DisplayStyle.Flex)
-		fontSize(1.3.cssRem)
-		justifyContent(JustifyContent.Center)
 		size(2.6.cssRem)
-
-		hover(self) style {
-			backgroundColor(Color("#FFFFFF0F"))
-			color(Color.white)
-		}
 	}
 
 	val facts by style {
@@ -679,14 +610,11 @@ object HomeStyle : StyleSheet() {
 
 	val skill by style {
 		alignItems(AlignItems.Center)
-		backgroundColor(Color(AppStyle.CARD_BACKGROUND))
-		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
 		borderRadius(.6.cssRem)
 		color(Color(AppStyle.TEXT_COLOR))
 		display(DisplayStyle.Flex)
 		gap(.7.cssRem)
 		padding(.55.cssRem, 1.cssRem, .55.cssRem, .6.cssRem)
-		revealOnScroll()
 
 		transitions {
 			properties("border-color", "box-shadow", "translate") { duration(.2.s) }
@@ -811,16 +739,11 @@ object HomeStyle : StyleSheet() {
 	}
 
 	val more by style {
-		backgroundColor(Color(AppStyle.CARD_BACKGROUND))
-		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
-		borderRadius(.9.cssRem)
 		display(DisplayStyle.Flex)
 		flexDirection(FlexDirection.Column)
 		alignItems(AlignItems.Start)
 		height(100.percent)
-		boxSizing(BoxSizing.BorderBox)
 		padding(1.8.cssRem)
-		revealOnScroll()
 
 		"h2" {
 			color(Color.white)

@@ -99,7 +99,8 @@ object FiltersStyle : StyleSheet() {
 		fontSize(.9.cssRem)
 		gap(.5.cssRem)
 
-		"svg" {
+		/** Its own icon only: the result counts nest an [AppStyle.iconLabel], whose icon keeps the muted look. */
+		"> svg" {
 			color(Color(AppStyle.VIOLET_COLOR))
 			fontSize(.8.cssRem)
 		}

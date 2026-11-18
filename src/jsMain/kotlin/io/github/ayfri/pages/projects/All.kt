@@ -3,7 +3,6 @@ package io.github.ayfri.pages.projects
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.varabyte.kobweb.compose.css.*
-import com.varabyte.kobweb.core.AppGlobals
 import com.varabyte.kobweb.core.Page
 import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.icons.lucide.*
@@ -11,15 +10,15 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.CodeTheme
 import io.github.ayfri.components.GitHubIcon
 import io.github.ayfri.components.Icon
+import io.github.ayfri.components.IconHeading
+import io.github.ayfri.components.IconLabel
 import io.github.ayfri.data.GitHubRepository
 import io.github.ayfri.data.portfolioData
 import io.github.ayfri.externals.HighlightCode
-import io.github.ayfri.ensureSuffix
 import io.github.ayfri.jsonld.projectNodes
 import io.github.ayfri.layouts.PageLayout
+import io.github.ayfri.layouts.canonicalUrl
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.pages.IconHeading
-import io.github.ayfri.pages.IconStyle
 import io.github.ayfri.utils.list
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.attributes.ATarget
@@ -58,7 +57,7 @@ fun All() {
 		return
 	}
 
-	val canonical = AppGlobals["url"] + context.route.path.ensureSuffix("/")
+	val canonical = context.canonicalUrl
 
 	PageLayout(
 		"${project.name} by ${project.owner.login}",
@@ -66,7 +65,6 @@ fun All() {
 		jsonLD = projectNodes(project, canonical),
 	) {
 		Style(ProjectStyle)
-		Style(IconStyle)
 		Style(CodeTheme)
 		HighlightCode()
 
@@ -110,10 +108,7 @@ fun All() {
 						Pair({ LucideGitBranch() }, "${project.forksCount} forks"),
 						Pair({ LucideHistory() }, "updated ${formatDate(project.updatedAt)}"),
 					).forEach { (icon, text) ->
-						Span({ classes(IconStyle.label) }) {
-							icon()
-							Text(text)
-						}
+						IconLabel(text, icon = icon)
 					}
 				}
 

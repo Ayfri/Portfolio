@@ -13,7 +13,7 @@ private val codeBlockRegex = Regex("```[\\s\\S]*?```")
 private val nonSlugRegex = Regex("[^a-z0-9\\s-]")
 private val whitespaceRegex = Regex("\\s+")
 
-// Extract headings from markdown content, ignoring code blocks because comment lines would be picked up as headings.
+/** Extract headings from markdown content, ignoring code blocks because comment lines would be picked up as headings. */
 fun extractHeadings(title: String, content: String) = buildList {
 	add(1 to title)
 	headingRegex.findAll(content.replace(codeBlockRegex, "")).forEach {

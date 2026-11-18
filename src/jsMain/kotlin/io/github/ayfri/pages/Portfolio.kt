@@ -8,12 +8,12 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.components.Dialog
 import io.github.ayfri.components.GitHubIcon
 import io.github.ayfri.components.Icon
+import io.github.ayfri.components.IconHeading
 import io.github.ayfri.components.TagList
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.tint
-import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.revealOnScroll
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
@@ -130,7 +130,7 @@ fun Portfolio() {
 			}) {
 				portfolioStats.forEach { stat ->
 					Div({
-						classes(PortfolioStyle.statTile)
+						classes(AppStyle.litCard, PortfolioStyle.statTile)
 					}) {
 						stat.icon()
 						Div {
@@ -236,10 +236,10 @@ object PortfolioStyle : StyleSheet() {
 		}
 	}
 
-	// Narrower column for prose (intro/outro paragraphs, tech stack blurb).
+	/** Narrower column for prose (intro/outro paragraphs, tech stack blurb). */
 	val textWidth = 44.cssRem
 
-	// Wider column for visual blocks (stats grid, image/text feature rows).
+	/** Wider column for visual blocks (stats grid, image/text feature rows). */
 	val wideWidth = 68.cssRem
 
 	val intro by style {
@@ -283,13 +283,10 @@ object PortfolioStyle : StyleSheet() {
 
 	val statTile by style {
 		alignItems(AlignItems.Center)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground()
 		borderRadius(.8.cssRem)
 		display(DisplayStyle.Flex)
 		gap(1.cssRem)
 		padding(1.2.cssRem)
-		revealOnScroll()
 
 		"svg" {
 			color(Color(AppStyle.VIOLET_COLOR))

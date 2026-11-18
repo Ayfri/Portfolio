@@ -40,8 +40,8 @@ fun StyleScope.renderWhenVisible(height: CSSNumeric) {
 
 /** Hairline brighter on top than at the bottom, so cards read as lit from above rather than outlined. */
 val cardEdgeGradient = linearGradient(180.deg) {
-	add(Color("#D9CCFF2E"))
-	add(Color("#D9CCFF0F"))
+	add(Color(AppStyle.CARD_EDGE_TOP))
+	add(Color(AppStyle.CARD_EDGE_BOTTOM))
 }
 
 /** The logo's cyan -> violet -> orchid tube, for the few elements that should glow, never as a default. */

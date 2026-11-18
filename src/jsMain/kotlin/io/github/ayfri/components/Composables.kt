@@ -37,6 +37,26 @@ fun TagList(tags: List<String>, vararg classes: String, max: Int = tags.size) {
 	}
 }
 
+/** `h2` led by a small icon in a violet-tinted square, the site's single icon + heading treatment. */
+@Composable
+fun IconHeading(icon: Icon, title: String, vararg classes: String) {
+	H2({
+		classes(AppStyle.iconHeading, *classes)
+	}) {
+		Span({ classes(AppStyle.iconBadge) }) { icon() }
+		Text(title)
+	}
+}
+
+/** Muted [icon] inline before [text]. */
+@Composable
+fun IconLabel(text: String, vararg classes: String, icon: Icon) {
+	Span({ classes(AppStyle.iconLabel, *classes) }) {
+		icon()
+		Text(text)
+	}
+}
+
 /** AVIF avatar with a PNG fallback, the `picture` wrapper uses `display: contents` so the parent sizes the `img` directly. */
 @Composable
 fun Avatar(alt: String, attrs: AttrsScope<HTMLImageElement>.() -> Unit) {

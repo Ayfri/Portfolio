@@ -8,6 +8,8 @@ import com.varabyte.kobweb.silk.components.icons.lucide.*
 import io.github.ayfri.AppStyle
 import io.github.ayfri.components.ChipGroup
 import io.github.ayfri.components.FiltersStyle
+import io.github.ayfri.components.IconHeading
+import io.github.ayfri.components.IconLabel
 import io.github.ayfri.components.SearchField
 import io.github.ayfri.components.countedByFrequency
 import io.github.ayfri.data.DataStyle
@@ -17,8 +19,6 @@ import io.github.ayfri.data.portfolioData
 import io.github.ayfri.jsonld.PageType
 import io.github.ayfri.jsonld.projectsListNode
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.pages.IconHeading
-import io.github.ayfri.pages.IconStyle
 import kotlinx.browser.window
 import org.jetbrains.compose.web.attributes.selected
 import org.jetbrains.compose.web.css.*
@@ -44,7 +44,6 @@ fun Projects() {
 		jsonLD = arrayOf(projectsListNode(allRepos)),
 	) {
 		Style(ProjectsStyle)
-		Style(IconStyle)
 		Style(DataStyle)
 
 		rememberPageContext()
@@ -120,10 +119,7 @@ fun Projects() {
 			P({
 				classes(FiltersStyle.label, ProjectsStyle.resultsCount)
 			}) {
-				Span({ classes(IconStyle.label) }) {
-					LucideFunnel()
-					Text("Showing ${filteredRepos.size} of ${allRepos.size} projects")
-				}
+				IconLabel("Showing ${filteredRepos.size} of ${allRepos.size} projects") { LucideFunnel() }
 			}
 
 			Section({

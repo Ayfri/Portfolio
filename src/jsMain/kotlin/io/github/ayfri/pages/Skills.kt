@@ -17,31 +17,13 @@ import io.github.ayfri.data.portfolioData
 import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
-import io.github.ayfri.utils.gradientBorderBackground
 import io.github.ayfri.utils.marker
 import io.github.ayfri.utils.n
-import io.github.ayfri.utils.revealOnScroll
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.AlignSelf
 import org.jetbrains.compose.web.dom.*
-
-data class Language(
-	val name: String,
-	val since: Int,
-	val learnedFor: String,
-	val nowUsing: String = learnedFor,
-	val level: Int,
-	val description: String,
-	val iconUrl: String,
-	val githubProjects: List<String> = listOf(),
-	val schoolProjects: List<String> = listOf(),
-	/** Language names GitHub reports that belong to this skill, e.g. Godot claiming its GDScript repos. */
-	val aliases: List<String> = listOf(),
-) {
-	fun matches(repoLanguage: String) = repoLanguage.equals(name, true) || aliases.any { repoLanguage.equals(it, true) }
-}
 
 /** The snapshot is a build-time constant, so every skill's project list is derived once instead of during composition. */
 private val languageRepos by lazy { portfolioData.repos.filter { it.language != null } }
@@ -60,14 +42,26 @@ private val GitHubRepository.isSchoolProject
 		schoolDescRegex.containsMatchIn(name) ||
 		description?.let(schoolDescRegex::containsMatchIn) == true
 
-data class Skill(val language: Language) {
-	private val ownRepos by lazy { languageRepos.filter { language.matches(it.language!!) } }
+data class Skill(
+	val name: String,
+	val since: Int,
+	val learnedFor: String,
+	val nowUsing: String = learnedFor,
+	val level: Int,
+	val description: String,
+	val iconUrl: String,
+	val githubProjects: List<String> = listOf(),
+	val schoolProjects: List<String> = listOf(),
+	/** Language names GitHub reports that belong to this skill, e.g. Godot claiming its GDScript repos. */
+	val aliases: List<String> = listOf(),
+) {
+	private fun matches(repoLanguage: String) = repoLanguage.equals(name, true) || aliases.any { repoLanguage.equals(it, true) }
 
-	val githubProjects by lazy { ownRepos + languageRepos.filter { it.fullName in language.githubProjects } }
+	private val ownRepos by lazy { languageRepos.filter { matches(it.language!!) } }
 
-	val schoolProjects by lazy {
-		ownRepos.filter { it.isSchoolProject } + languageRepos.filter { it.fullName in language.schoolProjects }
-	}
+	private val githubRepos by lazy { ownRepos + languageRepos.filter { it.fullName in githubProjects } }
+
+	private val schoolRepos by lazy { ownRepos.filter { it.isSchoolProject } + languageRepos.filter { it.fullName in schoolProjects } }
 
 	@Composable
 	fun Display() {
@@ -80,9 +74,9 @@ data class Skill(val language: Language) {
 				Div({
 					classes("left")
 				}) {
-					Img(language.iconUrl, alt = "${language.name} icon")
+					Img(iconUrl, alt = "$name icon")
 					H2 {
-						Text(language.name)
+						Text(name)
 					}
 				}
 
@@ -90,21 +84,21 @@ data class Skill(val language: Language) {
 					classes("details")
 				}) {
 					P({
-						val learnedAndNowUserFor = if (language.learnedFor == language.nowUsing) "<br>Using for: ${language.learnedFor}"
-						else "<br>Learned for: ${language.learnedFor}<br>Now using: ${language.nowUsing}"
+						val learnedAndNowUserFor = if (learnedFor == nowUsing) "<br>Using for: $learnedFor"
+						else "<br>Learned for: $learnedFor<br>Now using: $nowUsing"
 
-						markdownParagraph("Since: ${language.since}$learnedAndNowUserFor")
+						markdownParagraph("Since: $since$learnedAndNowUserFor")
 					})
 
 					P {
 						Text("Level: ")
-						repeat(language.level) { LucideStar() }
+						repeat(level) { LucideStar() }
 					}
 				}
 			}
 
 			P({
-				markdownParagraph(language.description, false, "description")
+				markdownParagraph(description, false, "description")
 			})
 		}
 
@@ -112,12 +106,12 @@ data class Skill(val language: Language) {
 			classes("bottom")
 		}) {
 			@Composable
-			fun section(name: String, list: List<GitHubRepository>, icon: Icon) {
+			fun section(title: String, list: List<GitHubRepository>, icon: Icon) {
 				if (list.isEmpty()) return
 
 				H3 {
 					icon()
-					Text(name)
+					Text(title)
 				}
 
 				Ul {
@@ -129,26 +123,27 @@ data class Skill(val language: Language) {
 				}
 			}
 
-			val githubNotSchoolProjects = githubProjects.filter { project -> schoolProjects.none { project.fullName == it.fullName } }
+			val githubNotSchoolProjects = githubRepos.filter { project -> schoolRepos.none { project.fullName == it.fullName } }
 			val (contributedProjects, ownProjects) = githubNotSchoolProjects.partition { it.fork || it.owner.login != "Ayfri" }
 			section("GitHub projects", ownProjects) { GitHubIcon() }
 			section("Contributions", contributedProjects) { LucideGitBranch() }
-			section("School projects", schoolProjects) { LucideGraduationCap() }
+			section("School projects", schoolRepos) { LucideGraduationCap() }
 		}
 	}
 
 	@Composable
 	fun DisplaySimple() {
-		Img(language.iconUrl, alt = "${language.name} language")
-		P(language.name, AppStyle.monoFont)
+		Img(iconUrl, alt = "$name language")
+		P(name, AppStyle.monoFont)
 	}
 }
 
 fun devIcon(name: String, suffix: String = "original") = "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/$name/$name-$suffix.svg"
 
-val skills = listOf(
-	Language(
-		name = "Bash",
+/** Display order for the skills page and the home page's featured strip; sorting once beats re-sorting per recomposition. */
+val skillsByLevel = listOf(
+	Skill(
+		name ="Bash",
 		since = 2022,
 		learnedFor = "Creating scripts on Linux.",
 		level = 4,
@@ -158,8 +153,8 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = devIcon("bash")
 	),
-	Language(
-		name = "C++",
+	Skill(
+		name ="C++",
 		since = 2016,
 		learnedFor = "Testing low-level programmation.",
 		nowUsing = "Low-level games.",
@@ -173,8 +168,8 @@ val skills = listOf(
 			"Ayfri/Cpp-TP1", "Ayfri/Cpp-TP2", "Ayfri/Cpp-TP3", "Ayfri/Cpp-TP4", "Ayfri/Cpp-TP5"
 		)
 	),
-	Language(
-		name = "C#",
+	Skill(
+		name ="C#",
 		since = 2017,
 		learnedFor = "Creating games in Unity.",
 		level = 3,
@@ -187,8 +182,8 @@ val skills = listOf(
 			"Ayfri/AyBreak"
 		)
 	),
-	Language(
-		name = "CSS",
+	Skill(
+		name ="CSS",
 		since = 2017,
 		learnedFor = "Styling websites.",
 		level = 5,
@@ -211,8 +206,8 @@ val skills = listOf(
 			"B-One-Ynov/Extranet-Ynov",
 		),
 	),
-	Language(
-		name = "Go",
+	Skill(
+		name ="Go",
 		since = 2021,
 		learnedFor = "Creating websites/APIs.",
 		level = 4,
@@ -231,8 +226,8 @@ val skills = listOf(
 			"Ayfri/VersionCraft"
 		)
 	),
-	Language(
-		name = "Godot",
+	Skill(
+		name ="Godot",
 		since = 2023,
 		learnedFor = "Creating games.",
 		level = 4,
@@ -250,8 +245,8 @@ val skills = listOf(
 			"Cat-aclsym/Cat-aclsym_Claw_of_the_dead",
 		),
 	),
-	Language(
-		name = "HTML",
+	Skill(
+		name ="HTML",
 		since = 2017,
 		learnedFor = "Creating websites.",
 		level = 5,
@@ -275,8 +270,8 @@ val skills = listOf(
 			"Ayfri/VersionCraft",
 		)
 	),
-	Language(
-		name = "Java",
+	Skill(
+		name ="Java",
 		since = 2016,
 		learnedFor = "Minecraft mods/Bots/Games.",
 		nowUsing = "Backend of websites.",
@@ -292,8 +287,8 @@ val skills = listOf(
 			"Ayfri/Java-TP3",
 		)
 	),
-	Language(
-		name = "JavaScript",
+	Skill(
+		name ="JavaScript",
 		since = 2018,
 		learnedFor = "Dynamic websites, bots/games/scripts/cli.",
 		nowUsing = "Dynamic websites without Kotlin.",
@@ -314,8 +309,8 @@ val skills = listOf(
 			"Ayfri/VersionCraft",
 		)
 	),
-	Language(
-		// Named without the "Notebook" so the skill's HTML id stays whitespace-free; the alias matches what GitHub reports.
+	Skill(
+		/** Named without the "Notebook" so the skill's HTML id stays whitespace-free; the alias matches what GitHub reports. */
 		name = "Jupyter",
 		since = 2024,
 		learnedFor = "Machine learning courses.",
@@ -331,8 +326,8 @@ val skills = listOf(
 			"Ayfri/UF_Project_B3",
 		),
 	),
-	Language(
-		name = "Kotlin",
+	Skill(
+		name ="Kotlin",
 		since = 2020,
 		learnedFor = "Improving Java projects.",
 		nowUsing = "Pretty much everything.",
@@ -349,8 +344,8 @@ val skills = listOf(
 			"HelysioFR/FallenKingdom",
 		)
 	),
-	Language(
-		name = "MySQL",
+	Skill(
+		name ="MySQL",
 		since = 2019,
 		learnedFor = "Storing data other than in a JSON.",
 		nowUsing = "Storing data efficiently.",
@@ -368,8 +363,8 @@ val skills = listOf(
 			"B-One-Ynov/Extranet-Ynov",
 		)
 	),
-	Language(
-		name = "MCFunction",
+	Skill(
+		name ="MCFunction",
 		since = 2017,
 		learnedFor = "Runnin more efficiently Minecraft commands.",
 		nowUsing = "Create fully-fledged Minecraft datapacks.",
@@ -379,8 +374,8 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = localImage("minecraft-new.avif"),
 	),
-	Language(
-		name = "PHP",
+	Skill(
+		name ="PHP",
 		since = 2022,
 		learnedFor = "Creating websites/plugins with WordPress.",
 		level = 4,
@@ -393,8 +388,8 @@ val skills = listOf(
 			"Ayfri/Cyber-TP-1",
 		)
 	),
-	Language(
-		name = "PowerShell",
+	Skill(
+		name ="PowerShell",
 		since = 2022,
 		learnedFor = "Automating tasks on Windows.",
 		level = 3,
@@ -404,8 +399,8 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = devIcon("powershell")
 	),
-	Language(
-		name = "Python",
+	Skill(
+		name ="Python",
 		since = 2014,
 		learnedFor = "Trying programmation.",
 		nowUsing = "Creating AIs, scripts & websites.",
@@ -424,8 +419,8 @@ val skills = listOf(
 			"Ayfri/UF_Project_B3"
 		)
 	),
-	Language(
-		name = "Svelte",
+	Skill(
+		name ="Svelte",
 		since = 2024,
 		learnedFor = "Creating web apps.",
 		nowUsing = "Creating web apps with SvelteKit.",
@@ -436,8 +431,8 @@ val skills = listOf(
 		""".trimIndent(),
 		iconUrl = devIcon("svelte"),
 	),
-	Language(
-		name = "TypeScript",
+	Skill(
+		name ="TypeScript",
 		since = 2019,
 		learnedFor = "Improving JavaScript projects.",
 		nowUsing = "Creating typed JS libraries.",
@@ -451,8 +446,8 @@ val skills = listOf(
 			"Ayfri/Pokestore",
 		)
 	),
-	Language(
-		name = "Redis",
+	Skill(
+		name ="Redis",
 		since = 2023,
 		learnedFor = "Caching data.",
 		level = 3,
@@ -465,13 +460,10 @@ val skills = listOf(
 			"Ayfri/Redis-Cluster",
 		)
 	)
-).map(::Skill)
-
-/** Display order for the skills page and the home page's featured strip; sorting once beats re-sorting per recomposition. */
-val skillsByLevel = skills.sortedWith(
-	compareByDescending<Skill> { it.language.level }
-		.thenByDescending { it.language.since }
-		.thenBy { it.language.name }
+).sortedWith(
+	compareByDescending(Skill::level)
+		.thenByDescending(Skill::since)
+		.thenBy(Skill::name)
 )
 
 @Page("/skills/index")
@@ -497,8 +489,8 @@ fun Skills() {
 			}) {
 				skillsByLevel.forEach { skill ->
 					Div({
-						id(skill.language.name)
-						classes(SkillsStyle.skill)
+						id(skill.name)
+						classes(AppStyle.litCard, SkillsStyle.skill)
 					}) {
 						skill.Display()
 					}
@@ -527,11 +519,7 @@ object SkillsStyle : StyleSheet() {
 	}
 
 	val skill by style {
-		borderRadius(.9.cssRem)
-		border(1.px, LineStyle.Solid, Color.transparent)
-		gradientBorderBackground()
 		color(Color(AppStyle.TEXT_COLOR))
-		revealOnScroll()
 
 		"img" {
 			size(3.cssRem)

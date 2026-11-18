@@ -26,6 +26,7 @@ import org.jetbrains.compose.web.dom.*
 fun ArticleLayout(content: @Composable () -> Unit) {
 	Style(AppStyle)
 	Style(MarkdownStyle)
+	Style(ArticleListStyle)
 	Style(CodeTheme)
 
 	val context = rememberPageContext()
@@ -41,17 +42,15 @@ fun ArticleLayout(content: @Composable () -> Unit) {
 	val articleContent = entry?.content ?: ""
 	val plainDescription = remember(description) { description.withoutMarkdownLinks().replace("`", "") }
 
-	// Both walk the whole article with regexes, so they are keyed on the article rather than run per recomposition.
+	/** Both walk the whole article with regexes, so they are keyed on the article rather than run per recomposition. */
 	val headings = remember(title, articleContent) { extractHeadings(title, articleContent) }
 
-	// The path only: with the export query attached this never matched an entry, so each article listed itself.
+	/** The path only: with the export query attached this never matched an entry, so each article listed itself. */
 	val currentPath = context.route.path
 	val keywordsList = remember(keywords) { keywords.split(",").map { it.trim() }.filter { it.isNotEmpty() } }
 	val relatedArticles = remember(currentPath, keywordsList) { findRelatedArticles(currentPath, keywordsList) }
 
-	// `context.route.toString()` still carries the `?_kobwebIsExporting=...` query during a static export, which
-	// would ship a canonical pointing at a URL that does not exist. Only the path belongs in a canonical.
-	val canonicalUrl = AppGlobals["url"] + context.route.path.ensureSuffix("/")
+	val canonicalUrl = context.canonicalUrl
 	val image = remember(entry) { entry?.let(::articleImage) ?: AVATAR_URL }
 	/** X and Facebook share cards don't render AVIF, while Google reads it fine in the BlogPosting image. */
 	val shareImage = image.takeUnless { it == AVATAR_URL || it.endsWith(".avif") }
@@ -141,7 +140,7 @@ object MarkdownStyle : StyleSheet() {
 		}
 
 		list("p", "li", "td") style {
-			color(Color("#D8D3E6"))
+			color(Color(AppStyle.ARTICLE_TEXT_COLOR))
 		}
 
 		linkStyle(desc(self, "li"))
@@ -180,7 +179,7 @@ object MarkdownStyle : StyleSheet() {
 			}
 
 			self + webkitScrollbarThumb style {
-				backgroundColor(Color("#FFFFFF33"))
+				backgroundColor(Color(tint("white", 20)))
 				borderRadius(.5.cssRem)
 			}
 

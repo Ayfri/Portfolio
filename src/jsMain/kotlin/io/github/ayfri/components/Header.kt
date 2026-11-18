@@ -16,7 +16,6 @@ import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
-import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.dom.*
 
 private const val NAV_ID = "site-nav"
@@ -54,7 +53,7 @@ fun Header() {
 
 		A(REPO_LINK, {
 			target(ATarget.Blank)
-			classes(HeaderStyle.iconButton)
+			classes(AppStyle.iconButton)
 			title("GitHub")
 			attr("aria-label", "GitHub")
 		}) {
@@ -62,7 +61,7 @@ fun Header() {
 		}
 
 		Button({
-			classes(HeaderStyle.iconButton, HeaderStyle.mobileMenuButton)
+			classes(AppStyle.iconButton, HeaderStyle.mobileMenuButton)
 			attr("aria-label", "Menu")
 			attr("popovertarget", NAV_ID)
 		}) {
@@ -115,7 +114,7 @@ object HeaderStyle : StyleSheet() {
 	}
 
 	val navbarLinks by style {
-		// Resets the user agent popover box (fixed, centered, bordered), the nav only behaves as a popover on mobile.
+		/** Resets the user agent popover box (fixed, centered, bordered), the nav only behaves as a popover on mobile. */
 		backgroundColor(Color.transparent)
 		border(0.px)
 		color(CSSColor.Inherit)
@@ -182,24 +181,6 @@ object HeaderStyle : StyleSheet() {
 				property("inset", "0 auto 0 0")
 				width(2.px)
 			}
-		}
-	}
-
-	val iconButton by style {
-		alignItems(AlignItems.Center)
-		backgroundColor(Color.transparent)
-		borderRadius(.5.cssRem)
-		color(Color(AppStyle.TEXT_MUTED_COLOR))
-		cursor(Cursor.Pointer)
-		display(DisplayStyle.Flex)
-		fontSize(1.3.cssRem)
-		height(2.4.cssRem)
-		justifyContent(JustifyContent.Center)
-		width(2.4.cssRem)
-
-		hover(self) style {
-			backgroundColor(Color("#FFFFFF0F"))
-			color(Color.white)
 		}
 	}
 

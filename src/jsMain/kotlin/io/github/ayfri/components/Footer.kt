@@ -7,7 +7,6 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.MAIL_TO
 import io.github.ayfri.data.*
 import io.github.ayfri.ifNotBlank
-import io.github.ayfri.pages.IconHeading
 import kotlinx.browser.document
 import kotlinx.browser.window
 import org.jetbrains.compose.web.attributes.*
@@ -253,7 +252,7 @@ fun Footer() {
 
 object FooterStyle : StyleSheet() {
 	val footer by style {
-		backgroundColor(Color("#08060F"))
+		backgroundColor(Color(AppStyle.FOOTER_BACKGROUND))
 		borderTop(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
 		color(Color(AppStyle.TEXT_MUTED_COLOR))
 		display(DisplayStyle.Flex)

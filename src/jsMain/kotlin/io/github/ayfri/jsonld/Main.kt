@@ -53,7 +53,7 @@ fun pageGraph(canonical: String, type: PageType, name: String, description: Stri
 			id = "$canonical#webpage",
 			inLanguage = "en",
 			isPartOf = NodeRef(WEBSITE_ID),
-			// `undefined` is dropped by `JSON.stringify`, `null` is not.
+			/** `undefined` is dropped by `JSON.stringify`, `null` is not. */
 			mainEntity = if (type == PageType.ProfilePage) NodeRef(PERSON_ID) else undefinedOrNull,
 			name = name,
 			type = type.name,

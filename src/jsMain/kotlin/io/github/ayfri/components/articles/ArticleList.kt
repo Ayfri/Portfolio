@@ -7,35 +7,23 @@ import com.varabyte.kobweb.silk.components.icons.lucide.LucideCalendar
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideClock
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideRefreshCw
 import io.github.ayfri.*
-import io.github.ayfri.components.Icon
+import io.github.ayfri.components.IconLabel
 import io.github.ayfri.components.TagList
 import io.github.ayfri.data.ArticleEntry
-import io.github.ayfri.pages.IconStyle
 import io.github.ayfri.utils.renderWhenVisible
 import io.github.ayfri.utils.revealOnScroll
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
-@Composable
-private fun MetaItem(text: String, vararg classes: String, icon: Icon) {
-	Span({ classes(IconStyle.label, *classes) }) {
-		icon()
-		Text(text)
-	}
-}
-
 /** Date, reading time and last update line, shared by the article list and the article page header. */
 @Composable
 fun ArticleMeta(date: String, dateModified: String, content: String) {
-	Style(ArticleListStyle)
-	Style(IconStyle)
-
 	P({
 		classes(AppStyle.monoFont, ArticleListStyle.meta)
 	}) {
-		MetaItem(formatLongDate(date)) { LucideCalendar() }
-		MetaItem("${calculateReadingTime(content)} min read") { LucideClock() }
-		if (date != dateModified) MetaItem("updated ${formatLongDate(dateModified)}", ArticleListStyle.updated) { LucideRefreshCw() }
+		IconLabel(formatLongDate(date)) { LucideCalendar() }
+		IconLabel("${calculateReadingTime(content)} min read") { LucideClock() }
+		if (date != dateModified) IconLabel("updated ${formatLongDate(dateModified)}", ArticleListStyle.updated) { LucideRefreshCw() }
 	}
 }
 

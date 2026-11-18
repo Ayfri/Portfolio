@@ -7,6 +7,7 @@ import io.github.ayfri.utils.*
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
 import org.jetbrains.compose.web.css.AlignSelf
+import org.jetbrains.compose.web.css.JustifyContent
 import org.jetbrains.compose.web.css.selectors.CSSSelector
 
 fun StyleSheet.linkStyle(parent: CSSSelector) {
@@ -33,10 +34,18 @@ object AppStyle : StyleSheet() {
 	const val SURFACE_RAISED = "#1C1830"
 	const val BORDER_COLOR = "#D9CCFF1C"
 	const val BORDER_STRONG_COLOR = "#D9CCFF38"
+	/** Top stop of [io.github.ayfri.utils.cardEdgeGradient], the brighter end of the hairline. */
+	const val CARD_EDGE_TOP = "#D9CCFF2E"
+	/** Bottom stop of [io.github.ayfri.utils.cardEdgeGradient], the dimmer end of the hairline. */
+	const val CARD_EDGE_BOTTOM = "#D9CCFF0F"
+	/** Footer surface, darker than the page background. */
+	const val FOOTER_BACKGROUND = "#08060F"
 
 	const val TEXT_COLOR = "#ECE9F5"
 	/** 7.5:1 on the page background, the floor for body copy. */
 	const val TEXT_MUTED_COLOR = "#A7A0BD"
+	/** Body copy of the articles, a touch softer than [TEXT_COLOR]. */
+	const val ARTICLE_TEXT_COLOR = "#D8D3E6"
 
 	/** Logo cyan: links, active states, focus rings and the primary button. */
 	const val ACCENT_COLOR = "#3EE6F0"
@@ -276,8 +285,16 @@ object AppStyle : StyleSheet() {
 		revealOnScroll()
 	}
 
+	/** [card] whose edge is [cardEdgeGradient] instead of a flat border, for cards whose edge lights up on hover or selection. */
+	val litCard by style {
+		border(1.px, LineStyle.Solid, Color.transparent)
+		borderRadius(.9.cssRem)
+		gradientBorderBackground()
+		revealOnScroll()
+	}
+
 	val tag by style {
-		backgroundColor(Color("#FFFFFF0D"))
+		backgroundColor(Color(tint("white", 5)))
 		borderRadius(.4.cssRem)
 		color(Color(TEXT_MUTED_COLOR))
 		fontFamily(MONO_FONT_FAMILY, "monospace")
@@ -380,6 +397,25 @@ object AppStyle : StyleSheet() {
 		}
 	}
 
+	/** Square ghost button holding a single icon, 2.4rem by default. */
+	val iconButton by style {
+		alignItems(AlignItems.Center)
+		backgroundColor(Color.transparent)
+		borderRadius(.5.cssRem)
+		color(Color(TEXT_MUTED_COLOR))
+		cursor(Cursor.Pointer)
+		display(DisplayStyle.Flex)
+		fontSize(1.3.cssRem)
+		height(2.4.cssRem)
+		justifyContent(JustifyContent.Center)
+		width(2.4.cssRem)
+
+		hover(self) style {
+			backgroundColor(Color(tint("white", 6)))
+			color(Color.white)
+		}
+	}
+
 	val avatar by style {
 		borderRadius(100.vmax)
 		objectFit(ObjectFit.Cover)
@@ -390,5 +426,40 @@ object AppStyle : StyleSheet() {
 				size(max(7.cssRem, 30.vw))
 			}
 		}
+	}
+
+	/** Row of an [iconBadge] and a title, rendered by [io.github.ayfri.components.IconHeading]. */
+	val iconHeading by style {
+		alignItems(AlignItems.Baseline)
+		display(DisplayStyle.Flex)
+		gap(.7.cssRem)
+	}
+
+	/** Muted icon inline before some text, rendered by [io.github.ayfri.components.IconLabel]. */
+	val iconLabel by style {
+		alignItems(AlignItems.Baseline)
+		display(DisplayStyle.LegacyInlineFlex)
+		gap(.45.cssRem)
+
+		"svg" {
+			color(Color(TEXT_MUTED_COLOR))
+			fontSize(.85.em)
+			opacity(.8)
+		}
+	}
+
+	/** Small icon in a violet-tinted square, leads an [iconHeading]. */
+	val iconBadge by style {
+		alignItems(AlignItems.Center)
+		alignSelf(AlignSelf.Center)
+		backgroundColor(Color(tint(VIOLET_COLOR, 14)))
+		border(1.px, LineStyle.Solid, Color(tint(VIOLET_COLOR, 30)))
+		borderRadius(.55.cssRem)
+		color(Color(VIOLET_COLOR))
+		display(DisplayStyle.LegacyInlineFlex)
+		flexShrink(0)
+		fontSize(.55.em)
+		justifyContent(JustifyContent.Center)
+		size(1.9.em)
 	}
 }

@@ -10,6 +10,7 @@ import io.github.ayfri.AppStyle
 import io.github.ayfri.articlesEntries
 import io.github.ayfri.components.ChipGroup
 import io.github.ayfri.components.FiltersStyle
+import io.github.ayfri.components.IconLabel
 import io.github.ayfri.components.SearchField
 import io.github.ayfri.components.articles.ArticleList
 import io.github.ayfri.components.articles.ArticleListStyle
@@ -17,7 +18,6 @@ import io.github.ayfri.components.countedByFrequency
 import io.github.ayfri.data.ArticleEntry
 import io.github.ayfri.jsonld.PageType
 import io.github.ayfri.layouts.PageLayout
-import io.github.ayfri.pages.IconStyle
 import org.jetbrains.compose.web.attributes.selected
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -40,7 +40,6 @@ fun ArticleList() {
 		schemaType = PageType.CollectionPage,
 	) {
 		Style(ArticleListStyle)
-		Style(IconStyle)
 		Style(BlogPageStyle)
 
 		var searchQuery by remember { mutableStateOf("") }
@@ -96,9 +95,8 @@ fun ArticleList() {
 			P({
 				classes(FiltersStyle.label, BlogPageStyle.resultsInfo)
 			}) {
-				Span({ classes(IconStyle.label) }) {
+				IconLabel(if (articles.isEmpty()) "No article matches these filters." else "Showing ${articles.size} article${if (articles.size != 1) "s" else ""}") {
 					if (articles.isEmpty()) LucideSearch() else LucideFunnel()
-					Text(if (articles.isEmpty()) "No article matches these filters." else "Showing ${articles.size} article${if (articles.size != 1) "s" else ""}")
 				}
 			}
 

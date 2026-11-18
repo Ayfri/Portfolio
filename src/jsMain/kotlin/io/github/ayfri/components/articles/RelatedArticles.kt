@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import com.varabyte.kobweb.silk.components.icons.lucide.LucideBookMarked
 import io.github.ayfri.articlesEntries
 import io.github.ayfri.data.ArticleEntry
-import io.github.ayfri.pages.IconHeading
+import io.github.ayfri.components.IconHeading
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
@@ -22,8 +22,6 @@ fun findRelatedArticles(currentPath: String, keywords: List<String>): List<Artic
 
 @Composable
 fun RelatedArticles(articles: List<ArticleEntry>) {
-	Style(ArticleListStyle)
-
 	Section({
 		style { marginTop(4.cssRem) }
 	}) {

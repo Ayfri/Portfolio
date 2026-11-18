@@ -25,7 +25,6 @@ import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.tint
 import io.github.ayfri.utils.gradientBorderBackground
-import io.github.ayfri.utils.revealOnScroll
 import io.github.ayfri.utils.size
 import kotlinx.browser.document
 import kotlinx.browser.window
@@ -46,43 +45,46 @@ data class AboutMeSection(
 	/** Shown as a badge next to the title, where the timeline only ever shows the starting year. */
 	val dateLabel: String = date.toString(),
 	val tags: List<String> = emptyList(),
-	val title: (@Composable AboutMeSection.() -> Unit),
+	val title: (@Composable () -> Unit),
 ) {
-	var additionalContent: (@Composable () -> Unit)? = null
-
 	@Composable
 	fun Display(selected: Boolean = false) = Section({
+		classes(AppStyle.litCard)
 		if (image) classes(AboutMeStyle.withImage)
 		if (selected) classes("selected")
 		id(id)
 	}) {
-		if (image) title()
-		else Div({
-			classes(AboutMeStyle.header)
-		}) {
-			H2({
-				classes(AboutMeStyle.textIcon)
-			}) {
-				title()
-			}
+		if (image) {
+			title()
 
-			Span({
-				classes(AboutMeStyle.dateBadge, AppStyle.monoFont)
-			}) {
-				Text(dateLabel)
-			}
-		}
-
-		if (additionalContent != null) {
 			Div({
 				classes(AboutMeStyle.additionalContent)
 			}) {
-				additionalContent!!()
+				H1 {
+					Text("About me")
+				}
+
 				P({
 					markdownParagraph(content, true)
 				})
 			}
 		} else {
+			Div({
+				classes(AboutMeStyle.header)
+			}) {
+				H2({
+					classes(AboutMeStyle.textIcon)
+				}) {
+					title()
+				}
+
+				Span({
+					classes(AboutMeStyle.dateBadge, AppStyle.monoFont)
+				}) {
+					Text(dateLabel)
+				}
+			}
+
 			P({
 				markdownParagraph(content, true)
 			})
@@ -98,12 +100,6 @@ val sections = listOf(
 	) {
 		Avatar("Pierre Roy") {
 			classes(AppStyle.avatar)
-		}
-
-		additionalContent = {
-			H1 {
-				Text("About me")
-			}
 		}
 	},
 
@@ -301,7 +297,7 @@ fun AboutMe() {
 				}
 			}, IntersectionObserverInit(rootMargin = "-35% 0px -64% 0px"))
 
-			// Looked up by id: this effect runs before the sections' own `ref` callbacks, so refs would still be null here.
+			/** Looked up by id: this effect runs before the sections' own `ref` callbacks, so refs would still be null here. */
 			sections.forEach { section -> document.getElementById(section.id)?.let { observer.observe(it.unsafeCast<web.dom.Element>()) } }
 			onDispose { observer.disconnect() }
 		}
@@ -309,8 +305,10 @@ fun AboutMe() {
 		Div({
 			classes(AboutMeStyle.layout)
 		}) {
-			// Sticky instead of scroll-positioned: the browser clamps the timeline to the bottom of the section list
-			// on its own, where the old JS offset kept dragging it down into the footer.
+			/**
+			 * Sticky instead of scroll-positioned: the browser clamps the timeline to the bottom of the section list
+			 * on its own, where the old JS offset kept dragging it down into the footer.
+			 */
 			Aside({
 				classes(AboutMeStyle.timeline)
 			}) {
@@ -430,7 +428,7 @@ object AboutMeStyle : StyleSheet() {
 		boxSizing(BoxSizing.BorderBox)
 		margin(0.px, autoLength)
 		maxWidth(1200.px + 8.cssRem)
-		// Left padding keeps room for the year label rendered on the left side of the selected round.
+		/** Left padding keeps room for the year label rendered on the left side of the selected round. */
 		padding(0.px, 1.5.cssRem, 0.px, 1.cssRem)
 
 		media(mediaMaxWidth(AppStyle.mobileFourthBreak)) {
@@ -488,7 +486,7 @@ object AboutMeStyle : StyleSheet() {
 					fontWeight(700)
 					fontSize(.75.cssRem)
 
-					// Anchored on the round's left edge instead of a fixed offset, so the year never spills out of the page.
+					/** Anchored on the round's left edge instead of a fixed offset, so the year never spills out of the page. */
 					position(Position.Absolute)
 					top(0.px)
 					property("right", "calc(100% + .5rem)")
@@ -503,8 +501,10 @@ object AboutMeStyle : StyleSheet() {
 			}
 		}
 
-		// The separators grow instead of having a fixed length, so the whole timeline always fits its sticky height,
-		// however many sections the list has.
+		/**
+		 * The separators grow instead of having a fixed length, so the whole timeline always fits its sticky height,
+		 * however many sections the list has.
+		 */
 		className("separator") style {
 			backgroundColor(Color(AppStyle.BORDER_STRONG_COLOR))
 			flex("1 1 0")
@@ -604,10 +604,6 @@ object AboutMeStyle : StyleSheet() {
 
 			padding(2.cssRem, max(2.cssRem, 3.vw))
 			position(Position.Relative)
-			borderRadius(.9.cssRem)
-			border(1.px, LineStyle.Solid, Color.transparent)
-			gradientBorderBackground()
-			revealOnScroll()
 
 			/** The section being read gets a cyan edge fading out, matching the lit round on the timeline. */
 			self + className("selected") style {
@@ -625,7 +621,7 @@ object AboutMeStyle : StyleSheet() {
 					val iconPadding = .4.cssRem
 					val iconHeight = titleHeight.value() + (iconPadding * 2)
 
-					backgroundColor(Color("#FFFFFF08"))
+					backgroundColor(Color(tint("white", 3)))
 					border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
 					borderRadius(.6.cssRem)
 					height(iconHeight)
@@ -657,7 +653,7 @@ object AboutMeStyle : StyleSheet() {
 			}
 
 			"code" {
-				backgroundColor(Color("#FFFFFF12"))
+				backgroundColor(Color(tint("white", 7)))
 				borderRadius(.35.cssRem)
 				fontSize(.9.cssRem)
 				padding(.1.cssRem, .35.cssRem)

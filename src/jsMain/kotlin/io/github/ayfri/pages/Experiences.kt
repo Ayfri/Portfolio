@@ -258,7 +258,7 @@ object ExperiencesStyle : StyleSheet() {
 
 	val logo by style {
 		alignItems(AlignItems.Center)
-		backgroundColor(Color("#FFFFFF08"))
+		backgroundColor(Color(tint("white", 3)))
 		border(1.px, LineStyle.Solid, Color(AppStyle.BORDER_COLOR))
 		borderRadius(.7.cssRem)
 		color(Color(AppStyle.TEXT_MUTED_COLOR))

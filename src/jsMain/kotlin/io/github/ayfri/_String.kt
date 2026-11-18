@@ -1,7 +1,5 @@
 package io.github.ayfri
 
-inline fun String.ensureSuffix(suffix: String) = if (endsWith(suffix)) this else this + suffix
-
 private val markdownLinkRegex = Regex("""\[([^\]]+)\]\([^)]+\)""")
 
 /** `[label](url)` becomes `label`, for descriptions rendered inside a link where a nested `<a>` would be invalid. */
