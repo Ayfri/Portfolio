@@ -1,3 +1,4 @@
+import com.google.devtools.ksp.gradle.KspAATask
 import com.varabyte.kobweb.common.text.ensureSurrounded
 import com.varabyte.kobweb.common.text.splitCamelCase
 import com.varabyte.kobweb.gradle.application.util.configAsKobwebApplication
@@ -8,6 +9,7 @@ import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
 import org.jetbrains.kotlin.gradle.targets.js.nodejs.NodeJsEnvSpec
 import java.net.HttpURLConnection
 import java.net.URI
+import java.security.MessageDigest
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
@@ -662,5 +664,64 @@ mapOf(
 	tasks.named("jsBrowser${mode}Webpack") {
 		enabled = false
 		dependsOn(bundle)
+	}
+}
+
+/**
+ * The declaration scan behind the `kspKotlinJs` skip below. It lives in an `object` because calls to it are static: a task lambda that
+ * called a script function would capture the script, which the configuration cache can't serialize.
+ */
+object KspDeclarations {
+	/**
+	 * A package, an annotation, the supertypes closing a constructor, a class-like declaration or a line naming Silk's `CssStyle` or
+	 * `Keyframes`: the lines a class hierarchy and the Silk style properties are read from.
+	 */
+	private val declarationLine = Regex("""^\s*(?:package\s|@|\)\s*:)|(?:^|\s)(?:class|interface|object|typealias)\s+[\w`]|\b(?:CssStyle|Keyframes)""")
+
+	/**
+	 * Hashes the declaration lines of [sources] together with the identity of the [processors] reading them and their [options], so the
+	 * result survives any edit of a function or property body. A top-level annotation brings the line it marks along, the signature of an
+	 * annotated function. It misses a supertype or a parameter wrapped onto a line of its own, a supertype whose import changes, and a
+	 * Silk style variant, whose line names neither type.
+	 */
+	fun digest(sources: Iterable<File>, processors: Iterable<File>, options: Map<String, String>): String {
+		val digest = MessageDigest.getInstance("SHA-256")
+		digest.update(options.toSortedMap().toString().toByteArray())
+		processors.sortedBy { it.path }.forEach { digest.update("${it.path}:${it.length()}:${it.lastModified()}".toByteArray()) }
+		sources.sortedBy { it.path }.parallelStream().map { file ->
+			buildString {
+				append(file.path)
+				var annotated = false
+				file.forEachLine { line ->
+					if (annotated || declarationLine.containsMatchIn(line)) append(line)
+					annotated = line.startsWith("@")
+				}
+			}
+		}.forEachOrdered { digest.update(it.toByteArray()) }
+		return digest.digest().joinToString("") { "%02x".format(it) }
+	}
+}
+
+/**
+ * Skips `kspKotlinJs` while the digest of the declaration lines is unchanged. Kobweb's processor reads annotated functions and `CssStyle`
+ * or `Keyframes` properties, never a body, and this site declares no such property. KSP rebuilds its analysis of the whole module for any
+ * edited file, 27 s here: an edited string compiles in 5.5 s without it. When the scan misses a changed page or supertype, the code
+ * generated from the stale output stops compiling, where a missed Silk style only loses its CSS. `-Pportfolio.ksp` forces the run.
+ */
+tasks.withType<KspAATask>().matching { it.name == "kspKotlinJs" }.configureEach {
+	val digestFile = layout.buildDirectory.file("kspDeclarations/$name.sha256")
+	val forced = providers.gradleProperty("portfolio.ksp").isPresent
+	val generated = kspConfig.outputBaseDir.asFileTree
+	val options = kspConfig.processorOptions
+	val processors = kspConfig.processorClasspath
+	val sources = (kspConfig.sourceRoots + kspConfig.commonSourceRoots).asFileTree.matching { include("**/*.kt") }
+
+	outputs.file(digestFile).withPropertyName("declarationDigest")
+	onlyIf("a declaration changed since its last run") {
+		val previous = digestFile.get().asFile
+		forced || generated.isEmpty || !previous.exists() || previous.readText() != KspDeclarations.digest(sources, processors, options.get())
+	}
+	doLast {
+		digestFile.get().asFile.writeText(KspDeclarations.digest(sources, processors, options.get()))
 	}
 }
