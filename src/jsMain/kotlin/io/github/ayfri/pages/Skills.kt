@@ -609,7 +609,7 @@ object SkillsStyle : StyleSheet() {
 			"a" {
 				color(Color(AppStyle.LINK_COLOR))
 
-				hover {
+				self + hover style {
 					color(Color(AppStyle.LINK_HOVER_COLOR))
 					textDecorationLine(TextDecorationLine.Underline)
 				}
