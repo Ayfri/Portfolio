@@ -18,7 +18,6 @@ import io.github.ayfri.layouts.PageLayout
 import io.github.ayfri.localImage
 import io.github.ayfri.markdownParagraph
 import io.github.ayfri.utils.marker
-import io.github.ayfri.utils.n
 import io.github.ayfri.utils.size
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.AlignItems
@@ -594,7 +593,7 @@ object SkillsStyle : StyleSheet() {
 					color(Color(AppStyle.TEXT_MUTED_COLOR))
 				}
 
-				self + nthOfType(2.n) style {
+				self + not(firstOfType) style {
 					marginTop(1.2.cssRem)
 				}
 			}

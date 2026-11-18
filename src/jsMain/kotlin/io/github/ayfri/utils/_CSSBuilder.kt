@@ -5,7 +5,6 @@ import com.varabyte.kobweb.compose.css.functions.Gradient
 import com.varabyte.kobweb.compose.css.functions.linearGradient
 import io.github.ayfri.AppStyle
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.selectors.Nth
 
 fun CSSBuilder.list(vararg selectors: String) = group(*(selectors.map { desc(self, it) }.toTypedArray()))
 
@@ -15,8 +14,6 @@ fun StyleScope.size(height: CSSNumeric, width: CSSNumeric = height) {
 }
 
 val SelectorsScope.marker get() = selector("::marker")
-
-val Int.n get() = Nth.Functional(this)
 
 /**
  * Fades and lifts the element in as it scrolls into view, a scroll-driven animation with no JS. Browsers without
