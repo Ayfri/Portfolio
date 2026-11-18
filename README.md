@@ -45,7 +45,7 @@ Useful commands:
 .\gradlew.bat compileProductionExecutableKotlinJs
 
 # Refresh only the project snapshot used by the site
-.\gradlew.bat downloadData
+.\gradlew.bat downloadData --rerun
 
 # Regenerate the sitemap
 .\gradlew.bat generateSitemap
@@ -69,7 +69,7 @@ Project data comes from the [`api`](https://github.com/Ayfri/Portfolio/tree/api)
 https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json
 ```
 
-During the build, `downloadData` downloads that snapshot, minifies it, converts its `snake_case` keys to `camelCase`, then generates `PortfolioSnapshot.kt` under `build/generated/portfolio-data/`. Converting the keys at build time lets the browser `JSON.parse` the snapshot directly, with no reviver pass on first paint. Kotlin/JS compilation depends on this task, so data is available synchronously while Kobweb snapshots each page. The browser does not fetch this data after the site has loaded.
+`downloadData` downloads that snapshot, minifies it, converts its `snake_case` keys to `camelCase`, then writes `PortfolioSnapshot.kt` under `build/generated/portfolio-data/`. Dev builds keep the snapshot they have and `--rerun` refreshes it. The export downloads it at configuration time and prerenders a page for every project in it. Converting the keys at build time lets the browser `JSON.parse` the snapshot directly, with no reviver pass on first paint. Kotlin/JS compilation depends on this task, so data is available synchronously while Kobweb snapshots each page. The browser does not fetch this data after the site has loaded.
 
 This is what ensures the home page, skills, and projects pages export with complete HTML rather than `Loading...`.
 

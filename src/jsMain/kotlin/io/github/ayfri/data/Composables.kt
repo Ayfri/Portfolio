@@ -16,7 +16,7 @@ import kotlin.js.Date
 
 @Composable
 fun ProjectCard(repository: GitHubRepository) {
-	A("/projects/${repository.owner.login}/${repository.name}", {
+	A("/projects/${repository.fullName}/", {
 		classes(AppStyle.card, DataStyle.projectCard)
 		id(repository.name)
 	}) {

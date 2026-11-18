@@ -62,7 +62,7 @@ fun All() {
 
 	PageLayout(
 		"${project.name} by ${project.owner.login}",
-		description = project.description ?: AppGlobals["description"]!!,
+		description = project.description ?: "${project.name}, an open-source project by ${project.owner.login} on GitHub.",
 		jsonLD = projectNodes(project, canonical),
 	) {
 		Style(ProjectStyle)

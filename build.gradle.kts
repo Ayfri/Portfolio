@@ -10,6 +10,7 @@ import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
+import kotlin.time.Duration.Companion.seconds
 
 plugins {
 	alias(libs.plugins.kotlin.compose)
@@ -38,41 +39,53 @@ operator fun <K : Any, V : Any> MapProperty<K, V>.get(key: K) = getting(key)
 val portfolioGeneratedResourcesRoot = layout.buildDirectory.dir("generated/portfolio-resources")
 val portfolioGeneratedKotlinRoot = layout.buildDirectory.dir("generated/portfolio-data/src/jsMain/kotlin")
 
+/** `result.json` of the `api` branch, with camelCased keys. */
+abstract class PortfolioSnapshot : ValueSource<String, ValueSourceParameters.None> {
+	override fun obtain(): String {
+		val connection = URI("https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json").toURL().openConnection() as HttpURLConnection
+		if (connection.responseCode != 200) throw GradleException("Error while downloading data, response code: ${connection.responseCode}")
+
+		// Keys are camelCased here so the browser can `JSON.parse` straight into the external interfaces,
+		// instead of walking every object of the snapshot through a reviver on first paint.
+		return groovy.json.JsonOutput.toJson(camelCaseKeys(groovy.json.JsonSlurper().parseText(connection.inputStream.readBytes().decodeToString())))
+	}
+
+	private fun snakeToCamel(key: String) = key.split('_').mapIndexed { i, part ->
+		if (i == 0) part else part.replaceFirstChar(Char::uppercase)
+	}.joinToString("")
+
+	private fun camelCaseKeys(node: Any?): Any? = when (node) {
+		is Map<*, *> -> node.entries.associate { (k, v) -> snakeToCamel(k as String) to camelCaseKeys(v) }
+		is List<*> -> node.map { camelCaseKeys(it) }
+		else -> node
+	}
+}
+
+val portfolioSnapshot = providers.of(PortfolioSnapshot::class.java) {}
+
+/** Kobweb only takes extra export routes eagerly, so the export downloads the snapshot at configuration time and writes that same copy. */
+val exportSnapshot: String? = portfolioSnapshot.takeIf { gradle.startParameter.taskNames.any { it.substringAfterLast(':') == "kobwebExport" } }?.get()
+
+/** Every project page route with the date of its last update, empty outside the export. */
+val projectPages: Map<String, String> = exportSnapshot?.let { json ->
+	((groovy.json.JsonSlurper().parseText(json) as Map<*, *>)["repos"] as List<*>).map { it as Map<*, *> }
+		.associate { "/projects/${it["fullName"]}/" to (it["updatedAt"] as String).take(10) }
+}.orEmpty()
+
 val downloadDataTask = tasks.register("downloadData") {
 	group = "build"
 	description = "Download the portfolio GitHub snapshot as JSON for the static site."
 
 	val kotlinOutFile = portfolioGeneratedKotlinRoot.map { it.file("io/github/ayfri/data/PortfolioSnapshot.kt") }
+	val download = portfolioSnapshot
+	val snapshot = exportSnapshot
 
 	outputs.file(kotlinOutFile)
+	/** Dev builds keep the snapshot they have, `--rerun` refreshes it. The export always writes the copy its routes come from. */
+	outputs.upToDateWhen { snapshot == null }
 
 	doLast {
-		val dataLink = "https://raw.githubusercontent.com/Ayfri/Portfolio/api/result.json"
-		val url = URI(dataLink).toURL()
-		val connection = url.openConnection() as HttpURLConnection
-		connection.requestMethod = "GET"
-		connection.connect()
-		val responseCode = connection.responseCode
-		if (responseCode != 200) {
-			throw Exception("Error while downloading data, response code: $responseCode")
-		}
-
-		val raw = connection.inputStream.readBytes().decodeToString()
-		// Keys are camelCased here so the browser can `JSON.parse` straight into the external interfaces,
-		// instead of walking every object of the snapshot through a reviver on first paint.
-		fun snakeToCamel(key: String) = key.split('_').mapIndexed { i, part ->
-			if (i == 0) part else part.replaceFirstChar(Char::uppercase)
-		}.joinToString("")
-
-		fun camelCaseKeys(node: Any?): Any? = when (node) {
-			is Map<*, *> -> node.entries.associate { (k, v) -> snakeToCamel(k as String) to camelCaseKeys(v) }
-			is List<*> -> node.map { camelCaseKeys(it) }
-			else -> node
-		}
-
-		val toWrite = runCatching {
-			groovy.json.JsonOutput.toJson(camelCaseKeys(groovy.json.JsonSlurper().parseText(raw)))
-		}.getOrElse { raw }
+		val toWrite = snapshot ?: download.get()
 
 		kotlinOutFile.get().asFile.apply {
 			parentFile.mkdirs()
@@ -227,6 +240,9 @@ kobweb {
 	app {
 		export {
 			includeSourceMap = false
+			/** Playwright's 30 s default leaves no headroom for project pages, whose `load` waits on README images hosted on GitHub. */
+			timeout = 90.seconds
+			projectPages.keys.forEach { addExtraRoute(it) }
 		}
 
 		index {
@@ -360,8 +376,11 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 	val articleDir = layout.projectDirectory.dir("src/jsMain/resources/markdown/articles")
 	val pagesDir = layout.projectDirectory.dir("src/jsMain/kotlin/io/github/ayfri/pages")
 
+	val pages = projectPages
+
 	inputs.dir(articleDir)
 	inputs.dir(pagesDir)
+	inputs.property("projectPages", pages)
 	outputs.file(sitemapOut)
 
 	doLast {
@@ -416,6 +435,10 @@ val generateSitemapTask = tasks.register("generateSitemap") {
 			lastmodMap[clean] = dateModified
 			routes.add(clean)
 		}
+
+		/** Project pages come from the export's snapshot, dev builds list none. */
+		lastmodMap += pages
+		routes += pages.keys
 
 		routes.sort()
 
@@ -597,3 +620,15 @@ tasks.matching { it.name.endsWith("KotlinJs") }.configureEach {
 tasks.withType<org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack>()
 	.matching { it.name == "jsBrowserProductionWebpack" }
 	.configureEach { sourceMaps = false }
+
+/** Kobweb logs a page that timed out and moves on, so without this check a missing project page ships as a 404. */
+tasks.named("kobwebExport") {
+	/** The full-stack layout, Kobweb's default, writes its pages one folder deeper than the static one. */
+	val static = providers.gradleProperty("kobwebExportLayout").orNull == "STATIC"
+	val pages = layout.projectDirectory.dir(if (static) ".kobweb/site" else ".kobweb/site/pages")
+	val routes = projectPages.keys.toList()
+	doLast {
+		val missing = routes.filterNot { pages.file("${it.removePrefix("/")}index.html").asFile.isFile }
+		if (missing.isNotEmpty()) throw GradleException("The export has no page for $missing, see the timeouts above.")
+	}
+}

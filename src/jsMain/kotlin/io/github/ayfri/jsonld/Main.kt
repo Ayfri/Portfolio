@@ -111,12 +111,12 @@ fun projectNodes(project: GitHubRepository, canonical: String): Array<JsonLD> = 
 	),
 )
 
-/** Items point at GitHub: `/projects/{user}/{project}/` pages are not prerendered, Cloudflare serves them through `404.html` with a 404 status. */
+/** The ten most-starred projects, pointing at their pages, which the export prerenders from the same snapshot. */
 fun projectsListNode(projects: List<GitHubRepository>): ItemListJsonLD {
 	val top = projects.take(10)
 	return ItemListJsonLD(
 		itemListElement = top.mapIndexed { index, project ->
-			ListItemJsonLD(item = project.htmlUrl, name = project.name, position = index + 1, type = "ListItem")
+			ListItemJsonLD(item = "${SITE_URL}projects/${project.fullName}/", name = project.name, position = index + 1, type = "ListItem")
 		}.toTypedArray(),
 		numberOfItems = top.size,
 		type = "ItemList",
